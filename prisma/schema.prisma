@@ -54,13 +54,13 @@ model User {
   phone         String
   email         String   @unique
   basic         Boolean?
-  regionB       String[]
+  regionB       String?
   medior        Boolean?
-  regionM       String[]
+  regionM       String?
   high          Boolean?
-  regionH       String[]
+  regionH       String?
   superior      Boolean?
-  regionS       String[]
+  regionS       String?
   director      Boolean?
   event         Event[]
   passwordHash  String
