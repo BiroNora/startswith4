@@ -15,17 +15,17 @@ const register: Action = async ({ request }) => {
   const phone = String(data.get('phone'))
 	const email = String(data.get('email'))
   const basic = Boolean(data.get('basic'))
-  const regB = String(data.get('regB'))
+  const regionB = String(data.get('regB')) || null
   const medior = Boolean(data.get('medior'))
-  const regM = String(data.get('regM'))
+  const regionM = String(data.get('regM')) || null
   const high = Boolean(data.get('high'))
-  const regH = String(data.get('regH'))
+  const regionH = String(data.get('regH')) || null
   const superior = Boolean(data.get('superior'))
-  const regS = String(data.get('regS'))
+  const regionS = String(data.get('regS')) || null
   const director = Boolean(data.get('director'))
 	const password1 = data.get('password1')
   const password2 = data.get('password2')
-  console.log(typeof director)
+  console.log(typeof regionB)
 
 	if (typeof email != 'string' ||
       typeof password1 != 'string' ||
@@ -42,11 +42,6 @@ const register: Action = async ({ request }) => {
   if (user) {
     return fail(400, {user: true})
   }
-
-  const regionB = regB.split(",")
-  const regionM = regM.split(",")
-  const regionH = regH.split(",")
-  const regionS = regS.split(",")
 
   await db.user.create({
     data: {
