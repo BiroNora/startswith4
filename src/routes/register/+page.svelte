@@ -7,8 +7,18 @@
   let yesH = false
   let yesS = false
   let yesD = false
-
+  let btnDisabled = false
+  let message = ''
+  
   export let form: ActionData
+
+
+  const handleInput = () => {
+    if (yesB == false && yesM == false && yesH == false && yesS == false && yesD == false) {
+      message = `One duty must be choosen.`
+      btnDisabled = true
+    }
+  }
 </script>
 
 <h1>Register</h1>
@@ -33,24 +43,63 @@
 	<div>
 		<input type="checkbox" name="basic" bind:checked={yesB} />
 			BASIC
-    
-    <input type="text" name="regB" class="hidden-textbox" placeholder="Please enter the region(s)" required={yesB}/>
+    <select name="regB" id="basic-select" class="hidden-textbox" >
+      <option value="" placeholder="Please enter the region(s)" >Please choose a region</option>
+      <option value="Dél-Alföld">Dél-Alföld</option>
+      <option value="Dél-Dunántúl">Dél-Dunántúl</option>
+      <option value="Észak-Magyarország">Észak-Magyarország</option>
+      <option value="Budapest">Budapest</option>
+      <option value="Közép-Dunántúl">Közép-Dunántúl</option>
+      <option value="Nyugat-Dunántúl">Nyugat-Dunántúl</option>
+      <option value="Észak-Alföld">Észak-Alföld</option>
+      <option value="Közép-Magyarország">Közép-Magyarország</option>
+    </select>
   </div>
   <div>
     <input type="checkbox" name="medior" bind:checked={yesM} />
       MEDIOR
-    <input type="text" name="regM" class="hidden-textbox" placeholder="Please enter the region(s)" required={yesM}/>
-  </div>
+      <select name="regM" id="basic-select" class="hidden-textbox" >
+        <option value="" placeholder="Please enter the region(s)" >Please choose a region</option>
+        <option value="Dél-Alföld">Dél-Alföld</option>
+        <option value="Dél-Dunántúl">Dél-Dunántúl</option>
+        <option value="Észak-Magyarország">Észak-Magyarország</option>
+        <option value="Budapest">Budapest</option>
+        <option value="Közép-Dunántúl">Közép-Dunántúl</option>
+        <option value="Nyugat-Dunántúl">Nyugat-Dunántúl</option>
+        <option value="Észak-Alföld">Észak-Alföld</option>
+        <option value="Közép-Magyarország">Közép-Magyarország</option>
+      </select>
+    </div>
   <div>
     <input type="checkbox" name="high" bind:checked={yesH} />
       HIGH
-    <input type="text" name="regH" class="hidden-textbox" placeholder="Please enter the region(s)" required={yesH} />
-  </div>
+    <select name="regH" id="basic-select" class="hidden-textbox" >
+      <option value="" placeholder="Please enter the region(s)" >Please choose a region</option>
+      <option value="Dél-Alföld">Dél-Alföld</option>
+      <option value="Dél-Dunántúl">Dél-Dunántúl</option>
+      <option value="Észak-Magyarország">Észak-Magyarország</option>
+      <option value="Budapest">Budapest</option>
+      <option value="Közép-Dunántúl">Közép-Dunántúl</option>
+      <option value="Nyugat-Dunántúl">Nyugat-Dunántúl</option>
+      <option value="Észak-Alföld">Észak-Alföld</option>
+      <option value="Közép-Magyarország">Közép-Magyarország</option>
+    </select>
+    </div>
   <div>
     <input type="checkbox" name="superior" bind:checked={yesS} />
       SUPERIOR
-    <input type="text" name="regS" class="hidden-textbox" placeholder="Please enter the region(s)" required={yesS} />
-  </div>
+    <select name="regS" id="basic-select" class="hidden-textbox" >
+      <option value="" placeholder="Please enter the region(s)" >Please choose a region</option>
+      <option value="Dél-Alföld">Dél-Alföld</option>
+      <option value="Dél-Dunántúl">Dél-Dunántúl</option>
+      <option value="Észak-Magyarország">Észak-Magyarország</option>
+      <option value="Budapest">Budapest</option>
+      <option value="Közép-Dunántúl">Közép-Dunántúl</option>
+      <option value="Nyugat-Dunántúl">Nyugat-Dunántúl</option>
+      <option value="Észak-Alföld">Észak-Alföld</option>
+      <option value="Közép-Magyarország">Közép-Magyarország</option>
+    </select>
+    </div>
   <div>
     <input type="checkbox" name="director" bind:checked={yesD} />
       DIRECTOR
@@ -67,7 +116,19 @@
 	{#if form?.user}
 		<p class="error">Username is taken.</p>
 	{/if}
-	<button type="submit">Register</button>
+
+  {#if (yesB == false && yesM == false && yesH == false && yesS == false && yesD == false)}
+    handleInput()
+  <p class="error">One duty must be choosen.</p>
+  {/if}
+
+  {#if message}
+  <div class="message">
+    {message}
+  </div>
+  {/if}
+
+	<button id="btn" type="submit" disabled={btnDisabled}>Register</button>
 </form>
 
 <style>
