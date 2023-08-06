@@ -1,0 +1,209 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model School {
+  school_id    Int          @id @default(autoincrement())
+  om_id        String?
+  name         String
+  zip_code     String
+  address      String
+  contact_id   String?
+  dir_name     String?
+  dir_phone    String?
+  school_email String?
+  website      String?
+  school_type  SchoolType[]
+  coop         Boolean?
+  note         String?
+  city         City         @relation(fields: [city_id], references: [city_id])
+  city_id      Int
+  country      Country      @relation(fields: [country_id], references: [country_id])
+  country_id   Int
+  county       County       @relation(fields: [county_id], references: [county_id])
+  county_id    Int
+  event        Event[]
+  region       Region       @relation(fields: [region_id], references: [region_id])
+  region_id    Int
+  contact      Contact?     @relation(fields: [contact_id], references: [contact_email])
+
+  @@map("schools")
+}
+
+model Contact {
+  contact_email String   @id
+  contact_name  String?
+  contact_phone String?
+  School        School[]
+
+  @@map("contacts")
+}
+
+model User {
+  user_id       String   @id @default(uuid())
+  name          String
+  nationality   String
+  phone         String
+  email         String   @unique
+  basic         Boolean?
+  regionB       String[]
+  medior        Boolean?
+  regionM       String[]
+  high          Boolean?
+  regionH       String[]
+  superior      Boolean?
+  regionS       String[]
+  director      Boolean?
+  event         Event[]
+  passwordHash  String
+  userAuthToken String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Event {
+  event_id           Int                  @id @default(autoincrement())
+  create_date        DateTime             @default(now())
+  closing_date       DateTime
+  event_type         EventType            @default(PRESENTATION)
+  presented_student  Int?
+  note               String?
+  School             School               @relation(fields: [school_id], references: [school_id])
+  school_id          Int
+  User               User                 @relation(fields: [user_id], references: [user_id])
+  user_id            String
+  InterestedStudents InterestedStudents[]
+
+  @@map("events")
+}
+
+model InterestedStudents {
+  intrest_id Int       @id @default(autoincrement())
+  event_id   Int
+  count      Int
+  city       String
+  grade      Grade
+  region     String
+  notice     Notice
+  applied    Boolean
+  work_title String
+  admission  Admission
+  regionId   Int       @unique
+  Event      Event     @relation(fields: [event_id], references: [event_id])
+
+  @@map("interested")
+}
+
+model Activity {
+  act_id          Int      @id @default(autoincrement())
+  date            DateTime
+  act_name        String
+  act_description String
+
+  @@map("activity")
+}
+
+model Country {
+  country_id Int      @id @default(autoincrement())
+  name       String   @unique
+  Region     Region[]
+  School     School[]
+
+  @@map("country")
+}
+
+model Region {
+  region_id  Int      @id @default(autoincrement())
+  name       String   @unique
+  country    Country  @relation(fields: [country_id], references: [country_id])
+  country_id Int
+  County     County[]
+  School     School[]
+
+  @@map("region")
+}
+
+model County {
+  county_id Int      @id @default(autoincrement())
+  name      String   @unique
+  region    Region   @relation(fields: [region_id], references: [region_id])
+  region_id Int
+  city      City[]
+  School    School[]
+
+  @@map("county")
+}
+
+model City {
+  city_id   Int      @id @default(autoincrement())
+  name      String   @unique
+  county    County   @relation(fields: [county_id], references: [county_id])
+  county_id Int
+  School    School[]
+
+  @@map("city")
+}
+
+enum Duty {
+  SUPERIOR
+  BASIC
+  MEDIOR
+  HIGH
+}
+
+enum SchoolType {
+  ART_SCHOOL
+  ELEMENTARY
+  TECHNICAL
+  GRAMMAR
+  COLLAGE
+  HOSTEL
+  ANY
+}
+
+enum EventType {
+  PRESENTATION
+  OPEN_DAY
+  BY_PHONE
+  BY_EMAIL
+  TV
+  RADIO
+  ONLINE
+  MEDIOR_LEAFLET
+}
+
+enum Grade {
+  PREPARATORY
+  CLASS_9
+  CLASS_10
+  CLASS_11
+  CLASS_12
+}
+
+enum Notice {
+  SCHOOL_PRESENTATION
+  FAMILY
+  TEACHER
+  FRENDS
+  CMM_MEMBER
+  CHLC
+  HIGH
+  FACEBOOK
+  ONLINE_PUBLICITY
+}
+
+enum Admission {
+  ADMITTED
+  REJECTED
+  IN_PROGRESS
+}
