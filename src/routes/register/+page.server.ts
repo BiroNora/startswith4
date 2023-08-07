@@ -25,7 +25,6 @@ const register: Action = async ({ request }) => {
   const director = Boolean(data.get('director'))
 	const password1 = data.get('password1')
   const password2 = data.get('password2')
-  console.log(typeof regionB)
 
 	if (typeof email != 'string' ||
       typeof password1 != 'string' ||
@@ -34,6 +33,10 @@ const register: Action = async ({ request }) => {
       password1 !== password2) {
 		return fail(400, { invalid: true })
 	}
+
+  if (regionB == null && regionH == null && regionM == null && regionS == null && director == false) {
+    return fail(400, { invalid: true })
+  }
 
   const user = await db.user.findUnique({
     where: { email }

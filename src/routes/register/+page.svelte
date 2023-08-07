@@ -7,18 +7,9 @@
   let yesH = false
   let yesS = false
   let yesD = false
-  let btnDisabled = false
-  let message = ''
-  
+
   export let form: ActionData
 
-
-  const handleInput = () => {
-    if (yesB == false && yesM == false && yesH == false && yesS == false && yesD == false) {
-      message = `One duty must be choosen.`
-      btnDisabled = true
-    }
-  }
 </script>
 
 <h1>Register</h1>
@@ -118,17 +109,10 @@
 	{/if}
 
   {#if (yesB == false && yesM == false && yesH == false && yesS == false && yesD == false)}
-    handleInput()
-  <p class="error">One duty must be choosen.</p>
+    <p class="error">One duty must be choosen.</p>
   {/if}
 
-  {#if message}
-  <div class="message">
-    {message}
-  </div>
-  {/if}
-
-	<button id="btn" type="submit" disabled={btnDisabled}>Register</button>
+	<button id="btn" type="submit">Register</button>
 </form>
 
 <style>
