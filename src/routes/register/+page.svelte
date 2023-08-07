@@ -13,7 +13,9 @@
 </script>
 
 <div class="grid">
-<h1 >Register</h1>
+  <div>
+    <h1>Register to Startswidth    <img src="../256.png" alt="icon" width="55" height="55"/></h1>
+  </div>
 
 <form action="?/register" method="post" use:enhance>
     <div>
@@ -136,16 +138,15 @@
     width: 35%;
     line-height: 85%;
     grid-row: minmax(5px, auto);
-    margin: auto;
-    border: 2px solid grey;
+    margin: 10px auto 10px auto;
+    border: 2px solid #32BEA6;
     border-radius: 5px;
     border-spacing: 2px;
     flex: 10 auto;
   }
-
-  .second {
-    display: inline;
-  }
+  .grid input:checked {
+  background-color: #32BEA6;
+}
 
   .dir {
     padding-bottom: 15px;
@@ -153,5 +154,6 @@
 
   .btn {
     margin-bottom: 0;
+    background-color: #32BEA6;
   }
   </style>
