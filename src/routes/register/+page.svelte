@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import type { ActionData } from './$types'
+	import type { ActionData, PageServerData } from './$types'
+
+  export let data: PageServerData
+  const { regio } = data
 
   let yesB = true
   let yesM = false
@@ -37,62 +40,38 @@
     <div class="second">
       <input type="checkbox" name="basic" bind:checked={yesB} />
         BASIC
-      <select name="regB" id="basic-select" class="hidden-textbox" >
-        <option value="" placeholder="Please enter the region(s)" >Please choose a region</option>
-        <option value="Dél-Alföld">Dél-Alföld</option>
-        <option value="Dél-Dunántúl">Dél-Dunántúl</option>
-        <option value="Észak-Magyarország">Észak-Magyarország</option>
-        <option value="Budapest">Budapest</option>
-        <option value="Közép-Dunántúl">Közép-Dunántúl</option>
-        <option value="Nyugat-Dunántúl">Nyugat-Dunántúl</option>
-        <option value="Észak-Alföld">Észak-Alföld</option>
-        <option value="Közép-Magyarország">Közép-Magyarország</option>
+      <select name="regB" id="sel-B" class="hidden-textbox" >
+        {#each regio as reg}
+          <option value="{reg.region_id}">{reg.name}</option>
+        {/each}
       </select>
     </div>
     <div>
       <input type="checkbox" name="medior" bind:checked={yesM} />
         MEDIOR
-        <select name="regM" id="basic-select" class="hidden-textbox" >
-          <option value="" placeholder="Please enter the region(s)" >Please choose a region</option>
-          <option value="Dél-Alföld">Dél-Alföld</option>
-          <option value="Dél-Dunántúl">Dél-Dunántúl</option>
-          <option value="Észak-Magyarország">Észak-Magyarország</option>
-          <option value="Budapest">Budapest</option>
-          <option value="Közép-Dunántúl">Közép-Dunántúl</option>
-          <option value="Nyugat-Dunántúl">Nyugat-Dunántúl</option>
-          <option value="Észak-Alföld">Észak-Alföld</option>
-          <option value="Közép-Magyarország">Közép-Magyarország</option>
+        <select name="regM" id="sel-M" class="hidden-textbox" >
+          {#each regio as reg}
+            <option value="{reg.region_id}">{reg.name}</option>
+          {/each}
         </select>
       </div>
     <div>
       <input type="checkbox" name="high" bind:checked={yesH} />
         HIGH
-      <select name="regH" id="basic-select" class="hidden-textbox" >
-        <option value="" placeholder="Please enter the region(s)" >Please choose a region</option>
-        <option value="Dél-Alföld">Dél-Alföld</option>
-        <option value="Dél-Dunántúl">Dél-Dunántúl</option>
-        <option value="Észak-Magyarország">Észak-Magyarország</option>
-        <option value="Budapest">Budapest</option>
-        <option value="Közép-Dunántúl">Közép-Dunántúl</option>
-        <option value="Nyugat-Dunántúl">Nyugat-Dunántúl</option>
-        <option value="Észak-Alföld">Észak-Alföld</option>
-        <option value="Közép-Magyarország">Közép-Magyarország</option>
-      </select>
+        <select name="regH" id="sel-H" class="hidden-textbox" >
+          {#each regio as reg}
+            <option value="{reg.region_id}">{reg.name}</option>
+          {/each}
+        </select>
       </div>
     <div >
       <input type="checkbox" name="superior" bind:checked={yesS} />
         SUPERIOR
-      <select name="regS" id="basic-select" class="hidden-textbox" >
-        <option value="" placeholder="Please enter the region(s)" >Please choose a region</option>
-        <option value="Dél-Alföld">Dél-Alföld</option>
-        <option value="Dél-Dunántúl">Dél-Dunántúl</option>
-        <option value="Észak-Magyarország">Észak-Magyarország</option>
-        <option value="Budapest">Budapest</option>
-        <option value="Közép-Dunántúl">Közép-Dunántúl</option>
-        <option value="Nyugat-Dunántúl">Nyugat-Dunántúl</option>
-        <option value="Észak-Alföld">Észak-Alföld</option>
-        <option value="Közép-Magyarország">Közép-Magyarország</option>
-      </select>
+        <select name="regS" id="sel-S" class="hidden-textbox" >
+          {#each regio as reg}
+            <option value="{reg.region_id}">{reg.name}</option>
+          {/each}
+        </select>
       </div>
     <div class="dir">
       <input type="checkbox" name="director" bind:checked={yesD} />
@@ -106,7 +85,6 @@
       <label for="password2">Confirm Password</label>
       <input type="password" name="password2" id="password2" required />
     </div>
-
 
 	{#if form?.user}
 		<p class="error">Email is taken.</p>
@@ -126,7 +104,7 @@
   }
 
   input[type='checkbox']:checked~.hidden-textbox {
-  visibility: visible;
+    visibility: visible;
   }
 
   .grid {
