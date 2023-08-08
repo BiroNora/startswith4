@@ -10,10 +10,14 @@
   let yesH = false
   let yesS = false
   let yesD = false
+  let pageName="Register to Startswidth";
 
   export let form: ActionData
 
 </script>
+<svelte:head>
+    <title> {pageName} </title>
+</svelte:head>
 
 <div class="grid">
   <div>
