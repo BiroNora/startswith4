@@ -4,7 +4,8 @@ import bcrypt from 'bcrypt'
 import { db } from '$lib/database'
 
 export const load: PageServerLoad = async () => {
-	const regio = await db.region.findMany({
+  const regio = await db.region.findMany({
+    orderBy: { name: 'asc' },
   })
   console.log(regio)
   return {regio}
