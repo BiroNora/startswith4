@@ -1,1 +1,1 @@
-<p>Visit <a href="/register">Register</a> to read the documentation</p>
+<p>Visit <a href="/register/school">Register</a> to read the documentation</p>
