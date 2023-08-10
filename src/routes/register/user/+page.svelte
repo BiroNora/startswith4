@@ -20,8 +20,8 @@
 </svelte:head>
 
 <div class="grid">
-  <div>
-    <h1>Register to Startswidth    <img src="../../256.png" alt="icon" width="55" height="55"/></h1>
+  <div class="rei">
+    <p>Register to Startswidth</p>
   </div>
 
 <form action="?/user" method="post" use:enhance>
@@ -103,6 +103,13 @@
 </div>
 
 <style>
+  .rei p {
+    position: relative;
+    line-height: normal;
+    font-size: 140%;
+    font-weight: bold;
+  }
+
   .hidden-textbox {
       visibility: hidden;
   }
