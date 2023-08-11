@@ -21,7 +21,7 @@ model School {
   dir_phone    String?
   school_email String?
   website      String?
-  school_type  SchoolType[]
+  school_type  String[]
   coop         Boolean?
   note         String?
   city         City         @relation(fields: [city_id], references: [city_id])
@@ -159,16 +159,6 @@ enum Duty {
   BASIC
   MEDIOR
   HIGH
-}
-
-enum SchoolType {
-  ART_SCHOOL
-  ELEMENTARY
-  TECHNICAL
-  GRAMMAR
-  COLLAGE
-  HOSTEL
-  ANY
 }
 
 enum EventType {
