@@ -10,7 +10,7 @@
   let yesH = false
   let yesS = false
   let yesD = false
-  let pageName="Register to Startswidth";
+  let pageName="Register to Startswidth"
 
   export let form: ActionData
 

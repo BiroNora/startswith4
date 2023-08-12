@@ -1,2 +1,26 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="/register/school">kit.svelte.dev</a> to read the documentation</p>
+<div class="container">
+  <h1>Welcome to Startswidth</h1>
+  <p>Visit <a href="/register/school">kit.svelte.dev</a> to read the documentation</p>
+</div>
+
+
+<style>
+  .container {
+    padding: 35px 15px 15px 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-content: space-around;
+    line-height: 85%;
+    grid-row: minmax(5px, auto);
+    margin: 10px auto 10px auto;
+    border: 2px solid #32BEA6;
+    border-radius: 5px;
+    border-spacing: 2px;
+    flex: 10 auto;
+  }
+  h1 {
+    display: flex;
+    align-items: center;
+  }
+</style>

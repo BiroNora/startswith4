@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import type { ActionData, PageServerData } from './$types'
+	import type { PageServerData } from './$types'
 
   export let data: PageServerData
   const { country, regio, county, city } = data
@@ -22,8 +22,6 @@
   let yesO = true
   let pageName="School Register"
 
-  //export let form: ActionData
-
 </script>
 <svelte:head>
     <title> {pageName} </title>
@@ -37,7 +35,7 @@
 <form action="?/school" method="post" use:enhance>
   <fieldset>
     <legend>Location</legend>
-    <p class="notice">Please note: if country / region / county /city <i>does not exist</i>  in the list, <a class="aa" href="/registration/location">use this link</a>  before the registration. </p>
+    <p class="notice">Please note: if country / region / county /city <i>does not exist</i>  in the list, <a class="aa" href="/register/location">use this link</a>  before the registration. </p>
     <div>
       <label for="countr">Country</label>
       <select name="countr" id="countr" >
