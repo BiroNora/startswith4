@@ -5,16 +5,16 @@ import { db } from '$lib/database'
 
 export const load: PageServerLoad = async () => {
   const country = await db.country.findMany({
-    orderBy: { name: 'asc' },
+    orderBy: { country_name: 'asc' },
   })
   const regio = await db.region.findMany({
-    orderBy: { name: 'asc' },
+    orderBy: { region_name: 'asc' },
   })
   const county = await db.county.findMany({
-    orderBy: { name: 'asc' },
+    orderBy: { county_name: 'asc' },
   })
   const city = await db.city.findMany({
-    orderBy: { name: 'asc' },
+    orderBy: { city_name: 'asc' },
   })
   return {country, regio, county, city}
 }

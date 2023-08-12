@@ -46,7 +46,7 @@
         BASIC
       <select name="regB" id="sel-B" class="hidden-textbox" >
         {#each regio as reg}
-          <option value="{reg.region_id}">{reg.name}</option>
+          <option value="{reg.region_id}">{reg.region_name}</option>
         {/each}
       </select>
     </div>
@@ -55,7 +55,7 @@
         MEDIOR
         <select name="regM" id="sel-M" class="hidden-textbox" >
           {#each regio as reg}
-            <option value="{reg.region_id}">{reg.name}</option>
+            <option value="{reg.region_id}">{reg.region_name}</option>
           {/each}
         </select>
       </div>
@@ -64,7 +64,7 @@
         HIGH
         <select name="regH" id="sel-H" class="hidden-textbox" >
           {#each regio as reg}
-            <option value="{reg.region_id}">{reg.name}</option>
+            <option value="{reg.region_id}">{reg.region_name}</option>
           {/each}
         </select>
       </div>
@@ -73,7 +73,7 @@
         SUPERIOR
         <select name="regS" id="sel-S" class="hidden-textbox" >
           {#each regio as reg}
-            <option value="{reg.region_id}">{reg.name}</option>
+            <option value="{reg.region_id}">{reg.region_name}</option>
           {/each}
         </select>
       </div>

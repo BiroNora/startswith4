@@ -5,7 +5,7 @@ import { db } from '$lib/database'
 
 export const load: PageServerLoad = async () => {
   const regio = await db.region.findMany({
-    orderBy: { name: 'asc' },
+    orderBy: { region_name: 'asc' },
   })
   return {regio}
 }

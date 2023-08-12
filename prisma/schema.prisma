@@ -114,39 +114,39 @@ model Activity {
 }
 
 model Country {
-  country_id Int      @id @default(autoincrement())
-  name       String   @unique
-  Region     Region[]
-  School     School[]
+  country_id   Int      @id @default(autoincrement())
+  country_name String   @unique
+  Region       Region[]
+  School       School[]
 
   @@map("country")
 }
 
 model Region {
-  region_id  Int      @id @default(autoincrement())
-  name       String   @unique
-  country    Country  @relation(fields: [country_id], references: [country_id])
-  country_id Int
-  County     County[]
-  School     School[]
+  region_id   Int      @id @default(autoincrement())
+  region_name String   @unique
+  country     Country  @relation(fields: [country_id], references: [country_id])
+  country_id  Int
+  County      County[]
+  School      School[]
 
   @@map("region")
 }
 
 model County {
-  county_id Int      @id @default(autoincrement())
-  name      String   @unique
-  region    Region   @relation(fields: [region_id], references: [region_id])
-  region_id Int
-  city      City[]
-  School    School[]
+  county_id   Int      @id @default(autoincrement())
+  county_name String   @unique
+  region      Region   @relation(fields: [region_id], references: [region_id])
+  region_id   Int
+  city        City[]
+  School      School[]
 
   @@map("county")
 }
 
 model City {
   city_id   Int      @id @default(autoincrement())
-  name      String   @unique
+  city_name String   @unique
   county    County   @relation(fields: [county_id], references: [county_id])
   county_id Int
   School    School[]
