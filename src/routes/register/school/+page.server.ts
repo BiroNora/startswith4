@@ -52,6 +52,10 @@ const school: Action = async ({ request }) => {
   const contact_id = 'norabora.biro@gmail.com'
   const school_type = []
 
+  if (country_id == 1 && om_id?.length != 6) {
+    return fail(400, {school: true})
+  }
+
   if (altisk) {
     school_type.push('ÁLTALÁNOS ISKOLA')
   }

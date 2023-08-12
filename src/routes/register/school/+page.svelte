@@ -20,6 +20,7 @@
   let yesM = false
   let yesN = false
   let yesO = true
+  let omi = ''
   let pageName="School Register"
 
 </script>
@@ -71,8 +72,8 @@
   </fieldset>
   <br>
     <div>
-      <label for="om">OM id (only for Hungary)</label>
-      <input type="text" name="om" id="om" />
+      <label for="om">OM id (for Hungary <strong>required</strong>)</label>
+      <input type="text" name="om" id="om" bind:value={omi}/>
     </div>
     <div>
       <label for="name">School name</label>
@@ -186,6 +187,10 @@
           cols="50" >
           </textarea>
     </fieldset>
+
+  {#if (omi != '' && omi.length != 6)}
+    <p>Please enter the correct OM Id</p>
+  {/if}
 
   {#if (yesA == false && yesB == false && yesC == false && yesD == false && yesE == false && yesF == false && yesG == false && yesH == false && yesI == false && yesJ == false && yesK == false && yesL == false && yesM == false && yesN == false)}
     <p class="error">One school type must be choosen.</p>

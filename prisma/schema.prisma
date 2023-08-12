@@ -12,7 +12,7 @@ datasource db {
 
 model School {
   school_id    Int      @id @default(autoincrement())
-  om           String
+  om_id        String?
   name         String
   zip_code     String
   address      String
