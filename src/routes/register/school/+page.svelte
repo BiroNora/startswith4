@@ -72,7 +72,7 @@
   </fieldset>
   <br>
     <div>
-      <label for="om">OM id (for Hungary <strong>required</strong>)</label>
+      <label for="om">OM id (for Hungary <strong><i>required</i></strong>)</label>
       <input type="text" name="om" id="om" bind:value={omi}/>
     </div>
     <div>
