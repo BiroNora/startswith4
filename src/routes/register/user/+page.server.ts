@@ -7,7 +7,6 @@ export const load: PageServerLoad = async () => {
   const regio = await db.region.findMany({
     orderBy: { name: 'asc' },
   })
-  console.log(regio)
   return {regio}
 }
 
