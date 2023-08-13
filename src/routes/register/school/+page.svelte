@@ -189,7 +189,7 @@
     </fieldset>
 
   {#if (omi != '' && omi.length != 6)}
-    <p>Please enter the correct OM Id</p>
+    <p class="error">OM Id is inadequate.</p>
   {/if}
 
   {#if (yesA == false && yesB == false && yesC == false && yesD == false && yesE == false && yesF == false && yesG == false && yesH == false && yesI == false && yesJ == false && yesK == false && yesL == false && yesM == false && yesN == false)}
@@ -260,5 +260,14 @@
   .btn {
     margin-bottom: 0;
     background-color: #32BEA6;
+  }
+
+  .error {
+    color: tomato;
+    padding: 2%;
+    text-align: center;
+    font-style: italic;
+    line-height: normal;
+    line-height: 95%;
   }
   </style>

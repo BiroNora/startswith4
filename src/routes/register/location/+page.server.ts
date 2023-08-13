@@ -2,7 +2,6 @@ import { fail, redirect} from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 import { db } from '$lib/database'
 
-
 export const load: PageServerLoad = async () => {
   const country = await db.country.findMany({
     orderBy: { country_name: 'asc' },
@@ -25,11 +24,12 @@ const location: Action = async ({ request }) => {
   const region_name = String(data.get('region'))
   const county_name = String(data.get('county'))
   const city_name = String(data.get('city'))
+  let exists = false
 
   const countryifexists = await db.country.findUnique({
     where: {country_name}
   })
-
+  //console.log(countryifexists)
   const regioncountry = await db.region.findUnique({
     where: { region_name }
   })
@@ -43,6 +43,7 @@ const location: Action = async ({ request }) => {
   })
 
   if ((countryifexists) && (regioncountry?.country_id == countryifexists?.country_id) && (countyregion?.region_id == regioncountry?.region_id) && (citycounty?.county_id == countyregion?.county_id) && (citycounty)) {
+    exists = true
     return fail(400, {school: true})
   }
 

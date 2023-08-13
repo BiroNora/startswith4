@@ -145,4 +145,13 @@
     margin-bottom: 0;
     background-color: #32BEA6;
   }
+
+  .error {
+    color: tomato;
+    padding: 2%;
+    text-align: center;
+    font-style: italic;
+    line-height: normal;
+    line-height: 95%;
+  }
   </style>
