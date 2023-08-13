@@ -72,7 +72,7 @@
   </fieldset>
   <br>
     <div>
-      <label for="om">OM id (for Hungary <strong><i>required</i></strong>)</label>
+      <label for="om">OM id (<i>only</i> for Hungary)</label>
       <input type="text" name="om" id="om" bind:value={omi}/>
     </div>
     <div>
@@ -201,6 +201,9 @@
 </div>
 
 <style>
+  i {
+    color: #32BEA6;
+  }
   .notice {
     color: tomato;
     padding: 2%;
