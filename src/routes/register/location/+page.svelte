@@ -1,8 +1,5 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import type { PageServerData } from '../location/$types'
-
-  //export let data: PageServerData
 
   let pageName="Location Register"
 </script>
