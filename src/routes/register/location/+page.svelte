@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
+  import type { ActionData } from './$types'
 
   let pageName="Location Register"
+
+  export let form: ActionData
 </script>
 
 <svelte:head>
@@ -33,6 +36,10 @@
     </div>
   </fieldset>
   <br>
+  console.log({form?.countryifexists})
+  {#if ((form?.country_id) && (form?.region_name) && (form?.county_name) && form?.city_name)}
+      <p class="error">Contact with this email is already exists.</p>
+  {/if}
   <button class="btn" id="btn" type="submit">Register</button>
 </form>
 </div>
