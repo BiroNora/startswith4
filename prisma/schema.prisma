@@ -42,6 +42,7 @@ model Contact {
   contact_email String   @id
   contact_name  String?
   contact_phone String?
+  note          String?
   School        School[]
 
   @@map("contacts")
