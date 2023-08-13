@@ -36,8 +36,8 @@
     </div>
   </fieldset>
   <br>
-  console.log({form?.countryifexists})
-  {#if ((form?.country_id) && (form?.region_name) && (form?.county_name) && form?.city_name)}
+
+  {#if ((form?.city))}
       <p class="error">Contact with this email is already exists.</p>
   {/if}
   <button class="btn" id="btn" type="submit">Register</button>
