@@ -29,7 +29,7 @@ const location: Action = async ({ request }) => {
   const countryifexists = await db.country.findUnique({
     where: {country_name}
   })
-  //console.log(countryifexists)
+  
   const regioncountry = await db.region.findUnique({
     where: { region_name }
   })
