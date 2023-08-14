@@ -173,6 +173,13 @@
       HÍDPROGRAMOK
     </div>
     <br>
+    <div class="dir i">
+      <a href="/lists/contacts" target=”_blank” style="color: #32BEA6"><strong>Add existing Contact(s)</strong></a>
+    </div>
+    <div class="dir i">
+      <a href="./contact" target=”_blank” style="color: #32BEA6"><strong>Add a new Contact</strong></a>
+    </div>
+    <br>
     <fieldset>
       <legend>Memo</legend>
       <br>
@@ -260,6 +267,12 @@
   .btn {
     margin-bottom: 0;
     background-color: #32BEA6;
+  }
+
+  .dir {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    decoration-color: #32BEA6;
   }
 
   .error {
