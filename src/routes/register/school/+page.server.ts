@@ -16,7 +16,7 @@ export const load: PageServerLoad = async () => {
   const city = await db.city.findMany({
     orderBy: { city_name: 'asc' },
   })
-  console.log(county)
+
   return {country, regio, county, city}
 }
 
