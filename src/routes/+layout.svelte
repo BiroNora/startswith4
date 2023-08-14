@@ -22,6 +22,12 @@
       <li>
         <a href="/register/event">Event R</a>
       </li>
+      <li>
+        <a href="/lists/contacts">Contact List</a>
+      </li>
+      <li>
+        <a href="/lists/schools">School List</a>
+      </li>
     </ul>
   </nav>
 
