@@ -39,7 +39,8 @@ model School {
 }
 
 model Contact {
-  contact_email String   @id
+  contact_id    Int      @id @default(autoincrement())
+  contact_email String   @unique
   contact_name  String?
   contact_phone String?
   note          String?
