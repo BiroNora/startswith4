@@ -13,8 +13,8 @@
     <title> {pageName} </title>
 </svelte:head>
 <div class="rounded-table">
-  <div >
-    <p class="rei">Contacts</p>
+  <div class="bb">
+    <p class="rei">Contacts <a class="aa" href="../register/contact" target=”_blank” style="color: #32BEA6"><strong>Add a new Contact</strong></a></p>
   </div>
   <br>
   <div class="table">
@@ -78,12 +78,23 @@
 }
 
 .rei {
+  display: inline-flexbox;
   padding-top: 40px;
   padding-left: 20px;
   padding-bottom: -5px;
-  position: relative;
   line-height: normal;
   font-size: 150%;
+  font-weight: bold;
+}
+
+.aa {
+  position: absolute;
+  right: 0;
+  display: inline-flexbox;
+  padding-right: 20px;
+  margin-right: 20px;
+  line-height: normal;
+  font-size: 80%;
   font-weight: bold;
 }
 

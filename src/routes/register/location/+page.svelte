@@ -4,7 +4,6 @@
 
   let pageName="Location Register"
 
-  export let form: ActionData
 </script>
 
 <svelte:head>
@@ -36,10 +35,6 @@
     </div>
   </fieldset>
   <br>
-
-  {#if ((form?.city))}
-      <p class="error">Contact with this email is already exists.</p>
-  {/if}
   <button class="btn" id="btn" type="submit">Register</button>
 </form>
 </div>

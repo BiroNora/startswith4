@@ -28,6 +28,10 @@
       <label for="phone">Phone</label>
       <input type="text" name="phone" id="phone" required />
     </div>
+    <div>
+      <label for="uemail">User email</label>
+      <input type="text" name="uemail" id="uemail" required />
+    </div>
   <br>
     <fieldset>
       <legend>Note</legend>

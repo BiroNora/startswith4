@@ -51,6 +51,7 @@ const school: Action = async ({ request }) => {
   const contact_email = String(data.get('contactemail'))
   const contact_phone = String(data.get('contactphone'))
   const contact_note = String(data.get('contactmessage'))
+  const user_email = String(data.get('useremail'))
   const coop = Boolean(data.get('coop'))
 	const note = String(data.get('message'))
   const school_type = []
@@ -105,13 +106,15 @@ const school: Action = async ({ request }) => {
 
   if (contact_email.valueOf() === 'null' ||
       contact_name.valueOf() === 'null' ||
-      contact_phone.valueOf() === 'null') {
+      contact_phone.valueOf() === 'null' ||
+      user_email.valueOf() === 'null') {
       console.log('nincs contact')
 
   }
   if (contact_email.valueOf() !== 'null' &&
       contact_name.valueOf() !== 'null' &&
-      contact_phone.valueOf() !== 'null'){
+      contact_phone.valueOf() !== 'null' &&
+      user_email.valueOf() !== 'null'){
       console.log('van contact')
 
   const contacty = await db.contact.findUnique({
@@ -121,13 +124,13 @@ const school: Action = async ({ request }) => {
   if ((contacty)) {
     return fail(400, {contact: true})
   }
-
+  // IDE KELL A MANY_TO_MANY RELATIONSHIP! USER - CONTACT
   await db.contact.create({
     data: {
       contact_email,
       contact_name,
       contact_phone,
-      contact_note
+      contact_note,
     }
   })
 

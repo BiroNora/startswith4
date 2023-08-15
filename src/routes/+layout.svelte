@@ -2,7 +2,7 @@
     import '@picocss/pico'
   </script>
 
-<nav>
+<nav aria-label="breadcrumb">
     <ul>
       <li>
         <a href="/">Home</a>

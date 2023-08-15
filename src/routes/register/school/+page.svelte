@@ -35,7 +35,7 @@
 
 <form action="?/school" method="post" use:enhance>
   <fieldset>
-    <legend>Location</legend>
+    <legend><strong>Location</strong></legend>
     <p class="notice">Please note: if country / region / county /city <i>does not exist</i>  in the list, <a class="aa" href="/register/location">use this link</a>  before the registration. </p>
     <div>
       <label for="countr">Country</label>
@@ -173,12 +173,6 @@
       HÍDPROGRAMOK
     </div>
     <br>
-    <div class="dir i">
-      <a href="/lists/contacts" target=”_blank” style="color: #32BEA6"><strong>Add existing Contact(s)</strong></a>
-    </div>
-    <div class="dir i">
-      <a href="./contact" target=”_blank” style="color: #32BEA6"><strong>Add a new Contact</strong></a>
-    </div>
     <br>
     <fieldset>
       <legend>Memo</legend>
@@ -192,7 +186,7 @@
           name="message"
           rows="4"
           cols="50" >
-          </textarea>
+        </textarea>
     </fieldset>
 
   {#if (omi != '' && omi.length != 6)}
@@ -223,6 +217,7 @@
     color: #32BEA6;
     font-style: italic;
   }
+
   fieldset {
     position: relative;
     padding: 6px;
@@ -267,12 +262,6 @@
   .btn {
     margin-bottom: 0;
     background-color: #32BEA6;
-  }
-
-  .dir {
-    padding-top: 15px;
-    padding-bottom: 15px;
-    decoration-color: #32BEA6;
   }
 
   .error {

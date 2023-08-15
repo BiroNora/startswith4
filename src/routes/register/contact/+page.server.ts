@@ -8,7 +8,8 @@ const contact: Action = async ({ request }) => {
   const contact_name = String(data.get('name'))
   const contact_email = String(data.get('email'))
   const contact_phone = String(data.get('phone'))
-  const note = String(data.get('message'))
+  const user_email = String(data.get('uemail'))
+  const contact_note = String(data.get('message'))
 
   const contact = await db.contact.findUnique({
     where: {contact_email}
@@ -22,11 +23,17 @@ const contact: Action = async ({ request }) => {
       contact_email,
       contact_name,
       contact_phone,
-      note,
+      contact_note,
+      user_email
     }
   })
 
-  throw redirect(303, '/register/school')
+  const newcontact = await db.contact.findUnique({
+    where: {contact_email}
+  })
+  console.log(newcontact?.contact_id)
+
+  throw redirect(303, '../lists/contacts')
 }
 
 export const actions: Actions = { contact }
