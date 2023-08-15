@@ -2,7 +2,6 @@ import { fail, redirect} from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 import { db } from '$lib/database'
 
-
 export const load: PageServerLoad = async () => {
   const country = await db.country.findMany({
     orderBy: { country_name: 'asc' },
@@ -48,10 +47,14 @@ const school: Action = async ({ request }) => {
   const kieg = Boolean(data.get('iskL'))
   const kolleg = Boolean(data.get('iskM'))
   const hidp = Boolean(data.get('iskN'))
+  const contact_name = String(data.get('contactname'))
+  const contact_email = String(data.get('contactemail'))
+  const contact_phone = String(data.get('contactphone'))
+  const contact_note = String(data.get('contactmessage'))
   const coop = Boolean(data.get('coop'))
 	const note = String(data.get('message'))
-  const contact_id = 'norabora.biro@gmail.com'
   const school_type = []
+  let contact_id = null
 
   if (country_id == 1 && om_id?.length != 6) {
     return fail(400, {school: true})
@@ -99,6 +102,44 @@ const school: Action = async ({ request }) => {
   if (hidp) {
     school_type.push('HÍDPROGRAMOK')
   }
+
+  if (contact_email.valueOf() === 'null' ||
+      contact_name.valueOf() === 'null' ||
+      contact_phone.valueOf() === 'null') {
+      console.log('nincs contact')
+
+  }
+  if (contact_email.valueOf() !== 'null' &&
+      contact_name.valueOf() !== 'null' &&
+      contact_phone.valueOf() !== 'null'){
+      console.log('van contact')
+
+  const contacty = await db.contact.findUnique({
+  where: {contact_email}
+  })
+
+  if ((contacty)) {
+    return fail(400, {contact: true})
+  }
+
+  await db.contact.create({
+    data: {
+      contact_email,
+      contact_name,
+      contact_phone,
+      contact_note
+    }
+  })
+
+  const newcontact = await db.contact.findUnique({
+    where: {contact_email}
+  })
+  contact_id = newcontact?.contact_id
+  console.log('contact_id:')
+  console.log(contact_id)
+
+  }
+  //const cont = await db.contact.
 
   const regioncountry = await db.region.findUnique({
     where: { region_id }
