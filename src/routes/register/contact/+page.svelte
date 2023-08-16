@@ -32,6 +32,10 @@
       <label for="uemail">User email</label>
       <input type="text" name="uemail" id="uemail" required />
     </div>
+    <div>
+      <label for="schemail">School email</label>
+      <input type="text" name="schemail" id="schemail" required />
+    </div>
   <br>
     <fieldset>
       <legend>Note</legend>
@@ -44,7 +48,7 @@
     </fieldset>
 
   {#if form?.contact}
-      <p class="error">Contact already exists.</p>
+      <p class="error">Please enter correct data.</p>
   {/if}
   <button class="btn" id="btn" type="submit">Register</button>
 </form>

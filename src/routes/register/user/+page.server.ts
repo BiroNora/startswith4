@@ -7,7 +7,7 @@ export const load: PageServerLoad = async () => {
   const regio = await db.region.findMany({
     orderBy: { region_name: 'asc' },
   })
-  
+
   return {regio}
 }
 
@@ -16,7 +16,7 @@ const user: Action = async ({ request }) => {
   const name = String(data.get('name'))
   const nationality = String(data.get('nationality'))
   const phone = String(data.get('phone'))
-	const email = String(data.get('email'))
+	const user_email = String(data.get('email'))
   const basic = Boolean(data.get('basic'))
   const reB = String(data.get('regB'))
   const medior = Boolean(data.get('medior'))
@@ -57,10 +57,10 @@ const user: Action = async ({ request }) => {
     regionS = NaN
   }
 
-	if (typeof email != 'string' ||
+	if (typeof user_email != 'string' ||
       typeof password1 != 'string' ||
       typeof password2 != 'string' ||
-      !email || !password1 || !password2 ||
+      !user_email || !password1 || !password2 ||
       password1 !== password2) {
 		return fail(400, { invalid: true })
 	}
@@ -70,7 +70,7 @@ const user: Action = async ({ request }) => {
   }
 
   const user = await db.user.findUnique({
-    where: { email }
+    where: { user_email }
   })
 
   if (user) {
@@ -82,7 +82,7 @@ const user: Action = async ({ request }) => {
       name,
       nationality,
       phone,
-      email,
+      user_email,
       basic,
       regionB,
       medior,

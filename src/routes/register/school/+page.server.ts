@@ -55,7 +55,6 @@ const school: Action = async ({ request }) => {
   const coop = Boolean(data.get('coop'))
 	const note = String(data.get('message'))
   const school_type = []
-  let contact_id = null
 
   if (country_id == 1 && om_id?.length != 6) {
     return fail(400, {school: true})
@@ -124,7 +123,7 @@ const school: Action = async ({ request }) => {
   if ((contacty)) {
     return fail(400, {contact: true})
   }
-  // IDE KELL A MANY_TO_MANY RELATIONSHIP! USER - CONTACT
+
   await db.contact.create({
     data: {
       contact_email,
@@ -134,16 +133,15 @@ const school: Action = async ({ request }) => {
     }
   })
 
-  const newcontact = await db.contact.findUnique({
-    where: {contact_email}
+  await db.contactonschool.create({
+    data: {
+      school_email,
+      contact_email
+    }
   })
-  contact_id = newcontact?.contact_id
-  console.log('contact_id:')
-  console.log(contact_id)
 
-  }
   //const cont = await db.contact.
-
+}
   const regioncountry = await db.region.findUnique({
     where: { region_id }
   })
@@ -171,7 +169,6 @@ const school: Action = async ({ request }) => {
       name,
       zip_code,
       address,
-      contact_id,
       dir_name,
       dir_phone,
       school_email,

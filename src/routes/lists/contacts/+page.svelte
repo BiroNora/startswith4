@@ -40,7 +40,7 @@
               <td class="cent fonts">{con.contact_name}</td>
               <td class="cent fonts">{con.contact_email}</td>
               <td class="cent fonts">{con.contact_phone}</td>
-              <td class="cent fonts">{con.note}</td>
+              <td class="cent fonts">{con.contact_note}</td>
               <td class="cent fonts"><button class="dbc">
                 Update
               </button></td>

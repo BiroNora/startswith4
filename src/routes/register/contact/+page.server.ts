@@ -9,31 +9,50 @@ const contact: Action = async ({ request }) => {
   const contact_email = String(data.get('email'))
   const contact_phone = String(data.get('phone'))
   const user_email = String(data.get('uemail'))
+  const school_email = String(data.get('schemail'))
   const contact_note = String(data.get('message'))
 
   const contact = await db.contact.findUnique({
     where: {contact_email}
   })
+  const useremail = await db.user.findUnique({
+    where: {user_email}
+  })
+  const schoolemail = await db.school.findUnique({
+    where: {school_email}
+  })
 
-  if ((contact)) {
+  if ((contact) || (!useremail) || (!schoolemail)) {
     return fail(400, {contact: true})
   }
-  await db.contact.create({
+  else {
+    await db.contact.create({
     data: {
       contact_email,
       contact_name,
       contact_phone,
       contact_note,
-      user_email
     }
   })
 
-  const newcontact = await db.contact.findUnique({
-    where: {contact_email}
+  await db.contactOnSchool.create({
+    data: {
+      school_email,
+      contact_email
+    }
   })
-  console.log(newcontact?.contact_id)
+
+  await db.contactOnUser.create({
+    data: {
+      user_email,
+      contact_email
+    }
+  })
 
   throw redirect(303, '../lists/contacts')
+  }
+
+
 }
 
 export const actions: Actions = { contact }
