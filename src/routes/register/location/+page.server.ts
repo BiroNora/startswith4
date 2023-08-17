@@ -1,35 +1,97 @@
 import { fail, redirect} from '@sveltejs/kit'
-import type { Action, Actions, PageServerLoad } from './$types'
+import type { Action, Actions } from './$types'
 import { db } from '$lib/database'
-
-
-export const load: PageServerLoad = async () => {
-  const country = await db.country.findMany({
-    orderBy: { country_name: 'asc' },
-  })
-  const regio = await db.region.findMany({
-    orderBy: { region_name: 'asc' },
-  })
-  const county = await db.county.findMany({
-    orderBy: { county_name: 'asc' },
-  })
-  const city = await db.city.findMany({
-    orderBy: { city_name: 'asc' },
-  })
-  return {country, regio, county, city}
-}
+import { loccond } from '../stores'
 
 const location: Action = async ({ request }) => {
   const data = await request.formData()
-  const country_name = String(data.get('country'))
-  const region_name = String(data.get('region'))
-  const county_name = String(data.get('county'))
-  const city_name = String(data.get('city'))
+  let country = String(data.get('country'))
+  let region = String(data.get('region'))
+  let county = String(data.get('county'))
+  let city = String(data.get('city'))
+  let countryname = ''
+  let country_name
+  let regionname = ''
+  let region_name
+  let countyname = ''
+  let county_name
+  let cityname = ''
+  let city_name
+
+
+  if (country.endsWith('-')) {
+    country = country.slice(0, -1)
+  }
+
+  const ctry = country.replace(/[!@#$%^&*~°?]/g, "").split('-')
+  for (const val of ctry) {
+    countryname += val.charAt(0).toUpperCase() + val.slice(1).toLowerCase()
+    countryname += '-'
+  }
+
+  if (countryname.endsWith("-")) {
+    country_name = countryname.slice(0, -1)
+  } else {
+    country_name = countryname
+  }
+
+
+  if (region.endsWith('-')) {
+    region = region.slice(0, -1)
+  }
+
+  const reg = region.replace(/[!@#$%^&*~°?]/g, "").split('-')
+  for (const val of reg) {
+    regionname += val.charAt(0).toUpperCase() + val.slice(1).toLowerCase()
+    regionname += '-'
+  }
+
+  if (regionname.endsWith("-")) {
+    region_name = regionname.slice(0, -1)
+  } else {
+    region_name = regionname
+  }
+
+
+  if (county.endsWith('-')) {
+    county = county.slice(0, -1)
+  }
+
+  const cnty = county.replace(/[!@#$%^&*~°?]/g, "").split('-')
+  for (const val of cnty) {
+    countyname += val.charAt(0).toUpperCase() + val.slice(1).toLowerCase()
+    countyname += '-'
+  }
+
+  if (countyname.endsWith("-")) {
+    county_name = countyname.slice(0, -1)
+  } else {
+    county_name = countyname
+  }
+
+
+
+  if (city.endsWith('-')) {
+    city = city.slice(0, -1)
+  }
+
+  const c = city.replace(/[!@#$%^&*~°?]/g, "").split('-')
+  for (const val of c) {
+    cityname += val.charAt(0).toUpperCase() + val.slice(1).toLowerCase()
+    cityname += '-'
+  }
+
+  if (cityname.endsWith("-")) {
+    city_name = cityname.slice(0, -1)
+  } else {
+    city_name = cityname
+  }
+  
 
   const countryifexists = await db.country.findUnique({
     where: {country_name}
   })
-  
+
   const regioncountry = await db.region.findUnique({
     where: { region_name }
   })
@@ -43,6 +105,7 @@ const location: Action = async ({ request }) => {
   })
 
   if ((countryifexists) && (regioncountry?.country_id == countryifexists?.country_id) && (countyregion?.region_id == regioncountry?.region_id) && (citycounty?.county_id == countyregion?.county_id) && (citycounty)) {
+    loccond.set(true)
     return fail(400, {school: true})
   }
 

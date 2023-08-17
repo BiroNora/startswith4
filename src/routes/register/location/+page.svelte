@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-  import type { ActionData } from './$types'
 
   let pageName="Location Register"
 
@@ -31,7 +30,7 @@
     </div>
     <div>
       <label for="city">City</label>
-      <input type="text" name="city" id="city" required />
+      <input type="text" name="city" id="city" pattern="^[A-Z]&#123;1&#125;|([-]?\[A-Z]&#123;1&#125;)&#123;4&#125;" required />
     </div>
   </fieldset>
   <br>
