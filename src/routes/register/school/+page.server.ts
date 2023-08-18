@@ -133,7 +133,7 @@ const school: Action = async ({ request }) => {
     }
   })
 
-  await db.contactonschool.create({
+  await db.contactOnSchool.create({
     data: {
       school_email,
       contact_email
