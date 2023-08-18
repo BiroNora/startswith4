@@ -66,7 +66,7 @@ const user: Action = async ({ request }) => {
 	}
 
   if (basic == false && high == false && medior == false && superior == false && director == false) {
-    return fail(400, { invalid: true })
+    return fail(400, { dutiechoose: true })
   }
 
   const user = await db.user.findUnique({

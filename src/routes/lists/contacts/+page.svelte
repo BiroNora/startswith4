@@ -42,12 +42,21 @@
               <td class="cent fonts">{con.contact_phone}</td>
               <td class="cent fonts">{con.contact_note}</td>
               <td class="cent fonts">
-              <button class="dbc" type="submit">
-                Update
-              </button></td>
-              <td ><button class="contrast outline cgb" type="submit">
-                Delete
-              </button></td>
+                <form action="">
+                  <input type="hidden" name="" value="">
+                  <button class="dbc" type="submit">
+                  Update
+                </button>
+                </form>
+              </td>
+              <td >
+                <form action="">
+                  <input type="hidden" name="" value="">
+                  <button class="contrast outline cgb" type="submit">
+                  Delete
+                </button>
+                </form>
+              </td>
             </tr>
             {/each}
         </tbody>

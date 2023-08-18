@@ -92,9 +92,14 @@
 
 	{#if form?.user}
 		<p class="error">Email is taken.</p>
+    else
 	{/if}
 
   {#if form?.invalid}
+		<p class="error">Confirm password.</p>
+	{/if}
+
+  {#if form?.dutiechoose}
     <p class="error">One duty must be choosen.</p>
   {/if}
 
@@ -134,7 +139,7 @@
     border-spacing: 2px;
     flex: 10 auto;
   }
-  
+
   .grid input:checked {
   background-color: #32BEA6;
   }
