@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
+  export let form
 
   let pageName="Location Register"
 
@@ -33,7 +34,9 @@
       <input type="text" name="city" id="city" pattern="^[A-Z]&#123;1&#125;|([-]?\[A-Z]&#123;1&#125;)&#123;4&#125;" required />
     </div>
   </fieldset>
-  <br>
+  {#if form?.error}
+    <p class="error">{form?.message}</p>
+	{/if}
   <button class="btn" id="btn" type="submit">Register</button>
 </form>
 </div>
@@ -86,5 +89,14 @@
   .btn {
     margin-bottom: 0;
     background-color: #32BEA6;
+  }
+
+  .error {
+    color: tomato;
+    padding: 2%;
+    text-align: justify;
+    font-style: italic;
+    line-height: normal;
+    line-height: 95%;
   }
 </style>
