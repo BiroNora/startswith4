@@ -41,10 +41,11 @@
               <td class="cent fonts">{con.contact_email}</td>
               <td class="cent fonts">{con.contact_phone}</td>
               <td class="cent fonts">{con.contact_note}</td>
-              <td class="cent fonts"><button class="dbc">
+              <td class="cent fonts">
+              <button class="dbc" type="submit">
                 Update
               </button></td>
-              <td ><button class="contrast outline cgb">
+              <td ><button class="contrast outline cgb" type="submit">
                 Delete
               </button></td>
             </tr>

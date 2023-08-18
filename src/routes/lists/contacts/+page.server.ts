@@ -7,7 +7,6 @@ export const load: PageServerLoad = async () => {
   const contact = await db.contact.findMany({
     orderBy: { contact_name: 'asc' },
   })
-  console.log(contact)
   return {contact}
 }
 

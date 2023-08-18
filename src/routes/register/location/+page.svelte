@@ -94,7 +94,7 @@
   .error {
     color: tomato;
     padding: 2%;
-    text-align: justify;
+    text-align: center;
     font-style: italic;
     line-height: normal;
     line-height: 95%;

@@ -94,13 +94,14 @@
 		<p class="error">Email is taken.</p>
 	{/if}
 
-  {#if (yesB == false && yesM == false && yesH == false && yesS == false && yesD == false)}
+  {#if form?.invalid}
     <p class="error">One duty must be choosen.</p>
   {/if}
 
   <button class="btn" id="btn" type="submit">Register</button>
 </form>
 </div>
+
 
 <style>
   .rei p {
@@ -133,9 +134,10 @@
     border-spacing: 2px;
     flex: 10 auto;
   }
+  
   .grid input:checked {
   background-color: #32BEA6;
-}
+  }
 
   .dir {
     padding-bottom: 15px;
