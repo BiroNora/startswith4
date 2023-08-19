@@ -192,6 +192,10 @@
       data-target="modal-example"
       on:click={openModal}>Add contact *
     </button>
+    <p>{modalIsOpen}</p>
+    {#if modalIsOpen}
+    <pre id="log">{modalIsOpen}</pre>
+    <p>{modalIsOpen}</p>
     <main>
     <form action="?/school" method="post" use:enhance>
       <Modal isOpen={modalIsOpen} onClose={closeModal} />
@@ -212,13 +216,17 @@
           cols="50" >
         </textarea>
     </fieldset>
-
+    {/if}
   {#if form?.local }
     <p class="error">Incorrect location.</p>
   {/if}
 
   {#if form?.omval}
     <p class="error">OM Id is inadequate.</p>
+  {/if}
+
+  {#if form?.schoolemail}
+    <p class="error">School already exists.</p>
   {/if}
 
   {#if (yesA == false && yesB == false && yesC == false && yesD == false && yesE == false && yesF == false && yesG == false && yesH == false && yesI == false && yesJ == false && yesK == false && yesL == false && yesM == false && yesN == false)}

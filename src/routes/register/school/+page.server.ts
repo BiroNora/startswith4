@@ -67,6 +67,14 @@ const school: Action = async ({ request }) => {
     return fail(400, {omval: true})
   }
 
+  const schoolemail = await db.school.findUnique({
+    where: {school_email}
+  })
+
+  if ((schoolemail)) {
+    return fail(400, {schoolemail: true})
+  }
+
   if (altisk) {
     school_type.push('ÁLTALÁNOS ISKOLA')
   }
