@@ -27,14 +27,14 @@
   let pageName="School Register"
 
 
-  let modalIsOpen = false;
+  let modalIsOpen: boolean = false
 
   function openModal() {
-    modalIsOpen = true;
+    modalIsOpen = true
   }
 
   function closeModal() {
-    modalIsOpen = false;
+    modalIsOpen = false
   }
 </script>
 <svelte:head>
@@ -193,12 +193,11 @@
       on:click={openModal}>Add contact *
     </button>
     <main>
-    <form action="?/contact" method="post" use:enhance>
+    <form action="?/school" method="post" use:enhance>
       <Modal isOpen={modalIsOpen} onClose={closeModal} />
     </form>
     </main>
     <p><i class="ii">* optional</i></p>
-
     <fieldset>
       <legend>Memo</legend>
       <br>

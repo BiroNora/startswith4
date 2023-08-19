@@ -6,21 +6,20 @@
 
   export let form: ActionData
 
-  let inputData: ModalData = {
-    c_name: '',
-    c_email: '',
-    c_phone: '',
-    u_email: '',
-    s_email: '',
-    c_note: '',
-  }
+  let c_name = ''
+  let c_email = ''
+  let c_phone = ''
+  let u_email = ''
+  let s_email = ''
+  let c_note = ''
 
   function handleSubmit() {
     // You can perform any necessary actions here, like sending the data to an API
-    modalData.set(inputData)
     onClose();
   }
+
 </script>
+
 
 {#if isOpen}
   <div class="modal-background">
@@ -28,21 +27,21 @@
       <div class="modal card">
         <div class="card-body">
           <br>
-          <form action="?/contact" method="post" use:enhance>
+          <form action="?/school" method="post" use:enhance>
             <br>
             <p class="a">Contact Register</p>
             <br>
-          <input type="text" class="input" bind:value={inputData.c_name} name="contactname" placeholder="Name" />
-          <input type="email" class="input" bind:value={inputData.c_email} name="contactemail" placeholder="Email" />
-          <input type="text" class="input" bind:value={inputData.c_phone} name="contactphone" placeholder="Phone" />
-          <input type="email" class="input" bind:value={inputData.u_email} name="useremail" placeholder="User Email" />
-          <input type="email" class="input" bind:value={inputData.s_email} name="schoolemail" placeholder="School Email" />
-          <textarea rows="4" cols="50" bind:value={inputData.c_note} name="contactmessage" placeholder="Note" />
-          {#if form?.contacty}
-            <p class="error">Existing contact.</p>
-          {/if}
-          <button class="btn primary" on:click={handleSubmit}>Submit</button>
-          <button class="contrast outline cbb" on:click={onClose}>Cancel</button>
+            <input type="text" class="input" bind:value={c_name} name="contactname" placeholder="Name" />
+            <input type="email" class="input" bind:value={c_email} name="contactemail" placeholder="Email" />
+            <input type="text" class="input" bind:value={c_phone} name="contactphone" placeholder="Phone" />
+            <input type="email" class="input" bind:value={u_email} name="useremail" placeholder="User Email" />
+            <input type="email" class="input" bind:value={s_email} name="schoolemail" placeholder="School Email" />
+            <textarea rows="4" cols="50" bind:value={c_note} name="contactmessage" placeholder="Note" />
+            {#if form?.contact}
+              <p class="error">Please enter correct data.</p>
+            {/if}
+            <button class="btn primary" on:click|stopPropagation={handleSubmit}>Submit</button>
+            <button class="contrast outline cbb" on:click={onClose}>Cancel</button>
           </form>
           <br>
         </div>
