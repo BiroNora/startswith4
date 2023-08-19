@@ -5,12 +5,12 @@ import { db } from '$lib/database'
 
 const contact: Action = async ({ request }) => {
   const data = await request.formData()
-  const contact_name = String(data.get('name'))
-  const contact_email = String(data.get('email'))
-  const contact_phone = String(data.get('phone'))
-  const user_email = String(data.get('uemail'))
-  const school_email = String(data.get('schemail'))
-  const contact_note = String(data.get('message'))
+  const contact_name = String(data.get('contactname'))
+  const contact_email = String(data.get('contactemail'))
+  const contact_phone = String(data.get('contactphone'))
+  const user_email = String(data.get('useremail'))
+  const school_email = String(data.get('schoolemail'))
+  const contact_note = String(data.get('contactmessage'))
 
   const contact = await db.contact.findUnique({
     where: {contact_email}

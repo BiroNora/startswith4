@@ -19,6 +19,7 @@ export const load: PageServerLoad = async () => {
   return {country, regio, county, city}
 }
 
+
 const school: Action = async ({ request }) => {
   const data = await request.formData()
   const country_id = Number(String(data.get('countr')))
@@ -55,9 +56,15 @@ const school: Action = async ({ request }) => {
   const coop = Boolean(data.get('coop'))
 	const note = String(data.get('message'))
   const school_type = []
+  console.log(contact_name)
+  console.log(contact_email)
+  console.log(contact_phone)
+  console.log(contact_note)
+  console.log(user_email)
+
 
   if (country_id == 1 && om_id?.length != 6) {
-    return fail(400, {school: true})
+    return fail(400, {omval: true})
   }
 
   if (altisk) {
@@ -117,7 +124,7 @@ const school: Action = async ({ request }) => {
       console.log('van contact')
 
   const contacty = await db.contact.findUnique({
-  where: {contact_email}
+    where: {contact_email}
   })
 
   if ((contacty)) {
@@ -146,21 +153,21 @@ const school: Action = async ({ request }) => {
     where: { region_id }
   })
   if (regioncountry?.country_id != country_id) {
-    return fail(400, {school: true})
+    return fail(400, {local: true})
   }
 
   const countyregion = await db.county.findUnique({
     where: { county_id }
   })
   if (countyregion?.region_id != region_id) {
-    return fail(400, {school: true})
+    return fail(400, {local: true})
   }
 
   const citycounty = await db.city.findUnique({
     where: { city_id }
   })
   if (citycounty?.county_id != county_id) {
-    return fail(400, {school: true})
+    return fail(400, {local: true})
   }
 
   await db.school.create({

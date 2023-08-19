@@ -18,30 +18,30 @@
   <form action="?/contact" method="post" use:enhance>
     <div>
       <label for="name">Name</label>
-      <input type="text" name="name" id="name" required />
+      <input type="text" name="contactname" id="contactname" required />
     </div>
     <div>
       <label for="email">Email</label>
-      <input type="text" name="email" id="email" required />
+      <input type="text" name="contactemail" id="contactemail" required />
     </div>
     <div>
       <label for="phone">Phone</label>
-      <input type="text" name="phone" id="phone" required />
+      <input type="text" name="contactphone" id="contactphone" required />
     </div>
     <div>
-      <label for="uemail">User email</label>
-      <input type="text" name="uemail" id="uemail" required />
+      <label for="uemail">User Email</label>
+      <input type="text" name="useremail" id="useremail" required />
     </div>
     <div>
-      <label for="schemail">School email</label>
-      <input type="text" name="schemail" id="schemail" required />
+      <label for="schemail">School Email</label>
+      <input type="text" name="schoolemail" id="schoolemail" required />
     </div>
   <br>
     <fieldset>
       <legend>Note</legend>
       <br>
         <textarea id="message"
-          name="message"
+          name="contactmessage"
           rows="4"
           cols="50" >
           </textarea>

@@ -1,9 +1,12 @@
 <script lang="ts">
-	import { enhance } from '$app/forms'
-	import type { PageServerData } from './$types'
+	import Modal from '../../components/Modal.svelte'
+  import { enhance } from '$app/forms'
+	import type { ActionData, PageServerData } from './$types'
 
   export let data: PageServerData
   const { country, regio, county, city } = data
+
+  export let form: ActionData
 
   let yesA = true
   let yesB = false
@@ -23,6 +26,16 @@
   let omi = ''
   let pageName="School Register"
 
+
+  let modalIsOpen = false;
+
+  function openModal() {
+    modalIsOpen = true;
+  }
+
+  function closeModal() {
+    modalIsOpen = false;
+  }
 </script>
 <svelte:head>
     <title> {pageName} </title>
@@ -174,6 +187,18 @@
     </div>
     <br>
     <br>
+    <button
+      class="contrast outline cgb"
+      data-target="modal-example"
+      on:click={openModal}>Add contact *
+    </button>
+    <main>
+    <form action="?/contact" method="post" use:enhance>
+      <Modal isOpen={modalIsOpen} onClose={closeModal} />
+    </form>
+    </main>
+    <p><i class="ii">* optional</i></p>
+
     <fieldset>
       <legend>Memo</legend>
       <br>
@@ -189,12 +214,20 @@
         </textarea>
     </fieldset>
 
-  {#if (omi != '' && omi.length != 6)}
+  {#if form?.local }
+    <p class="error">Incorrect location.</p>
+  {/if}
+
+  {#if form?.omval}
     <p class="error">OM Id is inadequate.</p>
   {/if}
 
   {#if (yesA == false && yesB == false && yesC == false && yesD == false && yesE == false && yesF == false && yesG == false && yesH == false && yesI == false && yesJ == false && yesK == false && yesL == false && yesM == false && yesN == false)}
     <p class="error">One school type must be choosen.</p>
+  {/if}
+
+  {#if form?.contacty}
+    <p class="error">Existing contact.</p>
   {/if}
 
   <button class="btn" id="btn" type="submit">Register</button>
@@ -205,6 +238,12 @@
   i {
     color: #32BEA6;
   }
+
+  .ii {
+    text-align: left;
+    padding-left: 5px;
+  }
+
   .notice {
     color: tomato;
     padding: 2%;
@@ -255,6 +294,7 @@
     border-spacing: 2px;
     flex: 10 auto;
   }
+
   .grid input:checked {
   background-color: #32BEA6;
   }
@@ -262,6 +302,15 @@
   .btn {
     margin-bottom: 0;
     background-color: #32BEA6;
+  }
+
+  .cgb {
+  border: 2px solid #32BEA6;
+  }
+
+  main {
+    text-align: center;
+    padding: 5px 5px 0 5px;
   }
 
   .error {
