@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Modal from '../../components/Modal.svelte'
   import { enhance } from '$app/forms'
 	import type { ActionData, PageServerData } from './$types'
 
@@ -24,18 +23,9 @@
   let yesN = false
   let yesO = true
   let omi = ''
+  let val = ''
   let pageName="School Register"
 
-
-  let modalIsOpen: boolean = false
-
-  function openModal() {
-    modalIsOpen = true
-  }
-
-  function closeModal() {
-    modalIsOpen = false
-  }
 </script>
 <svelte:head>
     <title> {pageName} </title>
@@ -48,7 +38,7 @@
 
 <form action="?/school" method="post" use:enhance>
   <fieldset>
-    <legend><strong>Location</strong></legend>
+    <legend class="n">Location</legend>
     <p class="notice">Please note: if country / region / county /city <i>does not exist</i>  in the list, <a class="aa" href="/register/location">use this link</a>  before the registration. </p>
     <div>
       <label for="countr">Country</label>
@@ -187,36 +177,53 @@
     </div>
     <br>
     <br>
-    <button
-      class="contrast outline cgb"
-      data-target="modal-example"
-      on:click={openModal}>Add contact *
-    </button>
-    <p>{modalIsOpen}</p>
-    {#if modalIsOpen}
-    <pre id="log">{modalIsOpen}</pre>
-    <p>{modalIsOpen}</p>
-    <main>
-    <form action="?/school" method="post" use:enhance>
-      <Modal isOpen={modalIsOpen} onClose={closeModal} />
-    </form>
-    </main>
-    <p><i class="ii">* optional</i></p>
     <fieldset>
-      <legend>Memo</legend>
+      <legend class="n">Add Contact *</legend>
+      <p><i class="ii">* optional</i></p>
+      <br>
+      <div>
+      <label for="name">Contact Name</label>
+      <input type="text" name="contactname" value={form?.contactname ?? ''} id="contactname" />
+    </div>
+    <div>
+      <label for="email">Contact Email</label>
+      <input type="text" name="contactemail" value={form?.contactemail ?? ''} id="contactemail" />
+    </div>
+    <div>
+      <label for="phone">Contact Phone</label>
+      <input type="text" name="contactphone" value={form?.contactphone ?? ''} id="contactphone" />
+    </div>
+    <div>
+      <label for="uemail">User Email</label>
+      <input type="text" name="useremail" value={form?.useremail ?? ''} id="useremail" />
+    </div>
+    <br>
+    <fieldset>
+      <legend>Note On Contact</legend>
+      <br>
+        <textarea id="message"
+          name="contactnote"
+          rows="4"
+          cols="50" >
+          </textarea>
+    </fieldset>
+    <p class="noticea">Please note: after registration it is possible to add more contacts. </p>
+    </fieldset>
+    <fieldset>
+      <legend class="n">Note On School *</legend>
+      <p><i class="ii">* optional</i></p>
       <br>
         <div class="second">
           <input type="checkbox" name="coop" bind:checked={yesO} />
           COOPERATION
         </div>
-        <label for="message">Note:</label>
+        <br>
         <textarea id="message"
-          name="message"
+          name="note"
           rows="4"
           cols="50" >
         </textarea>
     </fieldset>
-    {/if}
   {#if form?.local }
     <p class="error">Incorrect location.</p>
   {/if}
@@ -239,6 +246,7 @@
 
   <button class="btn" id="btn" type="submit">Register</button>
 </form>
+
 </div>
 
 <style>
@@ -247,8 +255,13 @@
   }
 
   .ii {
+    display: flex;
     text-align: left;
     padding-left: 5px;
+  }
+
+  .n {
+    font-weight: 500;
   }
 
   .notice {
@@ -256,6 +269,14 @@
     padding: 2%;
     text-align: center;
     font-weight: bolder;
+    line-height: normal;
+  }
+
+  .noticea {
+    color: #32BEA6;
+    padding: 2%;
+    text-align: center;
+    font-weight: 500;
     line-height: normal;
   }
 

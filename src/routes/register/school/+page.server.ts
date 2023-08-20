@@ -19,7 +19,6 @@ export const load: PageServerLoad = async () => {
   return {country, regio, county, city}
 }
 
-
 const school: Action = async ({ request }) => {
   const data = await request.formData()
   const country_id = Number(String(data.get('countr')))
@@ -29,7 +28,7 @@ const school: Action = async ({ request }) => {
   const om_id = String(data.get('om')) || null
   const name = String(data.get('name'))
   const zip_code = String(data.get('zip'))
-	const address = String(data.get('address'))
+  const address = String(data.get('address'))
   const dir_name = String(data.get('dirname'))
   const dir_phone = String(data.get('dirphone'))
   const school_email = String(data.get('email'))
@@ -51,16 +50,19 @@ const school: Action = async ({ request }) => {
   const contact_name = String(data.get('contactname'))
   const contact_email = String(data.get('contactemail'))
   const contact_phone = String(data.get('contactphone'))
-  const contact_note = String(data.get('contactmessage'))
+  const contact_note = String(data.get('contactnote'))
   const user_email = String(data.get('useremail'))
   const coop = Boolean(data.get('coop'))
-	const note = String(data.get('message'))
+  const note = String(data.get('note'))
   const school_type = []
-  console.log(contact_name)
-  console.log(contact_email)
-  console.log(contact_phone)
-  console.log(contact_note)
-  console.log(user_email)
+  console.log(school_email)
+  console.log(country_id)
+  console.log(contact_name.length)
+  console.log(contact_email.valueOf())
+  console.log(typeof(contact_email))
+  console.log(typeof(contact_phone))
+  console.log(typeof(contact_note))
+  console.log(typeof(user_email))
 
 
   if (country_id == 1 && om_id?.length != 6) {
@@ -118,26 +120,29 @@ const school: Action = async ({ request }) => {
     school_type.push('HÍDPROGRAMOK')
   }
 
-  if (contact_email.valueOf() === 'null' ||
-      contact_name.valueOf() === 'null' ||
-      contact_phone.valueOf() === 'null' ||
-      user_email.valueOf() === 'null') {
+  if (contact_email.valueOf() === '' ||
+      contact_name.valueOf() === '' ||
+      contact_phone.valueOf() === '' ||
+      user_email.valueOf() === '') {
       console.log('nincs contact')
 
   }
-  if (contact_email.valueOf() !== 'null' &&
-      contact_name.valueOf() !== 'null' &&
-      contact_phone.valueOf() !== 'null' &&
-      user_email.valueOf() !== 'null'){
+  if (contact_email.valueOf() !== '' &&
+      contact_name.valueOf() !== '' &&
+      contact_phone.valueOf() !== '' &&
+      user_email.valueOf() !== ''){
       console.log('van contact')
 
   const contacty = await db.contact.findUnique({
     where: {contact_email}
   })
 
-  if ((contacty)) {
-    return fail(400, {contact: true})
-  }
+  //if ((contacty)) {
+    //const contactyschool = await db.contactonschool.findUnique({
+      //where: {contact_email, school_email}
+    //})
+    //return fail(400, {contact: true})
+
 
   await db.contact.create({
     data: {
@@ -148,15 +153,22 @@ const school: Action = async ({ request }) => {
     }
   })
 
-  await db.contactOnSchool.create({
+  await db.contactonschool.create({
     data: {
       school_email,
       contact_email
     }
   })
 
+  await db.contactonuser.create({
+    data: {
+      user_email,
+      contact_email
+    }
+  })
+
   //const cont = await db.contact.
-}
+  }
   const regioncountry = await db.region.findUnique({
     where: { region_id }
   })
