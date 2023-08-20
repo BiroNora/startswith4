@@ -63,6 +63,7 @@ const school: Action = async ({ request }) => {
   console.log(typeof(contact_phone))
   console.log(typeof(contact_note))
   console.log(typeof(user_email))
+  console.log(contact_name)
 
 
   if (country_id == 1 && om_id?.length != 6) {
@@ -142,7 +143,7 @@ const school: Action = async ({ request }) => {
       //where: {contact_email, school_email}
     //})
     //return fail(400, {contact: true})
-
+  //}
 
   await db.contact.create({
     data: {
