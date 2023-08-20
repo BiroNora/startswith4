@@ -35,14 +35,14 @@ const contact: Action = async ({ request }) => {
     }
   })
 
-  await db.contactonschool.create({
+  await db.ContactOnSchool.create({
     data: {
       school_email,
       contact_email
     }
   })
 
-  await db.contactonuser.create({
+  await db.ContactOnUser.create({
     data: {
       user_email,
       contact_email
