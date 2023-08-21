@@ -121,17 +121,17 @@ const school: Action = async ({ request }) => {
     school_type.push('HÍDPROGRAMOK')
   }
 
-  if (contact_email.valueOf() === '' ||
-      contact_name.valueOf() === '' ||
-      contact_phone.valueOf() === '' ||
-      user_email.valueOf() === '') {
+  if (contact_email.valueOf() === 'null' ||
+      contact_name.valueOf() === 'null' ||
+      contact_phone.valueOf() === 'null' ||
+      user_email.valueOf() === 'null') {
       console.log('nincs contact')
 
   }
-  if (contact_email.valueOf() !== '' &&
-      contact_name.valueOf() !== '' &&
-      contact_phone.valueOf() !== '' &&
-      user_email.valueOf() !== ''){
+  if (contact_email.valueOf() !== 'null' &&
+      contact_name.valueOf() !== 'null' &&
+      contact_phone.valueOf() !== 'null' &&
+      user_email.valueOf() !== 'null'){
       console.log('van contact')
 
   const contacty = await db.contact.findUnique({

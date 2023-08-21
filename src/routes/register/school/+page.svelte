@@ -23,8 +23,17 @@
   let yesN = false
   let yesO = true
   let omi = ''
-  let val = ''
+  let isInput = true
   let pageName="School Register"
+
+  function isWork() {
+    if (isInput == true) {
+      isInput = false
+    } else {
+      isInput = true
+    }
+		return isInput
+	}
 
 </script>
 <svelte:head>
@@ -177,37 +186,38 @@
     </div>
     <br>
     <br>
-    <fieldset>
-      <legend class="n">Add Contact *</legend>
-      <p><i class="ii">* optional</i></p>
+    <button type="button" on:click={() => isWork()} class="contrast outline cgb"> + Add Contact*</button>
+    <p><i class="ii">* optional</i></p>
+    <fieldset disabled={isInput}>
+      <legend class="n">Contact</legend>
       <br>
       <div>
-      <label for="name">Contact Name</label>
-      <input type="text" name="contactname" value={form?.contactname ?? ''} id="contactname" />
-    </div>
-    <div>
-      <label for="email">Contact Email</label>
-      <input type="text" name="contactemail" value={form?.contactemail ?? ''} id="contactemail" />
-    </div>
-    <div>
-      <label for="phone">Contact Phone</label>
-      <input type="text" name="contactphone" value={form?.contactphone ?? ''} id="contactphone" />
-    </div>
-    <div>
-      <label for="uemail">User Email</label>
-      <input type="text" name="useremail" value={form?.useremail ?? ''} id="useremail" />
-    </div>
-    <br>
-    <fieldset>
-      <legend>Note On Contact</legend>
+        <label for="name">Contact Name</label>
+        <input type="text" name="contactname" id="contactname" required  />
+      </div>
+      <div>
+        <label for="email">Contact Email</label>
+        <input type="text" name="contactemail" id="contactemail" required />
+      </div>
+      <div>
+        <label for="phone">Contact Phone</label>
+        <input type="text" name="contactphone" id="contactphone" required />
+      </div>
+      <div>
+        <label for="uemail">User Email</label>
+        <input type="text" name="useremail" id="useremail" required />
+      </div>
       <br>
-        <textarea id="message"
-          name="contactnote"
-          rows="4"
-          cols="50" >
-          </textarea>
-    </fieldset>
-    <p class="noticea">Please note: after registration it is possible to add more contacts. </p>
+      <fieldset>
+        <legend>Note On Contact</legend>
+        <br>
+          <textarea id="message"
+            name="contactnote"
+            rows="4"
+            cols="50" >
+            </textarea>
+      </fieldset>
+      <p class="noticea">Please note: after registration it is possible to add more contacts. </p>
     </fieldset>
     <fieldset>
       <legend class="n">Note On School *</legend>
@@ -334,11 +344,6 @@
 
   .cgb {
   border: 2px solid #32BEA6;
-  }
-
-  main {
-    text-align: center;
-    padding: 5px 5px 0 5px;
   }
 
   .error {
