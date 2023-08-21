@@ -35,20 +35,6 @@ const contact: Action = async ({ request }) => {
     }
   })
 
-  await db.ContactOnSchool.create({
-    data: {
-      school_email,
-      contact_email
-    }
-  })
-
-  await db.ContactOnUser.create({
-    data: {
-      user_email,
-      contact_email
-    }
-  })
-
   throw redirect(303, '../lists/contacts')
   }
 
