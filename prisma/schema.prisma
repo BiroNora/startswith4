@@ -35,11 +35,11 @@ model School {
 }
 
 model ContactOnSchool {
-  conSchoo_id   Int     @id @default(autoincrement())
-  school_email  String
-  contact_email String
-  Contact       Contact @relation(fields: [contact_email], references: [contact_email])
-  school        School  @relation(fields: [school_email], references: [school_email])
+  conSchoo_id Int     @id @default(autoincrement())
+  school_id   Int
+  contact_id  Int
+  contact     Contact @relation(fields: [contact_id], references: [contact_id])
+  school      School  @relation(fields: [school_id], references: [school_id])
 
   @@map("contactonschool")
 }
@@ -57,11 +57,11 @@ model Contact {
 }
 
 model ContactOnUser {
-  conUser_id    Int     @id @default(autoincrement())
-  user_email    String
-  contact_email String
-  Contact       Contact @relation(fields: [contact_email], references: [contact_email])
-  User          User    @relation(fields: [user_email], references: [user_email])
+  conUser_id Int     @id @default(autoincrement())
+  user_id    String
+  contact_id Int
+  Contact    Contact @relation(fields: [contact_id], references: [contact_id])
+  User       User    @relation(fields: [user_id], references: [user_id])
 
   @@map("contactonuser")
 }
