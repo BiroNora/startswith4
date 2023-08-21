@@ -36,11 +36,14 @@ model School {
 
 model ContactOnSchool {
   conSchoo_id Int     @id @default(autoincrement())
+  school Int
+  contact Int
   school_id   Int
   contact_id  Int
-  contact     Contact @relation(fields: [contact_id], references: [contact_id])
-  school      School  @relation(fields: [school_id], references: [school_id])
+  Contact     Contact @relation(fields: [contact_id], references: [contact_id])
+  School      School  @relation(fields: [school_id], references: [school_id])
 
+  @@unique([school, contact])
   @@map("contactonschool")
 }
 
@@ -58,11 +61,14 @@ model Contact {
 
 model ContactOnUser {
   conUser_id Int     @id @default(autoincrement())
+  user Int
+  contact Int
   user_id    String
   contact_id Int
   Contact    Contact @relation(fields: [contact_id], references: [contact_id])
   User       User    @relation(fields: [user_id], references: [user_id])
 
+  @@unique([user, contact])
   @@map("contactonuser")
 }
 
@@ -89,6 +95,21 @@ model User {
   event         Event[]
 
   @@map("users")
+}
+
+model Partner {
+  partner_id       String   @id @default(uuid())
+  name             String
+  partner_email    String   @unique
+  salt             String   @unique
+  basic            Boolean?
+  regionB          Int?
+  passwordHash     String
+  partnerAuthToken String   @unique
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("partners")
 }
 
 model Event {
