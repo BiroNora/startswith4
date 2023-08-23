@@ -242,7 +242,7 @@
     <p class="error">OM Id is inadequate.</p>
   {/if}
 
-  {#if form?.schoolemail}
+  {#if form?.sch}
     <p class="error">School already exists.</p>
   {/if}
 
@@ -250,8 +250,12 @@
     <p class="error">One school type must be choosen.</p>
   {/if}
 
-  {#if form?.contacty}
-    <p class="error">Existing contact.</p>
+  {#if form?.sandu_id}
+    <p class="error">Please enter correct data.</p>
+  {/if}
+
+  {#if form?.real}
+    <p class="error">This contact is already added to this shool and this user.</p>
   {/if}
 
   <button class="btn" id="btn" type="submit">Register</button>

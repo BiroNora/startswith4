@@ -55,27 +55,33 @@ const school: Action = async ({ request }) => {
   const coop = Boolean(data.get('coop'))
   const note = String(data.get('note'))
   const school_type = []
-  console.log(school_email)
-  console.log(country_id)
-  console.log(contact_name.length)
-  console.log(contact_email.valueOf())
-  console.log(typeof(contact_email))
-  console.log(typeof(contact_phone))
-  console.log(typeof(contact_note))
-  console.log(typeof(user_email))
-  console.log(contact_name)
+  const common = []
+  let contact_id = ''
 
 
-  if (country_id == 1 && om_id?.length != 6) {
-    return fail(400, {omval: true})
+  const regioncountry = await db.region.findUnique({
+    where: { region_id }
+  })
+  if (regioncountry?.country_id != country_id) {
+    return fail(400, { local: true })
   }
 
-  const schoolemail = await db.school.findUnique({
-    where: {school_email}
+  const countyregion = await db.county.findUnique({
+    where: { county_id }
   })
+  if (countyregion?.region_id != region_id) {
+    return fail(400, { local: true })
+  }
 
-  if ((schoolemail)) {
-    return fail(400, {schoolemail: true})
+  const citycounty = await db.city.findUnique({
+    where: { city_id }
+  })
+  if (citycounty?.county_id != county_id) {
+    return fail(400, { local: true })
+  }
+
+  if (country_id == 1 && om_id?.length != 6) {
+    return fail(400, { omval: true })
   }
 
   if (altisk) {
@@ -120,98 +126,152 @@ const school: Action = async ({ request }) => {
   if (hidp) {
     school_type.push('HÍDPROGRAMOK')
   }
+  console.log(school_type)
 
-  if (contact_email.valueOf() === 'null' ||
-      contact_name.valueOf() === 'null' ||
-      contact_phone.valueOf() === 'null' ||
-      user_email.valueOf() === 'null') {
-      console.log('nincs contact')
+  if
+    (contact_email.valueOf() === 'null' ||
+    contact_name.valueOf() === 'null' ||
+    contact_phone.valueOf() === 'null' ||
+    user_email.valueOf() === 'null') {
+    console.log('nincs contact')
 
-  }
-  if (contact_email.valueOf() !== 'null' &&
-      contact_name.valueOf() !== 'null' &&
-      contact_phone.valueOf() !== 'null' &&
-      user_email.valueOf() !== 'null'){
-      console.log('van contact')
+    const schoolid = await db.school.findUnique({
+      where: { school_email }
+    })
 
-  const contacty = await db.contact.findUnique({
-    where: {contact_email}
-  })
+    const s_id = schoolid?.school_id
+    console.log('sch_id' + s_id)
 
-  //if ((contacty)) {
-    //const contactyschool = await db.contactonschool.findUnique({
-      //where: {contact_email, school_email}
-    //})
-    //return fail(400, {contact: true})
-  //}
-
-  await db.contact.create({
-    data: {
-      contact_email,
-      contact_name,
-      contact_phone,
-      contact_note,
+    if (s_id) {
+      return fail(400, { sch: true })
     }
-  })
 
-  await db.ContactOnSchool.create({
-    data: {
-      school_email,
-      contact_email
+    await db.school.create({
+      data: {
+        om_id,
+        name,
+        zip_code,
+        address,
+        dir_name,
+        dir_phone,
+        school_email,
+        website,
+        school_type,
+        coop,
+        note,
+        city_id,
+        country_id,
+        county_id,
+        region_id
+      }
+    })
+  }
+
+  if
+    (contact_email.valueOf() !== 'null' &&
+    contact_name.valueOf() !== 'null' &&
+    contact_phone.valueOf() !== 'null' &&
+    user_email.valueOf() !== 'null'){
+    console.log('van contact')
+
+    const schoolEid = await db.school.findUnique({
+      where: { school_email }
+    })
+
+    const sE_id = schoolEid?.school_id
+    console.log('sch_id' + sE_id)
+
+    if (sE_id) {
+      return fail(400, { sch: true })
     }
-  })
 
-  await db.ContactOnUser.create({
-    data: {
-      user_email,
-      contact_email
+    await db.school.create({
+      data: {
+        om_id,
+        name,
+        zip_code,
+        address,
+        dir_name,
+        dir_phone,
+        school_email,
+        website,
+        school_type,
+        coop,
+        note,
+        city_id,
+        country_id,
+        county_id,
+        region_id
+      }
+    })
+
+    const schoolid = await db.school.findUnique({
+      where: { school_email }
+    })
+
+    const userid = await db.user.findUnique({
+      where: { user_email }
+    })
+
+    const s_id = schoolid?.school_id
+    const u_id = userid?.user_id
+    console.log('sch_id' + s_id)
+    console.log('u_id' + u_id)
+
+    if (!s_id || !u_id) {
+      return fail(400, { sch: true })
     }
-  })
 
-  //const cont = await db.contact.
-  }
-  const regioncountry = await db.region.findUnique({
-    where: { region_id }
-  })
-  if (regioncountry?.country_id != country_id) {
-    return fail(400, {local: true})
-  }
+    const contid = await db.contact.findUnique({
+      where: { contact_email }
+    })
 
-  const countyregion = await db.county.findUnique({
-    where: { county_id }
-  })
-  if (countyregion?.region_id != region_id) {
-    return fail(400, {local: true})
-  }
+    const conty = contid?.contact_id
+    console.log(conty)
+    console.log(String(contid?.contact_id))
 
-  const citycounty = await db.city.findUnique({
-    where: { city_id }
-  })
-  if (citycounty?.county_id != county_id) {
-    return fail(400, {local: true})
-  }
-
-  await db.school.create({
-    data: {
-      om_id,
-      name,
-      zip_code,
-      address,
-      dir_name,
-      dir_phone,
-      school_email,
-      website,
-      school_type,
-      coop,
-      note,
-      city_id,
-      country_id,
-      county_id,
-      region_id
+    if (!conty) {
+      await db.contact.create({
+        data: {
+          contact_email,
+          contact_name,
+          contact_phone,
+          contact_note,
+        }
+      })
     }
-  })
 
+    if (conty) {
+      contact_id = String(conty)
+    }
+    else {
+      const conid = await db.contact.findUnique({
+      where: { contact_email }
+      })
+
+      contact_id = String(conid?.contact_id)
+    }
+
+    common.push(contact_id)
+    common.push(String(s_id))
+    common.push(String(u_id))
+
+    const commonunique = await db.contactOnUserOnSchool.findUnique({
+      where: { common }
+    })
+
+    if (commonunique) {
+      return fail(400, {real: true})
+    }
+
+    await db.contactOnUserOnSchool.create({
+      data: {
+        common,
+      }
+    })
+  }
   throw redirect(303, '/login')
 }
+
 
 export const actions: Actions = { school }
