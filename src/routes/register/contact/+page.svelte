@@ -48,7 +48,19 @@
     </fieldset>
 
   {#if form?.contact}
+      <p class="error">Contact already exists.</p>
+  {/if}
+
+  {#if form?.local}
+      <p class="error">Something went wrong. Please try it later.</p>
+  {/if}
+
+  {#if form?.contacts}
       <p class="error">Please enter correct data.</p>
+  {/if}
+
+  {#if form?.real}
+      <p class="error">This contact is already added to this shool and this user.</p>
   {/if}
   <button class="btn" id="btn" type="submit">Register</button>
 </form>
