@@ -24,7 +24,6 @@ model School {
   country_id   Int
   county_id    Int
   region_id    Int
-  contact      ContactOnSchool[]
   event        Event[]
   city         City              @relation(fields: [city_id], references: [city_id])
   country      Country           @relation(fields: [country_id], references: [country_id])
@@ -34,36 +33,22 @@ model School {
   @@map("schools")
 }
 
-model ContactOnSchool {
-  conSchoo_id Int     @id @default(autoincrement())
-  school_id   Int
-  contact_id  Int
-  Contact     Contact @relation(fields: [contact_id], references: [contact_id])
-  School      School  @relation(fields: [school_id], references: [school_id])
-
-  @@map("contactonschool")
-}
-
 model Contact {
   contact_id    Int               @id @default(autoincrement())
   contact_email String            @unique
   contact_name  String?
   contact_phone String?
   contact_note  String?
-  School        ContactOnSchool[]
-  User          ContactOnUser[]
 
   @@map("contacts")
 }
 
-model ContactOnUser {
-  conUser_id Int     @id @default(autoincrement())
-  user_id    String
-  contact_id Int
-  Contact    Contact @relation(fields: [contact_id], references: [contact_id])
-  User       User    @relation(fields: [user_id], references: [user_id])
+model ContactOnUserOnSchool {
+  id Int @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  common String[] @unique
 
-  @@map("contactonuser")
+  @@map("contactonuseronschool")
 }
 
 model User {
@@ -85,7 +70,6 @@ model User {
   userAuthToken String          @unique
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
-  Contact       ContactOnUser[]
   event         Event[]
 
   @@map("users")
