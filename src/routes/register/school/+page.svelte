@@ -250,8 +250,8 @@
     <p class="error">One school type must be choosen.</p>
   {/if}
 
-  {#if form?.sandu_id}
-    <p class="error">Please enter correct data.</p>
+  {#if form?.uid}
+    <p class="error">User does not exists.</p>
   {/if}
 
   {#if form?.real}
