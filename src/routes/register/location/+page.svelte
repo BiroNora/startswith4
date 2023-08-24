@@ -16,7 +16,7 @@
   </div>
   <form action="?/location" method="post" use:enhance>
   <fieldset>
-    <legend>New Location</legend>
+    <legend class="n">New Location</legend>
     <div>
       <label for="country">Country</label>
       <input type="text" name="country" id="country" required />
@@ -57,6 +57,10 @@
 
   legend {
     padding: 6px;
+  }
+
+  .n {
+    font-weight: 500;
   }
 
   .rei p {

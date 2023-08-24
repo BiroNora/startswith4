@@ -38,7 +38,7 @@
     </div>
   <br>
     <fieldset>
-      <legend>Note</legend>
+      <legend class="n">Note</legend>
       <br>
         <textarea id="message"
           name="contactmessage"
@@ -82,6 +82,10 @@
 
   legend {
     padding: 6px;
+  }
+
+  .n {
+    font-weight: 500;
   }
 
   .rei p {

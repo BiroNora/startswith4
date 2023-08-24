@@ -186,7 +186,7 @@
     </div>
     <br>
     <br>
-    <button type="button" on:click={() => isWork()} class="contrast outline cgb"> + Add Contact*</button>
+    <button type="button" on:click={() => isWork()} class="contrast outline cgb bb">Add Contact *</button>
     <p><i class="ii">* optional</i></p>
     <fieldset disabled={isInput}>
       <legend class="n">Contact</legend>
@@ -220,8 +220,7 @@
       <p class="noticea">Please note: after registration it is possible to add more contacts. </p>
     </fieldset>
     <fieldset>
-      <legend class="n">Note On School *</legend>
-      <p><i class="ii">* optional</i></p>
+      <legend class="n">Note On School</legend>
       <br>
         <div class="second">
           <input type="checkbox" name="coop" bind:checked={yesO} />
@@ -299,6 +298,10 @@
     font-style: italic;
   }
 
+  .bb {
+    font-weight: 450;
+  }
+
   fieldset {
     position: relative;
     padding: 6px;
@@ -310,6 +313,7 @@
   label {
     padding: 6px;
   }
+
   legend {
     padding: 6px;
   }
