@@ -9,7 +9,7 @@
   let pageName="Contacts"
 </script>
 
-  <svelte:head>
+<svelte:head>
     <title> {pageName} </title>
 </svelte:head>
 <div class="rounded-table">
@@ -27,6 +27,8 @@
             <th class="cent fonty">Email</th>
             <th class="cent fonty">Phone</th>
             <th class="cent fonty">Note</th>
+            <th class="cent fonty">School</th>
+            <th class="cent fonty">User</th>
           </tr>
         </thead>
           <tbody >
@@ -41,6 +43,8 @@
               <td class="cent fonts">{con.contact_email}</td>
               <td class="cent fonts">{con.contact_phone}</td>
               <td class="cent fonts">{con.contact_note}</td>
+              <td class="cent fonts">{con.contact_email}</td>
+              <td class="cent fonts">{con.contact_email}</td>
               <td class="cent fonts">
                 <form action="">
                   <input type="hidden" name="" value="">
