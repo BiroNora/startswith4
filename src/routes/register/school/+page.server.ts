@@ -138,16 +138,6 @@ const school: Action = async ({ request }) => {
       return fail(400, { local: true })
     }
 
-    if (om_id !== 'null') {
-      const om_num = await db.school.findUnique({
-      where: { om_id }
-      })
-      if (om_num) {
-        return fail(400, { omnum: true })
-      }
-    }
-
-
     if (country_id == 1 && om_id?.length != 6) {
       return fail(400, { omval: true })
     }
