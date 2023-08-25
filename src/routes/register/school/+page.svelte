@@ -21,7 +21,8 @@
   let yesL = false
   let yesM = false
   let yesN = false
-  let yesO = true
+  let yesO = false
+  let yesCOOP = true
   let omi = ''
   let isInput = true
   let pageName="School Register"
@@ -84,7 +85,8 @@
   </fieldset>
   <br>
     <div>
-      <label for="om">OM ID (<i>only</i> for Hungary)</label>
+      <label for="om">OM ID *</label>
+      <p><i class="iiii">* for Schools in Hungary only</i></p>
       <input type="text" name="om" id="om" bind:value={omi}/>
     </div>
     <div>
@@ -185,6 +187,12 @@
       HÍDPROGRAMOK
     </div>
     <br>
+    <div class="second">
+      <input type="checkbox" name="iskO" bind:checked={yesO} />
+      NEM BESOROLT *
+    </div>
+    <p><i class="iii">* please leave a comment</i></p>
+    <br>
     <br>
     <button type="button" on:click={() => isWork()} class="contrast outline cgb bb">Add Contact *</button>
     <p><i class="ii">* optional</i></p>
@@ -223,7 +231,7 @@
       <legend class="n">Note on School</legend>
       <br>
         <div class="second">
-          <input type="checkbox" name="coop" bind:checked={yesO} />
+          <input type="checkbox" name="coop" bind:checked={yesCOOP} />
           COOPERATION
         </div>
         <br>
@@ -249,7 +257,7 @@
     <p class="error">School already exists.</p>
   {/if}
 
-  {#if (yesA == false && yesB == false && yesC == false && yesD == false && yesE == false && yesF == false && yesG == false && yesH == false && yesI == false && yesJ == false && yesK == false && yesL == false && yesM == false && yesN == false)}
+  {#if (yesA == false && yesB == false && yesC == false && yesD == false && yesE == false && yesF == false && yesG == false && yesH == false && yesI == false && yesJ == false && yesK == false && yesL == false && yesM == false && yesN == false && yesO == false)}
     <p class="error">One school type must be choosen.</p>
   {/if}
 
@@ -275,6 +283,18 @@
     display: flex;
     text-align: left;
     padding-left: 5px;
+  }
+
+  .iii {
+    display: flex;
+    text-align: left;
+    padding-left: 40px;
+    color: rgb(146, 136, 136);
+  }
+
+  .iiii {
+    color: rgb(146, 136, 136);
+    padding-left: 10px;
   }
 
   .n {

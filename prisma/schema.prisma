@@ -160,15 +160,6 @@ model City {
   @@map("city")
 }
 
-// *** Please note: if the modal schooltype changes implement the school registration server as well
-
-model SchoolType {
-  id   Int    @id @default(autoincrement())
-  type String
-
-  @@map("schooltype")
-}
-
 enum Duty {
   SUPERIOR
   BASIC
@@ -185,6 +176,7 @@ enum EventType {
   RADIO
   ONLINE
   MEDIOR_LEAFLET
+  CORPORATE_EVENT
 }
 
 enum Grade {
