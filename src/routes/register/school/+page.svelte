@@ -84,15 +84,15 @@
   </fieldset>
   <br>
     <div>
-      <label for="om">OM id (<i>only</i> for Hungary)</label>
+      <label for="om">OM ID (<i>only</i> for Hungary)</label>
       <input type="text" name="om" id="om" bind:value={omi}/>
     </div>
     <div>
-      <label for="name">School name</label>
+      <label for="name">School Name</label>
       <input type="text" name="name" id="name" required />
     </div>
     <div>
-      <label for="zip">ZIP code</label>
+      <label for="zip">ZIP Code</label>
       <input type="text" name="zip" id="zip" required />
     </div>
     <div>
@@ -104,11 +104,11 @@
       <input type="text" name="dirname" id="dirname" required />
     </div>
     <div>
-      <label for="dirphone">School's phone number</label>
+      <label for="dirphone">School's Phone Number</label>
       <input type="text" name="dirphone" id="dirphone" required />
     </div>
     <div>
-      <label for="email">School's email</label>
+      <label for="email">School's Email</label>
       <input type="text" name="email" id="email" required />
     </div>
     <div>
@@ -209,7 +209,7 @@
       </div>
       <br>
       <fieldset>
-        <legend>Note On Contact</legend>
+        <legend>Note on Contact</legend>
         <br>
           <textarea id="message"
             name="contactnote"
@@ -220,7 +220,7 @@
       <p class="noticea">Please note: after registration it is possible to add more contacts. </p>
     </fieldset>
     <fieldset>
-      <legend class="n">Note On School</legend>
+      <legend class="n">Note on School</legend>
       <br>
         <div class="second">
           <input type="checkbox" name="coop" bind:checked={yesO} />
@@ -237,8 +237,12 @@
     <p class="error">Incorrect location.</p>
   {/if}
 
+  {#if form?.omnum}
+    <p class="error">OM ID already exists.</p>
+  {/if}
+
   {#if form?.omval}
-    <p class="error">OM Id is inadequate.</p>
+    <p class="error">OM ID is inadequate.</p>
   {/if}
 
   {#if form?.sch}

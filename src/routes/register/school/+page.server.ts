@@ -60,49 +60,52 @@ const school: Action = async ({ request }) => {
   let firstTime = true
   let scho_id
 
+  // *** Please note: if the modal schooltype changed implement this part as well
+
   if (altisk) {
-    school_type.push('ÁLTALÁNOS ISKOLA')
+    school_type.push('1') // általános iskola
   }
   if (gimn) {
-    school_type.push('GIMNÁZIUM')
+    school_type.push('2') // gimnázium
   }
   if (szakgimn) {
-    school_type.push('SZAKGIMNÁZIUM')
+    school_type.push('3') // szakgimnázium
   }
   if (szakkoz) {
-    school_type.push('SZAKKÖZÉPISKOLA')
+    school_type.push('4') // szakközépiskola
   }
   if (szakisk) {
-    school_type.push('SZAKISKOLA')
+    school_type.push('5') // szakiskola
   }
   if (techn) {
-    school_type.push('TECHNIKUM')
+    school_type.push('6') // technikum
   }
   if (szakkepz) {
-    school_type.push('SZAKKÉPZŐ ISKOLA')
+    school_type.push('7') // szakképző iskola
   }
   if (almuv) {
-    school_type.push('ALAPFOKÚ MŰVÉSZETOKTATÁS')
+    school_type.push('8') // alapfokú művészetoktatás
   }
   if (muvokt) {
-    school_type.push('MŰVÉSZETI OKTATÁS')
+    school_type.push('9') // művészeti oktatás
   }
   if (keszseg) {
-    school_type.push('KÉSZSÉGFEJLESZTÉS')
+    school_type.push('10') // készségfejlesztés
   }
   if (fejl) {
-    school_type.push('FEJLESZTŐ NEVELÉS-OKTATÁS')
+    school_type.push('11') // fejlesztő nevelés-oktatás
   }
   if (kieg) {
-    school_type.push('KIEGÉSZÍTŐ NEMZETISÉGI NYELVOKTATÁS')
+    school_type.push('12') // kiegészítő nemzetiségi nyelvoktatás
   }
   if (kolleg) {
-    school_type.push('KOLLÉGIUM')
+    school_type.push('13') // kollégium
   }
   if (hidp) {
-    school_type.push('HÍDPROGRAMOK')
+    school_type.push('14') // hídprogramok
   }
-  console.log(school_type)
+
+  // *** Implementation ends here
 
   if
     (contact_email.valueOf() !== 'null' &&
@@ -135,6 +138,16 @@ const school: Action = async ({ request }) => {
       return fail(400, { local: true })
     }
 
+    if (om_id !== 'null') {
+      const om_num = await db.school.findUnique({
+      where: { om_id }
+      })
+      if (om_num) {
+        return fail(400, { omnum: true })
+      }
+    }
+
+
     if (country_id == 1 && om_id?.length != 6) {
       return fail(400, { omval: true })
     }
@@ -144,7 +157,6 @@ const school: Action = async ({ request }) => {
     })
 
     const school_id = schoolid?.school_id
-    console.log('school_id' + school_id)
 
     if (school_id) {
       return fail(400, { sch: true })

@@ -8,14 +8,14 @@ datasource db {
 }
 
 model School {
-  school_id    Int               @id @default(autoincrement())
+  school_id    Int      @id @default(autoincrement())
   om_id        String?
   name         String
   zip_code     String
   address      String
   dir_name     String?
   dir_phone    String?
-  school_email String            @unique
+  school_email String   @unique
   website      String?
   school_type  String[]
   coop         Boolean?
@@ -25,17 +25,17 @@ model School {
   county_id    Int
   region_id    Int
   event        Event[]
-  city         City              @relation(fields: [city_id], references: [city_id])
-  country      Country           @relation(fields: [country_id], references: [country_id])
-  county       County            @relation(fields: [county_id], references: [county_id])
-  region       Region            @relation(fields: [region_id], references: [region_id])
+  city         City     @relation(fields: [city_id], references: [city_id])
+  country      Country  @relation(fields: [country_id], references: [country_id])
+  county       County   @relation(fields: [county_id], references: [county_id])
+  region       Region   @relation(fields: [region_id], references: [region_id])
 
   @@map("schools")
 }
 
 model Contact {
-  contact_id    Int               @id @default(autoincrement())
-  contact_email String            @unique
+  contact_id    Int     @id @default(autoincrement())
+  contact_email String  @unique
   contact_name  String?
   contact_phone String?
   contact_note  String?
@@ -44,19 +44,19 @@ model Contact {
 }
 
 model ContactOnUserOnSchool {
-  id Int @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  common String[] @unique
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  common    String[] @unique // contact_id, school_id, user_id
 
   @@map("contactonuseronschool")
 }
 
 model User {
-  user_id       String          @id @default(uuid())
+  user_id       String   @id @default(uuid())
   name          String
   nationality   String
   phone         String
-  user_email    String          @unique
+  user_email    String   @unique
   basic         Boolean?
   regionB       Int?
   medior        Boolean?
@@ -67,9 +67,9 @@ model User {
   regionS       Int?
   director      Boolean?
   passwordHash  String
-  userAuthToken String          @unique
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  userAuthToken String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
   event         Event[]
 
   @@map("users")
@@ -110,9 +110,11 @@ model InterestedStudents {
 
 model Activity {
   act_id          Int      @id @default(autoincrement())
-  date            DateTime
+  start_date      DateTime @default(now())
+  end_date        DateTime
   act_name        String
   act_description String
+  region          Int
 
   @@map("activity")
 }
@@ -156,6 +158,15 @@ model City {
   School    School[]
 
   @@map("city")
+}
+
+// *** Please note: if the modal schooltype changes implement the school registration server as well
+
+model SchoolType {
+  id   Int    @id @default(autoincrement())
+  type String
+
+  @@map("schooltype")
 }
 
 enum Duty {
