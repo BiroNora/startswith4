@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import type { ActionData, PageServerData } from './$types'
-
+  import { dutyMap } from '../../stores/dataStore'
   export let data: PageServerData
   const { regio } = data
 
@@ -10,10 +10,7 @@
   let yesH = false
   let yesS = false
   let yesD = false
-  const dutyMap = [
-        {id: "1", name: "BASIC"},
-        {id: "2", name: "MEDIOR-HIGH"}
-    ]
+
   let pageName="Register to Startswidth"
 
   export let form: ActionData
