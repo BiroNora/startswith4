@@ -30,12 +30,11 @@ const user: Action = async ({ request }) => {
   const reD = String(data.get('regD'))
 	const password1 = data.get('password1')
   const password2 = data.get('password2')
-  let regionB = "1"
-  let regionM = "2"
-  let regionH = "3"
-  let regionS = "4"
-  let regionD = "5"
-  const on_duty = [] // duryreg = ["10", "24", "30", "40", "50"]  medior / Budapest
+  let regionB = duty[0][0]
+  let regionM = duty[1][0]
+  let regionH = duty[2][0]
+  let regionS = duty[3][0]
+  let regionD = duty[4][0]
 
   if (basic == true) {
     regionB += reB
@@ -63,11 +62,16 @@ const user: Action = async ({ request }) => {
     regionD += "0"
   }
 
+  if (regionB == "10" && regionM == "20" && regionH == "30" && regionS == "40" && regionD == "50") {
+    return fail(400, { regions: true })
+  }
+
   on_duty.push(regionB)
   on_duty.push(regionM)
   on_duty.push(regionH)
   on_duty.push(regionS)
   on_duty.push(regionD)
+  console.log(on_duty)
 
 	if (typeof user_email != 'string' ||
       typeof password1 != 'string' ||
