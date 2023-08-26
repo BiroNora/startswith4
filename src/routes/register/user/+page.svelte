@@ -10,6 +10,10 @@
   let yesH = false
   let yesS = false
   let yesD = false
+  const dutyMap = [
+        {id: "1", name: "BASIC"},
+        {id: "2", name: "MEDIOR-HIGH"}
+    ]
   let pageName="Register to Startswidth"
 
   export let form: ActionData
@@ -80,6 +84,11 @@
     <div class="dir">
       <input type="checkbox" name="director" bind:checked={yesD} />
         DIRECTOR
+        <select name="regD" id="sel-D" class="hidden-textbox" >
+        {#each dutyMap as item, index (item.id)}
+          <option value="{item.id}">{item.name}</option>
+        {/each}
+        </select>
     </div>
     <div>
       <label for="password1">Password</label>

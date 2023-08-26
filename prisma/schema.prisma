@@ -57,15 +57,7 @@ model User {
   nationality   String
   phone         String
   user_email    String   @unique
-  basic         Boolean?
-  regionB       Int?
-  medior        Boolean?
-  regionM       Int?
-  high          Boolean?
-  regionH       Int?
-  superior      Boolean?
-  regionS       Int?
-  director      Boolean?
+  on_duty       String[]
   passwordHash  String
   userAuthToken String   @unique
   createdAt     DateTime @default(now())
@@ -79,8 +71,9 @@ model Event {
   event_id           Int                  @id @default(autoincrement())
   create_date        DateTime             @default(now())
   closing_date       DateTime
-  event_type         EventType            @default(PRESENTATION)
-  presented_student  Int?
+  on_duty            String
+  event_type         String
+  estimated_student  Int?
   note               String?
   school_id          Int
   user_id            String
@@ -158,25 +151,6 @@ model City {
   School    School[]
 
   @@map("city")
-}
-
-enum Duty {
-  SUPERIOR
-  BASIC
-  MEDIOR
-  HIGH
-}
-
-enum EventType {
-  PRESENTATION
-  OPEN_DAY
-  BY_PHONE
-  BY_EMAIL
-  TV
-  RADIO
-  ONLINE
-  MEDIOR_LEAFLET
-  CORPORATE_EVENT
 }
 
 enum Grade {
