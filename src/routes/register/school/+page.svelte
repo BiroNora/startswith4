@@ -111,7 +111,7 @@
     </div>
     <div>
       <label for="email">School's Email</label>
-      <input type="text" name="email" id="email" required />
+      <input type="email" name="email" id="email" required />
     </div>
     <div>
       <label for="website">Website</label>
@@ -205,7 +205,7 @@
       </div>
       <div>
         <label for="email">Contact Email</label>
-        <input type="text" name="contactemail" id="contactemail" required />
+        <input type="email" name="contactemail" id="contactemail" required />
       </div>
       <div>
         <label for="phone">Contact Phone</label>
@@ -213,7 +213,7 @@
       </div>
       <div>
         <label for="uemail">User Email</label>
-        <input type="text" name="useremail" id="useremail" required />
+        <input type="email" name="useremail" id="useremail" required />
       </div>
       <br>
       <fieldset>

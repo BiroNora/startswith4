@@ -22,7 +22,7 @@
     </div>
     <div>
       <label for="email">Email</label>
-      <input type="text" name="contactemail" id="contactemail" required />
+      <input type="email" name="contactemail" id="contactemail" required />
     </div>
     <div>
       <label for="phone">Phone</label>
@@ -30,11 +30,11 @@
     </div>
     <div>
       <label for="uemail">User Email</label>
-      <input type="text" name="useremail" id="useremail" required />
+      <input type="email" name="useremail" id="useremail" required />
     </div>
     <div>
       <label for="schemail">School Email</label>
-      <input type="text" name="schoolemail" id="schoolemail" required />
+      <input type="email" name="schoolemail" id="schoolemail" required />
     </div>
   <br>
     <fieldset>
