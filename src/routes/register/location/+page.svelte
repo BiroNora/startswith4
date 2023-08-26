@@ -100,7 +100,7 @@
     padding: 2%;
     text-align: center;
     font-style: italic;
-    line-height: normal;
     line-height: 95%;
+    font-weight: 500;
   }
 </style>
