@@ -2,9 +2,17 @@ import { fail, redirect} from '@sveltejs/kit'
 import type { Action, Actions } from './$types'
 import { db } from '$lib/database'
 
+function slugify(text:string) {
+  return text
+  .replace(/\s/g, '-')
+  .replace(/[^a-zA-Z0-9-]/g, '')
+  .toLowerCase()
+}
+
 
 const event: Action = async ({ request }) => {
   const data = await request.formData()
+  const event_name = String(data.get('fantasy'))
   const clos_date = String(data.get('meeting-time'))
   const on_duty = String(data.get('duty'))
   const event_type = String(data.get('type'))
@@ -26,6 +34,10 @@ const event: Action = async ({ request }) => {
     where: {school_email}
   })
 
+  //const school_name = schoolemail?.name
+  const school_name = slugify('Eventus Üzleti, Művészeti Szakgimnázium, Technikum, Gimnázium, Szakképző Iskola, Alapfokú Művészeti Iskola és Kollégium')
+  console.log(school_name)
+
   const school_id = schoolemail?.school_id
   const user_id = useremail?.user_id
 
@@ -38,6 +50,7 @@ const event: Action = async ({ request }) => {
 
   await db.event.create({
     data: {
+      event_name,
       create_date,
       closing_date,
       on_duty,

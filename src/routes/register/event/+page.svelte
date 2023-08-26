@@ -30,6 +30,10 @@
     />
     </div>
     <div>
+      <label for="fantasy">Event Name</label>
+      <input type="text" name="fantasy" id="fantasy" required />
+    </div>
+    <div>
       <label for="duty">On Duty</label>
       <select name="duty" id="duty" class="hidden-textbox" >
         {#each dutyMap3 as item, index (item.id)}
@@ -52,11 +56,11 @@
     </div>
     <div>
       <label for="schemail">School Email</label>
-      <input type="text" name="schoolemail" id="schoolemail" required />
+      <input type="email" name="schoolemail" id="schoolemail" required />
     </div>
     <div>
       <label for="uemail">User Email</label>
-      <input type="text" name="uemail" id="uemail" required />
+      <input type="email" name="uemail" id="uemail" required />
     </div>
   <br>
     <fieldset>

@@ -69,11 +69,12 @@ model User {
 
 model Event {
   event_id           Int                  @id @default(autoincrement())
+  event_name         String
   create_date        DateTime             @default(now())
   closing_date       DateTime
   on_duty            String
   event_type         String
-  estimated_student  Int?
+  estimated_student  Int
   note               String?
   school_id          Int
   user_id            String
