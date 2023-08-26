@@ -56,6 +56,10 @@ const school: Action = async ({ request }) => {
 	const user_email = String(data.get('useremail'))
 	const coop = Boolean(data.get('coop'))
 	const note = String(data.get('note'))
+
+	const createdAt = new Date()
+  	createdAt.setHours(createdAt.getHours() + 2)
+
 	const school_type = []
 	const common = []
 	let hasContact = false
@@ -252,6 +256,7 @@ const school: Action = async ({ request }) => {
 
 			await db.contactOnUserOnSchool.create({
 				data: {
+					createdAt,
 					common
 				}
 			})

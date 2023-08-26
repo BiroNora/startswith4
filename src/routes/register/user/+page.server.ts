@@ -30,11 +30,19 @@ const user: Action = async ({ request }) => {
   const reD = String(data.get('regD'))
 	const password1 = data.get('password1')
   const password2 = data.get('password2')
+
+  const createdAt = new Date()
+  createdAt.setHours(createdAt.getHours() + 2)
+
+  const updatedAt = new Date()
+  updatedAt.setHours(updatedAt.getHours() + 2)
+
   let regionB = duty[0][0]
   let regionM = duty[1][0]
   let regionH = duty[2][0]
   let regionS = duty[3][0]
   let regionD = duty[4][0]
+  const on_duty = []
 
   if (basic == true) {
     regionB += reB
@@ -98,6 +106,8 @@ const user: Action = async ({ request }) => {
       on_duty,
       passwordHash: await bcrypt.hash(password1, 10),
       userAuthToken: crypto.randomUUID(),
+      createdAt,
+      updatedAt
     }
   })
 
