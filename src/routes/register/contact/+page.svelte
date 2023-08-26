@@ -40,11 +40,7 @@
     <fieldset>
       <legend class="n">Note</legend>
       <br>
-        <textarea id="message"
-          name="contactmessage"
-          rows="4"
-          cols="50" >
-          </textarea>
+        <textarea id="message" name="contactmessage" rows="4" cols="50"></textarea>
     </fieldset>
 
   {#if form?.contact}

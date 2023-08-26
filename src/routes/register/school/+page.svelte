@@ -219,11 +219,7 @@
       <fieldset>
         <legend>Note on Contact</legend>
         <br>
-          <textarea id="message"
-            name="contactnote"
-            rows="4"
-            cols="50" >
-            </textarea>
+          <textarea id="message" name="contactnote" rows="4" cols="50"></textarea>
       </fieldset>
       <p class="noticea">Please note: after registration it is possible to add more contacts. </p>
     </fieldset>
@@ -235,11 +231,7 @@
           COOPERATION
         </div>
         <br>
-        <textarea id="message"
-          name="note"
-          rows="4"
-          cols="50" >
-        </textarea>
+        <textarea id="message" name="note" rows="4" cols="50"></textarea>
     </fieldset>
   {#if form?.local }
     <p class="error">Incorrect location.</p>

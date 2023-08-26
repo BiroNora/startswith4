@@ -3,35 +3,15 @@
   import type { ActionData } from './$types'
   import { dutyMap3 } from '../../stores/dataStore'
   import { eventType } from '../../stores/dataStore'
-  //import { format } from 'date-fns'
 
   let pageName="Event Register"
 
   export let form: ActionData
-
-  function formatDate(date: Date) {
-    return new Intl.DateTimeFormat('hu', {dateStyle: 'full' }).format(date)
-  }
-
-  function slugify(text:string) {
-    return text
-    .replace(/\s/g, '-')
-    .replace(/[^a-zA-Z0-9-]/g, '')
-    .toLowerCase()
-  }
 </script>
 
 <svelte:head>
     <title> {pageName} </title>
 </svelte:head>
-
-//<!-- How to counting 10 days+ -->
-
-let myBindDate = (new Date()).toJSON().slice(0, 10) + 10;
-const my_date = new Date();
-let next10 = my_date.setDate(my_date.getDate() + 10)
-
-
 
 <div class="grid">
   <div class="rei">
@@ -82,11 +62,7 @@ let next10 = my_date.setDate(my_date.getDate() + 10)
     <fieldset>
       <legend class="n">Note</legend>
       <br>
-        <textarea id="message"
-          name="message"
-          rows="4"
-          cols="50" >
-          </textarea>
+        <textarea id="message" name="message" rows="4" cols="50"></textarea>
     </fieldset>
 
   {#if form?.user}
