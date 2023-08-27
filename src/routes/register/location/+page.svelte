@@ -14,6 +14,7 @@
   <div class="rei">
     <p>Location Register</p>
   </div>
+  <br>
   <form action="?/location" method="post" use:enhance>
   <fieldset>
     <legend class="n">New Location</legend>

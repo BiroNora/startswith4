@@ -24,8 +24,8 @@
   <div class="rei">
     <p>Register to Startswidth</p>
   </div>
-
-<form action="?/user" method="post" use:enhance>
+  <br>
+  <form action="?/user" method="post" use:enhance>
     <div>
       <label for="name">Name</label>
       <input type="text" name="name" id="name" required />
@@ -108,9 +108,9 @@
   {#if form?.regions}
     <p class="error">One duty must be choosen.</p>
   {/if}
-
+  
   <button class="btn" id="btn" type="submit">Register</button>
-</form>
+  </form>
 </div>
 
 

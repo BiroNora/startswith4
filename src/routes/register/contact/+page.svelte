@@ -15,6 +15,7 @@
   <div class="rei">
     <p>Contact Register</p>
   </div>
+  <br>
   <form action="?/contact" method="post" use:enhance>
     <div>
       <label for="name">Name</label>
@@ -58,8 +59,9 @@
   {#if form?.real}
       <p class="error">This contact is already added to this shool and this user.</p>
   {/if}
+  
   <button class="btn" id="btn" type="submit">Register</button>
-</form>
+  </form>
 </div>
 
 

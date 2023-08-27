@@ -45,45 +45,45 @@
   <div class="rei">
     <p>School Register</p>
   </div>
-
-<form action="?/school" method="post" use:enhance>
-  <fieldset>
-    <legend class="n">Location</legend>
-    <p class="notice">Please note: if country / region / county /city <i>does not exist</i>  in the list, <a class="aa" href="/register/location">use this link</a>  before the registration. </p>
-    <div>
-      <label for="countr">Country</label>
-      <select name="countr" id="countr" >
-        {#each country as countr}
-          <option value="{countr.country_id}">{countr.country_name}</option>
-        {/each}
-      </select>
-    </div>
-    <div>
-      <label for="region">Region</label>
-      <select name="region" id="region" >
-        {#each regio as reg}
-          <option value="{reg.region_id}">{reg.region_name}</option>
-        {/each}
-      </select>
-    </div>
-    <div>
-      <label for="county">County</label>
-      <select name="county" id="county" >
-        {#each county as coun}
-          <option value="{coun.county_id}">{coun.county_name}</option>
-        {/each}
-      </select>
-    </div>
-    <div>
-      <label for="city">City</label>
-      <select name="city" id="city" >
-        {#each city as cit}
-          <option value="{cit.city_id}">{cit.city_name}</option>
-        {/each}
-      </select>
-    </div>
-  </fieldset>
   <br>
+  <form action="?/school" method="post" use:enhance>
+    <fieldset>
+      <legend class="n">Location</legend>
+      <p class="notice">Please note: if country / region / county /city <i>does not exist</i>  in the list, <a class="aa" href="/register/location">use this link</a>  before the registration. </p>
+      <div>
+        <label for="countr">Country</label>
+        <select name="countr" id="countr" >
+          {#each country as countr}
+            <option value="{countr.country_id}">{countr.country_name}</option>
+          {/each}
+        </select>
+      </div>
+      <div>
+        <label for="region">Region</label>
+        <select name="region" id="region" >
+          {#each regio as reg}
+            <option value="{reg.region_id}">{reg.region_name}</option>
+          {/each}
+        </select>
+      </div>
+      <div>
+        <label for="county">County</label>
+        <select name="county" id="county" >
+          {#each county as coun}
+            <option value="{coun.county_id}">{coun.county_name}</option>
+          {/each}
+        </select>
+      </div>
+      <div>
+        <label for="city">City</label>
+        <select name="city" id="city" >
+          {#each city as cit}
+            <option value="{cit.city_id}">{cit.city_name}</option>
+          {/each}
+        </select>
+      </div>
+    </fieldset>
+    <br>
     <div>
       <label for="om">OM ID *</label>
       <p><i class="iiii">* for Schools in Hungary only</i></p>
@@ -233,37 +233,36 @@
         <br>
         <textarea id="message" name="note" rows="4" cols="50"></textarea>
     </fieldset>
-  {#if form?.local }
-    <p class="error">Incorrect location.</p>
-  {/if}
+    {#if form?.local }
+      <p class="error">Incorrect location.</p>
+    {/if}
 
-  {#if form?.omnum}
-    <p class="error">OM ID already exists.</p>
-  {/if}
+    {#if form?.omnum}
+      <p class="error">OM ID already exists.</p>
+    {/if}
 
-  {#if form?.omval}
-    <p class="error">OM ID is inadequate.</p>
-  {/if}
+    {#if form?.omval}
+      <p class="error">OM ID is inadequate.</p>
+    {/if}
 
-  {#if form?.sch}
-    <p class="error">School already exists.</p>
-  {/if}
+    {#if form?.sch}
+      <p class="error">School already exists.</p>
+    {/if}
 
-  {#if (yesA == false && yesB == false && yesC == false && yesD == false && yesE == false && yesF == false && yesG == false && yesH == false && yesI == false && yesJ == false && yesK == false && yesL == false && yesM == false && yesN == false && yesO == false)}
-    <p class="error">One school type must be choosen.</p>
-  {/if}
+    {#if (yesA == false && yesB == false && yesC == false && yesD == false && yesE == false && yesF == false && yesG == false && yesH == false && yesI == false && yesJ == false && yesK == false && yesL == false && yesM == false && yesN == false && yesO == false)}
+      <p class="error">One school type must be choosen.</p>
+    {/if}
 
-  {#if form?.uid}
-    <p class="error">User does not exists.</p>
-  {/if}
+    {#if form?.uid}
+      <p class="error">User does not exists.</p>
+    {/if}
 
-  {#if form?.real}
-    <p class="error">This contact is already added to this shool and this user.</p>
-  {/if}
+    {#if form?.real}
+      <p class="error">This contact is already added to this shool and this user.</p>
+    {/if}
 
-  <button class="btn" id="btn" type="submit">Register</button>
-</form>
-
+    <button class="btn" id="btn" type="submit">Register</button>
+  </form>
 </div>
 
 <style>
