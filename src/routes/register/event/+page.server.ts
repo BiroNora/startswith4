@@ -49,6 +49,14 @@ const event: Action = async ({ request }) => {
   const slug = slugDate + '-' + cn + '-' + se + '-' + sn
   console.log(slug)
 
+  const uniqueSlug = await db.event.findUnique({
+    where: { slug }
+  })
+
+  if (uniqueSlug) {
+    return fail(400, { uslug: true })
+  }
+
   const school_id = schoolemail?.school_id
   const user_id = useremail?.user_id
 

@@ -81,6 +81,10 @@
       <p class="error">Event name is shorter than 10 chars long.</p>
   {/if}
 
+  {#if form?.uslug}
+      <p class="error">Event with same data is already exists.</p>
+  {/if}
+
   <button class="btn" id="btn" type="submit">Register</button>
 </form>
 </div>
