@@ -57,8 +57,8 @@ const school: Action = async ({ request }) => {
 	const coop = Boolean(data.get('coop'))
 	const note = String(data.get('note'))
 
-	const createdAt = new Date()
-  	createdAt.setHours(createdAt.getHours() + 2)
+	const now = new Date()
+  	const createdAt = now.toISOString()
 
 	const school_type = []
 	const common = []

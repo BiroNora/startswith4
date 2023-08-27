@@ -31,11 +31,9 @@ const user: Action = async ({ request }) => {
 	const password1 = data.get('password1')
   const password2 = data.get('password2')
 
-  const createdAt = new Date()
-  createdAt.setHours(createdAt.getHours() + 2)
-
-  const updatedAt = new Date()
-  updatedAt.setHours(updatedAt.getHours() + 2)
+  const now = new Date()
+  const createdAt = now.toISOString()
+  const updatedAt = now.toISOString()
 
   let regionB = duty[0][0]
   let regionM = duty[1][0]
