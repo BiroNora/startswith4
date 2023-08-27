@@ -19,19 +19,19 @@
   </div>
   <form action="?/event" method="post" use:enhance>
     <div>
+      <label for="fantasy"><p class="noticea">Please note: event name must be unique and at least 10 characters long.</p>Event Name</label>
+      <input type="text" name="fantasy" id="fantasy" minlength="10" placeholder="ANY LONGER" required />
+    </div>
+    <div>
       <label for="meeting-time">Event Date</label>
     <input
       type="datetime-local"
       id="meeting-time"
       name="meeting-time"
-      value="YYYY-MM-DDT08:00"
+      value="YYYY-MM-DDT00:00"
       min="2021-06-07T00:00"
       max="2060-06-14T00:00"
     />
-    </div>
-    <div>
-      <label for="fantasy">Event Name</label>
-      <input type="text" name="fantasy" id="fantasy" required />
     </div>
     <div>
       <label for="duty">On Duty</label>
@@ -48,7 +48,7 @@
           <option value="{item.id}">{item.name}</option>
         {/each}
       </select>
-      <p><i class="iii">* please leave a comment</i></p>
+      <p><i class="iii">in case of * please leave a comment</i></p>
     </div>
     <div>
       <label for="estimate">Estimated Number of Participants</label>
@@ -77,8 +77,8 @@
       <p class="error">School does not exist.</p>
   {/if}
 
-  {#if form?.contacts}
-      <p class="error">Please enter correct data.</p>
+  {#if form?.title}
+      <p class="error">Event name is shorter than 10 chars long.</p>
   {/if}
 
   <button class="btn" id="btn" type="submit">Register</button>
@@ -145,6 +145,15 @@
     margin-bottom: 0;
     background-color: #32BEA6;
   }
+
+  .noticea {
+    color: #32BEA6;
+    padding: 2%;
+    text-align: center;
+    font-weight: 500;
+    line-height: normal;
+  }
+
 
   .error {
     color: tomato;

@@ -1,13 +1,9 @@
+import { db } from '$lib/database'
 import { fail, redirect} from '@sveltejs/kit'
 import type { Action, Actions } from './$types'
-import { db } from '$lib/database'
-
-function slugify(text:string) {
-  return text
-  .replace(/\s/g, '-')
-  .replace(/[^a-zA-Z0-9-]/g, '')
-  .toLowerCase()
-}
+import { slugify } from '../../stores/dataStore'
+import { timeSlugify } from '../../stores/dataStore'
+import { hourSetter } from '../../stores/dataStore'
 
 
 const event: Action = async ({ request }) => {
@@ -21,11 +17,15 @@ const event: Action = async ({ request }) => {
   const user_email = String(data.get('uemail'))
   const note = String(data.get('message'))
 
-  const closing_date = new Date(clos_date)
-  closing_date.setHours(closing_date.getHours() + 2)
+  const closing_date = hourSetter(clos_date)
+  const slugDate = timeSlugify(clos_date)
+  console.log('psqldate' + closing_date)
+  console.log('slugDate' + slugDate)
 
-  const create_date = new Date()
-  create_date.setHours(create_date.getHours() + 2)
+  if (event_name.length < 10) {
+    console.log(event_name.length)
+    return fail(400, { title: true })
+  }
 
   const useremail = await db.user.findUnique({
     where: { user_email }
@@ -34,9 +34,20 @@ const event: Action = async ({ request }) => {
     where: {school_email}
   })
 
-  //const school_name = schoolemail?.name
-  const school_name = slugify('Eventus Üzleti, Művészeti Szakgimnázium, Technikum, Gimnázium, Szakképző Iskola, Alapfokú Művészeti Iskola és Kollégium')
-  console.log(school_name)
+  const city_id = schoolemail?.city_id
+
+  const city = await db.city.findUnique({
+    where: { city_id }
+  })
+  const city_name = city?.city_name
+  const school_name = schoolemail?.name
+  //const school_name = 'Eventus Üzleti, Művészeti Szakgimnázium, Technikum, Gimnázium, Szakképző Iskola, Alapfokú Művészeti Iskola és Kollégium'
+  //const city_name = 'Egerszalók'
+  const cn = slugify(String(city_name?.slice(0, 15)))
+  const sn = slugify(String(school_name?.slice(0, 15)))
+  const se = slugify(event_name.slice(0, 15))
+  const slug = slugDate + '-' + cn + '-' + se + '-' + sn
+  console.log(slug)
 
   const school_id = schoolemail?.school_id
   const user_id = useremail?.user_id
@@ -57,6 +68,7 @@ const event: Action = async ({ request }) => {
       event_type,
       estimated_student,
       note,
+      slug,
       school_id,
       user_id
     }

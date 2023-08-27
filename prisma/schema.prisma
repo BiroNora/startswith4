@@ -76,6 +76,7 @@ model Event {
   event_type         String
   estimated_student  Int
   note               String?
+  slug               String               @unique
   school_id          Int
   user_id            String
   School             School               @relation(fields: [school_id], references: [school_id])
