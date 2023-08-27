@@ -57,9 +57,6 @@ const school: Action = async ({ request }) => {
 	const coop = Boolean(data.get('coop'))
 	const note = String(data.get('note'))
 
-	const now = new Date()
-  	const createdAt = now.toISOString()
-
 	const school_type = []
 	const common = []
 	let hasContact = false
@@ -256,7 +253,6 @@ const school: Action = async ({ request }) => {
 
 			await db.contactOnUserOnSchool.create({
 				data: {
-					createdAt,
 					common
 				}
 			})

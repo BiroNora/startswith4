@@ -3,6 +3,7 @@ import { fail, redirect} from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 import bcrypt from 'bcrypt'
 import { db } from '$lib/database'
+import { hourSetter } from '../../stores/dataStore'
 
 export const load: PageServerLoad = async () => {
   const regio = await db.region.findMany({
@@ -30,10 +31,6 @@ const user: Action = async ({ request }) => {
   const reD = String(data.get('regD'))
 	const password1 = data.get('password1')
   const password2 = data.get('password2')
-
-  const now = new Date()
-  const createdAt = now.toISOString()
-  const updatedAt = now.toISOString()
 
   let regionB = duty[0][0]
   let regionM = duty[1][0]
@@ -104,8 +101,6 @@ const user: Action = async ({ request }) => {
       on_duty,
       passwordHash: await bcrypt.hash(password1, 10),
       userAuthToken: crypto.randomUUID(),
-      createdAt,
-      updatedAt
     }
   })
 

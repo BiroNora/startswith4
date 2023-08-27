@@ -45,7 +45,7 @@ model Contact {
 
 model ContactOnUserOnSchool {
   id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
   common    String[] @unique // contact_id, school_id, user_id
 
   @@map("contactonuseronschool")
@@ -60,8 +60,8 @@ model User {
   on_duty       String[]
   passwordHash  String
   userAuthToken String   @unique
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(3)
   event         Event[]
 
   @@map("users")
@@ -70,8 +70,8 @@ model User {
 model Event {
   event_id           Int                  @id @default(autoincrement())
   event_name         String
-  create_date        DateTime             @default(now())
-  closing_date       DateTime
+  create_date        DateTime             @default(now()) @db.Timestamptz(3)
+  closing_date       DateTime             @db.Timestamptz(3)
   on_duty            String
   event_type         String
   estimated_student  Int
@@ -105,7 +105,7 @@ model InterestedStudents {
 
 model Activity {
   act_id          Int      @id @default(autoincrement())
-  start_date      DateTime @default(now())
+  start_date      DateTime @default(now()) @db.Timestamptz(3)
   end_date        DateTime
   act_name        String
   act_description String

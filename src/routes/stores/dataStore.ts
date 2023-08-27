@@ -40,12 +40,6 @@ export function timeSlugify(text: string) {
   return slugDate
 }
 
-export function hourSetter(text: string) {
-  const closing_date = new Date(text)
-  closing_date.setHours(closing_date.getHours())
-  return closing_date
-}
-
 export const schoolType = [
   ["1", "ÁLTALÁNOS ISKOLA"],
   ["2", "GIMNÁZIUM"],
