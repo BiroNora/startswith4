@@ -69,6 +69,14 @@
         <textarea id="message" name="message" rows="4" cols="50"></textarea>
     </fieldset>
 
+  {#if form?.inactuser}
+      <p class="error">Something went wrong.</p>
+  {/if}
+
+  {#if form?.inactschool}
+      <p class="error">Something went wrong.</p>
+  {/if}
+
   {#if form?.user}
       <p class="error">User does not exist.</p>
   {/if}

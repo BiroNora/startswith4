@@ -51,6 +51,15 @@ model ContactOnUserOnSchool {
   @@map("contactonuseronschool")
 }
 
+model SchoolOnUser {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  common    String[] @unique
+  note      String?
+
+  @@map("schoolonuser")
+}
+
 model User {
   user_id       String   @id @default(uuid())
   name          String
@@ -65,6 +74,17 @@ model User {
   event         Event[]
 
   @@map("users")
+}
+
+model Inactive {
+  id          Int      @id @default(autoincrement())
+  create_date DateTime @default(now()) @db.Timestamptz(3)
+  made_by     String
+  contact_id  Int?
+  school_id   Int?
+  user_id     String?
+
+  @@map("inactive")
 }
 
 model Event {

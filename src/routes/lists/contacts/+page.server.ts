@@ -25,4 +25,5 @@ const contacts: Action = async ({ request }) => {
   throw redirect(303, '/login')
 }
 
+
 export const actions: Actions = { contacts }

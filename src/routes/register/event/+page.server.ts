@@ -34,6 +34,23 @@ const event: Action = async ({ request }) => {
     where: {school_email}
   })
 
+  const school_id = schoolemail?.school_id
+  const user_id = useremail?.user_id
+
+  const inactiveUser = await db.inactive.findFirst({
+    where: { user_id }
+  })
+  if (inactiveUser) {
+    return fail(400, { inactuser: true })
+  }
+
+  const inactiveSchool = await db.inactive.findFirst({
+    where: { school_id }
+  })
+  if (inactiveSchool) {
+    return fail(400, { inactschool: true })
+  }
+
   const city_id = schoolemail?.city_id
 
   const city = await db.city.findUnique({
@@ -57,9 +74,6 @@ const event: Action = async ({ request }) => {
     return fail(400, { uslug: true })
   }
 
-  const school_id = schoolemail?.school_id
-  const user_id = useremail?.user_id
-
   if ((!useremail)) {
     return fail(400, { user: true })
   }
@@ -80,6 +94,7 @@ const event: Action = async ({ request }) => {
       user_id
     }
   })
+
   throw redirect(303, '../lists/events')
 }
 
