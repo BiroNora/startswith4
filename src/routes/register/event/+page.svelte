@@ -69,28 +69,20 @@
         <textarea id="message" name="message" rows="4" cols="50"></textarea>
     </fieldset>
 
-  {#if form?.inactuser}
+  {#if form?.inactsu}
       <p class="error">Something went wrong.</p>
   {/if}
 
-  {#if form?.inactschool}
-      <p class="error">Something went wrong.</p>
-  {/if}
-
-  {#if form?.user}
-      <p class="error">User does not exist.</p>
-  {/if}
-
-  {#if form?.school}
-      <p class="error">School does not exist.</p>
+  {#if form?.user || form?.school}
+      <p class="error">Please enter correct data.</p>
   {/if}
 
   {#if form?.title}
-      <p class="error">Event name is shorter than 10 chars long.</p>
+      <p class="error">Event name is too short.</p>
   {/if}
 
   {#if form?.uslug}
-      <p class="error">Event with same data is already exists.</p>
+      <p class="error">Event already exists.</p>
   {/if}
 
   <button class="btn" id="btn" type="submit">Register</button>

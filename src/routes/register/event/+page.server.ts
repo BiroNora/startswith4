@@ -15,12 +15,12 @@ const event: Action = async ({ request }) => {
   const school_email = String(data.get('schoolemail'))
   const user_email = String(data.get('uemail'))
   const note = String(data.get('message'))
-
-  const closing_date = new Date(String(clos_date)).toISOString()
+  const closing_date = new Date(String(clos_date))
 
   const slugDate = timeSlugify(String(clos_date))
   console.log('psqldate' + clos_date)
   console.log('slugDate' + slugDate)
+  console.log('closing_date' + closing_date)
 
   if (event_name.length < 10) {
     console.log(event_name.length)
@@ -36,19 +36,11 @@ const event: Action = async ({ request }) => {
 
   const school_id = schoolemail?.school_id
   const user_id = useremail?.user_id
+  const school_active = schoolemail?.active
+  const user_active = useremail?.active
 
-  const inactiveUser = await db.inactive.findFirst({
-    where: { user_id }
-  })
-  if (inactiveUser) {
-    return fail(400, { inactuser: true })
-  }
-
-  const inactiveSchool = await db.inactive.findFirst({
-    where: { school_id }
-  })
-  if (inactiveSchool) {
-    return fail(400, { inactschool: true })
+  if (!school_active || !user_active) {
+    return fail(400, { inactsu: true })
   }
 
   const city_id = schoolemail?.city_id
@@ -90,8 +82,16 @@ const event: Action = async ({ request }) => {
       estimated_student,
       note,
       slug,
-      school_id,
-      user_id
+      School: {
+        connect: {
+          school_id:  school_id ,
+        },
+      },
+      User: {
+        connect: {
+          user_id: `${ user_id }`,
+        },
+      },
     }
   })
 
