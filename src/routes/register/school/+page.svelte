@@ -106,17 +106,22 @@
       <input type="text" name="dirname" id="dirname" required />
     </div>
     <div>
-      <label for="dirphone">School's Phone Number</label>
+      <label for="dirphone">School Phone Number</label>
       <input type="text" name="dirphone" id="dirphone" required />
     </div>
     <div>
-      <label for="email">School's Email</label>
+      <label for="email">School Email</label>
       <input type="email" name="email" id="email" required />
+    </div>
+    <div>
+      <label for="useremail">User Email</label>
+      <input type="uemail" name="useremail" id="useremail" required />
     </div>
     <div>
       <label for="website">Website</label>
       <input type="text" name="website" id="website" required />
     </div>
+    <br>
     <div class="second">
       <input type="checkbox" name="iskA" bind:checked={yesA} />
       ÁLTALÁNOS ISKOLA
@@ -192,37 +197,6 @@
       NEM BESOROLT *
     </div>
     <p><i class="iii">* please leave a comment</i></p>
-    <br>
-    <br>
-    <button type="button" on:click={() => isWork()} class="contrast outline cgb bb">Add Contact *</button>
-    <p><i class="ii">* optional</i></p>
-    <fieldset disabled={isInput}>
-      <legend class="n">Contact</legend>
-      <br>
-      <div>
-        <label for="name">Contact Name</label>
-        <input type="text" name="contactname" id="contactname" required  />
-      </div>
-      <div>
-        <label for="email">Contact Email</label>
-        <input type="email" name="contactemail" id="contactemail" required />
-      </div>
-      <div>
-        <label for="phone">Contact Phone</label>
-        <input type="text" name="contactphone" id="contactphone" required />
-      </div>
-      <div>
-        <label for="uemail">User Email</label>
-        <input type="email" name="useremail" id="useremail" required />
-      </div>
-      <br>
-      <fieldset>
-        <legend>Note on Contact</legend>
-        <br>
-          <textarea id="message" name="contactnote" rows="4" cols="50"></textarea>
-      </fieldset>
-      <p class="noticea">Please note: after registration it is possible to add more contacts. </p>
-    </fieldset>
     <fieldset>
       <legend class="n">Note on School</legend>
       <br>
@@ -245,21 +219,17 @@
       <p class="error">OM ID is inadequate.</p>
     {/if}
 
-    {#if form?.sch}
-      <p class="error">School already exists.</p>
+    {#if form?.sch || form?.user}
+      <p class="error">Please enter correct data.</p>
     {/if}
 
     {#if (yesA == false && yesB == false && yesC == false && yesD == false && yesE == false && yesF == false && yesG == false && yesH == false && yesI == false && yesJ == false && yesK == false && yesL == false && yesM == false && yesN == false && yesO == false)}
       <p class="error">One school type must be choosen.</p>
     {/if}
 
-    {#if form?.uid}
-      <p class="error">User does not exists.</p>
-    {/if}
-
-    {#if form?.real}
-      <p class="error">This contact is already added to this shool and this user.</p>
-    {/if}
+    <div>
+      <p class="noticea">Please note: contact can be added on the Contact Register page.</p>
+    </div>
 
     <button class="btn" id="btn" type="submit">Register</button>
   </form>
@@ -268,12 +238,6 @@
 <style>
   i {
     color: #32BEA6;
-  }
-
-  .ii {
-    display: flex;
-    text-align: left;
-    padding-left: 5px;
   }
 
   .iii {
@@ -313,9 +277,6 @@
     font-style: italic;
   }
 
-  .bb {
-    font-weight: 450;
-  }
 
   fieldset {
     position: relative;
@@ -363,10 +324,6 @@
   .btn {
     margin-bottom: 0;
     background-color: #32BEA6;
-  }
-
-  .cgb {
-  border: 2px solid #32BEA6;
   }
 
   .error {

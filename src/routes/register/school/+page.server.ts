@@ -49,19 +49,11 @@ const school: Action = async ({ request }) => {
 	const kolleg = Boolean(data.get('iskM'))
 	const hidp = Boolean(data.get('iskN'))
 	const nembes = Boolean(data.get('iskO'))
-	const contact_name = String(data.get('contactname'))
-	const contact_email = String(data.get('contactemail'))
-	const contact_phone = String(data.get('contactphone'))
-	const contact_note = String(data.get('contactnote'))
 	const user_email = String(data.get('useremail'))
 	const coop = Boolean(data.get('coop'))
 	const note = String(data.get('note'))
-
+	const active = true
 	const school_type = []
-	const common = []
-	let hasContact = false
-	let firstTime = true
-	let scho_id
 
 	if (altisk) {
 		school_type.push(schoolType[0][0]) // általános iskola
@@ -109,221 +101,75 @@ const school: Action = async ({ request }) => {
 		school_type.push(schoolType[14][0]) // nem besorolt
 	}
 
-	if (
-		contact_email.valueOf() !== 'null' &&
-		contact_name.valueOf() !== 'null' &&
-		contact_phone.valueOf() !== 'null' &&
-		user_email.valueOf() !== 'null'
-	) {
-		hasContact = true
-		console.log('van contact')
+	const regioncountry = await db.region.findUnique({
+		where: { region_id }
+	})
+	if (regioncountry?.country_id != country_id) {
+		return fail(400, { local: true })
 	}
 
-	if (hasContact && firstTime) {
-		const regioncountry = await db.region.findUnique({
-			where: { region_id }
-		})
-		if (regioncountry?.country_id != country_id) {
-			return fail(400, { local: true })
-		}
-
-		const countyregion = await db.county.findUnique({
-			where: { county_id }
-		})
-		if (countyregion?.region_id != region_id) {
-			return fail(400, { local: true })
-		}
-
-		const citycounty = await db.city.findUnique({
-			where: { city_id }
-		})
-		if (citycounty?.county_id != county_id) {
-			return fail(400, { local: true })
-		}
-
-		if (country_id == 1 && om_id?.length != 6 && !nembes) {
-			return fail(400, { omval: true })
-		}
-
-		const schoolid = await db.school.findUnique({
-			where: { school_email }
-		})
-
-		const school_id = schoolid?.school_id
-
-		if (school_id) {
-			return fail(400, { sch: true })
-		}
-
-		const userid = await db.user.findUnique({
-			where: { user_email }
-		})
-
-		const u_id = userid?.user_id
-		if (!u_id) {
-			return fail(400, { uid: true })
-		}
-
-		const contactid = await db.contact.findUnique({
-			where: { contact_email }
-		})
-
-		const c_id = contactid?.contact_id
-		if (c_id) {
-			return fail(400, { cid: true })
-		}
-
-		await db.school.create({
-			data: {
-				om_id,
-				name,
-				zip_code,
-				address,
-				dir_name,
-				dir_phone,
-				school_email,
-				website,
-				school_type,
-				coop,
-				note,
-				city_id,
-				country_id,
-				county_id,
-				region_id
-			}
-		})
-
-		const sch_id = await db.school.findUnique({
-			where: { school_email }
-		})
-
-		scho_id = sch_id?.school_id
-
-		firstTime = false
+	const countyregion = await db.county.findUnique({
+		where: { county_id }
+	})
+	if (countyregion?.region_id != region_id) {
+		return fail(400, { local: true })
 	}
 
-	if (hasContact && !firstTime) {
-		const userid = await db.user.findUnique({
-			where: { user_email }
-		})
-
-		const u_id = userid?.user_id
-		if (!u_id) {
-			return fail(400, { uid: true })
-		}
-
-		const contactid = await db.contact.findUnique({
-			where: { contact_email }
-		})
-
-		const conty = contactid?.contact_id
-		if (conty) {
-			return fail(400, { cid: true }) // contact already exists
-		}
-
-		if (!conty) {
-			await db.contact.create({
-				data: {
-					contact_email,
-					contact_name,
-					contact_phone,
-					contact_note
-				}
-			})
-		}
-
-		const contid = await db.contact.findUnique({
-			where: { contact_email }
-		})
-
-		const c_id = contid?.contact_id
-
-		if (c_id && scho_id && u_id) {
-			common.push(String(c_id))
-			common.push(String(scho_id))
-			common.push(String(u_id))
-
-			const commonunique = await db.contactOnUserOnSchool.findUnique({
-				where: { common }
-			})
-
-			if (commonunique) {
-				return fail(400, { real: true })
-			}
-
-			await db.contactOnUserOnSchool.create({
-				data: {
-					common
-				}
-			})
-		}
+	const citycounty = await db.city.findUnique({
+		where: { city_id }
+	})
+	if (citycounty?.county_id != county_id) {
+		return fail(400, { local: true })
 	}
 
-	if (!hasContact) {
-		const regioncountry = await db.region.findUnique({
-			where: { region_id }
-		})
-		if (regioncountry?.country_id != country_id) {
-			return fail(400, { local: true })
-		}
-
-		const countyregion = await db.county.findUnique({
-			where: { county_id }
-		})
-		if (countyregion?.region_id != region_id) {
-			return fail(400, { local: true })
-		}
-
-		const citycounty = await db.city.findUnique({
-			where: { city_id }
-		})
-		if (citycounty?.county_id != county_id) {
-			return fail(400, { local: true })
-		}
-
-		if (country_id == 1 && om_id?.length != 6 && !nembes) {
-			return fail(400, { omval: true })
-		}
-
-		const schoolid = await db.school.findUnique({
-			where: { school_email }
-		})
-
-		const school_id = schoolid?.school_id
-		console.log('school_id' + school_id)
-
-		if (school_id) {
-			return fail(400, { sch: true })
-		}
-
-		await db.school.create({
-			data: {
-				om_id,
-				name,
-				zip_code,
-				address,
-				dir_name,
-				dir_phone,
-				school_email,
-				website,
-				school_type,
-				coop,
-				note,
-				city_id,
-				country_id,
-				county_id,
-				region_id
-			}
-		})
-
-		const sch_id = await db.school.findUnique({
-			where: { school_email }
-		})
-
-		scho_id = sch_id?.school_id
-
-		firstTime = false
+	if (country_id == 1 && om_id?.length != 6 && !nembes) {
+		return fail(400, { omval: true })
 	}
+
+	const schoolid = await db.school.findUnique({
+		where: { school_email }
+	})
+
+	const school_id = schoolid?.school_id
+
+	if (school_id) {
+		return fail(400, { sch: true })
+	}
+
+	const myuser = await db.user.findUnique({
+		where: { user_email }
+	})
+
+	const user_id = myuser?.user_id
+	const active_by = String(user_id)
+
+	if (!myuser) {
+		return fail(400, { user: true })
+	}
+
+	await db.school.create({
+		data: {
+			om_id,
+			name,
+			zip_code,
+			address,
+			dir_name,
+			dir_phone,
+			school_email,
+			website,
+			school_type,
+			coop,
+			note,
+			city_id,
+			country_id,
+			county_id,
+			region_id,
+			user_id,
+			active,
+			active_by
+		}
+	})
+
 	throw redirect(303, '/login')
 }
 

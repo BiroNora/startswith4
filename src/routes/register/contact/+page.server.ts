@@ -11,7 +11,8 @@ const contact: Action = async ({ request }) => {
   const user_email = String(data.get('useremail'))
   const school_email = String(data.get('schoolemail'))
   const contact_note = String(data.get('contactmessage'))
-  const common = []
+  const active = true
+
 
   const contact = await db.contact.findUnique({
     where: { contact_email }
@@ -23,8 +24,10 @@ const contact: Action = async ({ request }) => {
     where: {school_email}
   })
 
-  const s_id = schoolemail?.school_id
-  const u_id = useremail?.user_id
+  const school_id = Number(schoolemail?.school_id)
+  const user_id = useremail?.user_id
+
+  const active_by = String(user_id)
 
   if ((contact)) {
     return fail(400, { contact: true })
@@ -34,45 +37,26 @@ const contact: Action = async ({ request }) => {
     return fail(400, { contacts: true })
   }
   else {
-
     await db.contact.create({
       data: {
         contact_email,
         contact_name,
         contact_phone,
         contact_note,
-      }
+        User: {
+          connect: {
+            user_id: `${ user_id }`,
+          },
+        },
+        active,
+        active_by,
+        School: {
+          connect: {
+            school_id:  school_id ,
+          },
+        },
+      },
     })
-
-    const contactid = await db.contact.findUnique({
-      where: { contact_email }
-    })
-
-    const contid = contactid?.contact_id
-
-    if (!contid) {
-      return fail(400, { local: true })
-    }
-    else {
-
-      common.push(String(contid))
-      common.push(String(s_id))
-      common.push(String(u_id))
-
-      const commonunique = await db.contactOnUserOnSchool.findUnique({
-        where: { common }
-      })
-
-      if (commonunique) {
-        return fail(400, {real: true})
-      }
-
-      await db.contactOnUserOnSchool.create({
-        data: {
-          common,
-        }
-      })
-    }
   }
 
   throw redirect(303, '../lists/contacts')

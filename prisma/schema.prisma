@@ -8,14 +8,14 @@ datasource db {
 }
 
 model School {
-  school_id    Int                     @id @default(autoincrement())
+  school_id    Int       @id @default(autoincrement())
   om_id        String?
   name         String
   zip_code     String
   address      String
   dir_name     String?
   dir_phone    String?
-  school_email String                  @unique
+  school_email String    @unique
   website      String?
   school_type  String[]
   coop         Boolean?
@@ -25,69 +25,54 @@ model School {
   county_id    Int
   region_id    Int
   event        Event[]
-  city         City                    @relation(fields: [city_id], references: [city_id])
-  country      Country                 @relation(fields: [country_id], references: [country_id])
-  county       County                  @relation(fields: [county_id], references: [county_id])
-  region       Region                  @relation(fields: [region_id], references: [region_id])
-  contactOn    ContactOnUserOnSchool[]
+  city         City      @relation(fields: [city_id], references: [city_id])
+  country      Country   @relation(fields: [country_id], references: [country_id])
+  county       County    @relation(fields: [county_id], references: [county_id])
+  region       Region    @relation(fields: [region_id], references: [region_id])
+  Contact      Contact[]
+  User         User?     @relation(fields: [user_id], references: [user_id])
+  user_id      String?
+  active       Boolean
+  active_by    String
 
   @@map("schools")
 }
 
 model Contact {
-  contact_id    Int                     @id @default(autoincrement())
-  contact_email String                  @unique
+  contact_id    Int      @id @default(autoincrement())
+  contact_email String   @unique
   contact_name  String?
   contact_phone String?
   contact_note  String?
-  contactOn     ContactOnUserOnSchool[]
+  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+  User          User?    @relation(fields: [user_id], references: [user_id])
+  user_id       String?
+  active        Boolean
+  active_by     String
+  School        School?  @relation(fields: [school_id], references: [school_id])
+  school_id     Int?
 
-  @@map("contacts")
-}
-
-model ContactOnUserOnSchool {
-  id                Int      @id @default(autoincrement())
-  createdAt         DateTime @default(now()) @db.Timestamptz(3)
-  contact_id        Int?
-  user_id           String
-  school_id         Int
-  note              String?
-  School            School?  @relation(fields: [schoolSchool_id], references: [school_id])
-  schoolSchool_id   Int?
-  Contact           Contact? @relation(fields: [contactContact_id], references: [contact_id])
-  contactContact_id Int?
-  User              User?    @relation(fields: [userUser_id], references: [user_id])
-  userUser_id       String?
-
-  @@map("contactonuseronschool")
+  @@map("contact")
 }
 
 model User {
-  user_id       String                  @id @default(uuid())
+  user_id       String    @id @default(uuid())
   name          String
   nationality   String
   phone         String
-  user_email    String                  @unique
+  user_email    String    @unique
   on_duty       String[]
   passwordHash  String
-  userAuthToken String                  @unique
-  createdAt     DateTime                @default(now()) @db.Timestamptz(3)
-  updatedAt     DateTime                @updatedAt @db.Timestamptz(3)
+  userAuthToken String    @unique
+  createdAt     DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime  @updatedAt @db.Timestamptz(3)
   event         Event[]
-  contactOn     ContactOnUserOnSchool[]
+  Contact       Contact[]
+  school        School[]
+  active        Boolean
+  active_by     String
 
   @@map("users")
-}
-
-model Inactive {
-  id          Int      @id @default(autoincrement())
-  create_date DateTime @default(now()) @db.Timestamptz(3)
-  made_by     String
-  contact_id  Int?
-  school_id   Int?
-  user_id     String?
-
-  @@map("inactive")
 }
 
 model Event {
