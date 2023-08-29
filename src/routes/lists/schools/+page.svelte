@@ -6,6 +6,8 @@
     $: ({ school, city } = data)
 </script>
 
+
+<div class="main">
 <h1>My School List</h1>
 
 <ul>
@@ -14,10 +16,27 @@
       {#each city as c}
         {#if city_id == c.city_id}
           <li>
-          <a href="/schools/{school_email}">{ name } {' - '} { c.city_name } {', '} { address } {' ↪️ '} { school_email } </a>
+          <a href="/schools/{school_email}" class="aa">{ name } {' - '} { c.city_name } {', '} { address } {' ↪️ '} { school_email } </a>
           </li>
         {/if}
       {/each}
       {/if}
   {/each}
 </ul>
+</div>
+
+
+<style>
+  .main {
+    padding-left: 5%;
+    padding-top: 2%;
+  }
+  .aa {
+    color: #32BEA6;
+    padding: 2%;
+    text-align: center;
+    font-weight: 400;
+    line-height: normal;
+    font-size: 22px;
+  }
+</style>
