@@ -122,6 +122,13 @@ const school: Action = async ({ request }) => {
 		return fail(400, { local: true })
 	}
 
+	const schoolomid = await db.school.findFirst({
+		where: { om_id: `${ om_id }` }
+	})
+	if (schoolomid) {
+		return fail(400, { omid: true })
+	}
+
 	if (country_id == 1 && om_id?.length != 6 && !nembes) {
 		return fail(400, { omval: true })
 	}

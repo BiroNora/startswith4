@@ -215,7 +215,7 @@
       <p class="error">OM ID already exists.</p>
     {/if}
 
-    {#if form?.omval}
+    {#if form?.omval || form?.omid}
       <p class="error">OM ID is inadequate.</p>
     {/if}
 
