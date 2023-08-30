@@ -19,6 +19,7 @@ export function slugify(text: string) {
   .replace(/[áÁ]/g, 'a')
   .replace(/[éÉ]/g, 'e')
   .replace(/[íÍ]/g, 'i')
+  .replace(/[.@]/g, '-')
   .replace(/[^a-zA-Z0-9-]/g, '')
   .toLowerCase()
 }

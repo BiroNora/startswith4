@@ -32,6 +32,7 @@ model School {
   Contact      Contact[]
   User         User?     @relation(fields: [user_id], references: [user_id])
   user_id      String?
+  slug         String    @unique
   active       Boolean
   active_by    String
 
