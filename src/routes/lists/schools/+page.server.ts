@@ -2,16 +2,21 @@ import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import { db } from '$lib/database'
 
-export const load: PageServerLoad = async () => {
-  const school = await db.school.findMany({
+export const load: PageServerLoad = async (event) => {
+  const schools = await db.school.findMany({
+    where: { active: true },
     orderBy: { name: 'asc' }
   })
 
-  const city = await db.city.findMany({})
+  event.setHeaders({
+    'Cashe-Control': 'public, max-age=0, s-maxage=60'
+  })
 
-  if (!school) {
+  const cities = await db.city.findMany({})
+
+  if (!schools) {
     throw error(404, 'School not found')
   }
 
-  return { school, city }
+  return { schools, cities }
 }
