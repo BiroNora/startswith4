@@ -1,7 +1,6 @@
 import { error } from '@sveltejs/kit'
 import { db } from '$lib/database'
-import { eventType, dutyMap3 } from '../../../stores/dataStore.js'
-
+import { eventType, dutyMap3, schType } from '../../../stores/dataStore.js'
 
 let extrType = ''
 let extrDuty = ''
@@ -11,6 +10,22 @@ export async function load( { params }) {
   const school = await db.school.findUnique({
     where: { school_id: sc_id }
   })
+
+  let extrschoolType = ''
+
+  if (school) {
+    schType.map((type, index) => {
+      const ind = String(index + 1)
+      school.school_type.forEach(function (item) {
+        if (ind == item) {
+          extrschoolType += type
+          extrschoolType += ', '
+        }
+      })
+    })
+  }
+
+  const res = extrschoolType.slice(0, -2)
 
   const schooly_id = Number(school?.school_id)
 
@@ -33,15 +48,14 @@ export async function load( { params }) {
           extrType = eT.name
         }
       }
-    obj.on_duty = extrDuty
-    obj.event_type = extrType
+      obj.on_duty = extrDuty
+      obj.event_type = extrType
     }
-    console.log(event)
   }
 
   if (!school) {
     throw error(404, 'School not found')
   }
 
-  return { school, event }
+  return { school, event, res }
 }
