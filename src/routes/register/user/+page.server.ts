@@ -1,4 +1,4 @@
-import { duty } from './../../stores/dataStore';
+import { dutyType } from './../../stores/dataStore';
 import { fail, redirect} from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 import bcrypt from 'bcrypt'
@@ -33,11 +33,11 @@ const user: Action = async ({ request }) => {
   const active = true
   const active_by = 'self'
 
-  let regionB = duty[0][0]
-  let regionM = duty[1][0]
-  let regionH = duty[2][0]
-  let regionS = duty[3][0]
-  let regionD = duty[4][0]
+  let regionB = dutyType[0][0]
+  let regionM = dutyType[1][0]
+  let regionH = dutyType[2][0]
+  let regionS = dutyType[3][0]
+  let regionD = dutyType[4][0]
   const on_duty = []
 
   if (basic == true) {
