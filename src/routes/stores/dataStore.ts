@@ -40,6 +40,8 @@ export function timeSlugify(text: string) {
   return slugDate
 }
 
+export const schType = ["ÁLTALÁNOS ISKOLA", "GIMNÁZIUM", "SZAKGIMNÁZIUM", "SZAKKÖZÉPISKOLA", "SZAKISKOLA", "TECHNIKUM", "SZAKKÉPZŐ ISKOLA", "ALAPFOKÚ MŰVÉSZETOKTATÁS", "MŰVÉSZETI OKTATÁS", "KÉSZSÉGFEJLESZTÉS", "FEJLESZTŐ NEVELÉS-OKTATÁS", "KIEGÉSZÍTŐ NEMZETISÉGI NYELVOKTATÁS", "KOLLÉGIUM", "HÍDPROGRAMOK", "NEM BESOROLT"]
+
 export const schoolType = [
   ["1", "ÁLTALÁNOS ISKOLA"],
   ["2", "GIMNÁZIUM"],

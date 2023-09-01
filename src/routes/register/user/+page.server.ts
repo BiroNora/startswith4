@@ -75,7 +75,6 @@ const user: Action = async ({ request }) => {
   on_duty.push(regionH)
   on_duty.push(regionS)
   on_duty.push(regionD)
-  console.log(on_duty)
 
 	if (typeof user_email != 'string' ||
       typeof password1 != 'string' ||
