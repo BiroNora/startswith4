@@ -1,29 +1,26 @@
-import { fail, redirect} from '@sveltejs/kit'
-import type { Action, Actions, PageServerLoad } from './$types'
+import { error } from '@sveltejs/kit'
+import type { PageServerLoad } from './$types'
 import { db } from '$lib/database'
 
+const my_id = "0747dd3d-2895-4587-9598-8330ec9b89da"
 
-export const load: PageServerLoad = async () => {
-  const contact = await db.contact.findMany({
-    orderBy: { contact_name: 'asc' },
+export const load: PageServerLoad = async (event) => {
+  console.log(event)
+  const contacts = await db.contact.findMany({
+    where: {
+      user_id:  my_id,
+      active: true,
+      },   // Todo! user_id comes from cookies
+    orderBy: { contact_name: 'asc' }
   })
-  return {contact}
-}
 
-const contacts: Action = async ({ request }) => {
-  const data = await request.formData()
-  const contact_name = String(data.get('name'))
-  const contact_email = String(data.get('email'))
+  event.setHeaders({
+    'Cashe-Control': 'public, max-age=0, s-maxage=60'
+  })
 
-  if (contact_name == '1') {
-      return fail(400, {school: true})
+  if (!contacts) {
+    throw error(404, 'School not found')
   }
-  const regioncountry = await db.contact.findUnique({
-    where: { contact_email }
-  })
 
-  throw redirect(303, '/login')
+  return { contacts }
 }
-
-
-export const actions: Actions = { contacts }
