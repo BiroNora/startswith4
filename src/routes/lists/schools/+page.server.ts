@@ -2,10 +2,15 @@ import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import { db } from '$lib/database'
 
+const my_id = "0747dd3d-2895-4587-9598-8330ec9b89da"
+
 export const load: PageServerLoad = async (event) => {
   console.log(event)
   const schools = await db.school.findMany({
-    where: { active: true },
+    where: {
+      user_id: my_id,
+      active: true,
+      },   // Todo! user_id comes from cookies
     orderBy: { name: 'asc' }
   })
 
