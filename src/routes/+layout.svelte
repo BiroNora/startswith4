@@ -23,10 +23,10 @@
         <a href="/register/event">Event R</a>
       </li>
       <li>
-        <a href="/lists/contacts">Contact List</a>
+        <a href="/lists/contacts">My Contact List</a>
       </li>
       <li>
-        <a href="/lists/schools">School List</a>
+        <a href="/lists/schools">My School List</a>
       </li>
     </ul>
   </nav>
