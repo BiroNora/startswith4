@@ -23,7 +23,10 @@
 						<hgroup>
 							<li class="lc">Iskola:</li>
 							<li class="ld">
-              <a href="../../lists/schools/{sch.school_id}" class="aa">Név: {sch.name}   </a></li>
+								<a href="../../lists/schools/{sch.school_id}" class="aa">
+									Név: {sch.name}
+								</a>
+							</li>
 							<li class="ld">Telefon: {sch.dir_phone}</li>
 							<li class="ld">Email: {sch.school_email}</li>
 							<li class="ld">Feljegyzés: {sch.note}</li>

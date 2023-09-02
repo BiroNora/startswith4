@@ -28,6 +28,9 @@
       <li>
         <a href="/lists/schools">My School List</a>
       </li>
+      <li>
+        <a href="/lists/events">My Event List</a>
+      </li>
     </ul>
   </nav>
 
