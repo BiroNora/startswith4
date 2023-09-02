@@ -26,17 +26,24 @@ export function slugify(text: string) {
 export function timeSlugify(text: string) {
 	const date = new Date(text)
 	const y = date.getFullYear()
-	let m = date.getMonth() + 1
-	let d = date.getDate()
+	const m = date.getMonth() + 1
+	const d = date.getDate()
+	let day =''
+	let month = ''
 
 	if (d < 10) {
-		d = `0${d}`
-	}
-	if (m < 10) {
-		m = `0${m}`
+		day = `0${d}`
+	} else {
+		day = String(d)
 	}
 
-	const slugDate = `${y}-${m}-${d}`
+	if (m < 10) {
+		month = `0${m}`
+	} else {
+		month = String(m)
+	}
+
+	const slugDate = `${y}-${month}-${day}`
 	return slugDate
 }
 
