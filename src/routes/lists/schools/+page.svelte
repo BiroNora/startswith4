@@ -1,8 +1,13 @@
 <script lang="ts">
+  $: ({ schools, cities } = data)
+  let pageName="My School List"
 
-    $: ({ schools, cities } = data)
-    export let data
+  export let data
 </script>
+
+<svelte:head>
+	<title>{pageName}</title>
+</svelte:head>
 
 <div class="main">
   <h1>My School List</h1>

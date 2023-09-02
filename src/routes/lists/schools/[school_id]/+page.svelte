@@ -6,8 +6,12 @@
     return formatter.format(date)
   }
 
-  let pageName="Event Register"
+  let pageName="School Details"
 </script>
+
+<svelte:head>
+	<title>{pageName}</title>
+</svelte:head>
 
 <div class="main">
   <h1>School Details</h1>
@@ -33,8 +37,8 @@
             <hgroup>
               <li class="lc">Kapcsolat:</li>
               <li class="ld">Név: {con.contact_name}</li>
-              <li class="ld">Email: {con.contact_email}</li>
               <li class="ld">Telefon: {con.contact_phone}</li>
+              <li class="ld">Email: {con.contact_email}</li>
               <li class="ld">Feljegyzés: {con.contact_note}</li>
             </hgroup>
           </ul>
