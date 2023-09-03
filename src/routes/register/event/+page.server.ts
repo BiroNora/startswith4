@@ -2,7 +2,7 @@ import { db } from '$lib/database'
 import { fail, redirect} from '@sveltejs/kit'
 import type { Action, Actions } from './$types'
 import { slugify } from '../../stores/dataStore'
-import { timeSlugify } from '../../stores/dataStore'
+import { dateSlugify } from '../../stores/dataStore'
 
 
 const event: Action = async ({ request }) => {
@@ -17,7 +17,7 @@ const event: Action = async ({ request }) => {
   const note = String(data.get('message'))
   const closing_date = new Date(String(clos_date))
 
-  const slugDate = timeSlugify(String(clos_date))
+  const slugDate = dateSlugify(String(clos_date))
   console.log('psqldate' + clos_date)
   console.log('slugDate' + slugDate)
   console.log('closing_date' + closing_date)

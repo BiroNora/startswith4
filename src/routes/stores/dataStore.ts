@@ -1,16 +1,3 @@
-import { writable, type Writable } from 'svelte/store'
-
-interface ModalData {
-	c_name: string
-	c_email: string
-	c_phone: string
-	u_email: string
-	s_email: string
-	c_note: string
-}
-
-export const modalData: Writable<ModalData | null> = writable(null)
-
 export function slugify(text: string) {
 	return text
 		.replace(/\s/g, '-')
@@ -23,7 +10,7 @@ export function slugify(text: string) {
 		.toLowerCase()
 }
 
-export function timeSlugify(text: string) {
+export function dateSlugify(text: string) {
 	const date = new Date(text)
 	const y = date.getFullYear()
 	const m = date.getMonth() + 1
@@ -45,6 +32,21 @@ export function timeSlugify(text: string) {
 
 	const slugDate = `${y}-${month}-${day}`
 	return slugDate
+}
+
+export function timeSlugify(date: Date) {
+	const timeComponents = [date.getHours(), date.getMinutes()]
+	return timeComponents
+			.map(component => {
+					const pad = (component < 10) ? '0' : ''
+					return pad + component
+			})
+			.join(':')
+}
+
+export function formatDate(date: Date) {
+	const formatter = new Intl.DateTimeFormat('hu', { dateStyle: 'full' })
+	return formatter.format(date)
 }
 
 export const schType = [
@@ -95,6 +97,7 @@ export const eventMap = [
 	{ id: '9', name: 'CORPORATE EVENT' },
 	{ id: '10', name: 'ELSE *' }
 ]
+
 //                              false |basic | med-high
 // director / basic | medior-high  0  |   1  |   2
 //                                   false |regions
@@ -102,7 +105,7 @@ export const eventMap = [
 // basic / region 0 | 1-8
 // medior / region 0 | 1-8
 // high /region 0 | 1-8
-//                           medior / Budapest
+
 export const dutyType = [
 	['1', 'BASIC'], // 1  &  0-8: ["1", "0"],
 	['2', 'MEDIOR'], // 2  &  0-8: ["2", "4"],
@@ -111,12 +114,7 @@ export const dutyType = [
 	['5', 'DIRECTOR'] // 5  &  0-2: ["5", "0"]
 ]
 
-// duryreg = [["1", "0"], ["2", "4"], ["3", "0"], ["4", "0"], ["5", "0"]]
-// duryreg = [["10"], ["24"], ["30"], ["40"], ["50"]]
-// duryreg = ["10", "24", "30", "40", "50"]
-// dutyreg = "1024304050"
-// dutyreg = "10-24-30-40-50"  medior / Budapest
-// dutyreg = "01-42-03-04-05"
+// duryreg = ["10", "24", "30", "40", "50"] medior / Budapest
 // if (10 20 30 40 50) {One duty must be choosen.}
 
 export const dutyMap = [

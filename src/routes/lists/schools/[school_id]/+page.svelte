@@ -1,10 +1,7 @@
 <script lang="ts">
-	export let data
+	import { formatDate } from '../../../stores/dataStore.js'
 
-	function formatDate(date: Date) {
-		const formatter = new Intl.DateTimeFormat('hu', { dateStyle: 'full' })
-		return formatter.format(date)
-	}
+	export let data
 
 	let pageName = 'School Details'
 </script>
@@ -55,7 +52,7 @@
 			{#each data.event as e}
 				<li class="la">
           <a href="../../lists/events/{e.event_id}" class="aa" >
-						{formatDate(e.closing_date)} / {e.on_duty} / {e.event_type}
+						{formatDate(e.closing_date)} &#9753 {e.event_name} &#10086 {e.on_duty} &#10087 {e.event_type}
 					</a>
 				</li>
 			{/each}
