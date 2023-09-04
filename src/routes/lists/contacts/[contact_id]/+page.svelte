@@ -17,11 +17,11 @@
 			<li class="lb">Telefon: {data.contact.contact_phone}</li>
 			<li class="lb">Email: {data.contact.contact_email}</li>
 			<li class="lb">Feljegyzés: {data.contact.contact_note}</li>
+			<li class="lb">Iskola:</li>
 			<hgroup>
 				{#each data.schools as sch}
 					<ul class="ac">
 						<hgroup>
-							<li class="lc">Iskola:</li>
 							<li class="ld">
 								<a href="../../lists/schools/{sch.school_id}" class="aa">
 									Név: {sch.name}
@@ -69,26 +69,13 @@
 		font-size: 22px;
 	}
 
-	.la {
-		list-style-position: inside;
-		list-style-type: disc;
-		padding-left: 5%;
-		text-indent: -6%;
-		line-height: 1.8;
-	}
-
 	.lb {
 		list-style-position: inside;
 		list-style-type: circle;
 		padding-left: 5%;
 		text-indent: -6%;
-		line-height: 1.3;
-	}
-
-	.lc {
-		list-style-position: inside;
-		list-style-type: circle;
-		line-height: 1.3;
+		line-height: 1.4;
+		font-size: 22px;
 	}
 
 	.ld {
@@ -98,13 +85,5 @@
 		text-indent: -5%;
 		line-height: 1.3;
 		font-size: 22px;
-	}
-
-	.h41 {
-		color: #83918f;
-	}
-
-	.h42 {
-		color: #32bea6;
 	}
 </style>

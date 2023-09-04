@@ -26,21 +26,22 @@
 			<li class="lb">Iskola telefon: {data.school.dir_phone}</li>
 			<li class="lb">Iskola email: {data.school.school_email}</li>
 			<li class="lb">Website: {data.school.website}</li>
-			<li class="lb">Iskola típusa: {data.res}</li>
+			<li class="lb">Iskola típusa: {data.resS}</li>
+			<li class="lb">Felelős: {data.resD}</li>
 			<li class="lb">Feljegyzés: {data.school.note}</li>
+			<li class="lb">Kapcsolat:</li>
 			<hgroup>
 				{#each data.contact as con}
 					<ul class="ac">
 						<hgroup>
-							<li class="lc">Kapcsolat:</li>
-							<li class="ld">
+							<li class="lb">
 								<a href="../../lists/contacts/{con.contact_id}" class="aa"
 									>Név: {con.contact_name}
 								</a>
 							</li>
-							<li class="ld">Telefon: {con.contact_phone}</li>
-							<li class="ld">Email: {con.contact_email}</li>
-							<li class="ld">Feljegyzés: {con.contact_note}</li>
+							<li class="lb">Telefon: {con.contact_phone}</li>
+							<li class="lb">Email: {con.contact_email}</li>
+							<li class="lb">Feljegyzés: {con.contact_note}</li>
 						</hgroup>
 					</ul>
 				{/each}
@@ -58,7 +59,6 @@
 			{/each}
 		</ul>
 	</hgroup>
-
 	<div class="content">
 		{@html data.school.user_id}
 	</div>
@@ -90,6 +90,7 @@
 		color: #83918f;
 		font-weight: 400;
 		line-height: normal;
+		padding-top: 1%;
 		padding-left: 5%;
 		text-indent: -6%;
 		font-size: 22px;
@@ -100,29 +101,16 @@
 		list-style-type: disc;
 		padding-left: 5%;
 		text-indent: -6%;
-		line-height: 1.8;
+		line-height: 1.4;
+		font-size: 22px;
 	}
 
 	.lb {
 		list-style-position: inside;
 		list-style-type: circle;
 		padding-left: 5%;
-		text-indent: -6%;
-		line-height: 1.3;
-	}
-
-	.lc {
-		list-style-position: inside;
-		list-style-type: circle;
-		line-height: 1.3;
-	}
-
-	.ld {
-		list-style-position: inside;
-		list-style-type: circle;
-		padding-left: 5%;
 		text-indent: -5%;
-		line-height: 1.3;
+		line-height: 1.4;
 		font-size: 22px;
 	}
 
