@@ -23,6 +23,9 @@
   let yesN = false
   let yesO = false
   let yesCOOP = true
+  let yesBAS = true
+  let yesMED = false
+  let yesHIG = false
   let omi = ''
   let isInput = true
   let pageName="School Register"
@@ -122,81 +125,95 @@
       <input type="text" name="website" id="website" required />
     </div>
     <br>
-    <div class="second">
+    <div >
       <input type="checkbox" name="iskA" bind:checked={yesA} />
       ÁLTALÁNOS ISKOLA
     </div>
     <br>
-    <div class="second">
+    <div >
       <input type="checkbox" name="iskB" bind:checked={yesB} />
       GIMNÁZIUM
     </div>
     <br>
-    <div class="second">
+    <div >
       <input type="checkbox" name="iskC" bind:checked={yesC} />
       SZAKGIMNÁZIUM
     </div>
     <br>
-    <div class="second">
+    <div >
       <input type="checkbox" name="iskD" bind:checked={yesD} />
       SZAKKÖZÉPISKOLA
     </div>
     <br>
-    <div class="second">
+    <div >
       <input type="checkbox" name="iskE" bind:checked={yesE} />
       SZAKISKOLA
     </div>
     <br>
-    <div class="second">
+    <div >
       <input type="checkbox" name="iskF" bind:checked={yesF} />
       TECHNIKUM
     </div>
     <br>
-    <div class="second">
+    <div >
       <input type="checkbox" name="iskG" bind:checked={yesG} />
       SZAKKÉPZŐ ISKOLA
     </div>
     <br>
-    <div class="second">
+    <div >
       <input type="checkbox" name="iskH" bind:checked={yesH} />
       ALAPFOKÚ MŰVÉSZETOKTATÁS
     </div>
     <br>
-    <div class="second">
+    <div >
       <input type="checkbox" name="iskI" bind:checked={yesI} />
       MŰVÉSZETI OKTATÁS
     </div>
     <br>
-    <div class="second">
+    <div >
       <input type="checkbox" name="iskJ" bind:checked={yesJ} />
       KÉSZSÉGFEJLESZTÉS
     </div>
     <br>
-    <div class="second">
+    <div >
       <input type="checkbox" name="iskK" bind:checked={yesK} />
       FEJLESZTŐ NEVELÉS-OKTATÁS
     </div>
     <br>
-    <div class="second">
+    <div >
       <input type="checkbox" name="iskL" bind:checked={yesL} />
       KIEGÉSZÍTŐ NEMZETISÉGI NYELVOKTATÁS
     </div>
     <br>
-    <div class="second">
+    <div >
       <input type="checkbox" name="iskM" bind:checked={yesM} />
       KOLLÉGIUM
     </div>
     <br>
-    <div class="second">
+    <div >
       <input type="checkbox" name="iskN" bind:checked={yesN} />
       HÍDPROGRAMOK
     </div>
     <br>
-    <div class="second">
+    <div >
       <input type="checkbox" name="iskO" bind:checked={yesO} />
       NEM BESOROLT *
     </div>
     <p><i class="iii">* please leave a comment</i></p>
+    <div class="first">
+      <div>
+        <input type="checkbox" name="bas" bind:checked={yesBAS} />
+        BASIC
+      </div>
+      <div>
+        <input type="checkbox" name="med" bind:checked={yesMED} />
+        MEDIOR
+      </div>
+      <div>
+        <input type="checkbox" name="hig" bind:checked={yesHIG} />
+        HIGH
+      </div>
+    </div>
     <fieldset>
       <legend class="n">Note on School</legend>
       <br>
@@ -225,6 +242,10 @@
 
     {#if (yesA == false && yesB == false && yesC == false && yesD == false && yesE == false && yesF == false && yesG == false && yesH == false && yesI == false && yesJ == false && yesK == false && yesL == false && yesM == false && yesN == false && yesO == false)}
       <p class="error">One school type must be choosen.</p>
+    {/if}
+
+    {#if yesBAS == false && yesMED == false && yesHIG == false}
+      <p class="error">One duty must be choosen.</p>
     {/if}
 
     <div>
@@ -277,6 +298,11 @@
     font-style: italic;
   }
 
+  .first {
+    justify-content:space-between;
+    padding: 0 5% 5%;
+    line-height: 1.9;
+  }
 
   fieldset {
     position: relative;

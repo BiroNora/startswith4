@@ -1,7 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 import { db } from '$lib/database'
-import { schoolType } from '../../stores/dataStore'
+import { duType, schoolType } from '../../stores/dataStore'
 
 export const load: PageServerLoad = async () => {
 	const country = await db.country.findMany({
@@ -49,11 +49,15 @@ const school: Action = async ({ request }) => {
 	const kolleg = Boolean(data.get('iskM'))
 	const hidp = Boolean(data.get('iskN'))
 	const nembes = Boolean(data.get('iskO'))
+	const basic = Boolean(data.get('bas'))
+	const medior = Boolean(data.get('med'))
+	const high = Boolean(data.get('hig'))
 	const user_email = String(data.get('useremail'))
 	const coop = Boolean(data.get('coop'))
 	const note = String(data.get('note'))
 	const active = true
 	const school_type = []
+	const duty = []
 
 	if (altisk) {
 		school_type.push(schoolType[0][0]) // általános iskola
@@ -99,6 +103,16 @@ const school: Action = async ({ request }) => {
 	}
 	if (nembes) {
 		school_type.push(schoolType[14][0]) // nem besorolt
+	}
+
+	if (basic) {
+		duty.push(duType[0]) // BASIC
+	}
+	if (medior) {
+		duty.push(duType[1]) // MEDIOR
+	}
+	if (high) {
+		duty.push(duType[2]) // HIGH
 	}
 
 	const regioncountry = await db.region.findUnique({
@@ -171,6 +185,7 @@ const school: Action = async ({ request }) => {
 			country_id,
 			county_id,
 			region_id,
+			duty,
 			user_id,
 			active,
 			active_by

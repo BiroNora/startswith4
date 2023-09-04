@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
 import { db } from '$lib/database'
-import { eventMap, dutyMap3, schType } from '../../../stores/dataStore.js'
+import { eventMap, dutyMap3, schType, duType,  } from '../../../stores/dataStore.js'
 
 let extrType = ''
 let extrDuty = ''
@@ -13,6 +13,7 @@ export async function load({ params }) {
 	})
 
 	let extrSchoolType = ''
+	let extrSchoolDuty = ''
 
 	if (school) {
 		schType.map((type, index) => {
@@ -24,9 +25,19 @@ export async function load({ params }) {
 				}
 			})
 		})
+		duType.map((type, index) => {
+			const ind = String(index + 1)
+			school.duty.forEach(function (item) {
+				if (ind == item) {
+					extrSchoolDuty += type
+					extrSchoolDuty += ', '
+				}
+			})
+		})
 	}
 
-	const res = extrSchoolType.slice(0, -2)
+	const resS = extrSchoolType.slice(0, -2)
+	const resD = extrSchoolDuty.slice(0, -2)
 
 	const contact = await db.contact.findMany({
 		where: { school_id: sc_id }
@@ -72,5 +83,5 @@ export async function load({ params }) {
 		throw error(404, 'School not found')
 	}
 
-	return { school, res, contact, event, city, region, county }
+	return { school, resS, resD, contact, event, city, region, county }
 }
