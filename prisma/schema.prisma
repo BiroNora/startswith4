@@ -24,6 +24,7 @@ model School {
   country_id   Int
   county_id    Int
   region_id    Int
+  duty         String[]
   event        Event[]
   city         City      @relation(fields: [city_id], references: [city_id])
   country      Country   @relation(fields: [country_id], references: [country_id])

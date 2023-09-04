@@ -1,8 +1,8 @@
 import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import { db } from '$lib/database'
+import { my_id } from '../../stores/dataStore'
 
-const my_id = "0747dd3d-2895-4587-9598-8330ec9b89da"
 
 export const load: PageServerLoad = async (event) => {
   console.log(event)

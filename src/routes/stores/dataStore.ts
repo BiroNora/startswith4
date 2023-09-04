@@ -1,3 +1,5 @@
+export const my_id = "7134799f-0f4d-4712-908c-0a6275a358a1"
+
 export function slugify(text: string) {
 	return text
 		.replace(/\s/g, '-')
@@ -96,6 +98,12 @@ export const eventMap = [
 	{ id: '8', name: 'MEDIOR LEAFLET' },
 	{ id: '9', name: 'CORPORATE EVENT' },
 	{ id: '10', name: 'ELSE *' }
+]
+
+export const duType = [
+	'BASIC',
+	'MEDIOR',
+	'HIGH',
 ]
 
 //                              false |basic | med-high
