@@ -23,9 +23,6 @@
         <a href="/register/event">Event R</a>
       </li>
       <li>
-        <a href="/register/interested">Interested R</a>
-      </li>
-      <li>
         <a href="/lists/contacts">My Contact List</a>
       </li>
       <li>
