@@ -108,7 +108,7 @@
   {#if form?.regions}
     <p class="error">One duty must be choosen.</p>
   {/if}
-  
+
   <button class="btn" id="btn" type="submit">Register</button>
   </form>
 </div>

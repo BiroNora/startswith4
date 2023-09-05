@@ -25,16 +25,16 @@ model School {
   county_id    Int
   region_id    Int
   duty         String[]
+  user_id      String?
+  active       Boolean
+  active_by    String
+  Contact      Contact[]
   event        Event[]
   city         City      @relation(fields: [city_id], references: [city_id])
   country      Country   @relation(fields: [country_id], references: [country_id])
   county       County    @relation(fields: [county_id], references: [county_id])
   region       Region    @relation(fields: [region_id], references: [region_id])
-  Contact      Contact[]
   User         User?     @relation(fields: [user_id], references: [user_id])
-  user_id      String?
-  active       Boolean
-  active_by    String
 
   @@map("schools")
 }
@@ -46,12 +46,12 @@ model Contact {
   contact_phone String?
   contact_note  String?
   createdAt     DateTime @default(now()) @db.Timestamptz(3)
-  User          User?    @relation(fields: [user_id], references: [user_id])
   user_id       String?
   active        Boolean
   active_by     String
-  School        School?  @relation(fields: [school_id], references: [school_id])
   school_id     Int?
+  School        School?  @relation(fields: [school_id], references: [school_id])
+  User          User?    @relation(fields: [user_id], references: [user_id])
 
   @@map("contact")
 }
@@ -67,11 +67,11 @@ model User {
   userAuthToken String    @unique
   createdAt     DateTime  @default(now()) @db.Timestamptz(3)
   updatedAt     DateTime  @updatedAt @db.Timestamptz(3)
-  event         Event[]
-  Contact       Contact[]
-  school        School[]
   active        Boolean
   active_by     String
+  Contact       Contact[]
+  event         Event[]
+  school        School[]
 
   @@map("users")
 }
@@ -96,18 +96,19 @@ model Event {
 }
 
 model InterestedStudents {
-  intrest_id Int       @id @default(autoincrement())
+  intrest_id Int      @id @default(autoincrement())
   event_id   Int
   count      Int
-  city       String
-  grade      Grade
-  region     String
-  notice     Notice
+  grade      String
   applied    Boolean
   work_title String
-  admission  Admission
-  regionId   Int       @unique
-  Event      Event     @relation(fields: [event_id], references: [event_id])
+  channel    String
+  status     String
+  country_id Int
+  region_id  Int
+  Country    Country @relation(fields: [country_id], references: [country_id])
+  Event      Event    @relation(fields: [event_id], references: [event_id])
+  Region     Region  @relation(fields: [region_id], references: [region_id])
 
   @@map("interested")
 }
@@ -124,21 +125,23 @@ model Activity {
 }
 
 model Country {
-  country_id   Int      @id @default(autoincrement())
-  country_name String   @unique
-  Region       Region[]
-  School       School[]
+  country_id        Int                  @id @default(autoincrement())
+  country_name      String               @unique
+  InterestedStudent InterestedStudents[]
+  Region            Region[]
+  School            School[]
 
   @@map("country")
 }
 
 model Region {
-  region_id   Int      @id @default(autoincrement())
-  region_name String   @unique
-  country_id  Int
-  County      County[]
-  country     Country  @relation(fields: [country_id], references: [country_id])
-  School      School[]
+  region_id         Int                  @id @default(autoincrement())
+  region_name       String               @unique
+  country_id        Int
+  County            County[]
+  InterestedStudent InterestedStudents[]
+  country           Country              @relation(fields: [country_id], references: [country_id])
+  School            School[]
 
   @@map("region")
 }
@@ -162,30 +165,4 @@ model City {
   School    School[]
 
   @@map("city")
-}
-
-enum Grade {
-  PREPARATORY
-  CLASS_9
-  CLASS_10
-  CLASS_11
-  CLASS_12
-}
-
-enum Notice {
-  SCHOOL_PRESENTATION
-  FAMILY
-  TEACHER
-  FRENDS
-  CMM_MEMBER
-  CHLC
-  HIGH
-  FACEBOOK
-  ONLINE_PUBLICITY
-}
-
-enum Admission {
-  ADMITTED
-  REJECTED
-  IN_PROGRESS
 }

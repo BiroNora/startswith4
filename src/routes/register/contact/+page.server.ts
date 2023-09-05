@@ -52,7 +52,7 @@ const contact: Action = async ({ request }) => {
         active_by,
         School: {
           connect: {
-            school_id:  school_id ,
+            school_id:  school_id,
           },
         },
       },

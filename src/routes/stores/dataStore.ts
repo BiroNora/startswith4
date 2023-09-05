@@ -1,4 +1,4 @@
-export const my_id = "7134799f-0f4d-4712-908c-0a6275a358a1"
+export const my_id = "30ae1ec1-7fea-43fc-8b76-8895b1ccf433"
 
 export function slugify(text: string) {
 	return text
@@ -134,4 +134,31 @@ export const dutyMap3 = [
 	{ id: '1', name: 'BASIC' },
 	{ id: '2', name: 'MEDIOR' },
 	{ id: '3', name: 'HIGH' }
+]
+
+export const statusMap = [
+	{ id: '1', name: 'ADMITTED' },
+	{ id: '2', name: 'REJECTED' },
+	{ id: '3', name: 'IN PROGRESS' }
+]
+
+export const channelMap = [
+	{ id: '1', name: 'SCHOOL PRESENTATION' },
+	{ id: '2', name: 'FAMILY' },
+	{ id: '3', name: 'TEACHER' },
+	{ id: '4', name: 'FRIENDS' },
+	{ id: '5', name: 'CMM MEMBER' },
+	{ id: '6', name: 'CHLC' },	// OKTV
+	{ id: '7', name: 'HIGH' },
+	{ id: '8', name: 'FACEBOOK' },
+	{ id: '9', name: 'ONLINE PUBLICITY' },
+	{ id: '10', name: 'ONLINE ARTICLE' }
+]
+
+export const gradeMap = [
+	{ id: '1', name: 'PREPARATORY' },
+	{ id: '2', name: 'CLASS 9' },
+	{ id: '3', name: 'CLASS 10' },
+	{ id: '4', name: 'CLASS 11' },
+	{ id: '5', name: 'CLASS 12' }
 ]
