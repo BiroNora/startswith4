@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
+	import type { ActionData } from './$types'
 	import {
 		channelMap,
 		formatDate,
@@ -82,12 +83,11 @@
 			</hgroup>
 			<p class="flower">&#10046;&#10046;&#10046;</p>
 		</ul>
-
 	</hgroup>
 
 	<div class="grid element-to-position" id="Section_further_down">
 		<div class="rei">
-			<p>Interested Students Register</p>
+			<p class="h43">Interested Students Register</p>
 		</div>
 		<form action="?/interested" method="post" use:enhance>
 			<div>
@@ -239,6 +239,10 @@
 
 	.flower {
 		font-size: 140%;
-		color: #83918f;
+		color: #a0a9a8;
+	}
+
+	.h43 {
+		color: #737978;
 	}
 </style>
