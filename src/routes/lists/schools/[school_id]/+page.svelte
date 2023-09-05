@@ -1,7 +1,10 @@
 <script lang="ts">
-	import { formatDate } from '../../../stores/dataStore.js'
+	import { enhance } from '$app/forms'
+	import type { ActionData } from './$types'
+	import { dutyMap3, eventMap, formatDate } from '../../../stores/dataStore.js'
 
 	export let data
+	export let form: ActionData
 
 	let pageName = 'School Details'
 </script>
@@ -17,6 +20,8 @@
 		<hgroup>
 			<h6>{data.school.zip_code} {data.city?.city_name} {data.school.address}</h6>
 			<p>{data.county?.county_name} megye / {data.region?.region_name} régió</p>
+			<a href="#Section_further_down" class="aa"> &#9758; Esemény hozzáadása </a>  &nbsp; &nbsp;
+			<a href="#Section_even_further_down" class="aa"> &#9758; Kapcsolat hozzáadása </a>
 		</hgroup>
 		<br />
 		<h4 class="h41">Adatok</h4>
@@ -59,9 +64,137 @@
 			{/each}
 		</ul>
 	</hgroup>
-	<div class="content">
-		{@html data.school.user_id}
+	<br>
+	<br>
+	<p class="flower">&#10046;&#10046;&#10046;</p>
+
+	<div class="grid element-to-position" id="Section_further_down" >
+		<div class="rei">
+			<p>Event Register</p>
+		</div>
+		<form action="?/event" method="post" use:enhance>
+			<div>
+				<label for="fantasy">
+					Event Name *
+				</label>
+				<input
+					type="text"
+					name="fantasy"
+					id="fantasy"
+					minlength="10"
+					placeholder="ANY LONGER"
+					required
+				/>
+				<p><i class="iii">* event name must be unique and at least 10 characters long</i></p>
+			</div>
+			<div>
+				<label for="meeting-time">Event Date</label>
+				<input
+					type="datetime-local"
+					id="meeting-time"
+					name="meeting-time"
+					value="YYYY-MM-DDT00:00"
+					min="2021-06-07T00:00"
+					max="2060-06-14T00:00"
+				/>
+			</div>
+			<div>
+				<label for="duty">On Duty</label>
+				<select name="duty" id="duty" class="hidden-textbox">
+					{#each dutyMap3 as item, index (item.id)}
+						<option value={item.id}>{item.name}</option>
+					{/each}
+				</select>
+			</div>
+			<div>
+				<label for="type">Event Type</label>
+				<select name="type" id="type" class="hidden-textbox">
+					{#each eventMap as item, index (item.id)}
+						<option value={item.id}>{item.name}</option>
+					{/each}
+				</select>
+				<p><i class="iii">in case of * please leave a comment</i></p>
+			</div>
+			<div>
+				<label for="estimate">Estimated Number of Participants</label>
+				<input type="text" name="estimate" id="estimate" required />
+			</div>
+			<div>
+				<label for="schemail">School Email</label>
+				<input type="email" name="schoolemail" id="schoolemail" required />
+			</div>
+			<div>
+				<label for="uemail">User Email</label>
+				<input type="email" name="uemail" id="uemail" required />
+			</div>
+			<label for="message">Note</label>
+				<textarea id="message" name="message" rows="4" cols="50" />
+
+			{#if form?.inactsu}
+				<p class="error">Something went wrong.</p>
+			{/if}
+
+			{#if form?.user || form?.school}
+				<p class="error">Please enter correct data.</p>
+			{/if}
+
+			{#if form?.title}
+				<p class="error">Event name is too short.</p>
+			{/if}
+
+			{#if form?.uslug}
+				<p class="error">Event already exists.</p>
+			{/if}
+
+			<button class="btn" id="btn" type="submit">Register</button>
+		</form>
 	</div>
+
+	<div class="grid element-to-even-position" id="Section_even_further_down">
+		<div class="rei">
+			<p class="h43">Contact Register</p>
+		</div>
+  	<br>
+		<form action="?/contact" method="post" use:enhance>
+			<div>
+				<label for="name">Name</label>
+				<input type="text" name="contactname" id="contactname" required />
+			</div>
+			<div>
+				<label for="email">Email</label>
+				<input type="email" name="contactemail" id="contactemail" required />
+			</div>
+			<div>
+				<label for="phone">Phone</label>
+				<input type="text" name="contactphone" id="contactphone" required />
+			</div>
+			<div>
+				<label for="uemail">User Email</label>
+				<input type="email" name="useremail" id="useremail" required />
+			</div>
+			<br>
+				<label for="message">Note</label>
+				<textarea id="message" name="contactmessage" rows="4" cols="50"></textarea>
+			{#if form?.contact}
+			<p class="error">Contact already exists.</p>
+			{/if}
+
+			{#if form?.local}
+					<p class="error">Something went wrong. Please try it later.</p>
+			{/if}
+
+			{#if form?.contacts}
+					<p class="error">Please enter correct data.</p>
+			{/if}
+
+			{#if form?.real}
+					<p class="error">This contact is already added to this shool and this user.</p>
+			{/if}
+
+			<button class="btn" id="btn" type="submit">Register</button>
+		</form>
+	</div>
+
 </div>
 
 <style>
@@ -121,4 +254,69 @@
 	.h42 {
 		color: #32bea6;
 	}
+
+	.h43 {
+		color: #737978;
+	}
+
+	label {
+    padding: 6px;
+  }
+
+  .rei p {
+    position: relative;
+    line-height: normal;
+    font-size: 140%;
+    font-weight: bold;
+  }
+
+  .grid {
+    padding: 35px 15px 0px 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-content: space-around;
+    width: 55%;
+    line-height: 75%;
+    grid-row: minmax(5px, auto);
+  }
+
+  .grid input:checked {
+    background-color: #32BEA6;
+  }
+
+  .btn {
+    margin-bottom: 0;
+    background-color: #32bea6;
+  }
+
+  .element-to-position {
+		transform: translateY(100vh); /* Move the element down one viewport height (vh) */
+	}
+
+	.element-to-even-position {
+		transform: translateY(120vh); /* Move the element down one viewport height (vh) */
+	}
+
+	.flower {
+		font-size: 140%;
+		color: #a0a9a8;
+	}
+
+	.iii {
+		display: flex;
+		text-align: left;
+		padding-left: 5px;
+		color: rgb(146, 136, 136);
+	}
+
+	.error {
+    color: tomato;
+    padding: 2%;
+    text-align: center;
+    font-style: italic;
+    line-height: 95%;
+    font-weight: 500;
+  }
+
 </style>
