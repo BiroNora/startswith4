@@ -1,157 +1,154 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { dutyMap3, eventMap, formatDate, timeSlugify } from '../../../stores/dataStore.js'
-	import type { ActionData } from './$types'
+	import {
+		channelMap,
+		formatDate,
+		gradeMap,
+		statusMap,
+		timeSlugify
+	} from '../../../stores/dataStore.js'
+
 	let pageName = 'Event Details'
+	let isInput = true
+
+	function isWork() {
+		if (isInput == true) {
+			isInput = false
+		} else {
+			isInput = true
+		}
+		return isInput
+	}
 
 	export let data
-	export let form: ActionData
 </script>
 
 <svelte:head>
 	<title>{pageName}</title>
 </svelte:head>
 
-
 <div class="main">
 	<h1>Event Details</h1>
 	<hgroup>
 		<hgroup class="title">
-			<h3>{data.event.event_name} </h3>
-			<a href="#Section_further_down" class="aa" > &#9758; Érdeklődő diákok hozzáadása</a>
+			<h3>{data.event.event_name}</h3>
+			<a href="#Section_further_down" class="aa"> &#9758; Érdeklődő diákok hozzáadása </a>
 		</hgroup>
 		<ul class="ab">
-			<li class="lb">Időpont: {formatDate(data.event.closing_date)}, {timeSlugify(data.event.closing_date)}</li>
+			<li class="lb">
+				Időpont: {formatDate(data.event.closing_date)}, {timeSlugify(data.event.closing_date)}
+			</li>
 			<li class="lb">Szervező: {data.event.on_duty}</li>
 			<li class="lb">Esemény formája: {data.event.event_type}</li>
 			<li class="lb">Feljegyzés: {data.event.note}</li>
 			<li class="lb">Iskola:</li>
 			<hgroup>
-					<ul class="ac">
-						<li class="la">
-							<a href="../../lists/schools/{data.school?.school_id}" class="aa">
-								{data.school?.name} {' 🏠 '} {data.cityname}
-							</a>
-						</li>
-					</ul>
+				<ul class="ac">
+					<li class="la">
+						<a href="../../lists/schools/{data.school?.school_id}" class="aa">
+							{data.school?.name}
+							{' 🏠 '}
+							{data.cityname}
+						</a>
+					</li>
+				</ul>
 			</hgroup>
-			<!--
+			<li class="lb">Érdeklődő diákok:</li>
 			<hgroup>
-				{#each data.school as sch}
+				{#each data.inters as ints}
 					<ul class="ac">
-						<hgroup>
-							<li class="lc">Érdeklődő diákok:</li>
-							<li class="la">
-								<a href="../../lists/schools/{sch.school_id}" class="aa">
-									Név: {sch.name}
-								</a>
-							</li>
-							<li class="ld">Telefon: {sch.dir_phone}</li>
-							<li class="ld">Email: {sch.school_email}</li>
-							<li class="ld">Feljegyzés: {sch.note}</li>
-						</hgroup>
+						<li class="lb">Diákok száma: {ints.count}</li>
+						{#each data.countries as country}
+							{#if country.country_id == ints.country_id}
+								<li class="lb">Ország: {country.country_name}</li>
+							{/if}
+						{/each}
+						<li class="lb">Évfolyam: {ints.grade}</li>
+						{#each data.regions as regio}
+							{#if regio.region_id == ints.region_id}
+								<li class="lb">Régió, ahonnan értesült a programról: {regio.region_name}</li>
+							{/if}
+						{/each}
+						<li class="lb">Csatorna, ahonnan értesült a programról: {ints.channel}</li>
+						{#if ints.applied == true}
+							<li class="lb">Jelentkezési mű címe: {ints.work_title}</li>
+							<li class="lb">Státusza: {ints.status}</li>
+						{:else}
+							<li class="lb">Nem jelentkezett</li>
+						{/if}
+						<br>
 					</ul>
 				{/each}
 			</hgroup>
-			-->
+			<p class="flower">&#10046;&#10046;&#10046;</p>
 		</ul>
+
 	</hgroup>
 
-	<div class="grid element-to-position" id="Section_further_down" >
+	<div class="grid element-to-position" id="Section_further_down">
 		<div class="rei">
 			<p>Interested Students Register</p>
 		</div>
-		<form action="?/event" method="post" use:enhance>
+		<form action="?/interested" method="post" use:enhance>
 			<div>
 				<label for="number">Number of Students</label>
 				<input type="text" name="number" id="number" required />
 			</div>
 			<div>
-        <label for="countr">Country</label>
-        <select name="countr" id="countr" >
-          {#each country as countr}
-            <option value="{countr.country_id}">{countr.country_name}</option>
-          {/each}
-        </select>
-      </div>
+				<label for="country">Country</label>
+				<select name="country" id="country">
+					{#each data.countries as country}
+						<option value={country.country_id}>{country.country_name}</option>
+					{/each}
+				</select>
+			</div>
 			<div>
-				<label for="duty">Grade</label>
-				<select name="duty" id="duty" class="hidden-textbox">
-					{#each dutyMap3 as item, index (item.id)}
+				<label for="grade">Grade</label>
+				<select name="grade" id="grade" class="hidden-textbox">
+					{#each gradeMap as item, index (item.id)}
 						<option value={item.id}>{item.name}</option>
 					{/each}
 				</select>
 			</div>
 			<div>
-        <label for="region">Connected by / Region</label>
-        <select name="region" id="region" >
-          {#each regio as reg}
-            <option value="{reg.region_id}">{reg.region_name}</option>
-          {/each}
-        </select>
-      </div>
-			<div>
-        <label for="region">Channeled by</label>
-        <select name="region" id="region" >
-          {#each regio as reg}
-            <option value="{reg.region_id}">{reg.region_name}</option>
-          {/each}
-        </select>
-      </div>
-			<div>
-				<label for="meeting-time">Event Date</label>
-				<input
-					type="datetime-local"
-					id="meeting-time"
-					name="meeting-time"
-					value="YYYY-MM-DDT00:00"
-					min="2021-06-07T00:00"
-					max="2060-06-14T00:00"
-				/>
-			</div>
-			<div>
-				<label for="duty">On Duty</label>
-				<select name="duty" id="duty" class="hidden-textbox">
-					{#each dutyMap3 as item, index (item.id)}
-						<option value={item.id}>{item.name}</option>
+				<label for="connect">Connected by / Region</label>
+				<select name="connect" id="connect">
+					{#each data.regions as region}
+						<option value={region.region_id}>{region.region_name}</option>
 					{/each}
 				</select>
 			</div>
 			<div>
-				<label for="type">Event Type</label>
-				<select name="type" id="type" class="hidden-textbox">
-					{#each eventMap as item, index (item.id)}
+				<label for="channel">Channeled by</label>
+				<select name="channel" id="channel" class="hidden-textbox">
+					{#each channelMap as item, index (item.id)}
 						<option value={item.id}>{item.name}</option>
 					{/each}
 				</select>
-				<p><i class="iii">in case of * please leave a comment</i></p>
 			</div>
-
-			<div>
-				<label for="schemail">School Email</label>
-				<input type="email" name="schoolemail" id="schoolemail" required />
-			</div>
-			<div>
-				<label for="uemail">User Email</label>
-				<input type="email" name="uemail" id="uemail" required />
-			</div>
-			<br />
-			<fieldset>
-				<legend class="n">Note</legend>
+			<button type="button" on:click={() => isWork()} class="contrast outline cgb" >Apply</button>
+			<fieldset disabled={isInput}>
+				<input type="hidden" name="apply" value={isInput}>
+				<div>
+					<label for="work">Title of Work</label>
+					<input type="text" name="work" id="work" required />
+				</div>
+				<div>
+					<label for="status">Status</label>
+					<select name="status" id="status" class="hidden-textbox">
+						{#each statusMap as item, index (item.id)}
+							<option value={item.id}>{item.name}</option>
+						{/each}
+					</select>
+				</div>
 				<br />
-				<textarea id="message" name="message" rows="4" cols="50" />
 			</fieldset>
 			<button class="btn" id="btn" type="submit">Register</button>
 		</form>
 	</div>
 </div>
 
-
 <style>
-	#Section_further_down {
-		transform: translateY(40%);
-	}
-
 	.main {
 		padding-left: 5%;
 		padding-top: 2%;
@@ -203,28 +200,10 @@
 	fieldset {
 		position: relative;
 		padding: 6px;
-		border: 1px solid #32bea6;
-		border-radius: 5px;
-		border-spacing: 2px;
 	}
 
 	label {
 		padding: 6px;
-	}
-
-	legend {
-		padding: 6px;
-	}
-
-	.iii {
-		display: flex;
-		text-align: left;
-		padding-left: 5px;
-		color: rgb(146, 136, 136);
-	}
-
-	.n {
-		font-weight: 500;
 	}
 
 	.rei p {
@@ -254,20 +233,12 @@
 		background-color: #32bea6;
 	}
 
-	.noticea {
-		color: #32bea6;
-		padding: 2%;
-		text-align: center;
-		font-weight: 500;
-		line-height: normal;
+	.element-to-position {
+		transform: translateY(100vh); /* Move the element down one viewport height (vh) */
 	}
 
-	.error {
-		color: tomato;
-		padding: 2%;
-		text-align: center;
-		font-style: italic;
-		line-height: 95%;
-		font-weight: 500;
+	.flower {
+		font-size: 140%;
+		color: #83918f;
 	}
 </style>
