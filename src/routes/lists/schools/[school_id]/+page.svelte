@@ -20,8 +20,8 @@
 		<hgroup>
 			<h6>{data.school.zip_code} {data.city?.city_name} {data.school.address}</h6>
 			<p>{data.county?.county_name} megye / {data.region?.region_name} régió</p>
-			<a href="#Section_further_down" class="aa"> &#9758; Esemény hozzáadása </a>  &nbsp; &nbsp;
-			<a href="#Section_even_further_down" class="aa"> &#9758; Kapcsolat hozzáadása </a>
+			<a href="#section_further_down" class="aa"> &#9758; Esemény hozzáadása </a>  &nbsp; &nbsp;
+			<a href="#section_even_further_down" class="aa"> &#9758; Kapcsolat hozzáadása </a>
 		</hgroup>
 		<br />
 		<h4 class="h41">Adatok</h4>
@@ -68,7 +68,7 @@
 	<br>
 	<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 
-	<div class="grid element-to-position" id="Section_further_down" >
+	<div class="grid element-to-position" id="section_further_down" >
 		<div class="rei">
 			<p>Event Register</p>
 		</div>
@@ -142,7 +142,7 @@
 		</form>
 	</div>
 
-	<div class="grid element-to-even-position" id="Section_even_further_down">
+	<div class="grid element-to-even-position" id="section_even_further_down">
 		<div class="rei">
 			<p class="h43">Contact Register</p>
 		</div>
