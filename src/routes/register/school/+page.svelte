@@ -249,7 +249,7 @@
     {/if}
 
     <div>
-      <p class="noticea">Please note: contact can be added on the Contact Register page.</p>
+      <p class="noticea">Please note: contact can be added on Shool Details page.</p>
     </div>
 
     <button class="btn" id="btn" type="submit">Register</button>
