@@ -119,14 +119,6 @@
 				<label for="estimate">Estimated Number of Participants</label>
 				<input type="text" name="estimate" id="estimate" required />
 			</div>
-			<div>
-				<label for="schemail">School Email</label>
-				<input type="email" name="schoolemail" id="schoolemail" required />
-			</div>
-			<div>
-				<label for="uemail">User Email</label>
-				<input type="email" name="uemail" id="uemail" required />
-			</div>
 			<label for="message">Note</label>
 				<textarea id="message" name="message" rows="4" cols="50" />
 
@@ -146,7 +138,7 @@
 				<p class="error">Event already exists.</p>
 			{/if}
 
-			<button class="btn" id="btn" type="submit">Register</button>
+			<button class="btn" id="btnevent" type="submit" >Register</button>
 		</form>
 	</div>
 
@@ -168,30 +160,19 @@
 				<label for="phone">Phone</label>
 				<input type="text" name="contactphone" id="contactphone" required />
 			</div>
-			<div>
-				<label for="uemail">User Email</label>
-				<input type="email" name="useremail" id="useremail" required />
-			</div>
 			<br>
 				<label for="message">Note</label>
-				<textarea id="message" name="contactmessage" rows="4" cols="50"></textarea>
+				<textarea id="message" name="contactmessage" rows="2" cols="50"></textarea>
+
 			{#if form?.contact}
 			<p class="error">Contact already exists.</p>
 			{/if}
 
-			{#if form?.local}
-					<p class="error">Something went wrong. Please try it later.</p>
+			{#if form?.uslug}
+				<p class="error">Event already exists.</p>
 			{/if}
 
-			{#if form?.contacts}
-					<p class="error">Please enter correct data.</p>
-			{/if}
-
-			{#if form?.real}
-					<p class="error">This contact is already added to this shool and this user.</p>
-			{/if}
-
-			<button class="btn" id="btn" type="submit">Register</button>
+			<button class="btn" id="btn" type="submit" >Register</button>
 		</form>
 	</div>
 

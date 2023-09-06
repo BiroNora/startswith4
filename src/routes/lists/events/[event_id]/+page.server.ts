@@ -48,7 +48,8 @@ export async function load({ params }) {
 	const cityname = city?.city_name
 
 	const inters = await db.interestedStudents.findMany({
-		where: { event_id: ev_id }
+		where: { event_id: ev_id },
+		orderBy: {intrest_id: 'desc'}
 	})
 
 	if (inters) {
