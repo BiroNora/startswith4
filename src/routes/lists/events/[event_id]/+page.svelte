@@ -28,7 +28,7 @@
 	<title>{pageName}</title>
 </svelte:head>
 
-<div class="main">
+<div id="top" class="main">
 	<h1>Event Details</h1>
 	<hgroup>
 		<hgroup class="title">
@@ -81,7 +81,7 @@
 					</ul>
 				{/each}
 			</hgroup>
-			<p class="flower">&#10046;&#10046;&#10046;</p>
+			<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 		</ul>
 	</hgroup>
 
@@ -240,6 +240,11 @@
 	.flower {
 		font-size: 140%;
 		color: #a0a9a8;
+	}
+
+	.flower:hover {
+		font-size: 140%;
+		color: #32bea6;
 	}
 
 	.h43 {
