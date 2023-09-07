@@ -3,10 +3,16 @@
 	import type { ActionData } from './$types'
 	import { dutyMap3, eventMap, formatDate } from '../../../stores/dataStore.js'
 
+	let pageName = 'School Details'
+
+	function scrollToConnect() {
+		window.scrollTo({
+			top: 0,
+		});
+	}
+
 	export let data
 	export let form: ActionData
-
-	let pageName = 'School Details'
 </script>
 
 <svelte:head>
@@ -20,8 +26,9 @@
 		<hgroup>
 			<h6>{data.school.zip_code} {data.city?.city_name} {data.school.address}</h6>
 			<p>{data.county?.county_name} megye / {data.region?.region_name} régió</p>
-			<a href="#section_further_down" class="aa"> &#9758; Esemény hozzáadása </a>  &nbsp; &nbsp;
-			<a href="#section_even_further_down" class="aa"> &#9758; Kapcsolat hozzáadása </a>
+			<a href="#section_event" class="aa"> &#9758; Esemény hozzáadása </a>  &nbsp; &nbsp;
+			<a href="#section_contact" class="aa"> &#9758; Kapcsolat hozzáadása </a> &nbsp; &nbsp;
+			<a href="#section_school_update" class="aa"> &#9758; Iskola adatainak módosítása </a>
 		</hgroup>
 		<br />
 		<h4 class="h41">Adatok</h4>
@@ -67,8 +74,8 @@
 	<br>
 	<br>
 	<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
-
-	<div class="grid element-to-position" id="section_further_down" >
+	<!-- Event form -->
+	<div class="grid element-to-position" id="section_event" >
 		<div class="rei">
 			<p>Event Register</p>
 		</div>
@@ -139,10 +146,12 @@
 			{/if}
 
 			<button class="btn" id="btnevent" type="submit" >Register</button>
+			<br>
+			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb" >Cancel / Jump to the Top</button>
 		</form>
 	</div>
-
-	<div class="grid element-to-even-position" id="section_even_further_down">
+	<!-- Contact form -->
+	<div class="grid element-to-even-position" id="section_contact">
 		<div class="rei">
 			<p class="h43">Contact Register</p>
 		</div>
@@ -173,8 +182,11 @@
 			{/if}
 
 			<button class="btn" id="btn" type="submit" >Register</button>
+			<br>
+			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb" >Cancel / Jump to the Top</button>
 		</form>
 	</div>
+	<!-- School update form -->
 
 </div>
 
@@ -276,7 +288,7 @@
 	}
 
 	.element-to-even-position {
-		transform: translateY(120vh); /* Move the element down one viewport height (vh) */
+		transform: translateY(160vh); /* Move the element down one viewport height (vh) */
 	}
 
 	.flower {
@@ -304,5 +316,4 @@
     line-height: 95%;
     font-weight: 500;
   }
-
 </style>

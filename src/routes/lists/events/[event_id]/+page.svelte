@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import type { ActionData } from './$types'
 	import {
 		channelMap,
 		formatDate,
@@ -19,6 +18,12 @@
 			isInput = true
 		}
 		return isInput
+	}
+
+	function scrollToConnect() {
+		window.scrollTo({
+			top: 0,
+		});
 	}
 
 	export let data
@@ -144,6 +149,8 @@
 				<br />
 			</fieldset>
 			<button class="btn" id="btn" type="submit">Register</button>
+			<br>
+			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb" >Cancel / Jump to the Top</button>
 		</form>
 	</div>
 </div>
