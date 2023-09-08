@@ -1,7 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 import { db } from '$lib/database'
-import { duType, schoolType } from '../../stores/dataStore'
+import { dutyType, schoolType } from '../../stores/dataStore'
 
 export const load: PageServerLoad = async () => {
 	const country = await db.country.findMany({
@@ -106,13 +106,13 @@ const school: Action = async ({ request }) => {
 	}
 
 	if (basic) {
-		duty.push(duType[0]) // BASIC
+		duty.push(dutyType[0][0]) // BASIC
 	}
 	if (medior) {
-		duty.push(duType[1]) // MEDIOR
+		duty.push(dutyType[1][0]) // MEDIOR
 	}
 	if (high) {
-		duty.push(duType[2]) // HIGH
+		duty.push(dutyType[2][0]) // HIGH
 	}
 
 	const regioncountry = await db.region.findUnique({

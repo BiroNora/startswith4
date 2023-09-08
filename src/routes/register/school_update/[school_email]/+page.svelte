@@ -1,9 +1,40 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import type { ActionData } from './$types'
-	import { dutyMap3, eventMap, formatDate } from '../../../stores/dataStore.js'
+	import { dutyMap3, eventMap, formatDate, my_id } from '../../../stores/dataStore.js'
 
 	let pageName = 'SCHOOL UPDATE'
+
+	let yesA = true
+  let yesB = false
+  let yesC = false
+  let yesD = false
+  let yesE = false
+  let yesF = false
+  let yesG = false
+  let yesH = false
+  let yesI = false
+  let yesJ = false
+  let yesK = false
+  let yesL = false
+  let yesM = false
+  let yesN = false
+  let yesO = false
+  let yesCOOP = true
+  let yesBAS = true
+  let yesMED = false
+  let yesHIG = false
+  let omi = ''
+  let isInput = true
+
+  function isWork() {
+    if (isInput == true) {
+      isInput = false
+    } else {
+      isInput = true
+    }
+		return isInput
+	}
 
 	function scrollToConnect() {
 		window.scrollTo({
@@ -25,10 +56,10 @@
 		<h3>{data.school.name}</h3>
 		<hgroup>
 			<h6>{data.school.zip_code} {data.city?.city_name} {data.school.address}</h6>
-			<p>{data.county?.county_name} megye / {data.region?.region_name} régió</p>
-			<a href="#section_event" class="aa"> &#9758; EVENT UPDATE </a>  &nbsp; &nbsp;
-			<a href="#section_contact" class="aa"> &#9758; CONTACT UPDATE </a> &nbsp; &nbsp;
-			<a href="#section_school_update" class="aa"> &#9758; SCHOOL UPDATE </a>
+			<p>{data.country?.country_name} / {data.region?.region_name} régió / {data.county?.county_name} megye </p>
+			<a href="#section_school" class="aa"> &#9758; SCHOOL UPDATE </a> &nbsp; &nbsp;
+			<a href="#section_event" class="aa"> &#9758; EVENT UPDATE </a> &nbsp; &nbsp;
+			<a href="#section_contact" class="aa"> &#9758; CONTACT UPDATE </a>
 		</hgroup>
 		<br />
 		<h4 class="h41">Adatok</h4>
@@ -74,8 +105,177 @@
 	<br>
 	<br>
 	<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
+
+	<!-- School update form -->
+
+	<div class="grid school-to-position" id="section_school">
+		<div class="rei">
+			<p>School Update</p>
+		</div>
+		<br>
+		<form action="?/school" method="post" use:enhance>
+			<div>
+				<label for="name">School Name</label>
+				<input type="text" value="{data.school.name}" name="name" id="name" required />
+			</div>
+			<div>
+				<label for="zip">ZIP Code</label>
+				<input type="text" value="{data.school.zip_code}" name="zip" id="zip" required />
+			</div>
+			<div>
+				<label for="address">Address</label>
+				<input type="text" value="{data.school.address}" name="address" id="address" required />
+			</div>
+			<div>
+				<label for="dirname">Head of School</label>
+				<input type="text" value="{data.school.dir_name}" name="dirname" id="dirname" required />
+			</div>
+			<div>
+				<label for="dirphone">School Phone</label>
+				<input type="text" value="{data.school.dir_phone}" name="dirphone" id="dirphone" required />
+			</div>
+			<div>
+				<label for="email">School Email</label>
+				<input type="email" value="{data.school.school_email}" name="email" id="email" required />
+			</div>
+			<div>
+				<label for="website">Website</label>
+				<input type="text" value="{data.school.website}" name="website" id="website" required />
+			</div>
+			<br>
+			<!-- SCOOL TYPE -->
+			<div >
+				<input type="checkbox" name="iskA" bind:checked={yesA} />
+				ÁLTALÁNOS ISKOLA
+			</div>
+			<br>
+			<div >
+				<input type="checkbox" name="iskB" bind:checked={yesB} />
+				GIMNÁZIUM
+			</div>
+			<br>
+			<div >
+				<input type="checkbox" name="iskC" bind:checked={yesC} />
+				SZAKGIMNÁZIUM
+			</div>
+			<br>
+			<div >
+				<input type="checkbox" name="iskD" bind:checked={yesD} />
+				SZAKKÖZÉPISKOLA
+			</div>
+			<br>
+			<div >
+				<input type="checkbox" name="iskE" bind:checked={yesE} />
+				SZAKISKOLA
+			</div>
+			<br>
+			<div >
+				<input type="checkbox" name="iskF" bind:checked={yesF} />
+				TECHNIKUM
+			</div>
+			<br>
+			<div >
+				<input type="checkbox" name="iskG" bind:checked={yesG} />
+				SZAKKÉPZŐ ISKOLA
+			</div>
+			<br>
+			<div >
+				<input type="checkbox" name="iskH" bind:checked={yesH} />
+				ALAPFOKÚ MŰVÉSZETOKTATÁS
+			</div>
+			<br>
+			<div >
+				<input type="checkbox" name="iskI" bind:checked={yesI} />
+				MŰVÉSZETI OKTATÁS
+			</div>
+			<br>
+			<div >
+				<input type="checkbox" name="iskJ" bind:checked={yesJ} />
+				KÉSZSÉGFEJLESZTÉS
+			</div>
+			<br>
+			<div >
+				<input type="checkbox" name="iskK" bind:checked={yesK} />
+				FEJLESZTŐ NEVELÉS-OKTATÁS
+			</div>
+			<br>
+			<div >
+				<input type="checkbox" name="iskL" bind:checked={yesL} />
+				KIEGÉSZÍTŐ NEMZETISÉGI NYELVOKTATÁS
+			</div>
+			<br>
+			<div >
+				<input type="checkbox" name="iskM" bind:checked={yesM} />
+				KOLLÉGIUM
+			</div>
+			<br>
+			<div >
+				<input type="checkbox" name="iskN" bind:checked={yesN} />
+				HÍDPROGRAMOK
+			</div>
+			<br>
+			<div >
+				<input type="checkbox" name="iskO" bind:checked={yesO} />
+				NEM BESOROLT *
+			</div>
+			<p><i class="iii">* please leave a comment</i></p>
+			<br>
+			<div>
+				<input type="checkbox" name="bas" bind:checked={yesBAS} />
+				BASIC
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="checkbox" name="med" bind:checked={yesMED} />
+				MEDIOR
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="checkbox" name="hig" bind:checked={yesHIG} />
+				HIGH
+			</div>
+			<br>
+			<div class="second">
+				<input type="checkbox" name="coop" bind:checked={yesCOOP} />
+				COOPERATION
+			</div>
+			<br>
+			<div class="second">
+				<input type="checkbox" name="coop" bind:checked={yesCOOP} />
+				ACTIVE
+			</div>
+			<br>
+			<br>
+				<textarea id="message" name="note" rows="4" cols="50"></textarea>
+			{#if form?.local }
+				<p class="error">Incorrect location.</p>
+			{/if}
+
+			{#if form?.omnum}
+				<p class="error">OM ID already exists.</p>
+			{/if}
+
+			{#if form?.omval || form?.omid}
+				<p class="error">OM ID is inadequate.</p>
+			{/if}
+
+			{#if form?.sch || form?.user}
+				<p class="error">Please enter correct data.</p>
+			{/if}
+
+			{#if (yesA == false && yesB == false && yesC == false && yesD == false && yesE == false && yesF == false && yesG == false && yesH == false && yesI == false && yesJ == false && yesK == false && yesL == false && yesM == false && yesN == false && yesO == false)}
+				<p class="error">One school type must be choosen.</p>
+			{/if}
+
+			{#if yesBAS == false && yesMED == false && yesHIG == false}
+				<p class="error">One duty must be choosen.</p>
+			{/if}
+
+			<button class="btn" id="btn" type="submit">Update</button>
+			<br>
+			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb" >Cancel / Jump to the Top</button>
+		</form>
+	</div>
+
 	<!-- Event form -->
-	<div class="grid element-to-position" id="section_event" >
+
+	<div class="grid event-to-position" id="section_event" >
 		<div class="rei">
 			<p>Event Register</p>
 		</div>
@@ -150,8 +350,10 @@
 			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb" >Cancel / Jump to the Top</button>
 		</form>
 	</div>
+
 	<!-- Contact form -->
-	<div class="grid element-to-even-position" id="section_contact">
+
+	<div class="grid contact-to-position" id="section_contact">
 		<div class="rei">
 			<p class="h43">Contact Register</p>
 		</div>
@@ -186,8 +388,6 @@
 			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb" >Cancel / Jump to the Top</button>
 		</form>
 	</div>
-	<!-- School update form -->
-
 </div>
 
 <style>
@@ -283,12 +483,16 @@
     background-color: #32bea6;
   }
 
-  .element-to-position {
-		transform: translateY(100vh); /* Move the element down one viewport height (vh) */
+  .school-to-position {
+		transform: translateY(120vh); /* Move the element down one viewport height (vh) */
 	}
 
-	.element-to-even-position {
-		transform: translateY(160vh); /* Move the element down one viewport height (vh) */
+	.event-to-position {
+		transform: translateY(180vh); /* Move the element down one viewport height (vh) */
+	}
+
+	.contact-to-position {
+		transform: translateY(240vh); /* Move the element down one viewport height (vh) */
 	}
 
 	.flower {
@@ -306,6 +510,13 @@
 		text-align: left;
 		padding-left: 5px;
 		color: rgb(146, 136, 136);
+	}
+
+	.first {
+		display: flex;
+		flex-direction: row;
+    justify-content: space-around;
+    align-content: space-around;
 	}
 
 	.error {
