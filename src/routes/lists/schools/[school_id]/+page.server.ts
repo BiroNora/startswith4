@@ -87,11 +87,15 @@ export async function load({ params }) {
 		where: { county_id: school?.county_id }
 	})
 
+  const country = await db.country.findUnique({
+		where: { country_id: school?.country_id }
+	})
+
 	if (!school) {
 		throw error(404, 'School not found')
 	}
 
-	return { school, resS, resD, contact, event, city, region, county }
+	return { school, resS, resD, contact, event, city, region, county, country }
 }
 
 const event: Action = async ({ request }) => {

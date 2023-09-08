@@ -97,7 +97,7 @@
 		<form action="?/interested" method="post" use:enhance>
 			<div>
 				<label for="number">Number of Students</label>
-				<input type="text" name="number" id="number" required />
+				<input type="number" name="number" id="number" required />
 			</div>
 			<div>
 				<label for="country">Country</label>

@@ -123,10 +123,10 @@
 			</div>
 			<div>
 				<label for="estimate">Estimated Number of Participants</label>
-				<input type="text" name="estimate" id="estimate" required />
+				<input type="number" name="estimate" id="estimate" required />
 			</div>
 			<label for="message">Note</label>
-				<textarea id="message" name="message" rows="4" cols="50" />
+				<textarea id="message" name="message" rows="2" cols="50" />
 
 			{#if form?.inactsu}
 				<p class="error">Something went wrong.</p>
