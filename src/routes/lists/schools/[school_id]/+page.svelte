@@ -25,7 +25,7 @@
 		<h3>{data.school.name}</h3>
 		<hgroup>
 			<h6>{data.school.zip_code} {data.city?.city_name} {data.school.address}</h6>
-			<p>{data.county?.county_name} megye / {data.region?.region_name} régió</p>
+			<p>{data.country?.country_name} / {data.region?.region_name} régió / {data.county?.county_name} megye</p>
 			<a href="#section_event" class="aa"> &#9758; Esemény hozzáadása </a>  &nbsp; &nbsp;
 			<a href="#section_contact" class="aa"> &#9758; Kapcsolat hozzáadása </a> &nbsp; &nbsp;
 			<a href="#section_school_update" class="aa"> &#9758; Iskola adatainak módosítása </a>
@@ -71,7 +71,6 @@
 			{/each}
 		</ul>
 	</hgroup>
-	<br>
 	<br>
 	<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 	<!-- Event form -->
@@ -186,8 +185,6 @@
 			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb" >Cancel / Jump to the Top</button>
 		</form>
 	</div>
-	<!-- School update form -->
-
 </div>
 
 <style>
