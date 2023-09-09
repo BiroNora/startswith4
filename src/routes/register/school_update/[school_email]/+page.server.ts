@@ -17,6 +17,9 @@ export async function load({ params }) {
 		where: { school_email: sc_email }
 	})
 
+	//console.log(school?.duty)
+	console.log(school?.school_type)
+
   sc_id = Number(school?.school_id)
 
   school_name = String(school?.name)
@@ -157,7 +160,6 @@ const school: Action = async ({ request }) => {
 	const basic = Boolean(data.get('bas'))
 	const medior = Boolean(data.get('med'))
 	const high = Boolean(data.get('hig'))
-	const user_email = String(data.get('useremail'))
 	const coop = Boolean(data.get('coop'))
 	const note = String(data.get('note'))
 	const active = true

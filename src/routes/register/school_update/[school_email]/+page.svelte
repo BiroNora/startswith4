@@ -5,7 +5,7 @@
 
 	let pageName = 'SCHOOL UPDATE'
 
-	let yesA = true
+	let yesA = false
   let yesB = false
   let yesC = false
   let yesD = false
@@ -21,10 +21,9 @@
   let yesN = false
   let yesO = false
   let yesCOOP = true
-  let yesBAS = true
+  let yesBAS = false
   let yesMED = false
   let yesHIG = false
-  let omi = ''
   let isInput = true
 
   function isWork() {
@@ -44,6 +43,88 @@
 
 	export let data
 	export let form: ActionData
+
+	data.school.school_type.forEach(function(item) {
+			switch(item) {
+				case '1': {
+					yesA = true
+					break
+				}
+				case '2': {
+					yesB = true
+					break
+				}
+				case '3': {
+					yesC = true
+					break
+				}
+				case '4': {
+					yesD = true
+					break
+				}
+				case '5': {
+					yesE = true
+					break
+				}
+				case '6': {
+					yesF = true
+					break
+				}
+				case '7': {
+					yesG = true
+					break
+				}
+				case '8': {
+					yesH = true
+					break
+				}
+				case '9': {
+					yesI = true
+					break
+				}
+				case '10': {
+					yesJ = true
+					break
+				}
+				case '11': {
+					yesK = true
+					break
+				}
+				case '12': {
+					yesL = true
+					break
+				}
+				case '13': {
+					yesM = true
+					break
+				}
+				case '14': {
+					yesN = true
+					break
+				}
+				case '15': {
+					yesO = true
+					break
+				}
+			}
+		})
+
+		data.school.duty.forEach(function(item) {
+			switch(item) {
+				case '1': {
+					yesBAS = true
+					break
+				}
+				case '2': {
+					yesMED = true
+					break
+				}
+				case '3': {
+					yesHIG = true
+					break
+				}
+			}
+		})
 </script>
 
 <svelte:head>
@@ -232,17 +313,17 @@
 			</div>
 			<br>
 			<div class="second">
-				<input type="checkbox" name="coop" bind:checked={yesCOOP} />
 				COOPERATION
+				<input type="checkbox" name="coop" bind:checked={yesCOOP} />
 			</div>
 			<br>
 			<div class="second">
-				<input type="checkbox" name="coop" bind:checked={yesCOOP} />
 				ACTIVE
+				<input type="checkbox" name="coop" bind:checked={yesCOOP} />
 			</div>
 			<br>
 			<br>
-				<textarea id="message" name="note" rows="4" cols="50"></textarea>
+				<textarea id="message" value="{data.school.note}" name="note" rows="4" cols="50"></textarea>
 			{#if form?.local }
 				<p class="error">Incorrect location.</p>
 			{/if}
