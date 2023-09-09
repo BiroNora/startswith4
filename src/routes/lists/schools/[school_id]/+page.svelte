@@ -146,7 +146,7 @@
 				<p class="error">Event already exists.</p>
 			{/if}
 
-			<button class="btn" id="btnevent" type="submit" on:click={scrollToConnect}>Register</button>
+			<button class="btn" id="btnevent" type="submit" >Register</button>
 			<br>
 			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb" >Cancel / Jump to the Top</button>
 		</form>
@@ -184,9 +184,12 @@
 				<p class="error">Event already exists.</p>
 			{/if}
 
-			<button class="btn" id="btn" type="submit" on:click={scrollToConnect}>Register</button>
+
+			<button class="btn" id="btn" type="submit" >Register</button>
+
+
 			<br>
-			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb" >Cancel / Jump to the Top</button>
+			<button type="button" id="backToTop" class="contrast outline cgb" >Cancel / Jump to the Top</button>
 		</form>
 	</div>
 </div>
