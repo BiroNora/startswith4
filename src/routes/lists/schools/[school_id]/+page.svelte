@@ -73,7 +73,9 @@
 	</hgroup>
 	<br>
 	<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
+
 	<!-- Event form -->
+
 	<div class="grid element-to-position" id="section_event" >
 		<div class="rei">
 			<p>Event Register</p>
@@ -144,12 +146,14 @@
 				<p class="error">Event already exists.</p>
 			{/if}
 
-			<button class="btn" id="btnevent" type="submit" >Register</button>
+			<button class="btn" id="btnevent" type="submit" on:click={scrollToConnect}>Register</button>
 			<br>
 			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb" >Cancel / Jump to the Top</button>
 		</form>
 	</div>
+
 	<!-- Contact form -->
+
 	<div class="grid element-to-even-position" id="section_contact">
 		<div class="rei">
 			<p class="h43">Contact Register</p>
@@ -180,7 +184,7 @@
 				<p class="error">Event already exists.</p>
 			{/if}
 
-			<button class="btn" id="btn" type="submit" >Register</button>
+			<button class="btn" id="btn" type="submit" on:click={scrollToConnect}>Register</button>
 			<br>
 			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb" >Cancel / Jump to the Top</button>
 		</form>

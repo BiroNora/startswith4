@@ -154,7 +154,7 @@ const event: Action = async ({ request }) => {
       },
     }
   })
-  throw redirect(303, '../../lists/events')
+  return { success: true }
 }
 
 
@@ -196,7 +196,7 @@ const contact: Action = async ({ request }) => {
       },
     })
   }
-  throw redirect(303, '../../lists/contacts')
+  return { success: true }
 }
 
 
