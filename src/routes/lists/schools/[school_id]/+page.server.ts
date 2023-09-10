@@ -1,6 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit'
 import { db } from '$lib/database'
-import { eventMap, dutyMap3, schType, duType, dateSlugify, slugify, my_id } from '../../../stores/dataStore.js'
+import { eventMap, dutyMap3, schType, duType, dateSlugify, slugify, my_id, dutyType, schoolType } from '../../../stores/dataStore.js'
 import type { Action, Actions } from './$types'
 
 let extrType = ''
@@ -199,5 +199,115 @@ const contact: Action = async ({ request }) => {
   throw redirect(303, '../../lists/schools')
 }
 
+const school: Action = async ({ request }) => {
+	const data = await request.formData()
+	const name = String(data.get('name'))
+	const zip_code = String(data.get('zip'))
+	const address = String(data.get('address'))
+	const dir_name = String(data.get('dirname'))
+	const dir_phone = String(data.get('dirphone'))
+	const school_email = String(data.get('email'))
+	const website = String(data.get('website')) || null
+	const altisk = Boolean(data.get('iskA'))
+	const gimn = Boolean(data.get('iskB'))
+	const szakgimn = Boolean(data.get('iskC'))
+	const szakkoz = Boolean(data.get('iskD'))
+	const szakisk = Boolean(data.get('iskE'))
+	const techn = Boolean(data.get('iskF'))
+	const szakkepz = Boolean(data.get('iskG'))
+	const almuv = Boolean(data.get('iskH'))
+	const muvokt = Boolean(data.get('iskI'))
+	const keszseg = Boolean(data.get('iskJ'))
+	const fejl = Boolean(data.get('iskK'))
+	const kieg = Boolean(data.get('iskL'))
+	const kolleg = Boolean(data.get('iskM'))
+	const hidp = Boolean(data.get('iskN'))
+	const nembes = Boolean(data.get('iskO'))
+	const basic = Boolean(data.get('bas'))
+	const medior = Boolean(data.get('med'))
+	const high = Boolean(data.get('hig'))
+	const coop = Boolean(data.get('coop'))
+	const note = String(data.get('note'))
+	const active = true
+	const school_type = []
+	const duty = []
 
-export const actions: Actions = { contact, event }
+	if (altisk) {
+		school_type.push(schoolType[0][0]) // általános iskola
+	}
+	if (gimn) {
+		school_type.push(schoolType[1][0]) // gimnázium
+	}
+	if (szakgimn) {
+		school_type.push(schoolType[2][0]) // szakgimnázium
+	}
+	if (szakkoz) {
+		school_type.push(schoolType[3][0]) // szakközépiskola
+	}
+	if (szakisk) {
+		school_type.push(schoolType[4][0]) // szakiskola
+	}
+	if (techn) {
+		school_type.push(schoolType[5][0]) // technikum
+	}
+	if (szakkepz) {
+		school_type.push(schoolType[6][0]) // szakképző iskola
+	}
+	if (almuv) {
+		school_type.push(schoolType[7][0]) // alapfokú művészetoktatás
+	}
+	if (muvokt) {
+		school_type.push(schoolType[8][0]) // művészeti oktatás
+	}
+	if (keszseg) {
+		school_type.push(schoolType[9][0]) // készségfejlesztés
+	}
+	if (fejl) {
+		school_type.push(schoolType[10][0]) // fejlesztő nevelés-oktatás
+	}
+	if (kieg) {
+		school_type.push(schoolType[11][0]) // kiegészítő nemzetiségi nyelvoktatás
+	}
+	if (kolleg) {
+		school_type.push(schoolType[12][0]) // kollégium
+	}
+	if (hidp) {
+		school_type.push(schoolType[13][0]) // hídprogramok
+	}
+	if (nembes) {
+		school_type.push(schoolType[14][0]) // nem besorolt
+	}
+
+	if (basic) {
+		duty.push(dutyType[0][0]) // BASIC
+	}
+	if (medior) {
+		duty.push(dutyType[1][0]) // MEDIOR
+	}
+	if (high) {
+		duty.push(dutyType[2][0]) // HIGH
+	}
+
+	await db.school.update({
+    where: {school_id: sc_id },
+		data: {
+			name,
+			zip_code,
+			address,
+			dir_name,
+			dir_phone,
+			school_email,
+			website,
+			school_type,
+			coop,
+			note,
+			duty,
+			active,
+		}
+	})
+
+	throw redirect(303, '../../lists/schools')
+}
+
+
+export const actions: Actions = { contact, event, school }
