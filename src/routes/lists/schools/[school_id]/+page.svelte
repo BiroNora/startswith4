@@ -6,125 +6,125 @@
 	let pageName = 'School Details'
 
 	let yesA = false
-  let yesB = false
-  let yesC = false
-  let yesD = false
-  let yesE = false
-  let yesF = false
-  let yesG = false
-  let yesH = false
-  let yesI = false
-  let yesJ = false
-  let yesK = false
-  let yesL = false
-  let yesM = false
-  let yesN = false
-  let yesO = false
-  let yesCOOP = true
-  let yesBAS = false
-  let yesMED = false
-  let yesHIG = false
-  let isInput = true
+	let yesB = false
+	let yesC = false
+	let yesD = false
+	let yesE = false
+	let yesF = false
+	let yesG = false
+	let yesH = false
+	let yesI = false
+	let yesJ = false
+	let yesK = false
+	let yesL = false
+	let yesM = false
+	let yesN = false
+	let yesO = false
+	let yesCOOP = true
+	let yesBAS = false
+	let yesMED = false
+	let yesHIG = false
+	let isInput = true
 
-  function isWork() {
-    if (isInput == true) {
-      isInput = false
-    } else {
-      isInput = true
-    }
+	function isWork() {
+		if (isInput == true) {
+			isInput = false
+		} else {
+			isInput = true
+		}
 		return isInput
 	}
 
 	function scrollToConnect() {
 		window.scrollTo({
-			top: 0,
-		});
+			top: 0
+		})
 	}
 
 	export let data
 	export let form: ActionData
 
-	data.school.school_type.forEach(function(item) {
-			switch(item) {
-				case '1': {
-					yesA = true
-					break
-				}
-				case '2': {
-					yesB = true
-					break
-				}
-				case '3': {
-					yesC = true
-					break
-				}
-				case '4': {
-					yesD = true
-					break
-				}
-				case '5': {
-					yesE = true
-					break
-				}
-				case '6': {
-					yesF = true
-					break
-				}
-				case '7': {
-					yesG = true
-					break
-				}
-				case '8': {
-					yesH = true
-					break
-				}
-				case '9': {
-					yesI = true
-					break
-				}
-				case '10': {
-					yesJ = true
-					break
-				}
-				case '11': {
-					yesK = true
-					break
-				}
-				case '12': {
-					yesL = true
-					break
-				}
-				case '13': {
-					yesM = true
-					break
-				}
-				case '14': {
-					yesN = true
-					break
-				}
-				case '15': {
-					yesO = true
-					break
-				}
+	data.school.school_type.forEach(function (item) {
+		switch (item) {
+			case '1': {
+				yesA = true
+				break
 			}
-		})
+			case '2': {
+				yesB = true
+				break
+			}
+			case '3': {
+				yesC = true
+				break
+			}
+			case '4': {
+				yesD = true
+				break
+			}
+			case '5': {
+				yesE = true
+				break
+			}
+			case '6': {
+				yesF = true
+				break
+			}
+			case '7': {
+				yesG = true
+				break
+			}
+			case '8': {
+				yesH = true
+				break
+			}
+			case '9': {
+				yesI = true
+				break
+			}
+			case '10': {
+				yesJ = true
+				break
+			}
+			case '11': {
+				yesK = true
+				break
+			}
+			case '12': {
+				yesL = true
+				break
+			}
+			case '13': {
+				yesM = true
+				break
+			}
+			case '14': {
+				yesN = true
+				break
+			}
+			case '15': {
+				yesO = true
+				break
+			}
+		}
+	})
 
-		data.school.duty.forEach(function(item) {
-			switch(item) {
-				case '1': {
-					yesBAS = true
-					break
-				}
-				case '2': {
-					yesMED = true
-					break
-				}
-				case '3': {
-					yesHIG = true
-					break
-				}
+	data.school.duty.forEach(function (item) {
+		switch (item) {
+			case '1': {
+				yesBAS = true
+				break
 			}
-		})
+			case '2': {
+				yesMED = true
+				break
+			}
+			case '3': {
+				yesHIG = true
+				break
+			}
+		}
+	})
 </script>
 
 <svelte:head>
@@ -137,8 +137,11 @@
 		<h3>{data.school.name}</h3>
 		<hgroup>
 			<h6>{data.school.zip_code} {data.city?.city_name} {data.school.address}</h6>
-			<p>{data.country?.country_name} / {data.region?.region_name} régió / {data.county?.county_name} megye</p>
-			<a href="#section_event" class="aa"> &#9758; Megjelenés hozzáadása </a>  &nbsp; &nbsp;
+			<p>
+				{data.country?.country_name} / {data.region?.region_name} régió / {data.county?.county_name}
+				megye
+			</p>
+			<a href="#section_event" class="aa"> &#9758; Esemény hozzáadása </a> &nbsp; &nbsp;
 			<a href="#section_contact" class="aa"> &#9758; Kapcsolat hozzáadása </a> &nbsp; &nbsp;
 		</hgroup>
 		<br />
@@ -171,19 +174,19 @@
 				{/each}
 			</hgroup>
 		</ul>
-		<h4 class="h42">Megjelenések</h4>
-    <br>
+		<h4 class="h42">Események</h4>
+		<br />
 		<ul class="aa">
 			{#each data.event as e}
 				<li class="la">
-          <a href="../../lists/events/{e.event_id}" class="aa" >
+					<a href="../../lists/events/{e.event_id}" class="aa">
 						{formatDate(e.closing_date)} &#9753 {e.event_name} &#10086 {e.on_duty} &#10087 {e.event_type}
 					</a>
 				</li>
 			{/each}
 		</ul>
 	</hgroup>
-	<br>
+	<br />
 	<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 
 	<!-- Event form -->
@@ -258,9 +261,14 @@
 				<p class="error">Event already exists.</p>
 			{/if}
 
-			<button class="btn" id="btnevent" type="submit" >Register</button>
-			<br>
-			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb h44" >Cancel &#10070; Jump to the Top</button>
+			<button class="btn" id="btnevent" type="submit">Register</button>
+			<br />
+			<button
+				type="button"
+				on:click={scrollToConnect}
+				id="backToTop"
+				class="contrast outline cgb h44">Cancel &#10070; Jump to the Top</button
+			>
 		</form>
 	</div>
 
@@ -289,22 +297,27 @@
 				<textarea id="message" name="contactmessage" rows="2" cols="50"></textarea>
 
 			{#if form?.contact}
-			<p class="error">Contact already exists.</p>
+				<p class="error">Contact already exists.</p>
 			{/if}
 
 			{#if form?.uslug}
 				<p class="error">Event already exists.</p>
 			{/if}
 
-			<button class="btn" id="btn" type="submit" >Register</button>
-			<br>
-			<button type="button" on:click={scrollToConnect}  id="backToTop" class="contrast outline cgb h44" >Cancel &#10070; Jump to the Top</button>
+			<button class="btn" id="btn" type="submit">Register</button>
+			<br />
+			<button
+				type="button"
+				on:click={scrollToConnect}
+				id="backToTop"
+				class="contrast outline cgb h44">Cancel &#10070; Jump to the Top</button
+			>
 		</form>
 	</div>
 
 	<!-- School update form -->
 
-	<div class="grid school-to-position" id="section_school" >
+	<div class="grid school-to-position" id="section_school">
 		<div class="rei">
 			<p>School Update</p>
 		</div>
@@ -312,134 +325,132 @@
 		<form action="?/school" method="post" use:enhance>
 			<div>
 				<label for="name">School Name</label>
-				<input type="text" value="{data.school.name}" name="name" id="name" required />
+				<input type="text" value={data.school.name} name="name" id="name" required />
 			</div>
 			<div>
 				<label for="zip">ZIP Code</label>
-				<input type="text" value="{data.school.zip_code}" name="zip" id="zip" required />
+				<input type="text" value={data.school.zip_code} name="zip" id="zip" required />
 			</div>
 			<div>
 				<label for="address">Address</label>
-				<input type="text" value="{data.school.address}" name="address" id="address" required />
+				<input type="text" value={data.school.address} name="address" id="address" required />
 			</div>
 			<div>
 				<label for="dirname">Head of School</label>
-				<input type="text" value="{data.school.dir_name}" name="dirname" id="dirname" required />
+				<input type="text" value={data.school.dir_name} name="dirname" id="dirname" required />
 			</div>
 			<div>
 				<label for="dirphone">School Phone</label>
-				<input type="text" value="{data.school.dir_phone}" name="dirphone" id="dirphone" required />
+				<input type="text" value={data.school.dir_phone} name="dirphone" id="dirphone" required />
 			</div>
 			<div>
 				<label for="email">School Email</label>
-				<input type="email" value="{data.school.school_email}" name="email" id="email" required />
+				<input type="email" value={data.school.school_email} name="email" id="email" required />
 			</div>
 			<div>
 				<label for="website">Website</label>
-				<input type="text" value="{data.school.website}" name="website" id="website" required />
+				<input type="text" value={data.school.website} name="website" id="website" required />
 			</div>
-			<br>
+			<br />
 			<!-- SCOOL TYPE -->
-			<div >
+			<div>
 				<input type="checkbox" name="iskA" bind:checked={yesA} />
 				ÁLTALÁNOS ISKOLA
 			</div>
-			<br>
-			<div >
+			<br />
+			<div>
 				<input type="checkbox" name="iskB" bind:checked={yesB} />
 				GIMNÁZIUM
 			</div>
-			<br>
-			<div >
+			<br />
+			<div>
 				<input type="checkbox" name="iskC" bind:checked={yesC} />
 				SZAKGIMNÁZIUM
 			</div>
-			<br>
-			<div >
+			<br />
+			<div>
 				<input type="checkbox" name="iskD" bind:checked={yesD} />
 				SZAKKÖZÉPISKOLA
 			</div>
-			<br>
-			<div >
+			<br />
+			<div>
 				<input type="checkbox" name="iskE" bind:checked={yesE} />
 				SZAKISKOLA
 			</div>
-			<br>
-			<div >
+			<br />
+			<div>
 				<input type="checkbox" name="iskF" bind:checked={yesF} />
 				TECHNIKUM
 			</div>
-			<br>
-			<div >
+			<br />
+			<div>
 				<input type="checkbox" name="iskG" bind:checked={yesG} />
 				SZAKKÉPZŐ ISKOLA
 			</div>
-			<br>
-			<div >
+			<br />
+			<div>
 				<input type="checkbox" name="iskH" bind:checked={yesH} />
 				ALAPFOKÚ MŰVÉSZETOKTATÁS
 			</div>
-			<br>
-			<div >
+			<br />
+			<div>
 				<input type="checkbox" name="iskI" bind:checked={yesI} />
 				MŰVÉSZETI OKTATÁS
 			</div>
-			<br>
-			<div >
+			<br />
+			<div>
 				<input type="checkbox" name="iskJ" bind:checked={yesJ} />
 				KÉSZSÉGFEJLESZTÉS
 			</div>
-			<br>
-			<div >
+			<br />
+			<div>
 				<input type="checkbox" name="iskK" bind:checked={yesK} />
 				FEJLESZTŐ NEVELÉS-OKTATÁS
 			</div>
-			<br>
-			<div >
+			<br />
+			<div>
 				<input type="checkbox" name="iskL" bind:checked={yesL} />
 				KIEGÉSZÍTŐ NEMZETISÉGI NYELVOKTATÁS
 			</div>
-			<br>
-			<div >
+			<br />
+			<div>
 				<input type="checkbox" name="iskM" bind:checked={yesM} />
 				KOLLÉGIUM
 			</div>
-			<br>
-			<div >
+			<br />
+			<div>
 				<input type="checkbox" name="iskN" bind:checked={yesN} />
 				HÍDPROGRAMOK
 			</div>
-			<br>
-			<div >
+			<br />
+			<div>
 				<input type="checkbox" name="iskO" bind:checked={yesO} />
 				NEM BESOROLT *
 			</div>
 			<p><i class="iii">* please leave a comment</i></p>
-			<br>
+			<br />
 			<div>
 				<input type="checkbox" name="bas" bind:checked={yesBAS} />
-				BASIC
-				&nbsp;&nbsp;&nbsp;&nbsp;
+				BASIC &nbsp;&nbsp;&nbsp;&nbsp;
 				<input type="checkbox" name="med" bind:checked={yesMED} />
-				MEDIOR
-				&nbsp;&nbsp;&nbsp;&nbsp;
+				MEDIOR &nbsp;&nbsp;&nbsp;&nbsp;
 				<input type="checkbox" name="hig" bind:checked={yesHIG} />
 				HIGH
 			</div>
-			<br>
+			<br />
 			<div class="second">
 				COOPERATION
 				<input type="checkbox" name="coop" bind:checked={yesCOOP} />
 			</div>
-			<br>
+			<br />
 			<div class="second">
 				ACTIVE
 				<input type="checkbox" name="coop" bind:checked={yesCOOP} />
 			</div>
-			<br>
-			<br>
-				<textarea id="message" value="{data.school.note}" name="note" rows="4" cols="50"></textarea>
-			{#if form?.local }
+			<br />
+			<br />
+			<textarea id="message" value={data.school.note} name="note" rows="4" cols="50" />
+			{#if form?.local}
 				<p class="error">Incorrect location.</p>
 			{/if}
 
@@ -455,7 +466,7 @@
 				<p class="error">Please enter correct data.</p>
 			{/if}
 
-			{#if (yesA == false && yesB == false && yesC == false && yesD == false && yesE == false && yesF == false && yesG == false && yesH == false && yesI == false && yesJ == false && yesK == false && yesL == false && yesM == false && yesN == false && yesO == false)}
+			{#if yesA == false && yesB == false && yesC == false && yesD == false && yesE == false && yesF == false && yesG == false && yesH == false && yesI == false && yesJ == false && yesK == false && yesL == false && yesM == false && yesN == false && yesO == false}
 				<p class="error">One school type must be choosen.</p>
 			{/if}
 
@@ -464,8 +475,13 @@
 			{/if}
 
 			<button class="btn" id="btn" type="submit">Update</button>
-			<br>
-			<button type="button" on:click={scrollToConnect}  id="backToTop" class="contrast outline cgb h44" >Cancel &#10070; Jump to the Top</button>
+			<br />
+			<button
+				type="button"
+				on:click={scrollToConnect}
+				id="backToTop"
+				class="contrast outline cgb h44">Cancel &#10070; Jump to the Top</button
+			>
 		</form>
 	</div>
 </div>
@@ -545,37 +561,37 @@
 	}
 
 	label {
-    padding: 6px;
-  }
+		padding: 6px;
+	}
 
-  .rei p {
-    position: relative;
-    line-height: normal;
-    font-size: 140%;
-    font-weight: bold;
-  }
+	.rei p {
+		position: relative;
+		line-height: normal;
+		font-size: 140%;
+		font-weight: bold;
+	}
 
-  .grid {
-    padding: 35px 15px 0px 15px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-content: space-around;
-    width: 55%;
-    line-height: 75%;
-    grid-row: minmax(5px, auto);
-  }
+	.grid {
+		padding: 35px 15px 0px 15px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-content: space-around;
+		width: 55%;
+		line-height: 75%;
+		grid-row: minmax(5px, auto);
+	}
 
-  .grid input:checked {
-    background-color: #32BEA6;
-  }
+	.grid input:checked {
+		background-color: #32bea6;
+	}
 
-  .btn {
-    margin-bottom: 0;
-    background-color: #32bea6;
-  }
+	.btn {
+		margin-bottom: 0;
+		background-color: #32bea6;
+	}
 
-  .element-to-position {
+	.element-to-position {
 		transform: translateY(120vh); /* Move the element down one viewport height (vh) */
 	}
 
@@ -605,11 +621,11 @@
 	}
 
 	.error {
-    color: tomato;
-    padding: 2%;
-    text-align: center;
-    font-style: italic;
-    line-height: 95%;
-    font-weight: 500;
-  }
+		color: tomato;
+		padding: 2%;
+		text-align: center;
+		font-style: italic;
+		line-height: 95%;
+		font-weight: 500;
+	}
 </style>
