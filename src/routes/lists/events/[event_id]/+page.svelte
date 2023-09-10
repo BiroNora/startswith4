@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
+	import type { ActionData } from './$types'
 	import {
 		channelMap,
+		dateSlugify,
+		dutyMap3,
+		eventMap,
 		formatDate,
 		gradeMap,
 		statusMap,
@@ -22,11 +26,26 @@
 
 	function scrollToConnect() {
 		window.scrollTo({
-			top: 0,
-		});
+			top: 0
+		})
 	}
 
 	export let data
+	export let form: ActionData
+	let formattedTimestamp
+
+	function dater(timestampWithTimezone: string): string {
+		const date = new Date(timestampWithTimezone)
+		const year = date.getFullYear()
+		const month = String(date.getMonth() + 1).padStart(2, '0')
+		const day = String(date.getDate()).padStart(2, '0')
+		const hour = String(date.getHours()).padStart(2, '0')
+		const minute = String(date.getMinutes()).padStart(2, '0')
+
+		formattedTimestamp = `${year}-${month}-${day}T${hour}:${minute}`
+
+		return formattedTimestamp
+	}
 </script>
 
 <svelte:head>
@@ -38,17 +57,18 @@
 	<hgroup>
 		<hgroup class="title">
 			<h3>{data.event.event_name}</h3>
-			<a href="#Section_further_down" class="aa"> &#9758; Érdeklődő diákok hozzáadása </a>
+			<a href="#section_interested" class="aa"> &#9758; Érdeklődő diákok hozzáadása </a>
 		</hgroup>
-		<br>
+		<br />
 		<h4 class="h41">Adatok</h4>
-		<a href="#section_school" class="ad"> &#9758; Megjelenés adatainak módosítása </a>
+		<a href="#section_event" class="ad"> &#9758; Esemény adatainak módosítása </a>
 		<ul class="ab">
 			<li class="lb">
 				Időpont: {formatDate(data.event.closing_date)}, {timeSlugify(data.event.closing_date)}
 			</li>
 			<li class="lb">Szervező: {data.event.on_duty}</li>
-			<li class="lb">Megjelenés formája: {data.event.event_type}</li>
+			<li class="lb">Esemény formája: {data.event.event_type}</li>
+			<li class="lb">Becsült résztvevők száma: {data.event.estimated_student}</li>
 			<li class="lb">Feljegyzés: {data.event.note}</li>
 			<li class="lb">Iskola:</li>
 			<hgroup>
@@ -85,15 +105,19 @@
 						{:else}
 							<li class="lb">Nem jelentkezett</li>
 						{/if}
-						<br>
+						<br />
 					</ul>
 				{/each}
 			</hgroup>
-			<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
+			<a href="#top" class="flower"
+				>&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a
+			>
 		</ul>
 	</hgroup>
 
-	<div class="grid element-to-position" id="Section_further_down">
+	<!-- Interested students adding form -->
+
+	<div class="grid interested-to-position" id="section_interested">
 		<div class="rei">
 			<p class="h43">Interested Students Register</p>
 		</div>
@@ -134,9 +158,9 @@
 					{/each}
 				</select>
 			</div>
-			<button type="button" on:click={() => isWork()} class="contrast outline cgb" >Apply</button>
+			<button type="button" on:click={() => isWork()} class="contrast outline cgb">Apply</button>
 			<fieldset disabled={isInput}>
-				<input type="hidden" name="apply" value={isInput}>
+				<input type="hidden" name="apply" value={isInput} />
 				<div>
 					<label for="work">Title of Work</label>
 					<input type="text" name="work" id="work" required />
@@ -152,8 +176,88 @@
 				<br />
 			</fieldset>
 			<button class="btn" id="btn" type="submit">Register</button>
-			<br>
-			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb h44" >Cancel &#10070; Jump to the Top</button>
+			<br />
+			<button
+				type="button"
+				on:click={scrollToConnect}
+				id="backToTop"
+				class="contrast outline cgb h44">Cancel &#10070; Jump to the Top</button
+			>
+		</form>
+	</div>
+
+	<!-- Event update form -->
+
+	<div class="grid event-to-position" id="section_event">
+		<div class="rei">
+			<p>Event Update</p>
+		</div>
+		<form action="?/event" method="post" use:enhance>
+			<div>
+				<label for="fantasy"> Event Name * </label>
+				<input
+					type="text"
+					name="fantasy"
+					id="fantasy"
+					minlength="10"
+					placeholder="ANY LONGER"
+					value={data.event.event_name}
+					required
+				/>
+				<p><i class="iii">* event name must be unique and at least 10 characters long</i></p>
+			</div>
+			<div>
+				<label for="meeting-time">Event Date</label>
+				<input
+					type="datetime-local"
+					id="meeting-time"
+					value={dater(String(data.event.closing_date))}
+					name="meeting-time"
+					min="2021-06-07T00:00"
+					max="2060-06-14T00:00"
+				/>
+			</div>
+			<div>
+				<label for="duty">On Duty</label>
+				<select bind:value={data.onduty} name="duty" id="duty" class="hidden-textbox">
+					{#each dutyMap3 as item, index (item.id)}
+						<option value={item.id}>{item.name} </option>
+					{/each}
+				</select>
+			</div>
+			<div>
+				<label for="type">Event Type</label>
+				<select bind:value={data.eventtype} name="type" id="type" class="hidden-textbox">
+					{#each eventMap as item, index (item.id)}
+						<option value={item.id}>{item.name}</option>
+					{/each}
+				</select>
+				<p><i class="iii">in case of * please leave a comment</i></p>
+			</div>
+			<div>
+				<label for="estimate">Estimated Number of Participants</label>
+				<input
+					type="text"
+					value={data.event.estimated_student}
+					name="estimate"
+					id="estimate"
+					required
+				/>
+			</div>
+			<label for="message">Note</label>
+			<textarea id="message" value={data.event.note} name="message" rows="4" cols="50" />
+
+			{#if form?.uslug}
+			<p class="error">This event name is already in use.</p>
+			{/if}
+			<button class="btn" id="btnevent" type="submit">Register</button>
+			<br />
+			<button
+				type="button"
+				on:click={scrollToConnect}
+				id="backToTop"
+				class="contrast outline cgb h44">Cancel &#10070; Jump to the Top</button
+			>
 		</form>
 	</div>
 </div>
@@ -250,8 +354,12 @@
 		background-color: #32bea6;
 	}
 
-	.element-to-position {
-		transform: translateY(100vh); /* Move the element down one viewport height (vh) */
+	.interested-to-position {
+		transform: translateY(120vh); /* Move the element down one viewport height (vh) */
+	}
+
+	.event-to-position {
+		transform: translateY(260vh);
 	}
 
 	.flower {
@@ -275,5 +383,14 @@
 	.h44 {
 		color: #83918f;
 		border-color: #83918f;
+	}
+
+	.error {
+		color: tomato;
+		padding: 2%;
+		text-align: center;
+		font-style: italic;
+		line-height: 95%;
+		font-weight: 500;
 	}
 </style>

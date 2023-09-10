@@ -1,5 +1,5 @@
-import { channelMap, gradeMap, statusMap } from './../../../stores/dataStore';
-import { error, redirect } from '@sveltejs/kit'
+import { channelMap, dateSlugify, gradeMap, my_id, slugify, statusMap } from './../../../stores/dataStore';
+import { error, fail, redirect } from '@sveltejs/kit'
 import { db } from '$lib/database'
 import { dutyMap3, eventMap } from '../../../stores/dataStore'
 import type { Action, Actions } from './$types'
@@ -10,6 +10,12 @@ let ev_id: number
 let extrGrade
 let extrChannel
 let extrStatus
+let cityname = ''
+let schoolname = ''
+let sc_id: number
+let onduty = ''
+let eventtype = ''
+let cldate = ''
 
 export async function load({ params }) {
 	ev_id = Number(params.event_id)
@@ -17,6 +23,10 @@ export async function load({ params }) {
 	const event = await db.event.findUnique({
 		where: { event_id: ev_id }
 	})
+
+	onduty = String(event?.on_duty)
+	eventtype = String(event?.event_type)
+	cldate = String(event?.closing_date)
 
 	if (event) {
 		extrDuty = event.on_duty
@@ -35,17 +45,19 @@ export async function load({ params }) {
 		event.event_type = extrType
 	}
 
-	const sc_id = Number(event?.school_id)
+	sc_id = Number(event?.school_id)
 
 	const school = await db.school.findUnique({
 		where: { school_id: sc_id },
 	})
+	schoolname = String(school?.name)
+
 	const cityid = school?.city_id
 
 	const city = await db.city.findUnique({
 		where: { city_id: cityid}
 	})
-	const cityname = city?.city_name
+	cityname = String(city?.city_name)
 
 	const inters = await db.interestedStudents.findMany({
 		where: { event_id: ev_id },
@@ -86,7 +98,7 @@ export async function load({ params }) {
 		throw error(404, 'School not found')
 	}
 
-	return { event, school, cityname, countries, regions, inters }
+	return { event, school, cityname, countries, regions, inters, onduty, eventtype, cldate }
 }
 
 const interested: Action = async ({ request }) => {
@@ -130,5 +142,55 @@ const interested: Action = async ({ request }) => {
   throw redirect(303, '../../lists/events')
 }
 
+const event: Action = async ({ request }) => {
+  const data = await request.formData()
+  const event_name = String(data.get('fantasy'))
+  const clos_date = data.get('meeting-time')
+  const on_duty = String(data.get('duty'))
+  const event_type = String(data.get('type'))
+  const estimated_student = Number(data.get('estimate'))
+  const note = String(data.get('message'))
+  const closing_date = new Date(String(clos_date))
 
-export const actions: Actions = { interested }
+  const slugDate = dateSlugify(String(clos_date))
+  console.log('psqldate' + clos_date)
+  console.log('slugDate' + slugDate)
+  console.log('closing_date' + closing_date)
+
+  if (event_name.length < 10) {
+    console.log(event_name.length)
+    return fail(400, { title: true })
+  }
+  //const school_name = 'Eventus Üzleti, Művészeti Szakgimnázium, Technikum, Gimnázium, Szakképző Iskola, Alapfokú Művészeti Iskola és Kollégium'
+  //const city_name = 'Egerszalók'
+  const cn = slugify(String(cityname?.slice(0, 12)))
+  const sn = slugify(String(schoolname?.slice(0, 12)))
+  const se = slugify(event_name.slice(0, 12))
+  const slug = slugDate + '-' + cn + '-' + se + '-' + sn
+  console.log(slug)
+
+  const uniqueSlug = await db.event.findUnique({
+    where: { slug }
+  })
+
+  if (uniqueSlug) {
+    return fail(400, { uslug: true })
+  }
+
+  await db.event.update({
+		where: {event_id: ev_id},
+    data: {
+      event_name,
+      closing_date,
+      on_duty,
+      event_type,
+      estimated_student,
+      note,
+      slug,
+    }
+  })
+  throw redirect(303, '../../lists/events')
+}
+
+
+export const actions: Actions = { interested, event }
