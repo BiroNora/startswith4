@@ -40,12 +40,15 @@
 			<h3>{data.event.event_name}</h3>
 			<a href="#Section_further_down" class="aa"> &#9758; Érdeklődő diákok hozzáadása </a>
 		</hgroup>
+		<br>
+		<h4 class="h41">Adatok</h4>
+		<a href="#section_school" class="ad"> &#9758; Megjelenés adatainak módosítása </a>
 		<ul class="ab">
 			<li class="lb">
 				Időpont: {formatDate(data.event.closing_date)}, {timeSlugify(data.event.closing_date)}
 			</li>
 			<li class="lb">Szervező: {data.event.on_duty}</li>
-			<li class="lb">Esemény formája: {data.event.event_type}</li>
+			<li class="lb">Megjelenés formája: {data.event.event_type}</li>
 			<li class="lb">Feljegyzés: {data.event.note}</li>
 			<li class="lb">Iskola:</li>
 			<hgroup>
@@ -150,7 +153,7 @@
 			</fieldset>
 			<button class="btn" id="btn" type="submit">Register</button>
 			<br>
-			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb" >Cancel / Jump to the Top</button>
+			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb h44" >Cancel &#10070; Jump to the Top</button>
 		</form>
 	</div>
 </div>
@@ -184,6 +187,13 @@
 		padding-top: 1%;
 		padding-left: 5%;
 		text-indent: -6%;
+		font-size: 22px;
+	}
+
+	.ad {
+		color: #83918f;
+		font-weight: 400;
+		line-height: normal;
 		font-size: 22px;
 	}
 
@@ -254,7 +264,16 @@
 		color: #32bea6;
 	}
 
+	.h41 {
+		color: #83918f;
+	}
+
 	.h43 {
 		color: #737978;
+	}
+
+	.h44 {
+		color: #83918f;
+		border-color: #83918f;
 	}
 </style>

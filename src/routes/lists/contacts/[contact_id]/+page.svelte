@@ -12,6 +12,9 @@
 	<h1>Contact Details</h1>
 	<hgroup>
 		<h3>{data.contact.contact_name}</h3>
+		<br>
+		<h4 class="h41">Adatok</h4>
+		<a href="#section_school" class="ad"> &#9758; Kapcsolattartó adatainak módosítása </a>
 		<ul class="ab">
 			<li class="lb">Név: {data.contact.contact_name}</li>
 			<li class="lb">Telefon: {data.contact.contact_phone}</li>
@@ -35,6 +38,7 @@
 				{/each}
 			</hgroup>
 		</ul>
+		<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 	</hgroup>
 </div>
 
@@ -69,6 +73,13 @@
 		font-size: 22px;
 	}
 
+	.ad {
+		color: #83918f;
+		font-weight: 400;
+		line-height: normal;
+		font-size: 22px;
+	}
+
 	.lb {
 		list-style-position: inside;
 		list-style-type: circle;
@@ -85,5 +96,19 @@
 		text-indent: -5%;
 		line-height: 1.3;
 		font-size: 22px;
+	}
+
+	.flower {
+		font-size: 140%;
+		color: #a0a9a8;
+	}
+
+	.flower:hover {
+		font-size: 140%;
+		color: #32bea6;
+	}
+
+	.h41 {
+		color: #83918f;
 	}
 </style>
