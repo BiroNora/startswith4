@@ -2,8 +2,23 @@
 	import { enhance } from '$app/forms'
 	import type { ActionData } from './$types'
 	import { dutyMap3, eventMap, formatDate, my_id } from '../../../stores/dataStore.js'
-
 	let pageName = 'SCHOOL UPDATE'
+
+	// Event "2023-10-26 15:00:00+02" "2023-10-26 15:00"
+	function dateCutter(closing_date: String) {
+		return closing_date.slice(0, -6)
+	}
+	let myEvent = {
+			name: 'Én eseményem',
+      closing_date: "2023-10-26 15:00:00+02",
+      on_duty: '2',
+      event_type: '7',
+      estimated_student: 70,
+      note: 'Nincs note',
+      slug: "2023-12-06-budapest-ix-mikulas-part-9-keruleti-",
+			user_id: "30ae1ec1-7fea-43fc-8b76-8895b1ccf433",
+			school_id:  1,
+	}
 
 	let yesA = false
   let yesB = false
@@ -131,6 +146,8 @@
 	<title>{pageName}</title>
 </svelte:head>
 
+
+
 <div id="top" class="main">
 	<h1>SCHOOL UPDATE</h1>
 	<hgroup>
@@ -187,6 +204,84 @@
 	<br>
 	<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 
+	<!-- Event update form -->
+
+	<div class="grid event-to-position" id="section_event" >
+		<div class="rei">
+			<p>Event Update</p>
+		</div>
+		<form action="?/event" method="post" use:enhance>
+			<div>
+				<label for="fantasy">
+					Event Name *
+				</label>
+				<input
+					type="text"
+					name="fantasy"
+					id="fantasy"
+					minlength="10"
+					placeholder="ANY LONGER"
+					value="{myEvent.name}"
+					required
+				/>
+				<p><i class="iii">* event name must be unique and at least 10 characters long</i></p>
+			</div>
+			<div>
+				<label for="meeting-time">Event Date</label>
+				<input
+					type="datetime-local"
+					id="meeting-time"
+					name="meeting-time"
+					value="{dateCutter(myEvent.closing_date)}"
+					min="2021-06-07T00:00"
+					max="2060-06-14T00:00"
+				/>
+			</div>
+			<div>
+				<label for="duty">On Duty</label>
+				<select bind:value={myEvent.on_duty} name="duty" id="duty" class="hidden-textbox">
+					{#each dutyMap3 as item, index (item.id)}
+						<option value={item.id}>{item.name} </option>
+					{/each}
+				</select>
+			</div>
+			<div>
+				<label for="type">Event Type</label>
+				<select bind:value={myEvent.event_type} name="type" id="type" class="hidden-textbox">
+					{#each eventMap as item, index (item.id)}
+						<option value={item.id}>{item.name}</option>
+					{/each}
+				</select>
+				<p><i class="iii">in case of * please leave a comment</i></p>
+			</div>
+			<div>
+				<label for="estimate">Estimated Number of Participants</label>
+				<input type="text" value="{myEvent.estimated_student}" name="estimate" id="estimate" required />
+			</div>
+			<label for="message">Note</label>
+				<textarea id="message" value="{myEvent.note}" name="message" rows="4" cols="50" />
+
+			{#if form?.inactsu}
+				<p class="error">Something went wrong.</p>
+			{/if}
+
+			{#if form?.user || form?.school}
+				<p class="error">Please enter correct data.</p>
+			{/if}
+
+			{#if form?.title}
+				<p class="error">Event name is too short.</p>
+			{/if}
+
+			{#if form?.uslug}
+				<p class="error">Event already exists.</p>
+			{/if}
+
+			<button class="btn" id="btnevent" type="submit" >Register</button>
+			<br>
+			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb" >Cancel / Jump to the Top</button>
+		</form>
+	</div>
 	<!-- School update form -->
 
 	<div class="grid school-to-position" id="section_school">
@@ -354,83 +449,7 @@
 		</form>
 	</div>
 
-	<!-- Event form -->
 
-	<div class="grid event-to-position" id="section_event" >
-		<div class="rei">
-			<p>Event Register</p>
-		</div>
-		<form action="?/event" method="post" use:enhance>
-			<div>
-				<label for="fantasy">
-					Event Name *
-				</label>
-				<input
-					type="text"
-					name="fantasy"
-					id="fantasy"
-					minlength="10"
-					placeholder="ANY LONGER"
-					required
-				/>
-				<p><i class="iii">* event name must be unique and at least 10 characters long</i></p>
-			</div>
-			<div>
-				<label for="meeting-time">Event Date</label>
-				<input
-					type="datetime-local"
-					id="meeting-time"
-					name="meeting-time"
-					value="YYYY-MM-DDT00:00"
-					min="2021-06-07T00:00"
-					max="2060-06-14T00:00"
-				/>
-			</div>
-			<div>
-				<label for="duty">On Duty</label>
-				<select name="duty" id="duty" class="hidden-textbox">
-					{#each dutyMap3 as item, index (item.id)}
-						<option value={item.id}>{item.name}</option>
-					{/each}
-				</select>
-			</div>
-			<div>
-				<label for="type">Event Type</label>
-				<select name="type" id="type" class="hidden-textbox">
-					{#each eventMap as item, index (item.id)}
-						<option value={item.id}>{item.name}</option>
-					{/each}
-				</select>
-				<p><i class="iii">in case of * please leave a comment</i></p>
-			</div>
-			<div>
-				<label for="estimate">Estimated Number of Participants</label>
-				<input type="text" name="estimate" id="estimate" required />
-			</div>
-			<label for="message">Note</label>
-				<textarea id="message" name="message" rows="4" cols="50" />
-
-			{#if form?.inactsu}
-				<p class="error">Something went wrong.</p>
-			{/if}
-
-			{#if form?.user || form?.school}
-				<p class="error">Please enter correct data.</p>
-			{/if}
-
-			{#if form?.title}
-				<p class="error">Event name is too short.</p>
-			{/if}
-
-			{#if form?.uslug}
-				<p class="error">Event already exists.</p>
-			{/if}
-
-			<button class="btn" id="btnevent" type="submit" >Register</button>
-			<br>
-			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb" >Cancel / Jump to the Top</button>
-		</form>
-	</div>
 
 	<!-- Contact form -->
 
@@ -565,11 +584,11 @@
   }
 
   .school-to-position {
-		transform: translateY(120vh); /* Move the element down one viewport height (vh) */
+		transform: translateY(180vh); /* Move the element down one viewport height (vh) */
 	}
 
 	.event-to-position {
-		transform: translateY(180vh); /* Move the element down one viewport height (vh) */
+		transform: translateY(120vh); /* Move the element down one viewport height (vh) */
 	}
 
 	.contact-to-position {
@@ -593,19 +612,13 @@
 		color: rgb(146, 136, 136);
 	}
 
-	.first {
-		display: flex;
-		flex-direction: row;
-    justify-content: space-around;
-    align-content: space-around;
-	}
-
 	.error {
     color: tomato;
-    padding: 2%;
+		padding: 2%;
     text-align: center;
     font-style: italic;
     line-height: 95%;
     font-weight: 500;
+
   }
 </style>
