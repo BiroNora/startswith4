@@ -1,5 +1,14 @@
 <script lang="ts">
+	import { enhance } from '$app/forms'
+
 	let pageName = 'Contact Details'
+	let yesACT = true
+
+	function scrollToConnect() {
+		window.scrollTo({
+			top: 0
+		})
+	}
 
 	export let data
 </script>
@@ -14,7 +23,7 @@
 		<h3>{data.contact.contact_name}</h3>
 		<br>
 		<h4 class="h41">Adatok</h4>
-		<a href="#section_school" class="ad"> &#9758; Kapcsolattartó adatainak módosítása </a>
+		<a href="#section_contact" class="ad"> &#9758; Kapcsolattartó adatainak módosítása </a>
 		<ul class="ab">
 			<li class="lb">Név: {data.contact.contact_name}</li>
 			<li class="lb">Telefon: {data.contact.contact_phone}</li>
@@ -40,6 +49,48 @@
 		</ul>
 		<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 	</hgroup>
+
+	<!-- Contact update form -->
+
+	<div class="grid element-to-position" id="section_contact">
+		<div class="rei">
+			<p>Contact Update</p>
+		</div>
+  	<br>
+		<form action="?/contact" method="post" use:enhance>
+			<div>
+				<label for="name">Name</label>
+				<input type="text" value="{data.contact.contact_name}" name="contactname" id="contactname" required />
+			</div>
+			<div>
+				<label for="email">Email</label>
+				<input type="email" value="{data.contact.contact_email}" name="contactemail" id="contactemail" required />
+			</div>
+			<div>
+				<label for="phone">Phone</label>
+				<input type="text" value="{data.contact.contact_phone}" name="contactphone" id="contactphone" required />
+			</div>
+			<br>
+			<div>
+				<label for="message">Note</label>
+				<textarea id="message" value="{data.contact.contact_note}" name="contactmessage" rows="2" cols="50"></textarea>
+			</div>
+			<br>
+			<div class="second">
+				ACTIVE
+				<input type="checkbox" name="active" bind:checked={yesACT} />
+			</div>
+			<br>
+			<br>
+			<button class="btn" id="btn" type="submit" >Update</button>
+			<br>
+			<button
+				type="button"
+				on:click={scrollToConnect}
+				id="backToTop"
+				class="contrast outline cgb h44" >Cancel &#10070; Jump to the Top</button>
+		</form>
+	</div>
 </div>
 
 <style>
@@ -68,6 +119,7 @@
 		color: #83918f;
 		font-weight: 400;
 		line-height: normal;
+		padding-top: 1%;
 		padding-left: 5%;
 		text-indent: -6%;
 		font-size: 22px;
@@ -98,6 +150,41 @@
 		font-size: 22px;
 	}
 
+	label {
+		padding: 6px;
+	}
+
+	.rei p {
+		position: relative;
+		line-height: normal;
+		font-size: 140%;
+		font-weight: bold;
+	}
+
+	.grid {
+		padding: 35px 15px 0px 15px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-content: space-around;
+		width: 55%;
+		line-height: 75%;
+		grid-row: minmax(5px, auto);
+	}
+
+	.grid input:checked {
+		background-color: #32bea6;
+	}
+
+	.btn {
+		margin-bottom: 0;
+		background-color: #32bea6;
+	}
+
+	.element-to-position {
+		transform: translateY(120vh); /* Move the element down one viewport height (vh) */
+	}
+
 	.flower {
 		font-size: 140%;
 		color: #a0a9a8;
@@ -110,5 +197,10 @@
 
 	.h41 {
 		color: #83918f;
+	}
+
+	.h44 {
+		color: #83918f;
+		border-color: #83918f;
 	}
 </style>
