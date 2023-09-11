@@ -58,6 +58,7 @@ const school: Action = async ({ request }) => {
 	const active = true
 	const school_type = []
 	const duty = []
+	const user_num = []
 
 	if (altisk) {
 		school_type.push(schoolType[0][0]) // általános iskola
@@ -161,12 +162,14 @@ const school: Action = async ({ request }) => {
 		where: { user_email }
 	})
 
-	const user_id = myuser?.user_id
-	const active_by = String(user_id)
+	const u_num = myuser?.user_num
+	const active_by = u_num
 
 	if (!myuser) {
 		return fail(400, { user: true })
 	}
+
+	user_num.push(u_num)
 
 	await db.school.create({
 		data: {
@@ -186,7 +189,7 @@ const school: Action = async ({ request }) => {
 			county_id,
 			region_id,
 			duty,
-			user_id,
+			user_num,
 			active,
 			active_by
 		}

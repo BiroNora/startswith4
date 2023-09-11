@@ -25,16 +25,15 @@ model School {
   county_id    Int
   region_id    Int
   duty         String[]
-  user_id      String?
+  user_num     Int[]
   active       Boolean
-  active_by    String
+  active_by    Int
   Contact      Contact[]
   event        Event[]
   city         City      @relation(fields: [city_id], references: [city_id])
   country      Country   @relation(fields: [country_id], references: [country_id])
   county       County    @relation(fields: [county_id], references: [county_id])
   region       Region    @relation(fields: [region_id], references: [region_id])
-  User         User?     @relation(fields: [user_id], references: [user_id])
 
   @@map("schools")
 }
@@ -46,32 +45,30 @@ model Contact {
   contact_phone String?
   contact_note  String?
   createdAt     DateTime @default(now()) @db.Timestamptz(3)
-  user_id       String?
+  user_num      Int[]
   active        Boolean
   active_by     String
   school_id     Int?
   School        School?  @relation(fields: [school_id], references: [school_id])
-  User          User?    @relation(fields: [user_id], references: [user_id])
 
   @@map("contact")
 }
 
 model User {
-  user_id       String    @id @default(uuid())
+  user_id       String   @id @default(uuid())
+  user_num      Int      @unique @default(autoincrement())
   name          String
   nationality   String
   phone         String
-  user_email    String    @unique
+  user_email    String   @unique
   on_duty       String[]
   passwordHash  String
-  userAuthToken String    @unique
-  createdAt     DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt     DateTime  @updatedAt @db.Timestamptz(3)
+  userAuthToken String   @unique
+  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(3)
   active        Boolean
   active_by     String
-  Contact       Contact[]
   event         Event[]
-  school        School[]
 
   @@map("users")
 }
@@ -96,7 +93,7 @@ model Event {
 }
 
 model InterestedStudents {
-  intrest_id Int      @id @default(autoincrement())
+  intrest_id Int     @id @default(autoincrement())
   event_id   Int
   count      Int
   grade      String
@@ -107,7 +104,7 @@ model InterestedStudents {
   country_id Int
   region_id  Int
   Country    Country @relation(fields: [country_id], references: [country_id])
-  Event      Event    @relation(fields: [event_id], references: [event_id])
+  Event      Event   @relation(fields: [event_id], references: [event_id])
   Region     Region  @relation(fields: [region_id], references: [region_id])
 
   @@map("interested")
