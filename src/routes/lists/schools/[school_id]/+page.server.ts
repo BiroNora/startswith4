@@ -228,7 +228,8 @@ const school: Action = async ({ request }) => {
 	const high = Boolean(data.get('hig'))
 	const coop = Boolean(data.get('coop'))
 	const note = String(data.get('note'))
-	const active = true
+	const active = Boolean(data.get('active'))
+	const active_by = my_id
 	const school_type = []
 	const duty = []
 
@@ -303,6 +304,7 @@ const school: Action = async ({ request }) => {
 			note,
 			duty,
 			active,
+			active_by,
 		}
 	})
 

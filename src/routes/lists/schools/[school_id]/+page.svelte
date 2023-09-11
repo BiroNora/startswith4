@@ -21,6 +21,7 @@
 	let yesN = false
 	let yesO = false
 	let yesCOOP = true
+	let yesACT = true
 	let yesBAS = false
 	let yesMED = false
 	let yesHIG = false
@@ -445,7 +446,7 @@
 			<br />
 			<div class="second">
 				ACTIVE
-				<input type="checkbox" name="coop" bind:checked={yesCOOP} />
+				<input type="checkbox" name="active" bind:checked={yesACT} />
 			</div>
 			<br />
 			<br />
