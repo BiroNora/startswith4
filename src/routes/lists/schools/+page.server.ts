@@ -12,10 +12,10 @@ export const load: PageServerLoad = async (event) => {
       },   // Todo! user_id comes from cookies
     orderBy: { name: 'asc' }
   })
-console.log(schools)
-  //event.setHeaders({
-    //'Cashe-Control': 'public, max-age=0, s-maxage=60'
-  //})
+
+  event.setHeaders({
+    'Cashe-Control': 'public, max-age=0, s-maxage=60'
+  })
 
   const cities = await db.city.findMany({})
 
