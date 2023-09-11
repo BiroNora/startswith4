@@ -96,7 +96,7 @@ model Event {
 }
 
 model InterestedStudents {
-  intrest_id Int      @id @default(autoincrement())
+  intrest_id Int     @id @default(autoincrement())
   event_id   Int
   count      Int
   grade      String
@@ -107,7 +107,7 @@ model InterestedStudents {
   country_id Int
   region_id  Int
   Country    Country @relation(fields: [country_id], references: [country_id])
-  Event      Event    @relation(fields: [event_id], references: [event_id])
+  Event      Event   @relation(fields: [event_id], references: [event_id])
   Region     Region  @relation(fields: [region_id], references: [region_id])
 
   @@map("interested")
