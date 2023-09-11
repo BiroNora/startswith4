@@ -1,4 +1,4 @@
-import { channelMap, dateSlugify, gradeMap, my_id, slugify, statusMap } from './../../../stores/dataStore';
+import { channelMap, dateSlugify, gradeMap, slugify, statusMap } from './../../../stores/dataStore';
 import { error, fail, redirect } from '@sveltejs/kit'
 import { db } from '$lib/database'
 import { dutyMap3, eventMap } from '../../../stores/dataStore'
@@ -169,14 +169,6 @@ const event: Action = async ({ request }) => {
   const slug = slugDate + '-' + cn + '-' + se + '-' + sn
   console.log(slug)
 
-  const uniqueSlug = await db.event.findUnique({
-    where: { slug }
-  })
-
-  if (uniqueSlug) {
-    return fail(400, { uslug: true })
-  }
-
   await db.event.update({
 		where: {event_id: ev_id},
     data: {
@@ -186,7 +178,6 @@ const event: Action = async ({ request }) => {
       event_type,
       estimated_student,
       note,
-      slug,
     }
   })
   throw redirect(303, '../../lists/events')

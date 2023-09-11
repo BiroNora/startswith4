@@ -31,7 +31,6 @@
 	}
 
 	export let data
-	export let form: ActionData
 	let formattedTimestamp
 
 	function dater(timestampWithTimezone: string): string {
@@ -246,10 +245,6 @@
 			</div>
 			<label for="message">Note</label>
 			<textarea id="message" value={data.event.note} name="message" rows="4" cols="50" />
-
-			{#if form?.uslug}
-			<p class="error">This event name is already in use.</p>
-			{/if}
 			<button class="btn" id="btnevent" type="submit">Register</button>
 			<br />
 			<button
@@ -383,14 +378,5 @@
 	.h44 {
 		color: #83918f;
 		border-color: #83918f;
-	}
-
-	.error {
-		color: tomato;
-		padding: 2%;
-		text-align: center;
-		font-style: italic;
-		line-height: 95%;
-		font-weight: 500;
 	}
 </style>
