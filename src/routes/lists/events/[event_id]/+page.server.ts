@@ -7,9 +7,9 @@ import type { Action, Actions } from './$types'
 let extrType = ''
 let extrDuty = ''
 let ev_id: number
-let extrGrade
-let extrChannel
-let extrStatus
+let extrGrade = ''
+let extrChannel = ''
+let extrStatus = ''
 let cityname = ''
 let schoolname = ''
 let sc_id: number
@@ -106,11 +106,11 @@ const interested: Action = async ({ request }) => {
   const count = Number(data.get('number'))
 	const country_id = Number(data.get('country'))
 	const region_id = Number(data.get('connect'))
-	const grade = Number(data.get('grade'))
-	const channel = Number(data.get('channel'))
+	const grade = String(data.get('grade'))
+	const channel = String(data.get('channel'))
   const apply = Boolean(data.get('apply'))
   const work_title = String(data.get('work'))
-	const status = Number(data.get('status'))
+	const status = String(data.get('status'))
   const event_id = ev_id
 	const applied = apply
 
