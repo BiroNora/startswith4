@@ -6,12 +6,12 @@ import { my_id } from '../../stores/dataStore'
 
 export const load: PageServerLoad = async (event) => {
   console.log(event)
-  const contacts = await db.contact.findMany({
-    where: {
-      user_id:  my_id,
-      },   // Todo! user_id comes from cookies
-    orderBy: { contact_name: 'asc' }
+  const user = await db.user.findUnique({
+    where: {user_id: my_id}, // Todo! user_id comes from cookies
+    include: { Contact : true },
   })
+  const contacts = user?.Contact
+
 
   event.setHeaders({
     'Cashe-Control': 'public, max-age=0, s-maxage=60'

@@ -5,13 +5,11 @@ import { my_id } from '../../stores/dataStore'
 
 
 export const load: PageServerLoad = async (event) => {
-  console.log(event)
-  const schools = await db.school.findMany({
-    where: {
-      user_id: my_id,
-      },   // Todo! user_id comes from cookies
-    orderBy: { name: 'asc' }
+  const user = await db.user.findUnique({
+    where: {user_id: my_id}, // Todo! user_id comes from cookies
+    include: { school : true },
   })
+  const schools = user?.school
 
   event.setHeaders({
     'Cashe-Control': 'public, max-age=0, s-maxage=60'

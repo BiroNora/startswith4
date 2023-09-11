@@ -186,12 +186,15 @@ const school: Action = async ({ request }) => {
 			county_id,
 			region_id,
 			duty,
-			user_id,
 			active,
-			active_by
+			active_by,
+			User: {
+				connect: {
+					user_id: user_id,
+				}
+			}
 		}
 	})
-
 	throw redirect(303, '/login')
 }
 
