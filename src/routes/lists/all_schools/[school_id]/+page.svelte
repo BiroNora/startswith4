@@ -69,7 +69,7 @@
 		<ul class="aa">
 			{#each data.event as e}
 				<li class="la">
-					<a href="../../lists/events/{e.event_id}" class="aa">
+					<a href="../../lists/all_events/{e.event_id}" class="aa">
 						{formatDate(e.closing_date)} &#9753 {e.event_name} &#10086 {e.on_duty} &#10087 {e.event_type}
 					</a>
 				</li>

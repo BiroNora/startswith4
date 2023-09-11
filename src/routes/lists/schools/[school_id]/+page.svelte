@@ -25,16 +25,6 @@
 	let yesBAS = false
 	let yesMED = false
 	let yesHIG = false
-	let isInput = true
-
-	function isWork() {
-		if (isInput == true) {
-			isInput = false
-		} else {
-			isInput = true
-		}
-		return isInput
-	}
 
 	function scrollToConnect() {
 		window.scrollTo({

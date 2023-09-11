@@ -3,8 +3,6 @@ import type { PageServerLoad } from './$types'
 import { db } from '$lib/database'
 import { dutyMap3, my_id } from '../../stores/dataStore'
 
-const ev_sc_set = new Set<number>()
-
 let extrDuty = ''
 
 export const load: PageServerLoad = async (event) => {
@@ -35,9 +33,6 @@ export const load: PageServerLoad = async (event) => {
       obj.on_duty = extrDuty
     }
   }
-
-  console.log(ev_sc_set)
-  console.log(events)
 
   event.setHeaders({
     'Cashe-Control': 'public, max-age=0, s-maxage=60'
