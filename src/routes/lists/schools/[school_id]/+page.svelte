@@ -45,6 +45,14 @@
 	export let data
 	export let form: ActionData
 
+	if (data.school.active == false) {
+		yesACT = false
+	}
+
+	if (data.school.coop == false) {
+		yesCOOP = false
+	}
+
 	data.school.school_type.forEach(function (item) {
 		switch (item) {
 			case '1': {

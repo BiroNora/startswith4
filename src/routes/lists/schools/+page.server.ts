@@ -8,8 +8,7 @@ export const load: PageServerLoad = async (event) => {
   console.log(event)
   const schools = await db.school.findMany({
     where: {
-      user_id: my_id,
-      active: true,
+      user_id: my_id
       },   // Todo! user_id comes from cookies
     orderBy: { name: 'asc' }
   })
