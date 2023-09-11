@@ -11,10 +11,16 @@
 <div class="main">
 <h1>My Contact List</h1>
 <ul>
-  {#each contacts as { contact_id, contact_name, contact_phone, contact_email }}
-    <li class="li">
-      <a href="../lists/contacts/{contact_id}" class="aa">{ contact_name } {' ☎️ '} { contact_phone } {' 📝 '} { contact_email } </a>
-    </li>
+  {#each contacts as { contact_id, contact_name, contact_phone, contact_email, active }}
+    {#if !active}
+      <li class="li">
+        <a href="../lists/contacts/{contact_id}" class="aa">{ contact_name } {' ☎️ '} { contact_phone } {' 📝 '} { contact_email } {' ⚠️ '} <strong>NOT ACTIVE</strong></a>
+      </li>
+    {:else if active}
+      <li class="li">
+        <a href="../lists/contacts/{contact_id}" class="aa">{ contact_name } {' ☎️ '} { contact_phone } {' 📝 '} { contact_email } </a>
+      </li>
+    {/if}
   {/each}
 </ul>
 </div>
@@ -41,5 +47,10 @@
   padding-left: 5%;
   text-indent: -6%;
   line-height: 2;
+}
+
+strong {
+  font-weight: 500;
+  color: tomato;
 }
 </style>

@@ -9,7 +9,6 @@ export const load: PageServerLoad = async (event) => {
   const contacts = await db.contact.findMany({
     where: {
       user_id:  my_id,
-      active: true,
       },   // Todo! user_id comes from cookies
     orderBy: { contact_name: 'asc' }
   })

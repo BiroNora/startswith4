@@ -11,6 +11,10 @@
 	}
 
 	export let data
+
+	if (data.contact.active == false) {
+		yesACT = false
+	}
 </script>
 
 <svelte:head>
@@ -20,7 +24,11 @@
 <div class="main">
 	<h1>Contact Details</h1>
 	<hgroup>
-		<h3>{data.contact.contact_name}</h3>
+		{#if data.contact.active}
+			<h3>{data.contact.contact_name}</h3>
+		{:else if !data.contact.active}
+			<h3>{data.contact.contact_name} {' ⚠️ '}</h3>
+		{/if}
 		<br>
 		<h4 class="h41">Adatok</h4>
 		<a href="#section_contact" class="ad"> &#9758; Kapcsolattartó adatainak módosítása </a>

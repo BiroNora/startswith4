@@ -8,14 +8,14 @@ export const load: PageServerLoad = async (event) => {
   console.log(event)
   const schools = await db.school.findMany({
     where: {
-      user_id: my_id
+      user_id: my_id,
       },   // Todo! user_id comes from cookies
     orderBy: { name: 'asc' }
   })
-
-  event.setHeaders({
-    'Cashe-Control': 'public, max-age=0, s-maxage=60'
-  })
+console.log(schools)
+  //event.setHeaders({
+    //'Cashe-Control': 'public, max-age=0, s-maxage=60'
+  //})
 
   const cities = await db.city.findMany({})
 

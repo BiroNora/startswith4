@@ -143,7 +143,11 @@
 <div id="top" class="main">
 	<h1>School Details</h1>
 	<hgroup>
-		<h3>{data.school.name}</h3>
+		{#if !data.school.active || !data.school.coop}
+			<h3>{data.school.name} {' ⚠️ '}</h3>
+		{:else if data.school.active}
+			<h3>{data.school.name}</h3>
+		{/if}
 		<hgroup>
 			<h6>{data.school.zip_code} {data.city?.city_name} {data.school.address}</h6>
 			<p>

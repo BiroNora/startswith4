@@ -17,11 +17,15 @@
         {#if city_id == c.city_id}
           {#if active && !coop}
           <li class="li">
-          <a href="../lists/schools/{school_id}" class="aa">{ name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } {' ⚠️ '} <strong>NOT COOPERATIVE</strong></a>
+          <a href="../lists/schools/{school_id}" class="aa">{ name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } {' ⚠️ '} <strong>NO COOPERATION</strong></a>
           </li>
-          {:else if active}
+          {:else if active && coop}
           <li class="li">
             <a href="../lists/schools/{school_id}" class="aa">{ name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } </a>
+          </li>
+          {:else if !active && coop}
+          <li class="li">
+            <a href="../lists/schools/{school_id}" class="aa">{ name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } {' ⚠️ '} <strong>NOT ACTIVE</a>
           </li>
           {:else if !active && !coop}
           <li class="li">
