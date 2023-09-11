@@ -25,16 +25,15 @@ model School {
   county_id    Int
   region_id    Int
   duty         String[]
-  user_id      String?
   active       Boolean
   active_by    String
   Contact      Contact[]
-  event        Event[]
+  Event        Event[]
   city         City      @relation(fields: [city_id], references: [city_id])
   country      Country   @relation(fields: [country_id], references: [country_id])
   county       County    @relation(fields: [county_id], references: [county_id])
   region       Region    @relation(fields: [region_id], references: [region_id])
-  User         User?     @relation(fields: [user_id], references: [user_id])
+  User         User[]
 
   @@map("schools")
 }
@@ -46,12 +45,11 @@ model Contact {
   contact_phone String?
   contact_note  String?
   createdAt     DateTime @default(now()) @db.Timestamptz(3)
-  user_id       String?
   active        Boolean
   active_by     String
   school_id     Int?
   School        School?  @relation(fields: [school_id], references: [school_id])
-  User          User?    @relation(fields: [user_id], references: [user_id])
+  User          User[]
 
   @@map("contact")
 }
@@ -70,8 +68,8 @@ model User {
   active        Boolean
   active_by     String
   Contact       Contact[]
-  event         Event[]
-  school        School[]
+  Event         Event[]
+  School        School[]
 
   @@map("users")
 }
