@@ -10,7 +10,8 @@ export async function load({ params }) {
 	sc_id = Number(params.school_id)
 
 	const school = await db.school.findUnique({
-		where: { school_id: sc_id }
+		where: { school_id: sc_id },
+		include: { User: true}
 	})
 
 	let extrSchoolType = ''
@@ -69,11 +70,8 @@ export async function load({ params }) {
 		}
 	}
 
-  const u_id = String(school?.user_id)
-
-  const user = await db.user.findMany({
-    where: { user_id: u_id}
-  })
+  const user = school?.User
+	console.log(user)
 
 	const city = await db.city.findUnique({
 		where: { city_id: school?.city_id }

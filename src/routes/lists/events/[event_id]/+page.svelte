@@ -9,6 +9,7 @@
 		statusMap,
 		timeSlugify
 	} from '../../../stores/dataStore.js'
+	import type { ActionData } from './$types'
 
 	let pageName = 'Event Details'
 	let isInput = true
@@ -29,6 +30,7 @@
 	}
 
 	export let data
+	export let form: ActionData
 	let formattedTimestamp
 
 	function dater(timestampWithTimezone: string): string {
@@ -241,10 +243,17 @@
 					required
 				/>
 			</div>
+			<div>
+				<label for="email">Email</label>
+				<input type="text" value={data.user} name="email" id="email" required />
+			</div>
 			<label for="message">Note</label>
 			<textarea id="message" value={data.event.note} name="message" rows="4" cols="50" />
 			<button class="btn" id="btnevent" type="submit">Register</button>
 			<br />
+			{#if form?.user}
+				<p class="error">Please enter valide data.</p>
+			{/if}
 			<button
 				type="button"
 				on:click={scrollToConnect}
@@ -377,4 +386,13 @@
 		color: #83918f;
 		border-color: #83918f;
 	}
+
+	.error {
+    color: tomato;
+    padding: 2%;
+    text-align: center;
+    font-style: italic;
+    line-height: 95%;
+    font-weight: 500;
+  }
 </style>

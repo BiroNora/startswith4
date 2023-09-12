@@ -24,9 +24,9 @@
 				Időpont: {formatDate(data.event.closing_date)}, {timeSlugify(data.event.closing_date)}
 			</li>
 			<li class="lb">Szervező: {data.event.on_duty}</li>
+			<li class="lb">Startswith kapcsolat: {data.user}</li>
 			<li class="lb">Esemény formája: {data.event.event_type}</li>
 			<li class="lb">Becsült résztvevők száma: {data.event.estimated_student}</li>
-			<li class="lb">Feljegyzés: {data.event.note}</li>
 			<li class="lb">Iskola:</li>
 			<hgroup>
 				<ul class="ac">
@@ -39,6 +39,7 @@
 					</li>
 				</ul>
 			</hgroup>
+			<li class="lb">Feljegyzés: {data.event.note}</li>
 			<li class="lb">Érdeklődő diákok:</li>
 			<hgroup>
 				{#each data.inters as ints}

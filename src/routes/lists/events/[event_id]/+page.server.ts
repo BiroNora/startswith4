@@ -90,6 +90,14 @@ export async function load({ params }) {
 		}
 	}
 
+	const us_id = event?.user_id
+
+	const us = await db.user.findUnique({
+		where: { user_id: us_id}
+	})
+
+	const user = us?.user_email
+
 	const countries = await db.country.findMany({})
 
 	const regions = await db.region.findMany({})
@@ -98,7 +106,7 @@ export async function load({ params }) {
 		throw error(404, 'School not found')
 	}
 
-	return { event, school, cityname, countries, regions, inters, onduty, eventtype, cldate }
+	return { event, school, cityname, countries, regions, inters, onduty, eventtype, cldate, user }
 }
 
 const interested: Action = async ({ request }) => {
@@ -151,6 +159,7 @@ const event: Action = async ({ request }) => {
   const estimated_student = Number(data.get('estimate'))
   const note = String(data.get('message'))
   const closing_date = new Date(String(clos_date))
+	const email = String(data.get('email'))
 
   const slugDate = dateSlugify(String(clos_date))
   console.log('psqldate' + clos_date)
@@ -169,6 +178,16 @@ const event: Action = async ({ request }) => {
   const slug = slugDate + '-' + cn + '-' + se + '-' + sn
   console.log(slug)
 
+	const user = await db.user.findUnique({
+		where: {user_email: email}
+	})
+
+	if (!user) {
+		return fail(400, { user: true })
+	}
+
+	const user_id = user?.user_id
+
   await db.event.update({
 		where: {event_id: ev_id},
     data: {
@@ -178,6 +197,7 @@ const event: Action = async ({ request }) => {
       event_type,
       estimated_student,
       note,
+			user_id,
     }
   })
   throw redirect(303, '../../lists/events')

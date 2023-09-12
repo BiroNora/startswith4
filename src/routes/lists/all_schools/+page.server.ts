@@ -10,8 +10,6 @@ export const load: PageServerLoad = async (event) => {
     orderBy: { name: 'asc' }
   })
 
-  
-
   event.setHeaders({
     'Cashe-Control': 'public, max-age=0, s-maxage=60'
   })

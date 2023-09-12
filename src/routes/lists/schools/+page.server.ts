@@ -7,9 +7,9 @@ import { my_id } from '../../stores/dataStore'
 export const load: PageServerLoad = async (event) => {
   const user = await db.user.findUnique({
     where: {user_id: my_id}, // Todo! user_id comes from cookies
-    include: { school : true },
+    include: { School : true },
   })
-  const schools = user?.school
+  const schools = user?.School
 
   event.setHeaders({
     'Cashe-Control': 'public, max-age=0, s-maxage=60'

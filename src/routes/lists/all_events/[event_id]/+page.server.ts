@@ -15,6 +15,7 @@ let onduty = ''
 let eventtype = ''
 let cldate = ''
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function load({ params }) {
 	ev_id = Number(params.event_id)
 
@@ -87,6 +88,14 @@ export async function load({ params }) {
 		}
 	}
 
+	const us_id = event?.user_id
+
+	const us = await db.user.findUnique({
+		where: { user_id: us_id}
+	})
+
+	const user = us?.name
+
 	const countries = await db.country.findMany({})
 
 	const regions = await db.region.findMany({})
@@ -95,5 +104,5 @@ export async function load({ params }) {
 		throw error(404, 'School not found')
 	}
 
-	return { event, school, cityname, countries, regions, inters, onduty, eventtype, cldate }
+	return { event, school, cityname, countries, regions, inters, onduty, eventtype, cldate, user }
 }

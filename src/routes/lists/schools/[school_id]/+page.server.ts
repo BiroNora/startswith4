@@ -9,6 +9,7 @@ let sc_id: number
 let school_name = ''
 let city_name = ''
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function load({ params }) {
 	sc_id = Number(params.school_id)
 

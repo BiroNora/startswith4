@@ -38,7 +38,7 @@
 			<li class="lb">Feljegyzés: {data.school.note}</li>
       <li class="lb">Startswidth kapcsolat:</li>
       <hgroup>
-				{#each data.user as u}
+				{#each data.school.User as u }
 					<ul class="ac">
 						<hgroup>
 							<li class="lb">

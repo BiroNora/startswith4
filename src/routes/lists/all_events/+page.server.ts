@@ -9,9 +9,7 @@ let extrDuty = ''
 
 export const load: PageServerLoad = async (event) => {
   const events = await db.event.findMany({
-    where: {
-      user_id: my_id,
-      },   // Todo! user_id comes from cookies
+       // Todo! user_id comes from cookies
     orderBy: { closing_date: 'desc' },
   })
 
