@@ -1,15 +1,14 @@
 import { error } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import { db } from '$lib/database'
-import { dutyMap3, my_id } from '../../stores/dataStore'
+import { dutyMap3 } from '../../stores/dataStore'
 
 const ev_sc_set = new Set<number>()
 
 let extrDuty = ''
 
 export const load: PageServerLoad = async (event) => {
-  const events = await db.event.findMany({
-       // Todo! user_id comes from cookies
+  const events = await db.event.findMany({// Todo! user_id comes from cookies
     orderBy: { closing_date: 'desc' },
   })
 

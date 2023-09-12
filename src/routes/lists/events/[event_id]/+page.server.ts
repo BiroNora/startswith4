@@ -1,4 +1,4 @@
-import { channelMap, dateSlugify, gradeMap, slugify, statusMap } from './../../../stores/dataStore';
+import { channelMap, gradeMap, my_id, statusMap } from './../../../stores/dataStore';
 import { error, fail, redirect } from '@sveltejs/kit'
 import { db } from '$lib/database'
 import { dutyMap3, eventMap } from '../../../stores/dataStore'
@@ -90,13 +90,11 @@ export async function load({ params }) {
 		}
 	}
 
-	const us_id = event?.user_id
+	const user_id = my_id
 
-	const us = await db.user.findUnique({
-		where: { user_id: us_id}
+	const user = await db.user.findUnique({
+		where: { user_id: user_id }
 	})
-
-	const user = us?.user_email
 
 	const countries = await db.country.findMany({})
 
@@ -161,32 +159,18 @@ const event: Action = async ({ request }) => {
   const closing_date = new Date(String(clos_date))
 	const email = String(data.get('email'))
 
-  const slugDate = dateSlugify(String(clos_date))
-  console.log('psqldate' + clos_date)
-  console.log('slugDate' + slugDate)
-  console.log('closing_date' + closing_date)
-
   if (event_name.length < 10) {
     console.log(event_name.length)
     return fail(400, { title: true })
   }
-  //const school_name = 'Eventus Üzleti, Művészeti Szakgimnázium, Technikum, Gimnázium, Szakképző Iskola, Alapfokú Művészeti Iskola és Kollégium'
-  //const city_name = 'Egerszalók'
-  const cn = slugify(String(cityname?.slice(0, 12)))
-  const sn = slugify(String(schoolname?.slice(0, 12)))
-  const se = slugify(event_name.slice(0, 12))
-  const slug = slugDate + '-' + cn + '-' + se + '-' + sn
-  console.log(slug)
 
-	const user = await db.user.findUnique({
+  const user = await db.user.findUnique({
 		where: {user_email: email}
 	})
 
 	if (!user) {
 		return fail(400, { user: true })
 	}
-
-	const user_id = user?.user_id
 
   await db.event.update({
 		where: {event_id: ev_id},
@@ -197,11 +181,54 @@ const event: Action = async ({ request }) => {
       event_type,
       estimated_student,
       note,
-			user_id,
     }
   })
   throw redirect(303, '../../lists/events')
 }
 
+const eventU: Action = async ({ request }) => {
+  const data = await request.formData()
+	const email = String(data.get('email'))
+	console.log(email)
 
-export const actions: Actions = { interested, event }
+	const user = await db.user.findUnique({
+		where: {user_email: email}
+	})
+
+	if (!user) {
+		return fail(400, { user: true })
+	}
+
+	const one = await db.event.findUnique({
+		where: {event_id: ev_id},
+		include: { User: true }
+	})
+
+	let already = false
+
+	one?.User.forEach(function(item) {
+		if (item.user_email == email) {
+			already = true
+		}
+	})
+
+	if (already) {
+		return fail(400, { already: true })
+	}
+
+	const us_id = user.user_id
+
+  await db.event.update({
+		where: {event_id: ev_id},
+    data: {
+			User: {
+				connect: {
+					user_id: us_id
+				}
+			}
+    }
+  })
+  throw redirect(303, '../../lists/events')
+}
+
+export const actions: Actions = { interested, event, eventU }

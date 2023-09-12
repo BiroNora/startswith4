@@ -24,7 +24,16 @@
 				Időpont: {formatDate(data.event.closing_date)}, {timeSlugify(data.event.closing_date)}
 			</li>
 			<li class="lb">Szervező: {data.event.on_duty}</li>
-			<li class="lb">Startswith kapcsolat: {data.user}</li>
+			<li class="ld">Startswith kapcsolat:</li>
+			<hgroup>
+				{#each data.event.User as u }
+					<ul class="ad">
+							<li class="lc">
+								Név: {u.name}
+							</li>
+					</ul>
+				{/each}
+			</hgroup>
 			<li class="lb">Esemény formája: {data.event.event_type}</li>
 			<li class="lb">Becsült résztvevők száma: {data.event.estimated_student}</li>
 			<li class="lb">Iskola:</li>
@@ -106,6 +115,15 @@
 		font-size: 22px;
 	}
 
+	.ad {
+		color: #83918f;
+		font-weight: 400;
+		line-height: normal;
+		padding-left: 5%;
+		text-indent: -6%;
+		font-size: 22px;
+	}
+
 	.la {
 		list-style-type: none;
 		padding-left: 5%;
@@ -120,6 +138,25 @@
 		padding-left: 5%;
 		text-indent: -6%;
 		line-height: 1.4;
+		font-size: 22px;
+	}
+
+	.lc {
+		list-style-position: inside;
+		list-style-type: circle;
+		padding-left: 5%;
+		text-indent: -6%;
+		line-height: normal;
+		font-size: 22px;
+	}
+
+	.ld {
+		list-style-position: inside;
+		list-style-type: circle;
+		padding-left: 5%;
+		text-indent: -6%;
+		line-height: 1.4;
+		padding-bottom: 1%;
 		font-size: 22px;
 	}
 

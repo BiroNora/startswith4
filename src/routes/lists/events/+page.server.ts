@@ -6,12 +6,12 @@ import { dutyMap3, my_id } from '../../stores/dataStore'
 let extrDuty = ''
 
 export const load: PageServerLoad = async (event) => {
-  const events = await db.event.findMany({
-    where: {
-      user_id: my_id,
-      },   // Todo! user_id comes from cookies
-    orderBy: { closing_date: 'desc' },
+  const user = await db.user.findUnique({
+    where: { user_id: my_id },
+    include: { Event: true }
   })
+
+  const events = user?.Event
 
   if (events) {
     for (const obj of events) {
