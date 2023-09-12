@@ -85,9 +85,8 @@ model Event {
   note               String?
   slug               String               @unique
   school_id          Int
-  user_id            String
   School             School               @relation(fields: [school_id], references: [school_id])
-  User               User                 @relation(fields: [user_id], references: [user_id])
+  User               User[]
   InterestedStudents InterestedStudents[]
 
   @@map("events")
