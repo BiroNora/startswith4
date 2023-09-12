@@ -20,7 +20,8 @@ export async function load({ params }) {
 	ev_id = Number(params.event_id)
 
 	const event = await db.event.findUnique({
-		where: { event_id: ev_id }
+		where: { event_id: ev_id },
+		include: { User: true }
 	})
 
 	onduty = String(event?.on_duty)
@@ -88,13 +89,7 @@ export async function load({ params }) {
 		}
 	}
 
-	const us_id = event?.user_id
-
-	const us = await db.user.findUnique({
-		where: { user_id: us_id}
-	})
-
-	const user = us?.name
+	const user = event?.User
 
 	const countries = await db.country.findMany({})
 

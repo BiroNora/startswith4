@@ -189,7 +189,6 @@ const event: Action = async ({ request }) => {
 const eventU: Action = async ({ request }) => {
   const data = await request.formData()
 	const email = String(data.get('email'))
-	console.log(email)
 
 	const user = await db.user.findUnique({
 		where: {user_email: email}

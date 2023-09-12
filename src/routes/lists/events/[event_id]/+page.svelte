@@ -60,7 +60,8 @@
 		</hgroup>
 		<br />
 		<h4 class="h41">Adatok</h4>
-		<a href="#section_event" class="ad"> &#9758; Esemény adatainak módosítása </a>
+		<a href="#section_event" class="ad"> &#9758; Esemény adatainak módosítása </a> &nbsp; &nbsp;
+		<a href="#section2_event" class="ad"> &#9758; Startswith kapcsolat hozzáadása </a>
 		<ul class="ab">
 			<li class="lb">
 				Időpont: {formatDate(data.event.closing_date)}, {timeSlugify(data.event.closing_date)}
@@ -243,13 +244,9 @@
 					required
 				/>
 			</div>
-			<div>
-				<label for="email">Email</label>
-				<input type="text" value={data.user} name="email" id="email" required />
-			</div>
 			<label for="message">Note</label>
 			<textarea id="message" value={data.event.note} name="message" rows="4" cols="50" />
-			<button class="btn" id="btnevent" type="submit">Register</button>
+			<button class="btn" id="btnevent" type="submit">Update</button>
 			<br />
 			{#if form?.user}
 				<p class="error">Please enter valide data.</p>
@@ -261,6 +258,40 @@
 				class="contrast outline cgb h44">Cancel &#10070; Jump to the Top</button
 			>
 		</form>
+	</div>
+
+	<!-- Event user update form -->
+
+	<div class="grid event2-to-position" id="section2_event">
+		<div class="rei">
+			<p>Event User Update</p>
+		</div>
+		<p class="uni">{data.event.event_name}</p>
+		<form action="?/eventU" method="post" use:enhance>
+			<div>
+			</div>
+			<div>
+				<label for="email">Email</label>
+				<input type="text" name="email" id="email" required />
+			</div>
+			{#if form?.user}
+				<p class="error">Please enter valide data.</p>
+			{/if}
+			{#if form?.already}
+				<p class="error">User already added.</p>
+			{/if}
+			<button class="btn" id="btnevent" type="submit">Add User</button>
+			<br />
+			<button
+				type="button"
+				on:click={scrollToConnect}
+				id="backToTop"
+				class="contrast outline cgb h44">Cancel &#10070; Jump to the Top</button
+			>
+		</form>
+	</div>
+	<div>
+		<a href="#top" class="flower grid event3-to-position">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 	</div>
 </div>
 
@@ -364,6 +395,15 @@
 		transform: translateY(260vh);
 	}
 
+	.event2-to-position {
+		transform: translateY(400vh);
+	}
+
+	.event3-to-position {
+		transform: translateY(430vh);
+		padding-bottom: 80px;
+	}
+
 	.flower {
 		font-size: 140%;
 		color: #a0a9a8;
@@ -385,6 +425,13 @@
 	.h44 {
 		color: #83918f;
 		border-color: #83918f;
+	}
+
+	.uni {
+		color: #444f4d;
+		font-weight: 500;
+		line-height: normal;
+		font-size: 24px;
 	}
 
 	.error {

@@ -1,6 +1,8 @@
-import { error } from '@sveltejs/kit'
+import { error, fail, redirect } from '@sveltejs/kit'
 import { db } from '$lib/database'
 import { eventMap, dutyMap3, schType, duType } from '../../../stores/dataStore.js'
+import type { Action, Actions } from './$types'
+
 
 let extrType = ''
 let extrDuty = ''
@@ -95,3 +97,49 @@ export async function load({ params }) {
 
 	return { school, resS, resD, contact, event, city, region, county, country, user }
 }
+
+const schoolU: Action = async ({ request }) => {
+  const data = await request.formData()
+	const email = String(data.get('email'))
+
+	const user = await db.user.findUnique({
+		where: {user_email: email}
+	})
+
+	if (!user) {
+		return fail(400, { user: true })
+	}
+
+	const one = await db.school.findUnique({
+		where: {school_id: sc_id},
+		include: { User: true }
+	})
+
+	let already = false
+
+	one?.User.forEach(function(item) {
+		if (item.user_email == email) {
+			already = true
+		}
+	})
+
+	if (already) {
+		return fail(400, { already: true })
+	}
+
+	const us_id = user.user_id
+
+	await db.school.update({
+		where: {school_id: sc_id},
+    data: {
+			User: {
+				connect: {
+					user_id: us_id
+				}
+			}
+    }
+  })
+  throw redirect(303, '../../lists/all_schools')
+}
+
+export const actions: Actions = { schoolU }
