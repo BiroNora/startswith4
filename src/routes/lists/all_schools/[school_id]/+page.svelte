@@ -60,17 +60,17 @@
 					</ul>
 				{/each}
 			</hgroup>
-			<li class="lb">Kapcsolat:</li>
+			<li class="ld">Kapcsolat:</li>
 			<hgroup>
 				{#each data.contact as con}
-					<ul class="ad">
+					<ul class="ac">
 						<hgroup>
 							<li class="lc">
 								Név: {con.contact_name}
 							</li>
-							<li class="lb">Telefon: {con.contact_phone}</li>
-							<li class="lb">Email: {con.contact_email}</li>
-							<li class="lb">Feljegyzés: {con.contact_note}</li>
+							<li class="lc">Telefon: {con.contact_phone}</li>
+							<li class="lc">Email: {con.contact_email}</li>
+							<li class="lc">Feljegyzés: {con.contact_note}</li>
 						</hgroup>
 					</ul>
 				{/each}

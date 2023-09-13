@@ -3,7 +3,7 @@
 	import type { ActionData } from './$types'
 	import { dutyMap3, eventMap, formatDate } from '../../../stores/dataStore.js'
 
-	let pageName = 'School Details'
+	let pageName = 'My School Details'
 
 	let yesA = false
 	let yesB = false

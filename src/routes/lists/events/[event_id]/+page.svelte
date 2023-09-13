@@ -11,7 +11,7 @@
 	} from '../../../stores/dataStore.js'
 	import type { ActionData } from './$types'
 
-	let pageName = 'Event Details'
+	let pageName = 'My Event Details'
 	let isInput = true
 
 	function isWork() {
