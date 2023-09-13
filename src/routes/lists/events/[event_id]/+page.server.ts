@@ -195,6 +195,50 @@ const eventU: Action = async ({ request }) => {
 	})
 
 	if (!user) {
+		return fail(400, { userevent: true })
+	}
+
+	const one = await db.event.findUnique({
+		where: {event_id: ev_id},
+		include: { User: true }
+	})
+
+	let alreadyevent = false
+
+	one?.User.forEach(function(item) {
+		if (item.user_email == email) {
+			alreadyevent = true
+		}
+	})
+
+	if (alreadyevent) {
+		return fail(400, { alreadyevent: true })
+	}
+
+	const us_id = user.user_id
+
+  const eventresult = await db.event.update({
+		where: {event_id: ev_id},
+    data: {
+			User: {
+				connect: {
+					user_id: us_id
+				}
+			}
+    }
+  })
+  return { eventresult }
+}
+
+const eventUD: Action = async ({ request }) => {
+  const data = await request.formData()
+	const email = String(data.get('email'))
+
+	const user = await db.user.findUnique({
+		where: {user_email: email}
+	})
+
+	if (!user) {
 		return fail(400, { user: true })
 	}
 
@@ -211,23 +255,21 @@ const eventU: Action = async ({ request }) => {
 		}
 	})
 
-	if (already) {
+	if (!already) {
 		return fail(400, { already: true })
 	}
 
 	const us_id = user.user_id
 
-  await db.event.update({
-		where: {event_id: ev_id},
-    data: {
-			User: {
-				connect: {
-					user_id: us_id
-				}
+  const result = await db.event.update({
+		where: { event_id: ev_id },
+			data: {
+				User: {
+				 disconnect: { user_id: us_id	}
+    		}
 			}
-    }
   })
-  throw redirect(303, '../../lists/events')
+	return { result }
 }
 
-export const actions: Actions = { interested, event, eventU }
+export const actions: Actions = { interested, event, eventU, eventUD }

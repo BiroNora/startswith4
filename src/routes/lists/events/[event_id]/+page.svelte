@@ -61,7 +61,8 @@
 		<br />
 		<h4 class="h41">Adatok</h4>
 		<a href="#section_event" class="ad"> &#9758; Esemény adatainak módosítása </a> &nbsp; &nbsp;
-		<a href="#section2_event" class="ad"> &#9758; Startswith kapcsolat hozzáadása </a>
+		<a href="#section2_event" class="ad"> &#9758; Startswith kapcsolat hozzáadása </a> &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+		<a href="#section3_event" class="ad"> <strong class="error1">&#10008;</strong>&nbsp;  Startswith kapcsolat törlése </a>
 		<ul class="ab">
 			<li class="lb">
 				Időpont: {formatDate(data.event.closing_date)}, {timeSlugify(data.event.closing_date)}
@@ -264,7 +265,7 @@
 
 	<div class="grid event2-to-position" id="section2_event">
 		<div class="rei">
-			<p>Event User Update</p>
+			<p>Event Startswith User Update</p>
 		</div>
 		<p class="uni">{data.event.event_name}</p>
 		<form action="?/eventU" method="post" use:enhance>
@@ -274,13 +275,44 @@
 				<label for="email">Email</label>
 				<input type="text" name="email" id="email" required />
 			</div>
-			{#if form?.user}
+			{#if form?.userevent || form?.alreadyevent}
 				<p class="error">Please enter valide data.</p>
 			{/if}
-			{#if form?.already}
-				<p class="error">User already added.</p>
+			{#if form?.eventresult}
+				<p class="success">Startswith user added.</p>
 			{/if}
-			<button class="btn" id="btnevent" type="submit">Add User</button>
+			<button class="btn" id="btnevent" type="submit">Add</button>
+			<br />
+			<button
+				type="button"
+				on:click={scrollToConnect}
+				id="backToTop"
+				class="contrast outline cgb h44">Cancel &#10070; Jump to the Top</button
+			>
+		</form>
+	</div>
+
+	<!-- User delete form -->
+
+	<div class="grid event3-to-position" id="section3_event">
+		<div class="rei">
+			<p>Event Startswith User Remove</p>
+		</div>
+		<p class="uni">{data.event.event_name}</p>
+		<form action="?/eventUD" method="post" use:enhance>
+			<div>
+			</div>
+			<div>
+				<label for="email">Email</label>
+				<input type="text" name="email" id="email" required />
+			</div>
+			{#if form?.user || form?.already}
+				<p class="error">Please enter valide data.</p>
+			{/if}
+			{#if form?.result}
+				<p class="success">Startswith user removed.</p>
+			{/if}
+			<button class="btn" id="btnevent" type="submit">Remove</button>
 			<br />
 			<button
 				type="button"
@@ -291,7 +323,7 @@
 		</form>
 	</div>
 	<div>
-		<a href="#top" class="flower grid event3-to-position">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
+		<a href="#top" class="flower grid event4-to-position">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 	</div>
 </div>
 
@@ -400,7 +432,11 @@
 	}
 
 	.event3-to-position {
-		transform: translateY(430vh);
+		transform: translateY(500vh);
+	}
+
+	.event4-to-position {
+		transform: translateY(530vh);
 		padding-bottom: 80px;
 	}
 
@@ -436,6 +472,23 @@
 
 	.error {
     color: tomato;
+    padding: 2%;
+    text-align: center;
+    font-style: italic;
+    line-height: 95%;
+    font-weight: 500;
+  }
+
+	.error1 {
+    color: tomato;
+    text-align: center;
+    font-style: italic;
+    line-height: 95%;
+    font-weight: 500;
+  }
+
+	.success {
+    color: #32bea6;
     padding: 2%;
     text-align: center;
     font-style: italic;

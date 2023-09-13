@@ -107,6 +107,50 @@ const schoolU: Action = async ({ request }) => {
 	})
 
 	if (!user) {
+		return fail(400, { usercontact: true })
+	}
+
+	const one = await db.school.findUnique({
+		where: {school_id: sc_id},
+		include: { User: true }
+	})
+
+	let alreadycontact = false
+
+	one?.User.forEach(function(item) {
+		if (item.user_email == email) {
+			alreadycontact = true
+		}
+	})
+
+	if (alreadycontact) {
+		return fail(400, { alreadycontact: true })
+	}
+
+	const us_id = user.user_id
+
+	const contactresult = await db.school.update({
+		where: {school_id: sc_id},
+    data: {
+			User: {
+				connect: {
+					user_id: us_id
+				}
+			}
+    }
+  })
+  return { contactresult }
+}
+
+const schoolUD: Action = async ({ request }) => {
+  const data = await request.formData()
+	const email = String(data.get('email'))
+
+	const user = await db.user.findUnique({
+		where: {user_email: email}
+	})
+
+	if (!user) {
 		return fail(400, { user: true })
 	}
 
@@ -123,23 +167,21 @@ const schoolU: Action = async ({ request }) => {
 		}
 	})
 
-	if (already) {
+	if (!already) {
 		return fail(400, { already: true })
 	}
 
 	const us_id = user.user_id
 
-	await db.school.update({
+	const result = await db.school.update({
 		where: {school_id: sc_id},
     data: {
 			User: {
-				connect: {
-					user_id: us_id
-				}
+				disconnect: {	user_id: us_id }
 			}
     }
   })
-  throw redirect(303, '../../lists/all_schools')
+  return { result }
 }
 
-export const actions: Actions = { schoolU }
+export const actions: Actions = { schoolU, schoolUD }
