@@ -17,6 +17,9 @@
       <a href="/register/location">Location R</a>
     </li>
     <li>
+      <a href="/register/school_update">School_update</a>
+    </li>
+    <li>
       <a href="/lists/all_schools">All School List</a>
     </li>
     <li>

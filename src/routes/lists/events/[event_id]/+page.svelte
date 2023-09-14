@@ -45,6 +45,11 @@
 
 		return formattedTimestamp
 	}
+
+
+	function toggleModal(event: Event | undefined) {
+		throw new Error('Function not implemented.')
+	}
 </script>
 
 <svelte:head>
@@ -52,17 +57,17 @@
 </svelte:head>
 
 <div id="top" class="main">
-	<h1>Event Details</h1>
+		<h1>Event Details</h1>
 	<hgroup>
 		<hgroup class="title">
-			<h3>{data.event.event_name}</h3>
+			<h3>{data.event.event_name}&nbsp;&nbsp;&nbsp;&nbsp;<a href="#section4_event" role="button" class="secondary outline ag h44" > <strong class="error1">&#10008;</strong> Esemény törlése* &nbsp; </a></h3>
 			<a href="#section_interested" class="aa"> &#9758; Érdeklődő diákok hozzáadása </a>
 		</hgroup>
 		<br />
-		<h4 class="h41">Adatok</h4>
-		<a href="#section_event" class="ad"> &#9758; Esemény adatainak módosítása </a> &nbsp; &nbsp;
-		<a href="#section2_event" class="ad"> &#9758; Startswith kapcsolat hozzáadása </a> &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-		<a href="#section3_event" class="ad"> <strong class="error1">&#10008;</strong>&nbsp;  Startswith kapcsolat törlése </a>
+		<h4 class="h41"> Adatok </h4>
+		<a href="#section_event" class="ad"> &#9758; Esemény adatainak módosítása </a>
+		<a href="#section2_event" class="ae"> &#9758; Startswith kapcsolat hozzáadása </a>
+		<a href="#section3_event" class="af"> <strong class="error1">&#10008;</strong>&nbsp;  Startswith kapcsolat törlése </a>
 		<ul class="ab">
 			<li class="lb">
 				Időpont: {formatDate(data.event.closing_date)}, {timeSlugify(data.event.closing_date)}
@@ -325,6 +330,9 @@
 	<div>
 		<a href="#top" class="flower grid event4-to-position">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 	</div>
+
+	<!-- Modal -->
+
 </div>
 
 <style>
@@ -364,6 +372,29 @@
 		font-weight: 400;
 		line-height: normal;
 		font-size: 22px;
+	}
+
+	.ae {
+		color: #83918f;
+		padding-left: 3%;
+		font-weight: 400;
+		line-height: normal;
+		font-size: 22px;
+	}
+
+	.af {
+		color: #83918f;
+		padding-left: 8%;
+		font-weight: 400;
+		line-height: normal;
+		font-size: 22px;
+	}
+
+	.ag {
+		color: #83918f;
+		font-weight: 400;
+		line-height: normal;
+		font-size: 18px;
 	}
 
 	.la {
@@ -417,6 +448,11 @@
 	.btn {
 		margin-bottom: 0;
 		background-color: #32bea6;
+	}
+
+	.h44 {
+		color: #83918f;
+		border-color: #83918f;
 	}
 
 	.interested-to-position {

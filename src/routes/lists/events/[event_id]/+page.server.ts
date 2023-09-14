@@ -11,7 +11,6 @@ let extrGrade = ''
 let extrChannel = ''
 let extrStatus = ''
 let cityname = ''
-let schoolname = ''
 let sc_id: number
 let onduty = ''
 let eventtype = ''
@@ -50,7 +49,6 @@ export async function load({ params }) {
 	const school = await db.school.findUnique({
 		where: { school_id: sc_id },
 	})
-	schoolname = String(school?.name)
 
 	const cityid = school?.city_id
 
