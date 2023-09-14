@@ -20,75 +20,79 @@
 </svelte:head>
 
 <div id="top" class="main">
-	<h1>School Details</h1>
-	<hgroup>
-		{#if !data.school.active || !data.school.coop}
-			<h3>{data.school.name} {' ⚠️ '}</h3>
-		{:else if data.school.active}
-			<h3>{data.school.name}</h3>
-		{/if}
+	<div id="base">
+		<h1>School Details</h1>
 		<hgroup>
-			<h6>{data.school.zip_code} {data.city?.city_name} {data.school.address}</h6>
-			<p>
-				{data.country?.country_name} / {data.region?.region_name} régió / {data.county?.county_name}
-				megye
-			</p>
-		</hgroup>
-		<br />
-		<h4 class="h41">Adatok</h4>
-		<a href="#section_school" class="ad"> &#9758; Startswith kapcsolat hozzáadása </a> &nbsp; &nbsp;
-		&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
-		<a href="#section3_event" class="ad">
-			<strong class="error1">&#10008;</strong>&nbsp; Startswith kapcsolat törlése
-		</a>
-		<ul class="ab">
-			<li class="lb">OM szám: {data.school.om_id}</li>
-			<li class="lb">Igazgató: {data.school.dir_name}</li>
-			<li class="lb">Iskola telefon: {data.school.dir_phone}</li>
-			<li class="lb">Iskola email: {data.school.school_email}</li>
-			<li class="lb">Website: {data.school.website}</li>
-			<li class="lb">Iskola típusa: {data.resS}</li>
-			<li class="lb">Felelős: {data.resD}</li>
-			<li class="lb">Feljegyzés: {data.school.note}</li>
-			<li class="ld">Startswith kapcsolat:</li>
+			{#if !data.school.active || !data.school.coop}
+				<h3>{data.school.name} {' ⚠️ '}</h3>
+			{:else if data.school.active}
+				<h3>{data.school.name}</h3>
+			{/if}
 			<hgroup>
-				{#each data.school.User as u}
-					<ul class="ac">
-						<li class="lc">
-							Név: {u.name}
-						</li>
-					</ul>
-				{/each}
+				<h6>{data.school.zip_code} {data.city?.city_name} {data.school.address}</h6>
+				<p>
+					{data.country?.country_name} / {data.region?.region_name} régió / {data.county?.county_name}
+					megye
+				</p>
 			</hgroup>
-			<li class="ld">Kapcsolat:</li>
-			<hgroup>
-				{#each data.contact as con}
-					<ul class="ac">
-						<hgroup>
+			<br />
+			<h4 class="h41">Adatok</h4>
+			<a href="#section_school" class="ad" > &#9758; Startswith kapcsolat hozzáadása </a> &nbsp; &nbsp;
+			&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;
+			<a href="#section3_event" class="ad">
+				<strong class="error1">&#10008;</strong>&nbsp; Startswith kapcsolat törlése
+			</a>
+			<ul class="ab">
+				<li class="lb">OM szám: {data.school.om_id}</li>
+				<li class="lb">Igazgató: {data.school.dir_name}</li>
+				<li class="lb">Iskola telefon: {data.school.dir_phone}</li>
+				<li class="lb">Iskola email: {data.school.school_email}</li>
+				<li class="lb">Website: {data.school.website}</li>
+				<li class="lb">Iskola típusa: {data.resS}</li>
+				<li class="lb">Felelős: {data.resD}</li>
+				<li class="lb">Feljegyzés: {data.school.note}</li>
+				<li class="ld">Startswith kapcsolat:</li>
+				<hgroup>
+					{#each data.school.User as u}
+						<ul class="ac">
 							<li class="lc">
-								Név: {con.contact_name}
+								Név: {u.name}
 							</li>
-							<li class="lc">Telefon: {con.contact_phone}</li>
-							<li class="lc">Email: {con.contact_email}</li>
-							<li class="lc">Feljegyzés: {con.contact_note}</li>
-						</hgroup>
-					</ul>
+						</ul>
+					{/each}
+				</hgroup>
+				<li class="ld">Kapcsolat:</li>
+				<hgroup>
+					{#each data.contact as con}
+						<ul class="ac">
+							<hgroup>
+								<li class="lc">
+									Név: {con.contact_name}
+								</li>
+								<li class="lc">Telefon: {con.contact_phone}</li>
+								<li class="lc">Email: {con.contact_email}</li>
+								<li class="lc">Feljegyzés: {con.contact_note}</li>
+							</hgroup>
+						</ul>
+					{/each}
+				</hgroup>
+			</ul>
+			<h4 class="h42">Események</h4>
+			<br />
+			<ul class="aa">
+				{#each data.event as e}
+					<li class="la">
+						<a href="../../lists/all_events/{e.event_id}" class="aa">
+							{formatDate(e.closing_date)} &#9753 {e.event_name} &#10086 {e.on_duty} &#10087 {e.event_type}
+						</a>
+					</li>
 				{/each}
-			</hgroup>
-		</ul>
-		<h4 class="h42">Események</h4>
-		<br />
-		<ul class="aa">
-			{#each data.event as e}
-				<li class="la">
-					<a href="../../lists/all_events/{e.event_id}" class="aa">
-						{formatDate(e.closing_date)} &#9753 {e.event_name} &#10086 {e.on_duty} &#10087 {e.event_type}
-					</a>
-				</li>
-			{/each}
-		</ul>
-		<br />
-	</hgroup>
+			</ul>
+			<br />
+		</hgroup>
+		<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
+	</div>
+
 
 	<!-- School user update form -->
 
@@ -262,15 +266,15 @@
 	}
 
 	.event2-to-position {
-		transform: translateY(140vh);
+		transform: translateY(420vh);
 	}
 
 	.event3-to-position {
-		transform: translateY(500vh);
+		transform: translateY(620vh);
 	}
 
 	.event4-to-position {
-		transform: translateY(530vh);
+		transform: translateY(650vh);
 		padding-bottom: 80px;
 	}
 

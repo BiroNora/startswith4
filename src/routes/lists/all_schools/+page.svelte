@@ -36,6 +36,8 @@
       {/each}
     {/each}
   </ul>
+  <br>
+  <a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 </div>
 
 <style>
@@ -61,6 +63,18 @@
     text-indent: -6%;
     line-height: 2;
   }
+
+  .flower {
+		font-size: 140%;
+		color: #a0a9a8;
+    padding-bottom: 3%;
+	}
+
+	.flower:hover {
+		font-size: 140%;
+		color: #32bea6;
+    padding-bottom: 3%;
+	}
 
   strong {
   font-weight: 500;

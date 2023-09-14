@@ -9,20 +9,22 @@
 </svelte:head>
 
 <div class="main">
-<h1>My Contact List</h1>
-<ul>
-  {#each contacts as { contact_id, contact_name, contact_phone, contact_email, active }}
-    {#if !active}
-      <li class="li">
-        <a href="../lists/contacts/{contact_id}" class="aa">{ contact_name } {' ☎️ '} { contact_phone } {' 📝 '} { contact_email } {' ⚠️ '} <strong>NOT ACTIVE</strong></a>
-      </li>
-    {:else if active}
-      <li class="li">
-        <a href="../lists/contacts/{contact_id}" class="aa">{ contact_name } {' ☎️ '} { contact_phone } {' 📝 '} { contact_email } </a>
-      </li>
-    {/if}
-  {/each}
-</ul>
+  <h1>My Contact List</h1>
+  <ul>
+    {#each contacts as { contact_id, contact_name, contact_phone, contact_email, active }}
+      {#if !active}
+        <li class="li">
+          <a href="../lists/contacts/{contact_id}" class="aa">{ contact_name } {' ☎️ '} { contact_phone } {' 📝 '} { contact_email } {' ⚠️ '} <strong>NOT ACTIVE</strong></a>
+        </li>
+      {:else if active}
+        <li class="li">
+          <a href="../lists/contacts/{contact_id}" class="aa">{ contact_name } {' ☎️ '} { contact_phone } {' 📝 '} { contact_email } </a>
+        </li>
+      {/if}
+    {/each}
+  </ul>
+  <br>
+  <a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 </div>
 
 <style>
@@ -52,5 +54,17 @@
 strong {
   font-weight: 500;
   color: tomato;
+}
+
+.flower {
+  font-size: 140%;
+  color: #a0a9a8;
+  padding-bottom: 3%;
+}
+
+.flower:hover {
+  font-size: 140%;
+  color: #32bea6;
+  padding-bottom: 3%;
 }
 </style>

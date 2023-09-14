@@ -110,10 +110,10 @@
 					</ul>
 				{/each}
 			</hgroup>
-			<a href="#top" class="flower"
+		</ul>
+		<a href="#top" class="flower"
 				>&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a
 			>
-		</ul>
 	</hgroup>
 
 	<!-- Interested students adding form -->
@@ -420,23 +420,23 @@
 	}
 
 	.interested-to-position {
-		transform: translateY(120vh); /* Move the element down one viewport height (vh) */
+		transform: translateY(420vh); /* Move the element down one viewport height (vh) */
 	}
 
 	.event-to-position {
-		transform: translateY(260vh);
+		transform: translateY(620vh);
 	}
 
 	.event2-to-position {
-		transform: translateY(400vh);
+		transform: translateY(820vh);
 	}
 
 	.event3-to-position {
-		transform: translateY(500vh);
+		transform: translateY(1020vh);
 	}
 
 	.event4-to-position {
-		transform: translateY(530vh);
+		transform: translateY(1050vh);
 		padding-bottom: 80px;
 	}
 

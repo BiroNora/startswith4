@@ -131,66 +131,69 @@
 </svelte:head>
 
 <div id="top" class="main">
-	<h1>School Details</h1>
-	<hgroup>
-		{#if !data.school.active || !data.school.coop}
-			<h3>{data.school.name} {' ⚠️ '}</h3>
-		{:else if data.school.active}
-			<h3>{data.school.name}</h3>
-		{/if}
+	<div id="base">
+		<h1>School Details</h1>
 		<hgroup>
-			<h6>{data.school.zip_code} {data.city?.city_name} {data.school.address}</h6>
-			<p>
-				{data.country?.country_name} / {data.region?.region_name} régió / {data.county?.county_name}
-				megye
-			</p>
-			<a href="#section_event" class="aa"> &#9758; Esemény hozzáadása </a> &nbsp; &nbsp;
-			<a href="#section_contact" class="aa"> &#9758; Kapcsolat hozzáadása </a> &nbsp; &nbsp;
+			{#if !data.school.active || !data.school.coop}
+				<h3>{data.school.name} {' ⚠️ '}</h3>
+			{:else if data.school.active}
+				<h3>{data.school.name}</h3>
+			{/if}
+			<hgroup>
+				<h6>{data.school.zip_code} {data.city?.city_name} {data.school.address}</h6>
+				<p>
+					{data.country?.country_name} / {data.region?.region_name} régió / {data.county?.county_name}
+					megye
+				</p>
+				<a href="#section_event" class="aa"> &#9758; Esemény hozzáadása </a> &nbsp; &nbsp;
+				<a href="#section_contact" class="aa"> &#9758; Kapcsolat hozzáadása </a> &nbsp; &nbsp;
+			</hgroup>
+			<br />
+			<h4 class="h41">Adatok</h4>
+			<a href="#section_school" class="ad"> &#9758; Iskola adatainak módosítása </a>
+			<ul class="ab">
+				<li class="lb">OM szám: {data.school.om_id}</li>
+				<li class="lb">Igazgató: {data.school.dir_name}</li>
+				<li class="lb">Iskola telefon: {data.school.dir_phone}</li>
+				<li class="lb">Iskola email: {data.school.school_email}</li>
+				<li class="lb">Website: {data.school.website}</li>
+				<li class="lb">Iskola típusa: {data.resS}</li>
+				<li class="lb">Felelős: {data.resD}</li>
+				<li class="lb">Feljegyzés: {data.school.note}</li>
+				<li class="lb">Kapcsolat:</li>
+				<hgroup>
+					{#each data.contact as con}
+						<ul class="ac">
+							<hgroup>
+								<li class="lb">
+									<a href="../../lists/contacts/{con.contact_id}" class="aa"
+										>Név: {con.contact_name}
+									</a>
+								</li>
+								<li class="lb">Telefon: {con.contact_phone}</li>
+								<li class="lb">Email: {con.contact_email}</li>
+								<li class="lb">Feljegyzés: {con.contact_note}</li>
+							</hgroup>
+						</ul>
+					{/each}
+				</hgroup>
+			</ul>
+			<h4 class="h42">Események</h4>
+			<br />
+			<ul class="aa">
+				{#each data.event as e}
+					<li class="la">
+						<a href="../../lists/events/{e.event_id}" class="aa">
+							{formatDate(e.closing_date)} &#9753 {e.event_name} &#10086 {e.on_duty} &#10087 {e.event_type}
+						</a>
+					</li>
+				{/each}
+			</ul>
 		</hgroup>
 		<br />
-		<h4 class="h41">Adatok</h4>
-		<a href="#section_school" class="ad"> &#9758; Iskola adatainak módosítása </a>
-		<ul class="ab">
-			<li class="lb">OM szám: {data.school.om_id}</li>
-			<li class="lb">Igazgató: {data.school.dir_name}</li>
-			<li class="lb">Iskola telefon: {data.school.dir_phone}</li>
-			<li class="lb">Iskola email: {data.school.school_email}</li>
-			<li class="lb">Website: {data.school.website}</li>
-			<li class="lb">Iskola típusa: {data.resS}</li>
-			<li class="lb">Felelős: {data.resD}</li>
-			<li class="lb">Feljegyzés: {data.school.note}</li>
-			<li class="lb">Kapcsolat:</li>
-			<hgroup>
-				{#each data.contact as con}
-					<ul class="ac">
-						<hgroup>
-							<li class="lb">
-								<a href="../../lists/contacts/{con.contact_id}" class="aa"
-									>Név: {con.contact_name}
-								</a>
-							</li>
-							<li class="lb">Telefon: {con.contact_phone}</li>
-							<li class="lb">Email: {con.contact_email}</li>
-							<li class="lb">Feljegyzés: {con.contact_note}</li>
-						</hgroup>
-					</ul>
-				{/each}
-			</hgroup>
-		</ul>
-		<h4 class="h42">Események</h4>
-		<br />
-		<ul class="aa">
-			{#each data.event as e}
-				<li class="la">
-					<a href="../../lists/events/{e.event_id}" class="aa">
-						{formatDate(e.closing_date)} &#9753 {e.event_name} &#10086 {e.on_duty} &#10087 {e.event_type}
-					</a>
-				</li>
-			{/each}
-		</ul>
-	</hgroup>
-	<br />
-	<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
+		<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
+	</div>
+
 
 	<!-- Event form -->
 
@@ -595,15 +598,15 @@
 	}
 
 	.element-to-position {
-		transform: translateY(120vh); /* Move the element down one viewport height (vh) */
+		transform: translateY(420vh); /* Move the element down one viewport height (vh) */
 	}
 
 	.element-to-even-position {
-		transform: translateY(260vh); /* Move the element down one viewport height (vh) */
+		transform: translateY(620vh); /* Move the element down one viewport height (vh) */
 	}
 
 	.school-to-position {
-		transform: translateY(420vh);
+		transform: translateY(820vh);
 	}
 
 	.flower {

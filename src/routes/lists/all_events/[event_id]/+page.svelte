@@ -76,11 +76,11 @@
 					</ul>
 				{/each}
 			</hgroup>
-			<a href="#top" class="flower"
-				>&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a
-			>
 		</ul>
 	</hgroup>
+	<a href="#top" class="flower"
+		>&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a
+	>
 </div>
 
 <style>

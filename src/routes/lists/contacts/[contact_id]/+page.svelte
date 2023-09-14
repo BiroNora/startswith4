@@ -22,41 +22,44 @@
 </svelte:head>
 
 <div class="main">
-	<h1>Contact Details</h1>
-	<hgroup>
-		{#if data.contact.active}
-			<h3>{data.contact.contact_name}</h3>
-		{:else if !data.contact.active}
-			<h3>{data.contact.contact_name} {' ⚠️ '}</h3>
-		{/if}
-		<br>
-		<h4 class="h41">Adatok</h4>
-		<a href="#section_contact" class="ad"> &#9758; Kapcsolattartó adatainak módosítása </a>
-		<ul class="ab">
-			<li class="lb">Név: {data.contact.contact_name}</li>
-			<li class="lb">Telefon: {data.contact.contact_phone}</li>
-			<li class="lb">Email: {data.contact.contact_email}</li>
-			<li class="lb">Feljegyzés: {data.contact.contact_note}</li>
-			<li class="lb">Iskola:</li>
+	<div id="base">
+		<h1>Contact Details</h1>
 			<hgroup>
-				{#each data.schools as sch}
-					<ul class="ac">
-						<hgroup>
-							<li class="ld">
-								<a href="../../lists/schools/{sch.school_id}" class="aa">
-									Név: {sch.name}
-								</a>
-							</li>
-							<li class="ld">Telefon: {sch.dir_phone}</li>
-							<li class="ld">Email: {sch.school_email}</li>
-							<li class="ld">Feljegyzés: {sch.note}</li>
-						</hgroup>
-					</ul>
-				{/each}
+				{#if data.contact.active}
+					<h3>{data.contact.contact_name}</h3>
+				{:else if !data.contact.active}
+					<h3>{data.contact.contact_name} {' ⚠️ '}</h3>
+				{/if}
+				<br>
+				<h4 class="h41">Adatok</h4>
+				<a href="#section_contact" class="ad"> &#9758; Kapcsolattartó adatainak módosítása </a>
+				<ul class="ab">
+					<li class="lb">Név: {data.contact.contact_name}</li>
+					<li class="lb">Telefon: {data.contact.contact_phone}</li>
+					<li class="lb">Email: {data.contact.contact_email}</li>
+					<li class="lb">Feljegyzés: {data.contact.contact_note}</li>
+					<li class="lb">Iskola:</li>
+					<hgroup>
+						{#each data.schools as sch}
+							<ul class="ac">
+								<hgroup>
+									<li class="ld">
+										<a href="../../lists/schools/{sch.school_id}" class="aa">
+											Név: {sch.name}
+										</a>
+									</li>
+									<li class="ld">Telefon: {sch.dir_phone}</li>
+									<li class="ld">Email: {sch.school_email}</li>
+									<li class="ld">Feljegyzés: {sch.note}</li>
+								</hgroup>
+							</ul>
+						{/each}
+					</hgroup>
+				</ul>
+				<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 			</hgroup>
-		</ul>
-		<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
-	</hgroup>
+	</div>
+
 
 	<!-- Contact update form -->
 
@@ -190,7 +193,7 @@
 	}
 
 	.element-to-position {
-		transform: translateY(120vh); /* Move the element down one viewport height (vh) */
+		transform: translateY(420vh); /* Move the element down one viewport height (vh) */
 	}
 
 	.flower {

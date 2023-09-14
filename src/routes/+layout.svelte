@@ -17,10 +17,10 @@
       <a href="/register/location">Location R</a>
     </li>
     <li>
-      <a href="/lists/all_schools">School List</a>
+      <a href="/lists/all_schools">All School List</a>
     </li>
     <li>
-      <a href="/lists/all_events">Event List</a>
+      <a href="/lists/all_events">All Event List</a>
     </li>
     <li>
       <a href="/lists/schools">My School List</a>
