@@ -16,7 +16,7 @@
       estimated_student: 70,
       note: 'Nincs note',
       slug: "2023-12-06-budapest-ix-mikulas-part-9-keruleti-",
-			user_id: "30ae1ec1-7fea-43fc-8b76-8895b1ccf433",
+			user_id: my_id,
 			school_id:  1,
 	}
 
@@ -42,85 +42,17 @@
 
 <div id="top" class="main">
 	<h1>SCHOOL UPDATE</h1>
-	<hgroup>
-		<h3>{data.school.name}</h3>
-		<hgroup>
-			<h6>{data.school.zip_code} {data.city?.city_name} {data.school.address}</h6>
-			<p>{data.country?.country_name} / {data.region?.region_name} régió / {data.county?.county_name} megye </p>
-			<a href="#section_school" class="aa"> &#9758; SCHOOL UPDATE </a> &nbsp; &nbsp;
-			<a href="#section_event" class="aa"> &#9758; EVENT UPDATE </a> &nbsp; &nbsp;
-			<a href="#section_contact" class="aa"> &#9758; CONTACT UPDATE </a>
-		</hgroup>
-		<br />
-		<h4 class="h41">Adatok</h4>
-		<ul class="ab">
-			<li class="lb">OM szám: {data.school.om_id}</li>
-			<li class="lb">Igazgató: {data.school.dir_name}</li>
-			<li class="lb">Iskola telefon: {data.school.dir_phone}</li>
-			<li class="lb">Iskola email: {data.school.school_email}</li>
-			<li class="lb">Website: {data.school.website}</li>
-			<li class="lb">Iskola típusa: {data.resS}</li>
-			<li class="lb">Felelős: {data.resD}</li>
-			<li class="lb">Feljegyzés: {data.school.note}</li>
-			<li class="lb">Kapcsolat:</li>
-			<hgroup>
-				{#each data.contact as con}
-					<ul class="ac">
-						<hgroup>
-							<li class="lb">
-								<a href="../../lists/contacts/{con.contact_id}" class="aa"
-									>Név: {con.contact_name}
-								</a>
-							</li>
-							<li class="lb">Telefon: {con.contact_phone}</li>
-							<li class="lb">Email: {con.contact_email}</li>
-							<li class="lb">Feljegyzés: {con.contact_note}</li>
-						</hgroup>
-					</ul>
-				{/each}
-			</hgroup>
-		</ul>
-		<h4 class="h42">Események</h4>
-    <br>
-		<ul class="aa">
-			{#each data.event as e}
-				<li class="la">
-          <a href="../../lists/events/{e.event_id}" class="aa" >
-						{formatDate(e.closing_date)} &#9753 {e.event_name} &#10086 {e.on_duty} &#10087 {e.event_type}
-					</a>
-				</li>
-			{/each}
-		</ul>
+	<hgroup class="title">
+		<h3>{myEvent.name} &nbsp;&nbsp;&nbsp;&nbsp;<a href="#section4_event" role="button" class="secondary outline ag h44" > <strong class="error1">&#10008;</strong> Esemény törlése* &nbsp; </a></h3>
+		<a href="#section_interested" class="aa"> &#9758; Érdeklődő diákok hozzáadása </a>
 	</hgroup>
+
 	<br>
 	<br>
 	<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 
 
-	<!-- School update form -->
 
-	<div class="grid" id="section_school">
-		<div class="rei">
-			<p>School Update</p>
-		</div>
-		<br>
-		<form action="?/school" method="post" use:enhance>
-			<div>
-				<label for="name">School Name</label>
-				<input type="text" value="{data.school.name}" name="name" id="name" required />
-			</div>
-			<div>
-				<label for="user
-				">User email</label>
-				<input type="text" name="user
-				" id="user
-				" required />
-			</div>
-
-			<button class="btn" id="btn" type="submit">Update</button>
-			<br>
-			<button type="button" on:click={scrollToConnect} id="backToTop" class="contrast outline cgb" >Cancel / Jump to the Top</button>
-		</form>
 	</div>
 
 
