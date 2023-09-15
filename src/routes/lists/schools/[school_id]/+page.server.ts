@@ -155,7 +155,7 @@ const event: Action = async ({ request }) => {
       },
     }
   })
-  throw redirect(303, '../../lists/schools')
+  throw redirect(303, '../../lists/events')
 }
 
 
@@ -197,7 +197,7 @@ const contact: Action = async ({ request }) => {
       },
     })
   }
-  throw redirect(303, '../../lists/schools')
+  throw redirect(303, '../../lists/contacts')
 }
 
 const school: Action = async ({ request }) => {
