@@ -13,6 +13,8 @@
 
 	let pageName = 'My Event Details'
 	let isInput = true
+	let formattedTimestamp
+	let showModal = false
 
 	function isWork() {
 		if (isInput == true) {
@@ -29,10 +31,6 @@
 		})
 	}
 
-	export let data
-	export let form: ActionData
-	let formattedTimestamp
-
 	function dater(timestampWithTimezone: string): string {
 		const date = new Date(timestampWithTimezone)
 		const year = date.getFullYear()
@@ -46,10 +44,8 @@
 		return formattedTimestamp
 	}
 
-
-	function toggleModal(event: Event | undefined) {
-		throw new Error('Function not implemented.')
-	}
+	export let data
+	export let form: ActionData
 </script>
 
 <svelte:head>
@@ -57,17 +53,66 @@
 </svelte:head>
 
 <div id="top" class="main">
-		<h1>Event Details</h1>
+	<h1> Event Details &nbsp;&nbsp;&nbsp;&nbsp;
+		<a
+			href="#section4_event"
+			role="button"
+			class="secondary outline ag h44 w"
+			on:click={() => (showModal = true)}
+		>
+			<strong	class="error1">
+				&#10008;
+			</strong>
+				Esemény törlése* &nbsp;
+		</a>
+	</h1>
+
+	<!-- Delete modal -->
+
+	{#if showModal}
+		<form action="?/delUser" method="post" use:enhance>
+				<article>
+				<h3>Az esemény adatai véglegesen törlődnek.</h3>
+				<strong	class="g">
+						&nbsp;* esemény abban az esetben törölhető, ha nincs hozzárendelt érdeklődő diák, illetve, ha az eseménynek egy gazdája van
+					</strong>
+				{#if form?.intern}
+					<p class="ah">&nbsp; Az eseményt nem lehet törölni.</p>
+				{/if}
+				<footer>
+					<button
+						type="submit"
+						class="secondary w z cc"
+						data-target="modal-example">
+					Confirm
+					</button>
+					<button
+						type="button"
+						class="secondary outline h44 w z"
+						data-target="modal-example"
+						on:click={() => (showModal = false)}>
+						Cancel
+				</button>
+				</footer>
+			</article>
+		</form>
+	{/if}
+
 	<hgroup>
 		<hgroup class="title">
-			<h3>{data.event.event_name}&nbsp;&nbsp;&nbsp;&nbsp;<a href="#section4_event" role="button" class="secondary outline ag h44" > <strong class="error1">&#10008;</strong> Esemény törlése* &nbsp; </a></h3>
+			<h3>{data.event.event_name}</h3>
 			<a href="#section_interested" class="aa"> &#9758; Érdeklődő diákok hozzáadása </a>
 		</hgroup>
 		<br />
 		<h4 class="h41"> Adatok </h4>
 		<a href="#section_event" class="ad"> &#9758; Esemény adatainak módosítása </a>
 		<a href="#section2_event" class="ae"> &#9758; Startswith kapcsolat hozzáadása </a>
-		<a href="#section3_event" class="af"> <strong class="error1">&#10008;</strong>&nbsp;  Startswith kapcsolat törlése </a>
+		<a href="#section3_event" class="af">
+			<strong class="error1">
+				&#10008;
+			</strong>
+			&nbsp;  Startswith kapcsolat törlése
+		</a>
 		<ul class="ab">
 			<li class="lb">
 				Időpont: {formatDate(data.event.closing_date)}, {timeSlugify(data.event.closing_date)}
@@ -330,9 +375,6 @@
 	<div>
 		<a href="#top" class="flower grid event4-to-position">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 	</div>
-
-	<!-- Modal -->
-
 </div>
 
 <style>
@@ -394,7 +436,23 @@
 		color: #83918f;
 		font-weight: 400;
 		line-height: normal;
-		font-size: 18px;
+		font-size: 20px;
+	}
+
+	.ah {
+		color: #83918f;
+		padding-top: 2%;
+		font-weight: 400;
+		line-height: normal;
+		font-size: 22px;
+	}
+
+	.g {
+		color: #83918f;
+		font-weight: 350;
+		line-height: normal;
+		font-size: 20px;
+		font-style: italic;
 	}
 
 	.la {
@@ -499,6 +557,15 @@
 		border-color: #83918f;
 	}
 
+	.w {
+		width: auto;
+	}
+
+	.z {
+		display: inline-flex;
+		flex-direction: row-reverse;
+	}
+
 	.uni {
 		color: #444f4d;
 		font-weight: 500;
@@ -531,4 +598,20 @@
     line-height: 95%;
     font-weight: 500;
   }
+
+
+	.cc {
+    background-color: #32bea6;
+    border: 1em solide #32bea6;
+  }
+
+  .cc:hover {
+    background-color: #0ba38a;
+  }
+	article::backdrop {
+		background: rgba(0, 0, 0, 0.3);
+	}
+
+
+
 </style>

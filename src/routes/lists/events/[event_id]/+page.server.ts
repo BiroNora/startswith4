@@ -102,7 +102,38 @@ export async function load({ params }) {
 		throw error(404, 'School not found')
 	}
 
-	return { event, school, cityname, countries, regions, inters, onduty, eventtype, cldate, user }
+	return {
+		event,
+		school,
+		cityname,
+		countries,
+		regions,
+		inters,
+		onduty,
+		eventtype,
+		cldate,
+		user,
+	}
+}
+
+async function delUser() {
+	const inter = await db.interestedStudents.findFirst({
+			where: { event_id: ev_id }
+	})
+
+	const	users = await db.event.findUnique({
+		where: { event_id : ev_id },
+		include: { User: true }
+	})
+
+	if (users && users.User.length > 1 || inter) {
+		return fail(400, { intern: true })
+	}
+
+	await db.event.delete({
+		where: { event_id: ev_id}
+	})
+	throw redirect(303, '../../lists/events')
 }
 
 const interested: Action = async ({ request }) => {
@@ -270,4 +301,4 @@ const eventUD: Action = async ({ request }) => {
 	return { result }
 }
 
-export const actions: Actions = { interested, event, eventU, eventUD }
+export const actions: Actions = { interested, event, eventU, eventUD, delUser }
