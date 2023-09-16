@@ -1,10 +1,8 @@
 <script lang="ts">
-	import { enhance } from '$app/forms'
+	import { dateSlugify } from '../../stores/dataStore.js'
 	import type { ActionData } from './$types'
-  import { dateSlugify } from '../../stores/dataStore.js'
 
-	let pageName = 'My Activity List'
-
+	let pageName = 'Activity List'
 
 	function scrollToConnect() {
 		window.scrollTo({
@@ -23,8 +21,8 @@
 <div id="top" class="main">
 	<div id="base">
     <hgroup>
-		<h1>Activity Details</h1>
-    <a
+		<h1>Activities</h1>
+		<a
       href="#section_event"
       class="aa"
     >
@@ -33,20 +31,23 @@
       &nbsp; &nbsp;
     </hgroup>
     <br />
+
     <ul>
       {#each data.activities as act}
-        <li class="li aa">
-            {dateSlugify(String(act.end_date))}
-            &#9753
-            {act.act_name}
-            {' 🏠 '}
-            {act.act_note}
-            &#10087
-            {#each data.regio as reg}
-              {#if act.region_id == reg.region_id}
-              {reg.region_name}
-              {/if}
-            {/each}
+			<li class="li">
+				<a href="../lists/activities/{act.act_id}" class="ab">
+					{dateSlugify(String(act.end_date))}
+					&#9753
+					{act.act_name}
+					&#10087
+					{act.act_note}
+					{' 🏠 '}
+					{#each data.regio as reg}
+						{#if act.region_id == reg.region_id}
+						{reg.region_name}
+						{/if}
+					{/each}
+				</a>
         </li>
       {/each}
     </ul>
@@ -61,7 +62,7 @@
 		<div class="rei">
 			<p>Activity Register</p>
 		</div>
-		<form action="?/activity" method="post" use:enhance>
+		<form action="?/activity" method="post" >
 			<div>
 				<label for="fantasy">
 					Event Name
@@ -139,58 +140,26 @@
 	}
 
 	.ab {
-		color: #83918f;
-		padding: 2%;
-		font-weight: 400;
-		line-height: normal;
-		font-size: 22px;
-	}
-
-	.ac {
-		color: #83918f;
-		font-weight: 400;
-		line-height: normal;
-		padding-top: 1%;
-		padding-left: 5%;
-		text-indent: -6%;
-		font-size: 22px;
-	}
-
-	.ad {
-		color: #83918f;
-		font-weight: 400;
-		line-height: normal;
-		font-size: 22px;
-	}
-
-	.la {
-		list-style-position: inside;
-		list-style-type: disc;
-		padding-left: 5%;
-		text-indent: -6%;
-		line-height: 1.4;
-		font-size: 22px;
-	}
-
-	.lb {
-		list-style-position: inside;
-		list-style-type: circle;
-		padding-left: 5%;
-		text-indent: -5%;
-		line-height: 1.4;
-		font-size: 22px;
-	}
-
-	.h41 {
-		color: #83918f;
-	}
-
-	.h42 {
 		color: #32bea6;
+		font-weight: 400;
+		line-height: normal;
+		font-size: 23px;
 	}
 
-	.h43 {
-		color: #737978;
+	.li {
+    list-style-position: inside;
+    list-style-type: none; /* Remove default bullet */
+    padding-left: 5%;
+    text-indent: -6%;
+    color: #32bea6; /* Set font color to #32bea6 */
+		line-height: 1.35;
+	}
+
+	.li::before {
+    content: "•"; /* Use a disc bullet character */
+    color: rgb(144, 132, 132); /* Set the bullet color to grey */
+    margin-right: 45px; /* Adjust spacing between bullet and text */
+		font-size: 30px;
 	}
 
 	.h44 {
@@ -236,11 +205,22 @@
 	.flower {
 		font-size: 140%;
 		color: #a0a9a8;
+		padding-top: 1%;
 	}
 
 	.flower:hover {
 		font-size: 140%;
 		color: #32bea6;
+		padding-top: 1%;
+	}
+
+	.h44 {
+		color: #83918f;
+		border-color: #83918f;
+	}
+
+	.w {
+		width: auto;
 	}
 
 	.error {
@@ -250,5 +230,22 @@
 		font-style: italic;
 		line-height: 95%;
 		font-weight: 500;
+	}
+
+	.z {
+		display: inline-flex;
+		flex-direction: row-reverse;
+	}
+
+	.cc {
+    background-color: #32bea6;
+    border: 1em solide #32bea6;
+  }
+
+  .cc:hover {
+    background-color: #0ba38a;
+  }
+	article::backdrop {
+		background: rgba(0, 0, 0, 0.3);
 	}
 </style>

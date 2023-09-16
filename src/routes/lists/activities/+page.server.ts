@@ -25,9 +25,10 @@ export async function load({ params }) {
 const activity: Action = async ({ request }) => {
   const data = await request.formData()
   const act_name = String(data.get('fantasy'))
-  const end_date = data.get('meeting-time')
+  const clos_date = data.get('meeting-time')
   const region_id = Number(data.get('region'))
   const act_note = String(data.get('message'))
+  const end_date = new Date(String(clos_date))
 
   await db.activity.create({
     data: {
@@ -40,4 +41,15 @@ const activity: Action = async ({ request }) => {
   throw redirect(303, '../../lists/activities')}
 
 
-export const actions: Actions = { activity }
+  async function delAct() {
+    const data = await request.formData()
+    const act_id = Number(data.get('actid'))
+    console.log(act_id)
+
+    await db.activity.delete({
+      where: { act_id: act_id}
+    })
+    throw redirect(303, '../../lists/activities')
+  }
+
+export const actions: Actions = { activity, delAct }
