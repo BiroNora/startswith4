@@ -5,7 +5,6 @@ import { my_id } from '../../stores/dataStore'
 
 
 export const load: PageServerLoad = async (event) => {
-  console.log(event)
   const user = await db.user.findUnique({
     where: {user_id: my_id}, // Todo! user_id comes from cookies
     include: { Contact : true },

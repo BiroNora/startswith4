@@ -33,9 +33,6 @@ export const load: PageServerLoad = async (event) => {
     }
   }
 
-  console.log(ev_sc_set)
-  console.log(events)
-
   event.setHeaders({
     'Cashe-Control': 'public, max-age=0, s-maxage=60'
   })

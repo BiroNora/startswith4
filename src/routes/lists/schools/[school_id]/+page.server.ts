@@ -110,12 +110,8 @@ const event: Action = async ({ request }) => {
   const closing_date = new Date(String(clos_date))
 
   const slugDate = dateSlugify(String(clos_date))
-  console.log('psqldate' + clos_date)
-  console.log('slugDate' + slugDate)
-  console.log('closing_date' + closing_date)
 
   if (event_name.length < 10) {
-    console.log(event_name.length)
     return fail(400, { title: true })
   }
   //const school_name = 'Eventus Üzleti, Művészeti Szakgimnázium, Technikum, Gimnázium, Szakképző Iskola, Alapfokú Művészeti Iskola és Kollégium'
@@ -124,7 +120,6 @@ const event: Action = async ({ request }) => {
   const sn = slugify(String(school_name?.slice(0, 12)))
   const se = slugify(event_name.slice(0, 12))
   const slug = slugDate + '-' + cn + '-' + se + '-' + sn
-  console.log(slug)
 
   const uniqueSlug = await db.event.findUnique({
     where: { slug }
@@ -306,6 +301,24 @@ const school: Action = async ({ request }) => {
 			duty,
 			active,
 			active_by,
+			basic,
+			medior,
+			high,
+			altisk,
+			gimn,
+			szakgimn,
+			szakkoz,
+			szakisk,
+			techn,
+			szakkepz,
+			almuv,
+			muvokt,
+			keszseg,
+			fejl,
+			kieg,
+			kolleg,
+			hidp,
+			nembes,
 		}
 	})
 

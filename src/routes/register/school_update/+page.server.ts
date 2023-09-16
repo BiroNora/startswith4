@@ -3,7 +3,6 @@ import type { PageServerLoad } from './$types'
 import { db } from '$lib/database'
 
 export const load: PageServerLoad = async (event) => {
-  console.log(event)
   const schools = await db.school.findMany({
   })
 

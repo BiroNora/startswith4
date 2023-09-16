@@ -73,7 +73,6 @@ export async function load({ params }) {
 	}
 
   const user = school?.User
-	console.log(user)
 
 	const city = await db.city.findUnique({
 		where: { city_id: school?.city_id }

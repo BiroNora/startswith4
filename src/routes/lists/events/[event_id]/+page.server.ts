@@ -189,7 +189,6 @@ const event: Action = async ({ request }) => {
 	const email = String(data.get('email'))
 
   if (event_name.length < 10) {
-    console.log(event_name.length)
     return fail(400, { title: true })
   }
 

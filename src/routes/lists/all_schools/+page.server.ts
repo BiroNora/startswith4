@@ -4,7 +4,6 @@ import { db } from '$lib/database'
 
 
 export const load: PageServerLoad = async (event) => {
-  console.log(event)
   const schools = await db.school.findMany({
     include: { User: true },
     orderBy: { name: 'asc' }
