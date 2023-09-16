@@ -149,6 +149,10 @@
 		background-color: #32bea6;
 	}
 
+	label {
+		padding: 6px;
+	}
+
 	.dir {
 		padding-bottom: 15px;
 	}

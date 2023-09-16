@@ -26,7 +26,7 @@
       <a href="/lists/all_events">All Events List</a>
     </li>
     <li>
-      <a href="/lists/activities">My Activity List</a>
+      <a href="/lists/activities">Activity List</a>
     </li>
     <li>
       <a href="/lists/schools">My School List</a>

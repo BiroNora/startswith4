@@ -61,9 +61,9 @@
 			on:click={() => (showModal = true)}
 		>
 			<strong	class="error1">
-				&#10008;
+				&nbsp;&#10008;
 			</strong>
-				Esemény törlése* &nbsp;
+			&nbsp; Esemény törlése* &nbsp;
 		</a>
 	</h1>
 
@@ -508,11 +508,6 @@
 		background-color: #32bea6;
 	}
 
-	.h44 {
-		color: #83918f;
-		border-color: #83918f;
-	}
-
 	.interested-to-position {
 		transform: translateY(420vh); /* Move the element down one viewport height (vh) */
 	}
@@ -611,7 +606,4 @@
 	article::backdrop {
 		background: rgba(0, 0, 0, 0.3);
 	}
-
-
-
 </style>
