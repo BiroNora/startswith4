@@ -192,7 +192,25 @@ const school: Action = async ({ request }) => {
 				connect: {
 					user_id: user_id,
 				}
-			}
+			},
+			basic,
+			medior,
+			high,
+			altisk,
+			gimn,
+			szakgimn,
+			szakkoz,
+			szakisk,
+			techn,
+			szakkepz,
+			almuv,
+			muvokt,
+			keszseg,
+			fejl,
+			kieg,
+			kolleg,
+			hidp,
+			nembes,
 		}
 	})
 	throw redirect(303, '/login')

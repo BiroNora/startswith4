@@ -34,6 +34,24 @@ model School {
   county       County    @relation(fields: [county_id], references: [county_id])
   region       Region    @relation(fields: [region_id], references: [region_id])
   User         User[]
+  basic        Boolean
+  medior       Boolean
+  high         Boolean
+  altisk       Boolean
+  gimn         Boolean
+  szakgimn     Boolean
+  szakkoz      Boolean
+  szakisk      Boolean
+  techn        Boolean
+  szakkepz     Boolean
+  almuv        Boolean
+  muvokt       Boolean
+  keszseg      Boolean
+  fejl         Boolean
+  kieg         Boolean
+  kolleg       Boolean
+  hidp         Boolean
+  nembes       Boolean
 
   @@map("schools")
 }
@@ -70,6 +88,16 @@ model User {
   Contact       Contact[]
   Event         Event[]
   School        School[]
+  basic         Boolean
+  reB           String
+  medior        Boolean
+  reM           String
+  high          Boolean
+  reH           String
+  superior Boolean
+  reS String
+  director Boolean
+  reD String
 
   @@map("users")
 }
@@ -111,12 +139,13 @@ model InterestedStudents {
 }
 
 model Activity {
-  act_id          Int      @id @default(autoincrement())
-  start_date      DateTime @default(now()) @db.Timestamptz(3)
-  end_date        DateTime
-  act_name        String
-  act_description String
-  region          Int
+  act_id     Int      @id @default(autoincrement())
+  start_date DateTime @default(now()) @db.Timestamptz(3)
+  end_date   DateTime @db.Timestamptz(3)
+  act_name   String
+  act_note   String?
+  region_id  Int
+  region     Region   @relation(fields: [region_id], references: [region_id])
 
   @@map("activity")
 }
@@ -139,6 +168,7 @@ model Region {
   InterestedStudent InterestedStudents[]
   country           Country              @relation(fields: [country_id], references: [country_id])
   School            School[]
+  Activity          Activity[]
 
   @@map("region")
 }
