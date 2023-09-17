@@ -2,11 +2,16 @@ import { error, redirect } from '@sveltejs/kit'
 import { db } from '$lib/database'
 import type { Action, Actions } from './$types'
 
-
+const today = new Date()
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function load({ params }) {
 	const activities = await db.activity.findMany({
-	})
+    where: {
+      end_date: {
+        gte: today,
+      }
+    }
+  })
 
 	if (!activities) {
     throw error(404, 'Program not found')
