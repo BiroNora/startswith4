@@ -106,7 +106,8 @@
 	}
 
   strong {
-  font-weight: 500;
-  color: tomato;
+    font-size: 18px;
+    font-weight: 500;
+    color: tomato;
   }
 </style>

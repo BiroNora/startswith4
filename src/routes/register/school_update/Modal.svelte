@@ -4,7 +4,7 @@
 	let dialog: any // HTMLDialogElement
 
 	$: if (dialog && showModal) dialog.showModal()
-  
+
   function confirmDelete() {
     onDelete()
     close()
@@ -81,8 +81,5 @@
 		to {
 			opacity: 1;
 		}
-	}
-	button {
-		display: block;
 	}
 </style>

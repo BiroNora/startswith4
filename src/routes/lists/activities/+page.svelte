@@ -219,10 +219,6 @@
 		border-color: #83918f;
 	}
 
-	.w {
-		width: auto;
-	}
-
 	.error {
 		color: tomato;
 		padding: 2%;
@@ -230,22 +226,5 @@
 		font-style: italic;
 		line-height: 95%;
 		font-weight: 500;
-	}
-
-	.z {
-		display: inline-flex;
-		flex-direction: row-reverse;
-	}
-
-	.cc {
-    background-color: #32bea6;
-    border: 1em solide #32bea6;
-  }
-
-  .cc:hover {
-    background-color: #0ba38a;
-  }
-	article::backdrop {
-		background: rgba(0, 0, 0, 0.3);
 	}
 </style>
