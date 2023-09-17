@@ -1,4 +1,30 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
+
+  onMount(() => {
+    // Define a function to handle the search
+    function handleSearch() {
+      const input = document.getElementById("searchInput") as HTMLInputElement
+      const list = document.getElementById("list") as HTMLUListElement
+      const filter = input.value.toLowerCase()
+      const items = list.getElementsByTagName("li")
+
+      // Loop through all list items
+      for (let i = 0; i < items.length; i++) {
+        const text = items[i].textContent?.toLowerCase() || ""
+        if (text.indexOf(filter) > -1) {
+          items[i].style.display = ""
+        } else {
+          items[i].style.display = "none"
+        }
+      }
+    }
+
+    // Add an event listener to the input element
+    const input = document.getElementById("searchInput") as HTMLInputElement
+    input.addEventListener("input", handleSearch)
+  })
+
   $: ({ schools, cities } = data)
   let pageName="School List"
 
@@ -11,7 +37,10 @@
 
 <div class="main">
   <h1>School List</h1>
-  <ul>
+  <input type="text" id="searchInput" placeholder="Search for items...">
+  <br>
+  <br>
+  <ul id="list">
     {#each schools as { school_id, name, school_email, address, active, coop, city_id }}
       {#each cities as c}
         {#if city_id == c.city_id}
