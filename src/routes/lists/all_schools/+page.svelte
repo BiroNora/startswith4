@@ -25,7 +25,7 @@
     input.addEventListener("input", handleSearch)
   })
 
-  $: ({ schools, cities } = data)
+  $: ({ schools, cities, regions } = data)
   let pageName="School List"
 
   export let data
@@ -41,26 +41,30 @@
   <br>
   <br>
   <ul id="list">
-    {#each schools as { school_id, name, school_email, address, active, coop, city_id }}
+    {#each schools as { school_id, name, address, active, coop, city_id, region_id }}
       {#each cities as c}
         {#if city_id == c.city_id}
-          {#if active && !coop}
-          <li class="li">
-          <a href="../lists/all_schools/{school_id}" class="aa">{ name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } {' ⚠️ '} <strong>NO COOPERATION</strong></a>
-          </li>
-          {:else if active && coop}
-          <li class="li">
-            <a href="../lists/all_schools/{school_id}" class="aa">{ name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } </a>
-          </li>
-          {:else if !active && coop}
-          <li class="li">
-            <a href="../lists/all_schools/{school_id}" class="aa">{ name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } {' ⚠️ '} <strong>NOT ACTIVE</a>
-          </li>
-          {:else if !active && !coop}
-          <li class="li">
-            <a href="../lists/all_schools/{school_id}" class="aa">{ name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } {' ⚠️ '} <strong>NOT ACTIVE</strong></a>
-          </li>
-          {/if}
+          {#each regions as r}
+            {#if region_id == r.region_id}
+              {#if active && !coop}
+                <li class="li">
+                  <a href="../lists/all_schools/{school_id}" class="aa">{ name } {' 🏠 '} { c.city_name } {', '} { address } &#9755; { r.region_name } {' ⚠️ '} <strong>NO COOPERATION</strong></a>
+                </li>
+                {:else if active && coop}
+                <li class="li">
+                  <a href="../lists/all_schools/{school_id}" class="aa">{ name } {' 🏠 '} { c.city_name } {', '} { address } &#10148; { r.region_name } </a>
+                </li>
+                {:else if !active && coop}
+                <li class="li">
+                  <a href="../lists/all_schools/{school_id}" class="aa">{ name } {' 🏠 '} { c.city_name } {', '} { address } &#9755; { r.region_name } {' ⚠️ '} <strong>NOT ACTIVE</a>
+                </li>
+                {:else if !active && !coop}
+                <li class="li">
+                  <a href="../lists/all_schools/{school_id}" class="aa">{ name } {' 🏠 '} { c.city_name } {', '} { address } &#9755; { r.region_name } {' ⚠️ '} <strong>NOT ACTIVE</strong></a>
+                </li>
+              {/if}
+            {/if}
+          {/each}
         {/if}
       {/each}
     {/each}

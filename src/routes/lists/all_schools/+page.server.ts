@@ -15,9 +15,11 @@ export const load: PageServerLoad = async (event) => {
 
   const cities = await db.city.findMany({})
 
+  const regions = await db.region.findMany({})
+
   if (!schools) {
     throw error(404, 'School not found')
   }
 
-  return { schools, cities }
+  return { schools, cities, regions }
 }
