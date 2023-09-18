@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms'
+	import { onMount } from 'svelte'
 	import type { ActionData, PageServerData } from './$types'
 
   export let data: PageServerData
@@ -7,6 +8,37 @@
 
   export let form: ActionData
   let pageName="Iskola Register"
+
+  let selectedCountry: number | null = null
+  let selectedRegion: number | null = null
+  let selectedCounty: number | null = null
+  let selectedCity: number | null = null
+  let filteredRegions: typeof regions = []
+  let filteredCounties: typeof counties = []
+  let filteredCities: typeof cities = []
+
+  // Function to filter regions based on the selected country
+  function filterRegions() {
+    filteredRegions = regions.filter((region) => region.country_id == selectedCountry);
+    selectedRegion = null // Reset selected region
+    filterCounties();
+  }
+
+  // Function to filter counties based on the selected region
+  function filterCounties() {
+    filteredCounties = counties.filter((county) => county.region_id == selectedRegion)
+    selectedCounty = null // Reset selected county
+    filterCities()
+  }
+
+  // Function to filter cities based on the selected county
+  function filterCities() {
+    filteredCities = cities.filter((city) => city.county_id == selectedCounty)
+    selectedCity = null // Reset selected city
+  }
+
+  // Initialize the filtered lists when the component mounts
+  onMount(filterRegions)
 
 </script>
 <svelte:head>
@@ -24,7 +56,7 @@
       <p class="notice">Please note: if country / region / county /city <i>does not exist</i>  in the list, <a class="aa" href="/register/location">use this link</a>  before the registration. </p>
       <div>
         <label for="countr">Country</label>
-        <select name="countr" id="countr" >
+        <select name="countr" id="country" bind:value={selectedCountry} on:change={filterRegions}>
           {#each countries as country}
             <option value="{country.country_id}">{country.country_name}</option>
           {/each}
@@ -32,24 +64,24 @@
       </div>
       <div>
         <label for="region">Region</label>
-        <select name="region" id="region" >
-          {#each regions as reg}
+        <select id="region" bind:value={selectedRegion} on:change={filterCounties}>
+          {#each filteredRegions as reg}
             <option value="{reg.region_id}">{reg.region_name}</option>
           {/each}
         </select>
       </div>
       <div>
         <label for="county">County</label>
-        <select name="county" id="county" >
-          {#each counties as coun}
+        <select id="county" bind:value={selectedCounty} on:change={filterCities}>
+          {#each filteredCounties as coun}
             <option value="{coun.county_id}">{coun.county_name}</option>
           {/each}
         </select>
       </div>
       <div>
         <label for="city">City</label>
-        <select name="city" id="city" >
-          {#each cities as cit}
+        <select id="city" bind:value={selectedCity}>
+          {#each filteredCities as cit}
             <option value="{cit.city_id}">{cit.city_name}</option>
           {/each}
         </select>
