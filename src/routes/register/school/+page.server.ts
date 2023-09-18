@@ -58,6 +58,10 @@ const school: Action = async ({ request }) => {
 	const active = true
 	const school_type = []
 	const duty = []
+	console.log('country' + country_id)
+	console.log('region' + region_id)
+	console.log('county' + county_id)
+	console.log('city' + city_id)
 
 	if (altisk) {
 		school_type.push(schoolType[0][0]) // általános iskola
