@@ -3,7 +3,7 @@
 	import type { ActionData, PageServerData } from './$types'
 
   export let data: PageServerData
-  const { country, regio, county, city } = data
+  const { countries, regions, counties, cities } = data
 
   export let form: ActionData
 
@@ -56,15 +56,15 @@
       <div>
         <label for="countr">Country</label>
         <select name="countr" id="countr" >
-          {#each country as countr}
-            <option value="{countr.country_id}">{countr.country_name}</option>
+          {#each countries as country}
+            <option value="{country.country_id}">{country.country_name}</option>
           {/each}
         </select>
       </div>
       <div>
         <label for="region">Region</label>
         <select name="region" id="region" >
-          {#each regio as reg}
+          {#each regions as reg}
             <option value="{reg.region_id}">{reg.region_name}</option>
           {/each}
         </select>
@@ -72,7 +72,7 @@
       <div>
         <label for="county">County</label>
         <select name="county" id="county" >
-          {#each county as coun}
+          {#each counties as coun}
             <option value="{coun.county_id}">{coun.county_name}</option>
           {/each}
         </select>
@@ -80,7 +80,7 @@
       <div>
         <label for="city">City</label>
         <select name="city" id="city" >
-          {#each city as cit}
+          {#each cities as cit}
             <option value="{cit.city_id}">{cit.city_name}</option>
           {/each}
         </select>

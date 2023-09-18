@@ -4,20 +4,20 @@ import { db } from '$lib/database'
 import { dutyType, schoolType } from '../../stores/dataStore'
 
 export const load: PageServerLoad = async () => {
-	const country = await db.country.findMany({
+	const countries = await db.country.findMany({
 		orderBy: { country_name: 'asc' }
 	})
-	const regio = await db.region.findMany({
+	const regions = await db.region.findMany({
 		orderBy: { region_name: 'asc' }
 	})
-	const county = await db.county.findMany({
+	const counties = await db.county.findMany({
 		orderBy: { county_name: 'asc' }
 	})
-	const city = await db.city.findMany({
+	const cities = await db.city.findMany({
 		orderBy: { city_name: 'asc' }
 	})
 
-	return { country, regio, county, city }
+	return { countries, regions, counties, cities }
 }
 
 const school: Action = async ({ request }) => {
