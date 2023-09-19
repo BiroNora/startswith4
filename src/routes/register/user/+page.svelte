@@ -135,7 +135,7 @@
 		flex-direction: column;
 		justify-content: space-around;
 		align-content: space-around;
-		width: 35%;
+		width: 45%;
 		line-height: 85%;
 		grid-row: minmax(5px, auto);
 		margin: 10px auto 10px auto;
