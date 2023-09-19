@@ -2,7 +2,6 @@
   import { onMount } from 'svelte'
 
   $: ({ schools, cities, regions } = data)
-  let show = false
 
   onMount(() => {
     // Define a function to handle the search
@@ -57,7 +56,7 @@
   <div id="itemCount" class="y" style="display: none;" >Number of items: &nbsp;<span id="length"></span></div>
   <br>
   <ul id="list">
-    {#each schools as { school_id, name, address, active, coop, city_id, region_id, basic, medior, high }}
+    {#each schools as { school_id, name, active, coop, city_id, region_id, basic, medior, high }}
       {#each cities as c}
         {#if city_id == c.city_id}
           {#each regions as r}
