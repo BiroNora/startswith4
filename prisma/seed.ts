@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 async function main() {
 	const magyaro = await prisma.country.create({
 		data: {
-			name: 'Magyarország'
+			country_name: 'Magyarország'
 		}
 	})
 }
