@@ -31,6 +31,7 @@
 
 	<input
 		type="search"
+		id="searchInput"
 		placeholder="Search for items..."
 	/>
 

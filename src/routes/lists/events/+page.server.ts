@@ -8,7 +8,13 @@ let extrDuty = ''
 export const load: PageServerLoad = async (event) => {
   const user = await db.user.findUnique({
     where: { user_id: my_id },
-    include: { Event: true }
+    include: {
+      Event: {
+        orderBy: {
+          closing_date: 'desc',
+        }
+      }
+    }
   })
 
   const events = user?.Event

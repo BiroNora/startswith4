@@ -1,4 +1,4 @@
-import { error, fail, redirect } from '@sveltejs/kit'
+import { error, fail } from '@sveltejs/kit'
 import { db } from '$lib/database'
 import { eventMap, dutyMap3, schType, duType } from '../../../stores/dataStore.js'
 import type { Action, Actions } from './$types'

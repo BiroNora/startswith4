@@ -63,6 +63,10 @@ const school: Action = async ({ request }) => {
 	console.log('county' + county_id)
 	console.log('city' + city_id)
 
+	if (!city_id || !country_id || !county_id || !region_id) {
+		return fail(400, { user: true })
+	}
+
 	if (altisk) {
 		school_type.push(schoolType[0][0]) // általános iskola
 	}
@@ -217,7 +221,7 @@ const school: Action = async ({ request }) => {
 			nembes,
 		}
 	})
-	throw redirect(303, '/login')
+	throw redirect(303, '../lists/schools')
 }
 
 export const actions: Actions = { school }
