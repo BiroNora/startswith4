@@ -51,7 +51,11 @@
 
 <div class="main">
     <h1>School List<h4 class="z">Number of schools:&nbsp;{schools.length}</h4></h1>
-  <input type="text" id="searchInput" placeholder="Search for items...">
+  <input
+    type="search"
+    id="searchInput"
+    placeholder="Search for items..."
+    >
   <br>
   <div id="itemCount" class="y" style="display: none;" >Number of items: &nbsp;<span id="length"></span></div>
   <br>

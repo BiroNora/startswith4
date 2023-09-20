@@ -286,7 +286,7 @@
 				<p><i class="iii">in case of * please leave a comment</i></p>
 			</div>
 			<div>
-				<label for="estimate">Estimated Number of Participants</label>
+				<label for="estimate">Estimated / Presented Number of Participants</label>
 				<input
 					type="text"
 					value={data.event.estimated_student}
