@@ -3,20 +3,25 @@ import { db } from '$lib/database'
 
 export const load: PageServerLoad = async () => {
   const schools = await db.school.findMany({
+		include: {
+			User: {
+				select: {
+					name: true,
+				},
+			},
+			Event: {
+				select: {
+					event_id: true,
+					estimated_student: true,
+				}
+			}
+		},
     orderBy: { name: 'asc' }
   })
-	const countries = await db.country.findMany({
-		orderBy: { country_name: 'asc' }
-	})
+
 	const regions = await db.region.findMany({
 		orderBy: { region_name: 'asc' }
 	})
-	const counties = await db.county.findMany({
-		orderBy: { county_name: 'asc' }
-	})
-	const cities = await db.city.findMany({
-		orderBy: { city_name: 'asc' }
-	})
 
-	return { schools, countries, regions, counties, cities }
+	return { schools, regions }
 }
