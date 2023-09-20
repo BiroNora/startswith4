@@ -8,19 +8,22 @@
       <a href="/">Home</a>
     </li>
     <li>
-      <a href="/register/user">User R</a>
+      <a href="/register/user">UserR</a>
     </li>
     <li>
-      <a href="/register/school">School R</a>
+      <a href="/register/school">SchoolR</a>
     </li>
     <li>
-      <a href="/register/location">Location R</a>
+      <a href="/register/location">LocationR</a>
     </li>
     <li>
-      <a href="/register/iskola_reg">Isk R</a>
+      <a href="/others/iskola_reg">IskR</a>
     </li>
     <li>
-      <a href="/register/school_update">School_update</a>
+      <a href="/others/school_update">School_update</a>
+    </li>
+    <li>
+      <a href="/others/tables">Tables</a>
     </li>
     <li>
       <a href="/lists/all_schools">All Schools List</a>
