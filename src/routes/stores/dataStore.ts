@@ -122,8 +122,11 @@ export const dutyType = [
 	['5', 'DIRECTOR'] // 5  &  0-2: ["5", "0"]
 ]
 
-// duryreg = ["10", "24", "30", "40", "50"] medior / Budapest
-// if (10 20 30 40 50) {One duty must be choosen.}
+export const statusType = [
+	['1', 'ADMITTED'],
+	['2', 'REJECTED'],
+	['3', 'IN PROGRESS']
+]
 
 export const dutyMap = [
 	{ id: '1', name: 'BASIC' },

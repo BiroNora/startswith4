@@ -44,6 +44,10 @@
 		return formattedTimestamp
 	}
 
+	function add(inters: Array<{ count?: number }>) {
+		return inters.reduce((total, inter) => total + (inter.count || 0), 0)
+	}
+
 	export let data
 	export let form: ActionData
 </script>
@@ -119,7 +123,7 @@
 			</li>
 			<li class="lb">Szervező: {data.event.on_duty}</li>
 			<li class="lb">Esemény formája: {data.event.event_type}</li>
-			<li class="lb">Becsült résztvevők száma: {data.event.estimated_student}</li>
+			<li class="lb">Becsült / megjelent résztvevők száma: {data.event.estimated_student}</li>
 			<li class="lb">Feljegyzés: {data.event.note}</li>
 			<li class="lb">Iskola:</li>
 			<hgroup>
@@ -133,7 +137,7 @@
 					</li>
 				</ul>
 			</hgroup>
-			<li class="lb">Érdeklődő diákok:</li>
+			<li class="lb">Érdeklődők,  összesen {add(data.inters)} diák <strong class="st">(a rögzítés sorrendjében, legfelül a legutoljára rögzített) </strong>:</li>
 			<hgroup>
 				{#each data.inters as ints}
 					<ul class="ac">
@@ -559,6 +563,11 @@
 	.z {
 		display: inline-flex;
 		flex-direction: row-reverse;
+	}
+
+	.st {
+		font-size: 17px;
+		font-weight: 300;
 	}
 
 	.uni {
