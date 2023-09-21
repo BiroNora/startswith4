@@ -204,7 +204,7 @@
 			<div>
 				<label for="channel">Channeled by</label>
 				<select name="channel" id="channel" class="hidden-textbox">
-					{#each channelMap as item, index (item.id)}
+					{#each channelMap as item (item.id)}
 						<option value={item.id}>{item.name}</option>
 					{/each}
 				</select>
@@ -219,7 +219,7 @@
 				<div>
 					<label for="status">Status</label>
 					<select name="status" id="status" class="hidden-textbox">
-						{#each statusMap as item, index (item.id)}
+						{#each statusMap as item (item.id)}
 							<option value={item.id}>{item.name}</option>
 						{/each}
 					</select>
