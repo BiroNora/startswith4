@@ -156,11 +156,8 @@
 			>
 		</form>
 	</div>
-	<div>
 		<a href="#top" class="flower grid event4-to-position"
-			>&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a
-		>
-	</div>
+			>&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 </div>
 
 <style>
@@ -305,11 +302,13 @@
 	.flower {
 		font-size: 140%;
 		color: #a0a9a8;
+		text-decoration: none; /* Remove underline */
 	}
 
 	.flower:hover {
 		font-size: 140%;
 		color: #32bea6;
+		text-decoration: none; /* Remove underline */
 	}
 
 	.error {

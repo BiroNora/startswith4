@@ -156,11 +156,13 @@
   .flower {
 		font-size: 140%;
 		color: #a0a9a8;
+		text-decoration: none; /* Remove underline */
 	}
 
 	.flower:hover {
 		font-size: 140%;
 		color: #32bea6;
+		text-decoration: none; /* Remove underline */
 	}
 
 	.error {

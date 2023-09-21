@@ -14,14 +14,25 @@ export const load: PageServerLoad = async () => {
 					event_id: true,
 					estimated_student: true,
 				}
-			}
+			},
 		},
-    orderBy: { name: 'asc' }
+    orderBy: { name: 'asc' },
   })
+
+	const events = await db.event.findMany({
+		include: {
+			InterestedStudents: {
+			}
+		}
+	})
+
+	const countries = await db.country.findMany({})
 
 	const regions = await db.region.findMany({
 		orderBy: { region_name: 'asc' }
 	})
 
-	return { schools, regions }
+	const istudents = await db.interestedStudents.findMany({})
+
+	return { schools, countries, regions, istudents, events }
 }

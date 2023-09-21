@@ -206,12 +206,14 @@
 		font-size: 140%;
 		color: #a0a9a8;
 		padding-top: 1%;
+		text-decoration: none; /* Remove underline */
 	}
 
 	.flower:hover {
 		font-size: 140%;
 		color: #32bea6;
 		padding-top: 1%;
+		text-decoration: none; /* Remove underline */
 	}
 
 	.h44 {

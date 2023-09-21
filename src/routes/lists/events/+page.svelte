@@ -56,14 +56,16 @@
   }
 
   .flower {
-  font-size: 140%;
-  color: #a0a9a8;
-  padding-bottom: 3%;
+    font-size: 140%;
+    color: #a0a9a8;
+    padding-bottom: 3%;
+		text-decoration: none; /* Remove underline */
   }
 
   .flower:hover {
     font-size: 140%;
     color: #32bea6;
     padding-bottom: 3%;
+		text-decoration: none; /* Remove underline */
   }
 </style>
