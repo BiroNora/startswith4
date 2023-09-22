@@ -36,60 +36,56 @@
   )
 	// Define a type for the events parameter
 	type EventWithEstimatedStudent = {
-        estimated_student?: number;
-    };
+    estimated_student?: number
+  }
 
-    function add(events: EventWithEstimatedStudent[]) {
-        return events.reduce((total: number, event) => total + (event.estimated_student || 0), 0);
-    }
+	function add(events: EventWithEstimatedStudent[]) {
+		return events.reduce((total: number, event) => total + (event.estimated_student || 0), 0);
+	}
 
-    function searchTable() {
-        const input = document.getElementById("searchInput") as HTMLInputElement;
-        const filter = input.value.toUpperCase();
-        const table = document.querySelector(".table") as HTMLTableElement;
-        const rows = table.getElementsByTagName("tr");
-        const totalEventCountCell = document.getElementById("totalEventCount");
+	function searchTable() {
+		const input = document.getElementById("searchInput") as HTMLInputElement
+		const filter = input.value.toUpperCase()
+		const table = document.querySelector(".table") as HTMLTableElement
+		const rows = table.getElementsByTagName("tr")
+		const totalEventCountCell = document.getElementById("totalEventCount")
 
-        if (totalEventCountCell) {
-            let filteredEvents: EventWithEstimatedStudent[] = [];
+		if (totalEventCountCell) {
+			let filteredEvents: EventWithEstimatedStudent[] = []
 
-            for (let i = 0; i < rows.length; i++) {
-                const cells = rows[i].getElementsByTagName("td");
+			for (let i = 0; i < rows.length; i++) {
+				const cells = rows[i].getElementsByTagName("td")
 
-                if (i !== 0) { // Skip the header row
-                    let found = false;
+				if (i !== 0) { // Skip the header row
+					let found = false;
 
-                    for (let j = 0; j < cells.length; j++) {
-                        const cell = cells[j];
-                        const text = cell.textContent || cell.innerText;
+					for (let j = 0; j < cells.length; j++) {
+						const cell = cells[j]
+						const text = cell.textContent || cell.innerText
 
-                        if (text.toUpperCase().indexOf(filter) > -1) {
-                            found = true;
-                            break;
-                        }
-                    }
+						if (text.toUpperCase().indexOf(filter) > -1) {
+								found = true
+								break
+						}
+					}
 
-                    if (found) {
-                        rows[i].style.display = "";
-                        // Cast the Event property to the correct type
-                        const schoolEvent: EventWithEstimatedStudent[] = schools[i - 1].Event;
-                        filteredEvents.push(...schoolEvent);
-                    } else {
-                        rows[i].style.display = "none";
-                    }
-                }
-            }
-
-            // Update the total event count in the header cell
-            totalEventCountCell.textContent = String(add(filteredEvents));
-        }
-    }
+					if (found) {
+							rows[i].style.display = ""
+							// Cast the Event property to the correct type
+							const schoolEvent: EventWithEstimatedStudent[] = schools[i - 1].Event
+							filteredEvents.push(...schoolEvent)
+					} else {
+							rows[i].style.display = "none"
+					}
+				}
+			}
+			// Update the total event count in the header cell
+			totalEventCountCell.textContent = String(add(filteredEvents));
+		}
+	}
 
     // The initial total event count is provided from the server
-     /* Provide the initial count here from your server */;
-
-
-
+   /* Provide the initial count here from your server */
 
 	function searchTable1() {
 		const input = document.getElementById("searchInput") as HTMLInputElement;
@@ -240,10 +236,13 @@
   }
 
   th, td {
-    border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
   }
+
+	tr:nth-child(even) {
+  	background-color: #f2f2f2;
+}
 
 	.nb {
     text-align: center;
@@ -263,7 +262,7 @@
 	}
 
 	th {
-    background-color: #f2f2f2;
+    background-color:#fafdfd;
     position: sticky;
     top: 0;
     z-index: 1;
