@@ -28,13 +28,13 @@
 		eventsCount: school.Event.length,
 	}))
 
-	const totalEventCount = evs.reduce(
+	const initialTotalEventCount = evs.reduce(
 		(total, school) => total + school.eventsCount, 0)
+
 	// Define a type for the events parameter
 	type EventWithEstimatedStudent = { estimated_student?: number }
 
-
-	let initialTotalEventCount = events.reduce(
+	let initialTotalStudentCount = events.reduce(
 		(total: number, event: any) => total + (event.estimated_student || 0), 0)
 
 	function add(events: EventWithEstimatedStudent[]) {
@@ -43,16 +43,32 @@
 
 	let schoolCount: number = schools.length
 
+	// Function to update the total event count
+	function updateTotalEventCount(filteredEvents: EventWithEstimatedStudent[]) {
+		const totalEventCountCell = document.getElementById("totalEventCount");
+
+		if (totalEventCountCell) {
+			// Calculate the total count of events
+			const totalEventCount = filteredEvents.length;
+
+			// Update the total event count in the header cell
+			totalEventCountCell.textContent = String(totalEventCount);
+		}
+	}
+
+
 	function searchTable() {
 		const input = document.getElementById("searchInput") as HTMLInputElement
 		const filter = input.value.toUpperCase()
 		const table = document.querySelector(".table") as HTMLTableElement
 		const rows = table.getElementsByTagName("tr")
-		const totalEventCountCell = document.getElementById("totalEventCount")
+		const totalStudentCountCell = document.getElementById("totalStudentCount")
 
-		if (totalEventCountCell) {
-			let filteredEvents: EventWithEstimatedStudent[] = []
+		if (totalStudentCountCell) {
+			let filteredStudents: EventWithEstimatedStudent[] = []
 			let filteredSchoolCount = 0
+
+			let filteredEvents: EventWithEstimatedStudent[] = []
 
 			for (let i = 0; i < rows.length; i++) {
 				const cells = rows[i].getElementsByTagName("td")
@@ -74,6 +90,7 @@
 						rows[i].style.display = ""
 						// Cast the Event property to the correct type
 						const schoolEvent: EventWithEstimatedStudent[] = schools[i - 1].Event
+						filteredStudents.push(...schoolEvent)
 						filteredEvents.push(...schoolEvent)
 						filteredSchoolCount++
 					} else {
@@ -81,8 +98,19 @@
 					}
 				}
 			}
+
+			// Calculate the sum of estimated_student values in filteredStudents
+			const totalStudentCount = add(filteredStudents)
+
+			// Update the total student count in the header cell
+			totalStudentCountCell.textContent = String(totalStudentCount)
+
+			// Call the new updateTotalEventCount function with the filtered events
+			updateTotalEventCount(filteredEvents)
+			updateTotalEventCount(filteredEvents)
+
 			// Update the total event count in the header cell
-			totalEventCountCell.textContent = String(add(filteredEvents))
+			totalStudentCountCell.textContent = String(add(filteredStudents))
 			schoolCount = filteredSchoolCount
 		}
 	}
@@ -109,7 +137,7 @@
         <th class="c">Region</th>
 				<!-- A kereséshez kell majd igazítani! -->
 				<th class="c">
-					<div>&#8470; of Schools</div>
+					<div>&#8470; of Schools </div>
 					<div><strong>{schoolCount}/{schools.length}</strong></div>
 				</th>
 				<th class="c">School Type</th>
@@ -117,12 +145,12 @@
         <th class="c b">MED</th>
         <th class="c b">HIGH</th>
 				<th class="c">
-					<div>&#8470; of Events</div>
-					<div><strong></strong></div>
+					<div>&#8470; of Events &emsp;</div>
+					<div><strong id="totalEventCount">{initialTotalEventCount}</strong></div>
 				</th>
         <th class="c">
 					<div>&#8470; of Est./Pres. Students</div>
-					<div><strong id="totalEventCount">{initialTotalEventCount}</strong></div>
+					<div><strong id="totalStudentCount">{initialTotalStudentCount}</strong></div>
 				</th>
 				<th class="c">Interested Students</th>
         <th class="c">Admitted</th>
