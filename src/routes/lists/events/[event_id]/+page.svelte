@@ -14,7 +14,8 @@
 	let pageName = 'My Event Details'
 	let isInput = true
 	let formattedTimestamp
-	let showModal = false
+	let showEventModal = false
+	let showIntrestModal = false
 
 	function isWork() {
 		if (isInput == true) {
@@ -48,6 +49,26 @@
 		return inters.reduce((total, inter) => total + (inter.count || 0), 0)
 	}
 
+	let itemNumber = 0
+
+  // Function to set the itemNumber
+  function setItemNumber(index: number) {
+    itemNumber = index + 1
+  }
+
+	// Variable to store the selected intrest_id
+  let selectedIntrestId = 0
+
+  // Function to set the selected intrest_id
+  function setSelectedIntrestId(intrest_id: number) {
+    selectedIntrestId = intrest_id;
+  }
+
+  // Function to reset the selected intrest_id
+  function resetSelectedIntrestId() {
+    selectedIntrestId = 0
+  }
+
 	export let data
 	export let form: ActionData
 </script>
@@ -62,7 +83,7 @@
 			href="#section4_event"
 			role="button"
 			class="secondary outline ag h44 w"
-			on:click={() => (showModal = true)}
+			on:click={() => (showEventModal = true)}
 		>
 			<strong	class="error1">
 				&nbsp;&#10008;
@@ -71,15 +92,15 @@
 		</a>
 	</h1>
 
-	<!-- Delete modal -->
+	<!-- Event delete modal -->
 
-	{#if showModal}
+	{#if showEventModal}
 		<form action="?/delUser" method="post" use:enhance>
-				<article>
+			<article>
 				<h3>Az esemény adatai véglegesen törlődnek.</h3>
 				<strong	class="g">
 						&nbsp;* esemény abban az esetben törölhető, ha nincs hozzárendelt érdeklődő diák, illetve, ha az eseménynek egy gazdája van
-					</strong>
+				</strong>
 				{#if form?.intern}
 					<p class="ah">&nbsp; Az eseményt nem lehet törölni.</p>
 				{/if}
@@ -94,9 +115,9 @@
 						type="button"
 						class="secondary outline h44 w z"
 						data-target="modal-example"
-						on:click={() => (showModal = false)}>
+						on:click={() => (showEventModal = false)}>
 						Cancel
-				</button>
+					</button>
 				</footer>
 			</article>
 		</form>
@@ -139,9 +160,22 @@
 			</hgroup>
 			<li class="lb">Érdeklődők,  összesen {add(data.inters)} diák <strong class="st">(a rögzítés sorrendjében, legfelül a legutoljára rögzített) </strong>:</li>
 			<hgroup>
-				{#each data.inters as ints}
+				{#each data.inters as ints, index}
 					<ul class="ac">
-						<li class="lb">Diákok száma: {ints.count}</li>
+						<p class="lc">
+							<input type="hidden" name="int_id" value={ints.intrest_id}>
+							<a href="#inter"
+								class="aa"
+								on:click={() => {
+									setItemNumber(index)
+									setSelectedIntrestId(ints.intrest_id)
+									showIntrestModal = true
+								}}>
+								{index+1}. adat törlése
+							</a></p>
+						<li class="lb">
+							Diákok száma: {ints.count}
+						</li>
 						{#each data.countries as country}
 							{#if country.country_id == ints.country_id}
 								<li class="lb">Ország: {country.country_name}</li>
@@ -164,6 +198,37 @@
 					</ul>
 				{/each}
 			</hgroup>
+
+			<!-- Interested delete modal -->
+
+			{#if showIntrestModal}
+			<form action="?/delInterest" method="post" use:enhance id="inter">
+				<article>
+					<h3>A(z) {itemNumber}. adat véglegesen törlődik.</h3>
+					{#if form?.interest}
+						<p class="ah">&nbsp; Az adatot nem lehet törölni.</p>
+					{/if}
+					<input type="hidden" name="int_id" value={selectedIntrestId}>
+					<footer>
+						<button
+							type="submit"
+							class="secondary w z cc"
+							data-target="modal-example"
+							on:click={scrollToConnect}>
+							Confirm
+						</button>
+						<button
+							type="button"
+							class="secondary outline h44 w z"
+							data-target="modal-example"
+							on:click={() => (showIntrestModal = false, scrollToConnect())}>
+							Cancel
+						</button>
+					</footer>
+				</article>
+			</form>
+			{/if}
+
 		</ul>
 		<a href="#top" class="flower"
 				>&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a
@@ -473,6 +538,14 @@
 		padding-left: 5%;
 		text-indent: -6%;
 		line-height: 1.4;
+		font-size: 22px;
+	}
+
+	.lc {
+		list-style-position: inside;
+		list-style-type: circle;
+		padding-left: 5%;
+		text-indent: -6%;
 		font-size: 22px;
 	}
 

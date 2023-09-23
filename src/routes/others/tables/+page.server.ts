@@ -10,9 +10,8 @@ export const load: PageServerLoad = async () => {
 				},
 			},
 			Event: {
-				select: {
-					event_id: true,
-					estimated_student: true,
+				include: {
+					InterestedStudents:true
 				}
 			},
 		},

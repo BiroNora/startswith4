@@ -145,9 +145,13 @@ const interested: Action = async ({ request }) => {
 	const channel = String(data.get('channel'))
   const apply = Boolean(data.get('apply'))
   const work_title = String(data.get('work'))
-	const status = String(data.get('status'))
+	let status = String(data.get('status'))
   const event_id = ev_id
 	const applied = apply
+
+	if (status === 'null') {
+		status = '0'
+	}
 
   await db.interestedStudents.create({
     data: {
@@ -300,4 +304,23 @@ const eventUD: Action = async ({ request }) => {
 	return { result }
 }
 
-export const actions: Actions = { interested, event, eventU, eventUD, delUser }
+const delInterest: Action = async ({ request }) => {
+  const data = await request.formData()
+	const intrest_id = Number(data.get('int_id'))
+	console.log(intrest_id)
+
+	const intrest = await db.interestedStudents.findUnique({
+		where: { intrest_id: intrest_id }
+	})
+
+	if (!intrest) {
+		return fail(400, { inters: true })
+	}
+
+	const delResult = await db.interestedStudents.delete({
+		where: { intrest_id: intrest_id }
+  })
+	return { delResult }
+}
+
+export const actions: Actions = { interested, event, eventU, eventUD, delUser, delInterest }
