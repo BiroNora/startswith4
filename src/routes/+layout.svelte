@@ -8,40 +8,40 @@
       <a href="/">Home</a>
     </li>
     <li>
-      <a href="/register/user">UserR</a>
+      <a href="/register/user" target="_blank">UserR</a>
     </li>
     <li>
-      <a href="/register/school">SchoolR</a>
+      <a href="/register/school" target="_blank">SchoolR</a>
     </li>
     <li>
-      <a href="/register/location">LocationR</a>
+      <a href="/register/location" target="_blank">LocationR</a>
     </li>
     <li>
-      <a href="/others/iskola_reg">IskR</a>
+      <a href="/others/iskola_reg" target="_blank">IskR</a>
     </li>
     <li>
-      <a href="/others/school_update">School_update</a>
+      <a href="/others/school_update" target="_blank">School_update</a>
     </li>
     <li>
-      <a href="/others/tables">Tables</a>
+      <a href="/others/tables" target="_blank">Tables</a>
     </li>
     <li>
-      <a href="/lists/all_schools">All Schools List</a>
+      <a href="/lists/all_schools" target="_blank">All Schools List</a>
     </li>
     <li>
-      <a href="/lists/all_events">All Events List</a>
+      <a href="/lists/all_events" target="_blank">All Events List</a>
     </li>
     <li>
-      <a href="/lists/activities">Activity List</a>
+      <a href="/lists/activities" target="_blank">Activity List</a>
     </li>
     <li>
-      <a href="/lists/schools">My School List</a>
+      <a href="/lists/schools" target="_blank">My School List</a>
     </li>
     <li>
-      <a href="/lists/events">My Event List</a>
+      <a href="/lists/events" target="_blank">My Event List</a>
     </li>
     <li>
-      <a href="/lists/contacts">My Contact List</a>
+      <a href="/lists/contacts" target="_blank">My Contact List</a>
     </li>
   </ul>
 </nav>
