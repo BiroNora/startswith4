@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { InterestedStudents } from '@prisma/client'
 	import { schType, statusType } from '../../stores/dataStore'
 	import type { PageServerData } from './$types'
 
@@ -8,6 +9,7 @@
 
 	let pageName="Tables"
 
+	// Schootypes
 	function getType(arr: string[]): string {
 		let types: string = ''
 
@@ -17,9 +19,7 @@
 				types += schType[index] + ', '
 			}
 		})
-		// Remove the trailing comma and space
 		types = types.slice(0, -2)
-
 		return types
 	}
 
@@ -31,31 +31,68 @@
 	const initialTotalEventCount = evs.reduce(
 		(total, school) => total + school.eventsCount, 0)
 
-	// Define a type for the events parameter
-	type EventWithEstimatedStudent = { estimated_student?: number }
-
 	let initialTotalStudentCount = events.reduce(
 		(total: number, event: any) => total + (event.estimated_student || 0), 0)
+
+	let initialTotalIntrStudentCount = events.reduce((total: number, event: any) => {
+		if (event.InterestedStudents) {
+			// Filter InterestedStudents with status === "0" and sum their counts
+			const countWithStateZero = event.InterestedStudents
+				.filter((student: any) => student.status === '0')
+				.reduce((sum: number, student: any) => sum + student.count, 0)
+
+			return total + countWithStateZero
+		}
+		return total
+	}, 0)
+
+	let schoolCount: number = schools.length
+
+	// Define a type for the events parameter
+	type EventWithEstimatedStudent = {
+		estimated_student?: number,
+		InterestedStudents: InterestedStudents[] }
+
+	// Function to update the total event count
+	function updateTotalEventCount(filteredEvents: EventWithEstimatedStudent[]) {
+		const totalEventCountCell = document.getElementById("totalEventCount")
+
+		if (totalEventCountCell) {
+			// Calculate the total count of events
+			const totalEventCount = filteredEvents.length
+			// Update the total event count in the header cell
+			totalEventCountCell.textContent = String(totalEventCount)
+		}
+	}
 
 	function add(events: EventWithEstimatedStudent[]) {
 		return events.reduce((total: number, event) => total + (event.estimated_student || 0), 0)
 	}
 
-	let schoolCount: number = schools.length
-
-	// Function to update the total event count
-	function updateTotalEventCount(filteredEvents: EventWithEstimatedStudent[]) {
-		const totalEventCountCell = document.getElementById("totalEventCount");
-
-		if (totalEventCountCell) {
-			// Calculate the total count of events
-			const totalEventCount = filteredEvents.length;
-
-			// Update the total event count in the header cell
-			totalEventCountCell.textContent = String(totalEventCount);
-		}
+	function addInterest(interestedStudents: InterestedStudents[]): number {
+		return interestedStudents.reduce((total: number, student) => {
+			if (student.status === '0') {
+				return total + student.count
+			}
+			return total;
+		}, 0);
 	}
 
+	function calculateInterestForSchoolEvents(events: EventWithEstimatedStudent[]): number {
+		return events.reduce((total: number, event) => {
+			if (event.InterestedStudents) {
+				const studentsWithStatusZero = event.InterestedStudents.filter(
+					student => student.status === '0'
+				);
+				const countWithStatusZero = studentsWithStatusZero.reduce(
+					(sum, student) => sum + student.count,
+					0
+				)
+				return total + countWithStatusZero
+			}
+			return total
+		}, 0)
+	}
 
 	function searchTable() {
 		const input = document.getElementById("searchInput") as HTMLInputElement
@@ -63,12 +100,14 @@
 		const table = document.querySelector(".table") as HTMLTableElement
 		const rows = table.getElementsByTagName("tr")
 		const totalStudentCountCell = document.getElementById("totalStudentCount")
+		const totalInterestedStudentCountCell = document.getElementById("totalInterestedStudentCount")
 
-		if (totalStudentCountCell) {
+		if (totalStudentCountCell && totalInterestedStudentCountCell) {
 			let filteredStudents: EventWithEstimatedStudent[] = []
 			let filteredSchoolCount = 0
 
 			let filteredEvents: EventWithEstimatedStudent[] = []
+			let filteredInterestedStudents: InterestedStudents[] = []
 
 			for (let i = 0; i < rows.length; i++) {
 				const cells = rows[i].getElementsByTagName("td")
@@ -88,31 +127,51 @@
 
 					if (found) {
 						rows[i].style.display = ""
-						// Cast the Event property to the correct type
-						const schoolEvent: EventWithEstimatedStudent[] = schools[i - 1].Event
-						filteredStudents.push(...schoolEvent)
-						filteredEvents.push(...schoolEvent)
-						filteredSchoolCount++
+						// Get the corresponding school
+						const school = schools[i - 1];
+						// Include the InterestedStudents from the school's events if they exist
+						if (school.Event) {
+							school.Event.forEach((event) => {
+								if (event.InterestedStudents) {
+									filteredInterestedStudents.push(...event.InterestedStudents)
+								}
+							})
+          }
+						// Update the total student count and school count
+						if (school.Event) {
+							filteredStudents.push(...school.Event)
+							filteredEvents.push(...school.Event)
+							filteredSchoolCount++
+						}
 					} else {
 						rows[i].style.display = "none"
 					}
 				}
 			}
-
 			// Calculate the sum of estimated_student values in filteredStudents
 			const totalStudentCount = add(filteredStudents)
+
+			// Calculate the total interested student count
+			const totalInterestedStudentCount = addInterest(filteredInterestedStudents)
 
 			// Update the total student count in the header cell
 			totalStudentCountCell.textContent = String(totalStudentCount)
 
 			// Call the new updateTotalEventCount function with the filtered events
 			updateTotalEventCount(filteredEvents)
-			updateTotalEventCount(filteredEvents)
 
+			// Update the total interested student count in the header cell
+			totalInterestedStudentCountCell.textContent = String(totalInterestedStudentCount)
 			// Update the total event count in the header cell
 			totalStudentCountCell.textContent = String(add(filteredStudents))
 			schoolCount = filteredSchoolCount
 		}
+	}
+
+	function clearInput() {
+		let input = document.getElementById("searchInput") as HTMLInputElement
+		input.value = ''
+		searchTable()
 	}
 </script>
 
@@ -122,12 +181,22 @@
 
 <div class="main">
 	<h1 >Schools and Presented Students</h1>
-	<input
+	<div class="input-container">
+		<input
 		type="search"
 		id="searchInput"
 		placeholder="Search for items..."
 		on:input={searchTable}
-	/>
+		/>
+		<button
+    type="button"
+    class="clear-button secondary outline"
+    on:click={clearInput}
+  	>
+    &#10007;
+  	</button>
+	</div>
+
 
 	<table class="table">
 		<thead>
@@ -152,12 +221,18 @@
 					<div>&#8470; of Est./Pres. Students</div>
 					<div><strong id="totalStudentCount">{initialTotalStudentCount}</strong></div>
 				</th>
-				<th class="c">Interested Students</th>
+				<th class="c">
+					<div>&#8470; of Interested Students</div>
+					<div><strong id="totalInterestedStudentCount">{initialTotalIntrStudentCount}</strong></div>
+				</th>
         <th class="c">Admitted</th>
         <th class="c">Rejected</th>
         <th class="c">In Progress</th>
 			</tr>
 		</thead>
+
+		<!-- TABLE BODY -->
+
 		<tbody>
 			{#each schools as school}
 				<tr>
@@ -173,7 +248,7 @@
 							<td class="c">{reg.region_name}</td>
 						{/if}
 					{/each}
-					<a href="../lists/all_schools/{school.school_id}" class="centered-link">
+					<a href="../lists/all_schools/{school.school_id}" target="_blank" class="centered-link">
 						<td class="centered-link nb">{school.name}</td>
 					</a>
 					<td class="c w">{getType(school.school_type)}</td>
@@ -194,8 +269,8 @@
 						<td></td>
 					{/if}
 					<td class="c">{school.Event.length}</td>
-						<td class="c">{add(school.Event)}</td>
-					<td class="c"></td>
+					<td class="c">{add(school.Event)}</td>
+					<td class="c">{calculateInterestForSchoolEvents(school.Event)}</td>
 					<td class="c">{statusType[0][1]}</td>
 					<td class="c">{statusType[1][1]}</td>
 					<td class="c">{statusType[2][1]}</td>
@@ -267,4 +342,22 @@
     top: 0;
     z-index: 1;
   }
+
+.input-container {
+  position: relative;
+}
+
+.clear-button {
+  position: absolute;
+	width: auto;
+  top: 35%;
+  right: 38px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1.2rem;
+	color: #32bea6;
+}
 </style>
