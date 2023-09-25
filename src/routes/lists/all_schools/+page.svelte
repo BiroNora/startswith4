@@ -1,7 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import type { PageServerData } from './$types'
 
-  $: ({ schools, cities, regions } = data)
+  export let data: PageServerData
+
+  const { schools, cities, regions, counties } = data
 
   onMount(() => {
     // Define a function to handle the search
@@ -35,14 +38,22 @@
       }
     }
 
+    function clearInput() {
+      let input = document.getElementById("searchInput") as HTMLInputElement
+      input.value = ''
+      handleSearch()
+    }
+
     // Add an event listener to the input element
     const input = document.getElementById("searchInput") as HTMLInputElement
     input.addEventListener("input", handleSearch)
+
+    // Attach the clearInput function to the delete button
+    const deleteButton = document.querySelector(".clear-button")
+    deleteButton!.addEventListener("click", clearInput)
   })
 
   let pageName="School List"
-
-  export let data
 </script>
 
 <svelte:head>
@@ -50,70 +61,83 @@
 </svelte:head>
 
 <div class="main">
-    <h1>School List<h4 class="z">Number of schools:&nbsp;{schools.length}</h4></h1>
-  <input
-    type="search"
-    id="searchInput"
-    placeholder="Search for items..."
-    >
+  <h1>School List<h4 class="z">Number of schools:&nbsp;{schools.length}</h4></h1>
+    <div class="input-container">
+      <input
+        type="search"
+        id="searchInput"
+        placeholder="Search for items..."
+      >
+      <button
+        type="button"
+        class="clear-button secondary outline"
+      >
+        &#10007;
+      </button>
+    </div>
+
   <br>
   <div id="itemCount" class="y" style="display: none;" >Number of items: &nbsp;<span id="length"></span></div>
   <br>
   <ul id="list">
-    {#each schools as { school_id, name, active, coop, city_id, region_id, basic, medior, high }}
+    {#each schools as { school_id, name, active, coop, city_id, region_id, county_id, basic, medior, high }}
       {#each cities as c}
         {#if city_id == c.city_id}
           {#each regions as r}
             {#if region_id == r.region_id}
-              {#if active && !coop}
-                <li class="li">
-                  <a href="../lists/all_schools/{school_id}" class="aa">
-                    { name } &#10148; { r.region_name } {' 🏠 '} { c.city_name } &#10045;
-                    <strong
-                      class="s1">{#if (basic)} BASIC {/if} {#if (medior)} MEDIOR {/if} {#if (high)} HIGH {/if}
-                    </strong>
-                      {' ⚠️ '}
-                    <strong class="s">
-                      NO COOPERATION
-                    </strong>
-                  </a>
-                </li>
-                {:else if active && coop}
-                <li class="li">
-                  <a href="../lists/all_schools/{school_id}" class="aa">
-                    { name } &#10148; { r.region_name } {' 🏠 '} { c.city_name } &#10045;
-                    <strong
-                      class="s1">{#if (basic)} BASIC {/if} {#if (medior)} MEDIOR {/if} {#if (high)} HIGH {/if}
-                    </strong>
-                  </a>
-                </li>
-                {:else if !active && coop}
-                <li class="li">
-                  <a href="../lists/all_schools/{school_id}" class="aa">
-                    { name } &#10148; { r.region_name } {' 🏠 '} { c.city_name } &#10045;
-                    <strong
-                      class="s1">{#if (basic)} BASIC {/if} {#if (medior)} MEDIOR {/if} {#if (high)} HIGH {/if}
-                    </strong>
-                    {' ⚠️ '}
-                    <strong class="s">
-                      NOT ACTIVE
-                    </strong>
-                    </a>
-                </li>
-                {:else if !active && !coop}
-                <li class="li">
-                  <a href="../lists/all_schools/{school_id}" class="aa">
-                    { name } &#10148; { r.region_name } {' 🏠 '} { c.city_name } &#10045;
-                    <strong
-                      class="s1">{#if (basic)} BASIC {/if} {#if (medior)} MEDIOR {/if} {#if (high)} HIGH {/if}
-                    </strong>
-                    {' ⚠️ '}
-                    <strong class="s">
-                      NOT ACTIVE
-                    </strong>
-                  </a>
-                </li>
-              {/if}
+              {#each counties as coun}
+                {#if (county_id == coun.county_id)}
+                  {#if active && !coop}
+                    <li class="li">
+                      <a href="../lists/all_schools/{school_id}" class="aa">
+                        { name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
+                        <strong
+                          class="s1">{#if (basic)} BASIC {/if} {#if (medior)} MEDIOR {/if} {#if (high)} HIGH {/if}
+                        </strong>
+                          {' ⚠️ '}
+                        <strong class="s">
+                          NO COOPERATION
+                        </strong>
+                      </a>
+                    </li>
+                  {:else if active && coop}
+                    <li class="li">
+                      <a href="../lists/all_schools/{school_id}" class="aa">
+                        { name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
+                        <strong
+                          class="s1">{#if (basic)} BASIC {/if} {#if (medior)} MEDIOR {/if} {#if (high)} HIGH {/if}
+                        </strong>
+                      </a>
+                    </li>
+                  {:else if !active && coop}
+                    <li class="li">
+                      <a href="../lists/all_schools/{school_id}" class="aa">
+                        { name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
+                        <strong
+                          class="s1">{#if (basic)} BASIC {/if} {#if (medior)} MEDIOR {/if} {#if (high)} HIGH {/if}
+                        </strong>
+                        {' ⚠️ '}
+                        <strong class="s">
+                          NOT ACTIVE
+                        </strong>
+                        </a>
+                    </li>
+                  {:else if !active && !coop}
+                    <li class="li">
+                      <a href="../lists/all_schools/{school_id}" class="aa">
+                        { name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
+                        <strong
+                          class="s1">{#if (basic)} BASIC {/if} {#if (medior)} MEDIOR {/if} {#if (high)} HIGH {/if}
+                        </strong>
+                        {' ⚠️ '}
+                        <strong class="s">
+                          NOT ACTIVE
+                        </strong>
+                      </a>
+                    </li>
+                  {/if}
+                {/if}
+              {/each}
             {/if}
           {/each}
         {/if}
@@ -180,5 +204,23 @@
   .y {
     color: rgb(144, 132, 132);
     font-weight: 500;
+  }
+
+  .input-container {
+  position: relative;
+  }
+
+  .clear-button {
+    position: absolute;
+    width: auto;
+    top: 35%;
+    right: 38px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 1.2rem;
+    color: #32bea6;
   }
 </style>
