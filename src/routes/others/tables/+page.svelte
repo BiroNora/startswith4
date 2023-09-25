@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { InterestedStudents } from '@prisma/client'
-	import { schType, statusType } from '../../stores/dataStore'
+	import { schType } from '../../stores/dataStore'
 	import type { PageServerData } from './$types'
 
   export let data: PageServerData
 
-  const { schools, countries, regions, events, istudents } = data
+  const { schools, countries, regions, events } = data
 
 	let pageName="Tables"
 
@@ -46,6 +46,39 @@
 		return total
 	}, 0)
 
+	let initialTotalIntrStudentCountOne = events.reduce((total: number, event: any) => {
+		if (event.InterestedStudents) {
+			const countWithStateOne = event.InterestedStudents
+				.filter((student: any) => student.status === '1')
+				.reduce((sum: number, student: any) => sum + student.count, 0)
+
+			return total + countWithStateOne
+		}
+		return total
+	}, 0)
+
+	let initialTotalIntrStudentCountTwo = events.reduce((total: number, event: any) => {
+		if (event.InterestedStudents) {
+			const countWithStateTwo = event.InterestedStudents
+				.filter((student: any) => student.status === '2')
+				.reduce((sum: number, student: any) => sum + student.count, 0)
+
+			return total + countWithStateTwo
+		}
+		return total
+	}, 0)
+
+	let initialTotalIntrStudentCountThree = events.reduce((total: number, event: any) => {
+		if (event.InterestedStudents) {
+			const countWithStateThree = event.InterestedStudents
+				.filter((student: any) => student.status === '3')
+				.reduce((sum: number, student: any) => sum + student.count, 0)
+
+			return total + countWithStateThree
+		}
+		return total
+	}, 0)
+
 	let schoolCount: number = schools.length
 
 	// Define a type for the events parameter
@@ -74,8 +107,35 @@
 			if (student.status === '0') {
 				return total + student.count
 			}
-			return total;
-		}, 0);
+			return total
+		}, 0)
+	}
+
+	function addInterestOne(interestedStudents: InterestedStudents[]): number {
+		return interestedStudents.reduce((total: number, student) => {
+			if (student.status === '1') {
+				return total + student.count
+			}
+			return total
+		}, 0)
+	}
+
+	function addInterestTwo(interestedStudents: InterestedStudents[]): number {
+		return interestedStudents.reduce((total: number, student) => {
+			if (student.status === '2') {
+				return total + student.count
+			}
+			return total
+		}, 0)
+	}
+
+	function addInterestThree(interestedStudents: InterestedStudents[]): number {
+		return interestedStudents.reduce((total: number, student) => {
+			if (student.status === '3') {
+				return total + student.count
+			}
+			return total
+		}, 0)
 	}
 
 	function calculateInterestForSchoolEvents(events: EventWithEstimatedStudent[]): number {
@@ -94,6 +154,54 @@
 		}, 0)
 	}
 
+	function calculateInterestForSchoolEventsOne(events: EventWithEstimatedStudent[]): number {
+		return events.reduce((total: number, event) => {
+			if (event.InterestedStudents) {
+				const studentsWithStatusOne = event.InterestedStudents.filter(
+					student => student.status === '1'
+				)
+				const countWithStatusOne = studentsWithStatusOne.reduce(
+					(sum, student) => sum + student.count,
+					0
+				)
+				return total + countWithStatusOne
+			}
+			return total
+		}, 0)
+	}
+
+	function calculateInterestForSchoolEventsTwo(events: EventWithEstimatedStudent[]): number {
+		return events.reduce((total: number, event) => {
+			if (event.InterestedStudents) {
+				const studentsWithStatusTwo = event.InterestedStudents.filter(
+					student => student.status === '2'
+				)
+				const countWithStatusTwo = studentsWithStatusTwo.reduce(
+					(sum, student) => sum + student.count,
+					0
+				)
+				return total + countWithStatusTwo
+			}
+			return total
+		}, 0)
+	}
+
+	function calculateInterestForSchoolEventsThree(events: EventWithEstimatedStudent[]): number {
+		return events.reduce((total: number, event) => {
+			if (event.InterestedStudents) {
+				const studentsWithStatusThree = event.InterestedStudents.filter(
+					student => student.status === '3'
+				);
+				const countWithStatusThree = studentsWithStatusThree.reduce(
+					(sum, student) => sum + student.count,
+					0
+				)
+				return total + countWithStatusThree
+			}
+			return total
+		}, 0)
+	}
+
 	function searchTable() {
 		const input = document.getElementById("searchInput") as HTMLInputElement
 		const filter = input.value.toUpperCase()
@@ -101,6 +209,9 @@
 		const rows = table.getElementsByTagName("tr")
 		const totalStudentCountCell = document.getElementById("totalStudentCount")
 		const totalInterestedStudentCountCell = document.getElementById("totalInterestedStudentCount")
+		const totalInterestedStudentCountCellOne = document.getElementById("totalInterestedStudentCountOne")
+		const totalInterestedStudentCountCellTwo = document.getElementById("totalInterestedStudentCountTwo")
+		const totalInterestedStudentCountCellThree = document.getElementById("totalInterestedStudentCountThree")
 
 		if (totalStudentCountCell && totalInterestedStudentCountCell) {
 			let filteredStudents: EventWithEstimatedStudent[] = []
@@ -153,6 +264,9 @@
 
 			// Calculate the total interested student count
 			const totalInterestedStudentCount = addInterest(filteredInterestedStudents)
+			const totalInterestedStudentCountOne = addInterestOne(filteredInterestedStudents)
+			const totalInterestedStudentCountTwo = addInterestTwo(filteredInterestedStudents)
+			const totalInterestedStudentCountThree = addInterestThree(filteredInterestedStudents)
 
 			// Update the total student count in the header cell
 			totalStudentCountCell.textContent = String(totalStudentCount)
@@ -162,6 +276,10 @@
 
 			// Update the total interested student count in the header cell
 			totalInterestedStudentCountCell.textContent = String(totalInterestedStudentCount)
+			totalInterestedStudentCountCellOne!.textContent = String(totalInterestedStudentCountOne)
+			totalInterestedStudentCountCellTwo!.textContent = String(totalInterestedStudentCountTwo)
+			totalInterestedStudentCountCellThree!.textContent = String(totalInterestedStudentCountThree)
+
 			// Update the total event count in the header cell
 			totalStudentCountCell.textContent = String(add(filteredStudents))
 			schoolCount = filteredSchoolCount
@@ -204,7 +322,6 @@
         <th class="c">Stratswidth Contact</th>
 				<th class="c">Country</th>
         <th class="c">Region</th>
-				<!-- A kereséshez kell majd igazítani! -->
 				<th class="c">
 					<div>&#8470; of Schools </div>
 					<div><strong>{schoolCount}/{schools.length}</strong></div>
@@ -225,9 +342,18 @@
 					<div>&#8470; of Interested Students</div>
 					<div><strong id="totalInterestedStudentCount">{initialTotalIntrStudentCount}</strong></div>
 				</th>
-        <th class="c">Admitted</th>
-        <th class="c">Rejected</th>
-        <th class="c">In Progress</th>
+        <th class="c">
+					<div>&#8470; of ADMITTED &emsp;</div>
+					<div><strong id="totalInterestedStudentCountOne">{initialTotalIntrStudentCountOne}</strong></div>
+				</th>
+        <th class="c">
+					<div>&#8470; of REJECTED &emsp;</div>
+					<div><strong id="totalInterestedStudentCountTwo">{initialTotalIntrStudentCountTwo}</strong></div>
+				</th>
+        <th class="c">
+					<div>&nbsp;&nbsp;&nbsp; &#8470; of &emsp; IN PROGRESS </div>
+					<div><strong id="totalInterestedStudentCountThree">{initialTotalIntrStudentCountThree}</strong></div>
+				</th>
 			</tr>
 		</thead>
 
@@ -271,9 +397,9 @@
 					<td class="c">{school.Event.length}</td>
 					<td class="c">{add(school.Event)}</td>
 					<td class="c">{calculateInterestForSchoolEvents(school.Event)}</td>
-					<td class="c">{statusType[0][1]}</td>
-					<td class="c">{statusType[1][1]}</td>
-					<td class="c">{statusType[2][1]}</td>
+					<td class="c">{calculateInterestForSchoolEventsOne(school.Event)}</td>
+					<td class="c">{calculateInterestForSchoolEventsTwo(school.Event)}</td>
+					<td class="c">{calculateInterestForSchoolEventsThree(school.Event)}</td>
 				</tr>
 			{/each}
 		</tbody>

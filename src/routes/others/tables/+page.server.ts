@@ -31,7 +31,5 @@ export const load: PageServerLoad = async () => {
 		orderBy: { region_name: 'asc' }
 	})
 
-	const istudents = await db.interestedStudents.findMany({})
-
-	return { schools, countries, regions, istudents, events }
+	return { schools, countries, regions, events }
 }
