@@ -31,5 +31,9 @@ export const load: PageServerLoad = async () => {
 		orderBy: { region_name: 'asc' }
 	})
 
-	return { schools, countries, regions, events }
+	const counties = await db.county.findMany({})
+
+	const cities = await db.city.findMany({})
+
+	return { schools, countries, regions, counties, cities, events }
 }

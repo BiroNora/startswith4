@@ -5,7 +5,7 @@
 
   export let data: PageServerData
 
-  const { schools, countries, regions, events } = data
+  const { schools, countries, regions, counties, cities, events } = data
 
 	let pageName="Tables"
 
@@ -319,38 +319,40 @@
 	<table class="table">
 		<thead>
 			<tr>
-        <th class="c">Stratswidth Contact</th>
-				<th class="c">Country</th>
-        <th class="c">Region</th>
-				<th class="c">
-					<div>&#8470; of Schools </div>
+        <th class="c v">Stratswith Contact</th>
+				<th class="c v">Country</th>
+        <th class="c v">Region</th>
+				<th class="c v">County</th>
+				<th class="c v">City</th>
+				<th class="c v">
+					<div>&#8470; of Schools</div>
 					<div><strong>{schoolCount}/{schools.length}</strong></div>
 				</th>
-				<th class="c">School Type</th>
+				<th class="c v">School Type</th>
 				<th class="c b">BAS</th>
         <th class="c b">MED</th>
         <th class="c b">HIGH</th>
-				<th class="c">
+				<th class="c v">
 					<div>&#8470; of Events &emsp;</div>
 					<div><strong id="totalEventCount">{initialTotalEventCount}</strong></div>
 				</th>
-        <th class="c">
+        <th class="c v">
 					<div>&#8470; of Est./Pres. Students</div>
 					<div><strong id="totalStudentCount">{initialTotalStudentCount}</strong></div>
 				</th>
-				<th class="c">
+				<th class="c v">
 					<div>&#8470; of Interested Students</div>
 					<div><strong id="totalInterestedStudentCount">{initialTotalIntrStudentCount}</strong></div>
 				</th>
-        <th class="c">
+        <th class="c v">
 					<div>&#8470; of ADMITTED &emsp;</div>
 					<div><strong id="totalInterestedStudentCountOne">{initialTotalIntrStudentCountOne}</strong></div>
 				</th>
-        <th class="c">
+        <th class="c v">
 					<div>&#8470; of REJECTED &emsp;</div>
 					<div><strong id="totalInterestedStudentCountTwo">{initialTotalIntrStudentCountTwo}</strong></div>
 				</th>
-        <th class="c">
+        <th class="c v">
 					<div>&nbsp;&nbsp;&nbsp; &#8470; of &emsp; IN PROGRESS </div>
 					<div><strong id="totalInterestedStudentCountThree">{initialTotalIntrStudentCountThree}</strong></div>
 				</th>
@@ -366,12 +368,22 @@
 						{school.User.map((user) => user.name)}</td>
 					{#each countries as coun}
 						{#if (school.country_id == coun.country_id)}
-							<td class="c">{coun.country_name}</td>
+							<td class="c w">{coun.country_name}</td>
 						{/if}
 					{/each}
 					{#each regions as reg}
 						{#if (school.region_id == reg.region_id)}
 							<td class="c">{reg.region_name}</td>
+						{/if}
+					{/each}
+					{#each counties as county}
+						{#if (school.county_id == county.county_id)}
+							<td class="c">{county.county_name}</td>
+						{/if}
+					{/each}
+					{#each cities as city}
+						{#if (school.city_id == city.city_id)}
+							<td class="c">{city.city_name}</td>
 						{/if}
 					{/each}
 					<a href="../lists/all_schools/{school.school_id}" target="_blank" class="centered-link">
@@ -427,8 +439,12 @@
 		font-weight: 900;
 	}
 
+	.v {
+		font-size: 19px;
+	}
+
 	.w {
-		font-size:x-small;
+		font-size:xx-small;
 	}
 
 	table {
