@@ -299,7 +299,7 @@
 
 <div class="main">
 	<hgroup>
-		<h1 >Schools and Presented Students*</h1>
+		<h1 >Schools* and Presented Students</h1>
 		<p><i>&emsp;*Active and cooperative schools with Startswith contact</i></p>
 	</hgroup>
 	<br>
@@ -392,7 +392,7 @@
 						{/if}
 					{/each}
 					<a href="../lists/all_schools/{school.school_id}" target="_blank" class="centered-link">
-						<td class="centered-link nb">{school.name}</td>
+						<td class="centered-link nb h">{school.name}</td>
 					</a>
 					<td class="c w">{getType(school.school_type)}</td>
 					{#if (school.basic)}
@@ -444,6 +444,10 @@
 		font-weight: 900;
 	}
 
+	.h {
+		color: #32bea6;
+	}
+
 	.v {
 		font-size: 19px;
 	}
@@ -485,6 +489,7 @@
 		width: 100%;
 		border: none; /* Remove border */
 		outline: none; /* Remove focus outline (optional, for better accessibility) */
+		text-decoration-color: #32bea6;
 	}
 
 	th {
