@@ -21,6 +21,7 @@
       // Loop through all list items
       for (let i = 0; i < items.length; i++) {
         const text = items[i].textContent?.toLowerCase() || ""
+        console.log(text)
         if (text.indexOf(filter) > -1 || filter == "") {
           items[i].style.display = ""
           matchingItemCount++
@@ -35,6 +36,7 @@
         itemCountElement!.style.display = "none" // Hide the itemCount element
       } else {
         itemCountElement!.style.display = "block" // Show the itemCount element
+        console.log(itemCountElement?.childElementCount)
       }
     }
 
@@ -61,38 +63,42 @@
 </svelte:head>
 
 <div class="main">
-  <h1>School List<h4 class="z">Number of schools:&nbsp;{schools.length}</h4></h1>
-    <div class="input-container">
-      <input
-        type="search"
-        id="searchInput"
-        placeholder="Search for items..."
-      >
-      <button
-        type="button"
-        class="clear-button secondary outline"
-      >
-        &#10007;
-      </button>
-    </div>
-
+  <hgroup>
+    <h1>School List*<i>&emsp;*Grey colored schools has no Startswith connection</i></h1>
+    <h4 class="z">Number of schools:&nbsp;{schools.length}</h4>
+  </hgroup>
   <br>
-  <div id="itemCount" class="y" style="display: none;" >Number of items: &nbsp;<span id="length"></span></div>
+
+  <div class="input-container">
+    <input
+      type="search"
+      id="searchInput"
+      placeholder="Search for items..."
+    >
+    <button
+      type="button"
+      class="clear-button secondary outline"
+    >
+      &#10007;
+    </button>
+  </div>
+
+  <div id="itemCount" class="z" style="display: none;" >Number of items: &nbsp;<span id="length"></span></div>
   <br>
   <ul id="list">
-    {#each schools as { school_id, name, active, coop, city_id, region_id, county_id, basic, medior, high }}
+    {#each schools as s }
       {#each cities as c}
-        {#if city_id == c.city_id}
+        {#if s.city_id == c.city_id}
           {#each regions as r}
-            {#if region_id == r.region_id}
+            {#if s.region_id == r.region_id}
               {#each counties as coun}
-                {#if (county_id == coun.county_id)}
-                  {#if active && !coop}
+                {#if (s.county_id == coun.county_id)}
+                  {#if s.active && !s.coop}
                     <li class="li">
-                      <a href="../lists/all_schools/{school_id}" class="aa">
-                        { name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
+                      <a href="../lists/all_schools/{s.school_id}" class={s.User.length > 0 ? "aa" : "bb"}>
+                        { s.name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
                         <strong
-                          class="s1">{#if (basic)} BASIC {/if} {#if (medior)} MEDIOR {/if} {#if (high)} HIGH {/if}
+                          class="s1">{#if (s.basic)} BASIC {/if} {#if (s.medior)} MEDIOR {/if} {#if (s.high)} HIGH {/if}
                         </strong>
                           {' ⚠️ '}
                         <strong class="s">
@@ -100,21 +106,21 @@
                         </strong>
                       </a>
                     </li>
-                  {:else if active && coop}
+                  {:else if s.active && s.coop}
                     <li class="li">
-                      <a href="../lists/all_schools/{school_id}" class="aa">
-                        { name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
+                      <a href="../lists/all_schools/{s.school_id}" class={s.User.length > 0 ? "aa" : "bb"}>
+                        { s.name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
                         <strong
-                          class="s1">{#if (basic)} BASIC {/if} {#if (medior)} MEDIOR {/if} {#if (high)} HIGH {/if}
+                          class="s1">{#if (s.basic)} BASIC {/if} {#if (s.medior)} MEDIOR {/if} {#if (s.high)} HIGH {/if}
                         </strong>
                       </a>
                     </li>
-                  {:else if !active && coop}
+                  {:else if !s.active && s.coop}
                     <li class="li">
-                      <a href="../lists/all_schools/{school_id}" class="aa">
-                        { name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
+                      <a href="../lists/all_schools/{s.school_id}" class={s.User.length > 0 ? "aa" : "bb"}>
+                        { s.name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
                         <strong
-                          class="s1">{#if (basic)} BASIC {/if} {#if (medior)} MEDIOR {/if} {#if (high)} HIGH {/if}
+                          class="s1">{#if (s.basic)} BASIC {/if} {#if (s.medior)} MEDIOR {/if} {#if (s.high)} HIGH {/if}
                         </strong>
                         {' ⚠️ '}
                         <strong class="s">
@@ -122,12 +128,12 @@
                         </strong>
                         </a>
                     </li>
-                  {:else if !active && !coop}
+                  {:else if !s.active && !s.coop}
                     <li class="li">
-                      <a href="../lists/all_schools/{school_id}" class="aa">
-                        { name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
+                      <a href="../lists/all_schools/{s.school_id}" class={s.User.length > 0 ? "aa" : "bb"}>
+                        { s.name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
                         <strong
-                          class="s1">{#if (basic)} BASIC {/if} {#if (medior)} MEDIOR {/if} {#if (high)} HIGH {/if}
+                          class="s1">{#if (s.basic)} BASIC {/if} {#if (s.medior)} MEDIOR {/if} {#if (s.high)} HIGH {/if}
                         </strong>
                         {' ⚠️ '}
                         <strong class="s">
@@ -158,8 +164,16 @@
   .aa {
     color: #32BEA6;
     padding: 2%;
+    font-weight: 480;
+    font-size: 20px;
+  }
+
+  .bb {
+    color: rgb(144, 132, 132);
+    padding: 2%;
     font-weight: 400;
     font-size: 20px;
+    font-style: italic;
   }
 
   .li {
@@ -198,12 +212,9 @@
   }
 
   .z {
-    color: rgb(144, 132, 132);
-  }
-
-  .y {
-    color: rgb(144, 132, 132);
-    font-weight: 500;
+    color: #32bea6;
+    font-size: medium;
+    font-weight: 400;
   }
 
   .input-container {
@@ -223,4 +234,9 @@
     font-size: 1.2rem;
     color: #32bea6;
   }
+
+  i {
+    font-size: medium;
+		font-weight: 300;
+	}
 </style>

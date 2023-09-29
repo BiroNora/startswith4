@@ -494,21 +494,21 @@
     z-index: 1;
   }
 
-.input-container {
-  position: relative;
-}
+	.input-container {
+		position: relative;
+	}
 
-.clear-button {
-  position: absolute;
-	width: auto;
-  top: 35%;
-  right: 38px;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  font-size: 1.2rem;
-	color: #32bea6;
-}
+	.clear-button {
+		position: absolute;
+		width: auto;
+		top: 35%;
+		right: 38px;
+		transform: translateY(-50%);
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0;
+		font-size: 1.2rem;
+		color: #32bea6;
+	}
 </style>
