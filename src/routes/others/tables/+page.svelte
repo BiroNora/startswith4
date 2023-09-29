@@ -298,7 +298,12 @@
 </svelte:head>
 
 <div class="main">
-	<h1 >Schools and Presented Students</h1>
+	<hgroup>
+		<h1 >Schools and Presented Students*</h1>
+		<p><i>&emsp;*Active and cooperative schools with Startswith contact</i></p>
+	</hgroup>
+	<br>
+
 	<div class="input-container">
 		<input
 		type="search"
@@ -459,7 +464,11 @@
 
 	tr:nth-child(even) {
   	background-color: #f2f2f2;
-}
+	}
+
+	i {
+		font-weight: 300;
+	}
 
 	.nb {
     text-align: center;

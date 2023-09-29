@@ -3,6 +3,17 @@ import { db } from '$lib/database'
 
 export const load: PageServerLoad = async () => {
   const schools = await db.school.findMany({
+		where: {
+			coop: true,
+			active: true,
+			User: {
+				some: {
+					NOT: {
+						user_id: undefined
+					}
+				}
+			},
+		},
 		include: {
 			User: {
 				select: {
