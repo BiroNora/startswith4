@@ -36,6 +36,17 @@ export function dateSlugify(text: string) {
 	return slugDate
 }
 
+export function seasonSlugify(text: string) {
+  const date = new Date(text)
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+
+  const semester = month >= 3 && month <= 9 ? 'SPRING' : 'AUTUMN'
+
+	const seasony = `${year}-${semester}`
+  return seasony
+}
+
 export function timeSlugify(date: Date) {
 	const timeComponents = [date.getHours(), date.getMinutes()]
 	return timeComponents

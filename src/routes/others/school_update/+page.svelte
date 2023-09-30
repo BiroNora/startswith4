@@ -21,11 +21,96 @@
     //goto('/results'); // Use the `goto` function for navigation
   }
 	let pageName = "Working On It"
+
+  // Define types for input fields
+interface InputFields {
+    nameInput: HTMLInputElement;
+    ageInput: HTMLInputElement;
+    cityInput: HTMLInputElement;
+}
+
+// Function to perform the multi-task table search
+function searchTable() {
+    const { nameInput, ageInput, cityInput }: InputFields = {
+        nameInput: document.getElementById("nameInput") as HTMLInputElement,
+        ageInput: document.getElementById("ageInput") as HTMLInputElement,
+        cityInput: document.getElementById("cityInput") as HTMLInputElement,
+    };
+
+    const table = document.getElementById("myTable") as HTMLTableElement;
+    const trs = table.getElementsByTagName("tr");
+
+    // Loop through all table rows and hide those that don't match the search criteria
+    for (const tr of Array.from(trs)) {
+        const tds = tr.getElementsByTagName("td");
+        if (tds.length === 3) {
+            const nameText = tds[0].textContent || tds[0].innerText;
+            const ageText = tds[1].textContent || tds[1].innerText;
+            const cityText = tds[2].textContent || tds[2].innerText;
+
+            // Check if each input field has a value and matches the corresponding criteria
+            const nameMatch = nameInput.value === "" || nameText.toLowerCase().includes(nameInput.value.toLowerCase());
+            const ageMatch = ageInput.value === "" || ageText.toLowerCase() === ageInput.value.toLowerCase();
+            const cityMatch = cityInput.value === "" || cityText.toLowerCase().includes(cityInput.value.toLowerCase());
+
+            if (nameMatch && ageMatch && cityMatch) {
+                tr.style.display = "";
+            } else {
+                tr.style.display = "none";
+            }
+        }
+    }
+}
+
+// Attach the search function to the input fields' onkeyup events
+document.getElementById("nameInput")?.addEventListener("keyup", searchTable);
+document.getElementById("ageInput")?.addEventListener("keyup", searchTable);
+document.getElementById("cityInput")?.addEventListener("keyup", searchTable);
+
 </script>
 
 <svelte:head>
     <title> {pageName} </title>
 </svelte:head>
+
+<head>
+  <title>Table Multi-Task Search Example (TypeScript)</title>
+</head>
+<body>
+  <h1>Table Multi-Task Search</h1>
+
+  <input type="text" id="nameInput" placeholder="Name">
+  <input type="number" id="ageInput" placeholder="Age">
+  <input type="text" id="cityInput" placeholder="City">
+
+  <table id="myTable">
+      <thead>
+          <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>City</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td>John</td>
+              <td>30</td>
+              <td>New York</td>
+          </tr>
+          <tr>
+              <td>Jane</td>
+              <td>25</td>
+              <td>Los Angeles</td>
+          </tr>
+          <tr>
+              <td>Bob</td>
+              <td>30</td>
+              <td>Los Angeles</td>
+          </tr>
+      </tbody>
+    </table>
+</body>
+
 
 <div class="grid">
   <div class="rei">

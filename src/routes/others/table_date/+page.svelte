@@ -1,13 +1,13 @@
 <script lang="ts">
 	import type { InterestedStudents } from '@prisma/client'
-	import { schType, seasonSlugify } from '../../stores/dataStore'
+	import { dateSlugify, schType, seasonSlugify } from '../../stores/dataStore'
 	import type { PageServerData } from './$types'
 
   export let data: PageServerData
 
   const { schools, countries, regions, counties, cities, events } = data
 
-	let pageName="Tables"
+	let pageName="Table Date"
 
 	// Schootypes
 	function getType(arr: string[]): string {
@@ -299,12 +299,8 @@
 
 <div class="main">
 	<hgroup>
-		<h1 >Schools* and Presented Students</h1>
-		<p>
-			<i>&emsp;*Active and cooperative schools with Startswith contact</i>
-			<br>
-			<i>&emsp;**Semesters: Spring — months among 3th & 9th; Autumn — others</i>
-		</p>
+		<h1 >Table Date</h1>
+		<p><i>&emsp;*Active and cooperative schools with Startswith contact</i></p>
 	</hgroup>
 	<br>
 
@@ -329,10 +325,8 @@
 		<thead>
 			<tr>
         <th class="c v">Stratswith Contact</th>
-				<th class="c v">Country</th>
         <th class="c v">Region</th>
-				<th class="c v">County</th>
-				<th class="c v">City</th>
+        <th class="c v">City</th>
 				<th class="c v">
 					<div>&#8470; of Schools</div>
 					<div><strong>{schoolCount}/{schools.length}</strong></div>
@@ -341,7 +335,7 @@
 				<th class="c b">BAS</th>
         <th class="c b">MED</th>
         <th class="c b">HIGH</th>
-				<th class="c v">Semester** of Events</th>
+        <th class="c v">Semester</th>
 				<th class="c v">
 					<div>&#8470; of Events &emsp;</div>
 					<div><strong id="totalEventCount">{initialTotalEventCount}</strong></div>
@@ -376,21 +370,13 @@
 				<tr>
 					<td id="nameCell" class="c">
 						{school.User.map((user) => user.name)}</td>
-					{#each countries as coun}
-						{#if (school.country_id == coun.country_id)}
-							<td class="c w">{coun.country_name}</td>
-						{/if}
-					{/each}
+
 					{#each regions as reg}
 						{#if (school.region_id == reg.region_id)}
-							<td class="c w">{reg.region_name}</td>
+							<td class="c">{reg.region_name}</td>
 						{/if}
 					{/each}
-					{#each counties as county}
-						{#if (school.county_id == county.county_id)}
-							<td class="c w">{county.county_name}</td>
-						{/if}
-					{/each}
+
 					{#each cities as city}
 						{#if (school.city_id == city.city_id)}
 							<td class="c">{city.city_name}</td>
@@ -416,7 +402,7 @@
 					{:else}
 						<td></td>
 					{/if}
-					<td class="c w">
+          <td class="c w">
             {#each school.Event as event}
               {seasonSlugify(String(event.closing_date))}
               <br />
@@ -527,4 +513,8 @@
 		font-size: 1.2rem;
 		color: #32bea6;
 	}
+
+  .no-line-break {
+  white-space: nowrap;
+  }
 </style>
