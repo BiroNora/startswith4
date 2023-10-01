@@ -303,7 +303,7 @@
 		<p>
 			<i>&emsp;*Active and cooperative schools with Startswith contact</i>
 			<br>
-			<i>&emsp;**Semesters: Spring — months among 3th & 9th; Autumn — others</i>
+			<i>&emsp;**Semesters: Spring — months between the 3th & 9th months; Autumn — others</i>
 		</p>
 	</hgroup>
 	<br>
@@ -416,12 +416,7 @@
 					{:else}
 						<td></td>
 					{/if}
-					<td class="c w">
-            {#each school.Event as event}
-              {seasonSlugify(String(event.closing_date))}
-              <br />
-            {/each}
-          </td>
+					<td class="c w">{school.Event.map((event) => seasonSlugify(String(event.closing_date)))}</td>
 					<td class="c">{school.Event.length}</td>
 					<td class="c">{add(school.Event)}</td>
 					<td class="c">{calculateInterestForSchoolEvents(school.Event)}</td>

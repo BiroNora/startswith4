@@ -190,25 +190,22 @@ const event: Action = async ({ request }) => {
   const estimated_student = Number(data.get('estimate'))
   const note = String(data.get('message'))
   const closing_date = new Date(String(clos_date))
-	const email = String(data.get('email'))
+	const date = new Date(String(clos_date))
+	const year = date.getFullYear()
+	const month = date.getMonth() + 1
+	const semester = month >= 3 && month <= 9 ? 'SPRING' : 'AUTUMN'
 
   if (event_name.length < 10) {
     return fail(400, { title: true })
   }
-
-  const user = await db.user.findUnique({
-		where: {user_email: email}
-	})
-
-	if (!user) {
-		return fail(400, { user: true })
-	}
 
   await db.event.update({
 		where: {event_id: ev_id},
     data: {
       event_name,
       closing_date,
+			year,
+			semester,
       on_duty,
       event_type,
       estimated_student,

@@ -94,10 +94,10 @@ model User {
   reM           String
   high          Boolean
   reH           String
-  superior Boolean
-  reS String
-  director Boolean
-  reD String
+  superior      Boolean
+  reS           String
+  director      Boolean
+  reD           String
 
   @@map("users")
 }
@@ -107,6 +107,8 @@ model Event {
   event_name         String
   create_date        DateTime             @default(now()) @db.Timestamptz(3)
   closing_date       DateTime             @db.Timestamptz(3)
+  year               Int
+  semester           String
   on_duty            String
   event_type         String
   estimated_student  Int

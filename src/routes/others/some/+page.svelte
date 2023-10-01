@@ -1,27 +1,14 @@
 <script lang="ts">
 	import type { InterestedStudents } from '@prisma/client'
-	import { dateSlugify, schType, seasonSlugify } from '../../stores/dataStore'
+	import { schType, seasonSlugify } from '../../stores/dataStore'
 	import type { PageServerData } from './$types'
 
   export let data: PageServerData
 
-  const { schools, countries, regions, counties, cities, events } = data
+  const { schools, regions, cities, events } = data
 
-	let pageName="Table Date"
+	let pageName="Some"
 
-	// Schootypes
-	function getType(arr: string[]): string {
-		let types: string = ''
-
-		arr.forEach((value: string) => {
-			const index: number = parseInt(value, 10) - 1 // Convert value to integer and subtract 1 to match array index
-			if (index >= 0 && index < schType.length) {
-				types += schType[index] + ', '
-			}
-		})
-		types = types.slice(0, -2)
-		return types
-	}
 
 	const evs = schools.map((school) => ({
 		...school,
@@ -57,34 +44,13 @@
 		return total
 	}, 0)
 
-	let initialTotalIntrStudentCountTwo = events.reduce((total: number, event: any) => {
-		if (event.InterestedStudents) {
-			const countWithStateTwo = event.InterestedStudents
-				.filter((student: any) => student.status === '2')
-				.reduce((sum: number, student: any) => sum + student.count, 0)
-
-			return total + countWithStateTwo
-		}
-		return total
-	}, 0)
-
-	let initialTotalIntrStudentCountThree = events.reduce((total: number, event: any) => {
-		if (event.InterestedStudents) {
-			const countWithStateThree = event.InterestedStudents
-				.filter((student: any) => student.status === '3')
-				.reduce((sum: number, student: any) => sum + student.count, 0)
-
-			return total + countWithStateThree
-		}
-		return total
-	}, 0)
-
 	let schoolCount: number = schools.length
 
 	// Define a type for the events parameter
 	type EventWithEstimatedStudent = {
 		estimated_student?: number,
-		InterestedStudents: InterestedStudents[] }
+		InterestedStudents: InterestedStudents[]
+  }
 
 	// Function to update the total event count
 	function updateTotalEventCount(filteredEvents: EventWithEstimatedStudent[]) {
@@ -114,24 +80,6 @@
 	function addInterestOne(interestedStudents: InterestedStudents[]): number {
 		return interestedStudents.reduce((total: number, student) => {
 			if (student.status === '1') {
-				return total + student.count
-			}
-			return total
-		}, 0)
-	}
-
-	function addInterestTwo(interestedStudents: InterestedStudents[]): number {
-		return interestedStudents.reduce((total: number, student) => {
-			if (student.status === '2') {
-				return total + student.count
-			}
-			return total
-		}, 0)
-	}
-
-	function addInterestThree(interestedStudents: InterestedStudents[]): number {
-		return interestedStudents.reduce((total: number, student) => {
-			if (student.status === '3') {
 				return total + student.count
 			}
 			return total
@@ -170,48 +118,16 @@
 		}, 0)
 	}
 
-	function calculateInterestForSchoolEventsTwo(events: EventWithEstimatedStudent[]): number {
-		return events.reduce((total: number, event) => {
-			if (event.InterestedStudents) {
-				const studentsWithStatusTwo = event.InterestedStudents.filter(
-					student => student.status === '2'
-				)
-				const countWithStatusTwo = studentsWithStatusTwo.reduce(
-					(sum, student) => sum + student.count,
-					0
-				)
-				return total + countWithStatusTwo
-			}
-			return total
-		}, 0)
-	}
-
-	function calculateInterestForSchoolEventsThree(events: EventWithEstimatedStudent[]): number {
-		return events.reduce((total: number, event) => {
-			if (event.InterestedStudents) {
-				const studentsWithStatusThree = event.InterestedStudents.filter(
-					student => student.status === '3'
-				);
-				const countWithStatusThree = studentsWithStatusThree.reduce(
-					(sum, student) => sum + student.count,
-					0
-				)
-				return total + countWithStatusThree
-			}
-			return total
-		}, 0)
-	}
-
 	function searchTable() {
 		const input = document.getElementById("searchInput") as HTMLInputElement
-		const filter = input.value.toUpperCase()
+    const semesterInput = document.getElementById("semesterFilter") as HTMLInputElement
+    const filter = input.value.toUpperCase()
+    const semesterFilter = semesterInput.value.toUpperCase()
 		const table = document.querySelector(".table") as HTMLTableElement
 		const rows = table.getElementsByTagName("tr")
 		const totalStudentCountCell = document.getElementById("totalStudentCount")
 		const totalInterestedStudentCountCell = document.getElementById("totalInterestedStudentCount")
 		const totalInterestedStudentCountCellOne = document.getElementById("totalInterestedStudentCountOne")
-		const totalInterestedStudentCountCellTwo = document.getElementById("totalInterestedStudentCountTwo")
-		const totalInterestedStudentCountCellThree = document.getElementById("totalInterestedStudentCountThree")
 
 		if (totalStudentCountCell && totalInterestedStudentCountCell) {
 			let filteredStudents: EventWithEstimatedStudent[] = []
@@ -231,10 +147,15 @@
 						const text = cell.textContent || cell.innerText
 
 						if (text.toUpperCase().indexOf(filter) > -1) {
-							found = true
-							break
-						}
-					}
+              const semesterCell = cells[4] // Semester cell in the table
+              const semesterText = semesterCell.textContent || semesterCell.innerText
+
+              if (semesterText.toUpperCase().indexOf(semesterFilter) > -1) {
+                  found = true
+                  break
+              }
+            }
+          }
 
 					if (found) {
 						rows[i].style.display = ""
@@ -247,17 +168,15 @@
 									filteredInterestedStudents.push(...event.InterestedStudents)
 								}
 							})
-          }
-						// Update the total student count and school count
-						if (school.Event) {
+						  // Update the total student count and school count
 							filteredStudents.push(...school.Event)
 							filteredEvents.push(...school.Event)
 							filteredSchoolCount++
-						}
-					} else {
-						rows[i].style.display = "none"
-					}
-				}
+            }
+          } else {
+            rows[i].style.display = "none"
+          }
+        }
 			}
 			// Calculate the sum of estimated_student values in filteredStudents
 			const totalStudentCount = add(filteredStudents)
@@ -265,8 +184,6 @@
 			// Calculate the total interested student count
 			const totalInterestedStudentCount = addInterest(filteredInterestedStudents)
 			const totalInterestedStudentCountOne = addInterestOne(filteredInterestedStudents)
-			const totalInterestedStudentCountTwo = addInterestTwo(filteredInterestedStudents)
-			const totalInterestedStudentCountThree = addInterestThree(filteredInterestedStudents)
 
 			// Update the total student count in the header cell
 			totalStudentCountCell.textContent = String(totalStudentCount)
@@ -277,8 +194,6 @@
 			// Update the total interested student count in the header cell
 			totalInterestedStudentCountCell.textContent = String(totalInterestedStudentCount)
 			totalInterestedStudentCountCellOne!.textContent = String(totalInterestedStudentCountOne)
-			totalInterestedStudentCountCellTwo!.textContent = String(totalInterestedStudentCountTwo)
-			totalInterestedStudentCountCellThree!.textContent = String(totalInterestedStudentCountThree)
 
 			// Update the total event count in the header cell
 			totalStudentCountCell.textContent = String(add(filteredStudents))
@@ -291,6 +206,12 @@
 		input.value = ''
 		searchTable()
 	}
+
+  function clearInput1() {
+		let input = document.getElementById("semesterFilter") as HTMLInputElement
+		input.value = ''
+    searchTable()
+	}
 </script>
 
 <svelte:head>
@@ -299,7 +220,7 @@
 
 <div class="main">
 	<hgroup>
-		<h1 >Table Date</h1>
+		<h1 >Some</h1>
 		<p><i>&emsp;*Active and cooperative schools with Startswith contact</i></p>
 	</hgroup>
 	<br>
@@ -319,7 +240,21 @@
     &#10007;
   	</button>
 	</div>
-
+  <div class="input-container">
+		<input
+		type="search"
+		id="semesterFilter"
+		placeholder="Filter by Semester"
+		on:input={searchTable}
+		/>
+		<button
+    type="button"
+    class="clear-button secondary outline"
+    on:click={clearInput1}
+  	>
+    &#10007;
+  	</button>
+	</div>
 
 	<table class="table">
 		<thead>
@@ -331,10 +266,6 @@
 					<div>&#8470; of Schools</div>
 					<div><strong>{schoolCount}/{schools.length}</strong></div>
 				</th>
-				<th class="c v">School Type</th>
-				<th class="c b">BAS</th>
-        <th class="c b">MED</th>
-        <th class="c b">HIGH</th>
         <th class="c v">Semester</th>
 				<th class="c v">
 					<div>&#8470; of Events &emsp;</div>
@@ -352,14 +283,6 @@
 					<div>&#8470; of ADMITTED &emsp;</div>
 					<div><strong id="totalInterestedStudentCountOne">{initialTotalIntrStudentCountOne}</strong></div>
 				</th>
-        <th class="c v">
-					<div>&#8470; of REJECTED &emsp;</div>
-					<div><strong id="totalInterestedStudentCountTwo">{initialTotalIntrStudentCountTwo}</strong></div>
-				</th>
-        <th class="c v">
-					<div>&nbsp;&nbsp;&nbsp; &#8470; of &emsp; IN PROGRESS </div>
-					<div><strong id="totalInterestedStudentCountThree">{initialTotalIntrStudentCountThree}</strong></div>
-				</th>
 			</tr>
 		</thead>
 
@@ -370,13 +293,11 @@
 				<tr>
 					<td id="nameCell" class="c">
 						{school.User.map((user) => user.name)}</td>
-
 					{#each regions as reg}
 						{#if (school.region_id == reg.region_id)}
 							<td class="c">{reg.region_name}</td>
 						{/if}
 					{/each}
-
 					{#each cities as city}
 						{#if (school.city_id == city.city_id)}
 							<td class="c">{city.city_name}</td>
@@ -385,30 +306,13 @@
 					<a href="../lists/all_schools/{school.school_id}" target="_blank" class="centered-link">
 						<td class="centered-link nb h">{school.name}</td>
 					</a>
-					<td class="c w">{getType(school.school_type)}</td>
-					{#if (school.basic)}
-						<td class="c g">&#10003;</td>
-					{:else}
-						<td></td>
-					{/if}
 					<!--<td><a href={`/album/${track.albumId}`}>{track.albumTitle}</a></td>-->
-					{#if (school.medior)}
-						<td class="c g">&#10003;</td>
-					{:else}
-						<td></td>
-					{/if}
-					{#if (school.high)}
-          	<td class="c g">&#10003;</td>
-					{:else}
-						<td></td>
-					{/if}
-          <td class="c w">{school.Event.map((event) => seasonSlugify(String(event.closing_date)))}</td>
+
+          <td class="c w">{school.Event.map((e) => seasonSlugify(String(e.closing_date)))}</td>
 					<td class="c">{school.Event.length}</td>
 					<td class="c">{add(school.Event)}</td>
 					<td class="c">{calculateInterestForSchoolEvents(school.Event)}</td>
 					<td class="c">{calculateInterestForSchoolEventsOne(school.Event)}</td>
-					<td class="c">{calculateInterestForSchoolEventsTwo(school.Event)}</td>
-					<td class="c">{calculateInterestForSchoolEventsThree(school.Event)}</td>
 				</tr>
 			{/each}
 		</tbody>
@@ -422,18 +326,8 @@
     padding-right: 0.5%;
   }
 
-	.b {
-		width: 7%;
-		font-size: x-small;
-	}
-
 	.c {
 		text-align: center
-	}
-
-	.g {
-		color: #32bea6;
-		font-weight: 900;
 	}
 
 	.h {

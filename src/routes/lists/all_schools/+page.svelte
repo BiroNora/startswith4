@@ -64,7 +64,7 @@
 
 <div class="main">
   <hgroup>
-    <h1>School List*<i>&emsp;*Grey colored schools has no Startswith connection</i></h1>
+    <h1>School List*<i>&emsp;*Grey colored schools have no Startswith connection</i></h1>
     <h4 class="z">Number of schools:&nbsp;{schools.length}</h4>
   </hgroup>
   <br>

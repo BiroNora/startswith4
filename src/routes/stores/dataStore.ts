@@ -43,7 +43,7 @@ export function seasonSlugify(text: string) {
 
   const semester = month >= 3 && month <= 9 ? 'SPRING' : 'AUTUMN'
 
-	const seasony = `${year}-${semester}`
+	const seasony = ` ${year}/${semester}`
   return seasony
 }
 

@@ -23,6 +23,9 @@
       <a href="/others/school_update" target="_blank">School_update</a>
     </li>
     <li>
+      <a href="/others/some" target="_blank">Some</a>
+    </li>
+    <li>
       <a href="/others/table_date" target="_blank">Table Date</a>
     </li>
     <li>

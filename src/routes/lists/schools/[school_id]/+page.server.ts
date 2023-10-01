@@ -108,6 +108,12 @@ const event: Action = async ({ request }) => {
   const estimated_student = Number(data.get('estimate'))
   const note = String(data.get('message'))
   const closing_date = new Date(String(clos_date))
+	const date = new Date(String(clos_date))
+	const year = date.getFullYear()
+	const month = date.getMonth() + 1
+	const semester = month >= 3 && month <= 9 ? 'SPRING' : 'AUTUMN'
+	console.log(year)
+	console.log(semester)
 
   const slugDate = dateSlugify(String(clos_date))
 
@@ -133,6 +139,8 @@ const event: Action = async ({ request }) => {
     data: {
       event_name,
       closing_date,
+			year,
+			semester,
       on_duty,
       event_type,
       estimated_student,
