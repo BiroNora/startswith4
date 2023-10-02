@@ -64,11 +64,6 @@
     selectedIntrestId = intrest_id;
   }
 
-  // Function to reset the selected intrest_id
-  function resetSelectedIntrestId() {
-    selectedIntrestId = 0
-  }
-
 	export let data
 	export let form: ActionData
 </script>
@@ -340,7 +335,7 @@
 			<div>
 				<label for="duty">On Duty</label>
 				<select bind:value={data.onduty} name="duty" id="duty" class="hidden-textbox">
-					{#each dutyMap3 as item, index (item.id)}
+					{#each dutyMap3 as item (item.id)}
 						<option value={item.id}>{item.name} </option>
 					{/each}
 				</select>
@@ -348,7 +343,7 @@
 			<div>
 				<label for="type">Event Type</label>
 				<select bind:value={data.eventtype} name="type" id="type" class="hidden-textbox">
-					{#each eventMap as item, index (item.id)}
+					{#each eventMap as item (item.id)}
 						<option value={item.id}>{item.name}</option>
 					{/each}
 				</select>
