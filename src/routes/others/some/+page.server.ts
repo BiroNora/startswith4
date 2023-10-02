@@ -36,6 +36,12 @@ export const load: PageServerLoad = async () => {
 		}
 	})
 
+	const y = events.map((e) => e.year)
+	const distinct: number[] = [...new Set(y)]
+	const distinctStrings: string[] = distinct.map(String) // Convert numbers to strings
+	const years: string[] = ['ALL', ...distinctStrings]
+	console.log(years)
+
 	const countries = await db.country.findMany({})
 
 	const regions = await db.region.findMany({
@@ -46,5 +52,5 @@ export const load: PageServerLoad = async () => {
 
 	const cities = await db.city.findMany({})
 
-	return { schools, countries, regions, counties, cities, events }
+	return { schools, countries, regions, counties, cities, events, years }
 }

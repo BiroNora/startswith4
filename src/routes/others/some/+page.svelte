@@ -1,10 +1,11 @@
 <script lang="ts">
 	import type { InterestedStudents } from '@prisma/client'
 	import type { PageServerData } from './$types'
+	import { semester } from '../../stores/dataStore'
 
   export let data: PageServerData
 
-  const { schools, regions, cities, events } = data
+  const { schools, regions, cities, events, years } = data
 
 	let pageName="Some"
 
@@ -143,9 +144,7 @@
 
 	function searchTable() {
 		const input = document.getElementById("searchInput") as HTMLInputElement
-    const semesterInput = document.getElementById("semesterFilter") as HTMLInputElement
     const filter = input.value.toUpperCase()
-    const semesterFilter = semesterInput.value.toUpperCase()
 		const table = document.querySelector(".table") as HTMLTableElement
 		const rows = table.getElementsByTagName("tr")
 		const totalStudentCountCell = document.getElementById("totalStudentCount")
@@ -170,13 +169,8 @@
 						const text = cell.textContent || cell.innerText
 
 						if (text.toUpperCase().indexOf(filter) > -1) {
-              const semesterCell = cells[4] // Semester cell in the table
-              const semesterText = semesterCell.textContent || semesterCell.innerText
-
-              if (semesterText.toUpperCase().indexOf(semesterFilter) > -1) {
-                  found = true
-                  break
-              }
+							found = true
+							break
             }
           }
 
@@ -229,12 +223,6 @@
 		input.value = ''
 		searchTable()
 	}
-
-  function clearInput1() {
-		let input = document.getElementById("semesterFilter") as HTMLInputElement
-		input.value = ''
-    searchTable()
-	}
 </script>
 
 <svelte:head>
@@ -247,6 +235,24 @@
 		<p><i>&emsp;*Active and cooperative schools with Startswith contact</i></p>
 	</hgroup>
 	<br>
+
+	<div class="semi-circular-input">
+		<label for="year">Select year</label>
+		<select value={years[0]} name="year" id="year" class="hidden-textbox">
+			{#each years as y}
+				<option value={y}>{y} </option>
+			{/each}
+		</select>
+	</div>
+
+	<div class="semi-circular-input">
+		<label for="semester">Select semester</label>
+		<select value={semester[0]} name="semester" id="semester" class="hidden-textbox">
+			{#each semester as sem}
+				<option value={sem}>{sem} </option>
+			{/each}
+		</select>
+	</div>
 
 	<div class="input-container">
 		<input
@@ -263,21 +269,6 @@
     &#10007;
   	</button>
 	</div>
-  <div class="input-container">
-		<input
-		type="search"
-		id="semesterFilter"
-		placeholder="Filter by Semester"
-		on:input={searchTable}
-		/>
-		<button
-    type="button"
-    class="clear-button secondary outline"
-    on:click={clearInput1}
-  	>
-    &#10007;
-  	</button>
-	</div>
 
 	<table class="table">
 		<thead>
@@ -289,7 +280,6 @@
 					<div>&#8470; of Schools</div>
 					<div><strong>{schoolCount}/{schools.length}</strong></div>
 				</th>
-				<th class="c v">Semester</th>
 				<th class="c v">
 					<div>&#8470; of Events &emsp;</div>
 					<div><strong id="totalEventCount">{initialTotalEventCount}</strong></div>
@@ -330,8 +320,6 @@
 						<td class="centered-link nb h">{school.name}</td>
 					</a>
 					<!--<td><a href={`/album/${track.albumId}`}>{track.albumTitle}</a></td>-->
-
-          <td class="c w">{semest(school.Event)}</td>
 					<td class="c">{school.Event.length}</td>
 					<td class="c">{add(school.Event)}</td>
 					<td class="c">{calculateInterestForSchoolEvents(school.Event)}</td>
@@ -424,5 +412,18 @@
 		padding: 0;
 		font-size: 1.2rem;
 		color: #32bea6;
+	}
+
+	select {
+		border-top-left-radius: 100px;
+    border-top-right-radius: 100px;
+		border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+	}
+
+	label {
+		padding-left: 1%;
+		font-size: 22px;
+		color: rgb(144, 132, 132);
 	}
 </style>
