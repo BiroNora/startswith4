@@ -1,4 +1,4 @@
-import { channelMap, gradeMap, my_id, statusMap } from './../../../stores/dataStore';
+import { channelMap, gradeMap, my_id, statusMap } from './../../../stores/dataStore'
 import { error, fail, redirect } from '@sveltejs/kit'
 import { db } from '$lib/database'
 import { dutyMap3, eventMap } from '../../../stores/dataStore'
@@ -47,19 +47,19 @@ export async function load({ params }) {
 	sc_id = Number(event?.school_id)
 
 	const school = await db.school.findUnique({
-		where: { school_id: sc_id },
+		where: { school_id: sc_id }
 	})
 
 	const cityid = school?.city_id
 
 	const city = await db.city.findUnique({
-		where: { city_id: cityid}
+		where: { city_id: cityid }
 	})
 	cityname = String(city?.city_name)
 
 	const inters = await db.interestedStudents.findMany({
 		where: { event_id: ev_id },
-		orderBy: {intrest_id: 'desc'}
+		orderBy: { intrest_id: 'desc' }
 	})
 
 	if (inters) {
@@ -112,115 +112,115 @@ export async function load({ params }) {
 		onduty,
 		eventtype,
 		cldate,
-		user,
+		user
 	}
 }
 
 async function delUser() {
 	const inter = await db.interestedStudents.findFirst({
-			where: { event_id: ev_id }
+		where: { event_id: ev_id }
 	})
 
-	const	users = await db.event.findUnique({
-		where: { event_id : ev_id },
+	const users = await db.event.findUnique({
+		where: { event_id: ev_id },
 		include: { User: true }
 	})
 
-	if (users && users.User.length > 1 || inter) {
+	if ((users && users.User.length > 1) || inter) {
 		return fail(400, { intern: true })
 	}
 
 	await db.event.delete({
-		where: { event_id: ev_id}
+		where: { event_id: ev_id }
 	})
 	throw redirect(303, '../../lists/events')
 }
 
 const interested: Action = async ({ request }) => {
-  const data = await request.formData()
-  const count = Number(data.get('number'))
+	const data = await request.formData()
+	const count = Number(data.get('number'))
 	const country_id = Number(data.get('country'))
 	const region_id = Number(data.get('connect'))
 	const grade = String(data.get('grade'))
 	const channel = String(data.get('channel'))
-  const apply = Boolean(data.get('apply'))
-  const work_title = String(data.get('work'))
+	const apply = Boolean(data.get('apply'))
+	const work_title = String(data.get('work'))
 	let status = String(data.get('status'))
-  const event_id = ev_id
+	const event_id = ev_id
 	const applied = apply
 
 	if (status === 'null') {
 		status = '0'
 	}
 
-  await db.interestedStudents.create({
-    data: {
-      Event: {
-        connect: {
-          event_id:  event_id,
-        },
-      },
-      count,
-      grade,
-      applied,
-      work_title,
-      channel,
-      status,
-      Region: {
-        connect: {
-          region_id:  region_id,
-        },
-      },
-      Country: {
-        connect: {
-          country_id: country_id,
-        },
-      },
-    }
-  })
-  throw redirect(303, '../../lists/events')
+	await db.interestedStudents.create({
+		data: {
+			Event: {
+				connect: {
+					event_id: event_id
+				}
+			},
+			count,
+			grade,
+			applied,
+			work_title,
+			channel,
+			status,
+			Region: {
+				connect: {
+					region_id: region_id
+				}
+			},
+			Country: {
+				connect: {
+					country_id: country_id
+				}
+			}
+		}
+	})
+	throw redirect(303, '../../lists/events')
 }
 
 const event: Action = async ({ request }) => {
-  const data = await request.formData()
-  const event_name = String(data.get('fantasy'))
-  const clos_date = data.get('meeting-time')
-  const on_duty = String(data.get('duty'))
-  const event_type = String(data.get('type'))
-  const estimated_student = Number(data.get('estimate'))
-  const note = String(data.get('message'))
-  const closing_date = new Date(String(clos_date))
+	const data = await request.formData()
+	const event_name = String(data.get('fantasy'))
+	const clos_date = data.get('meeting-time')
+	const on_duty = String(data.get('duty'))
+	const event_type = String(data.get('type'))
+	const estimated_student = Number(data.get('estimate'))
+	const note = String(data.get('message'))
+	const closing_date = new Date(String(clos_date))
 	const date = new Date(String(clos_date))
 	const year = date.getFullYear()
 	const month = date.getMonth() + 1
-	const semester = month >= 3 && month <= 9 ? 'SPRING' : 'AUTUMN'
+	const semester = month >= 3 && month <= 9 ? 'SPRING' : 'FALL'
 
-  if (event_name.length < 10) {
-    return fail(400, { title: true })
-  }
+	if (event_name.length < 10) {
+		return fail(400, { title: true })
+	}
 
-  await db.event.update({
-		where: {event_id: ev_id},
-    data: {
-      event_name,
-      closing_date,
+	await db.event.update({
+		where: { event_id: ev_id },
+		data: {
+			event_name,
+			closing_date,
 			year,
 			semester,
-      on_duty,
-      event_type,
-      estimated_student,
-      note,
-    }
-  })
-  throw redirect(303, '../../lists/events')
+			on_duty,
+			event_type,
+			estimated_student,
+			note
+		}
+	})
+	throw redirect(303, '../../lists/events')
 }
 
 const eventU: Action = async ({ request }) => {
-  const data = await request.formData()
+	const data = await request.formData()
 	const email = String(data.get('email'))
 
 	const user = await db.user.findUnique({
-		where: {user_email: email}
+		where: { user_email: email }
 	})
 
 	if (!user) {
@@ -228,13 +228,13 @@ const eventU: Action = async ({ request }) => {
 	}
 
 	const one = await db.event.findUnique({
-		where: {event_id: ev_id},
+		where: { event_id: ev_id },
 		include: { User: true }
 	})
 
 	let alreadyevent = false
 
-	one?.User.forEach(function(item) {
+	one?.User.forEach(function (item) {
 		if (item.user_email == email) {
 			alreadyevent = true
 		}
@@ -246,25 +246,25 @@ const eventU: Action = async ({ request }) => {
 
 	const us_id = user.user_id
 
-  const eventresult = await db.event.update({
-		where: {event_id: ev_id},
-    data: {
+	const eventresult = await db.event.update({
+		where: { event_id: ev_id },
+		data: {
 			User: {
 				connect: {
 					user_id: us_id
 				}
 			}
-    }
-  })
-  return { eventresult }
+		}
+	})
+	return { eventresult }
 }
 
 const eventUD: Action = async ({ request }) => {
-  const data = await request.formData()
+	const data = await request.formData()
 	const email = String(data.get('email'))
 
 	const user = await db.user.findUnique({
-		where: {user_email: email}
+		where: { user_email: email }
 	})
 
 	if (!user) {
@@ -272,13 +272,13 @@ const eventUD: Action = async ({ request }) => {
 	}
 
 	const one = await db.event.findUnique({
-		where: {event_id: ev_id},
+		where: { event_id: ev_id },
 		include: { User: true }
 	})
 
 	let already = false
 
-	one?.User.forEach(function(item) {
+	one?.User.forEach(function (item) {
 		if (item.user_email == email) {
 			already = true
 		}
@@ -290,19 +290,19 @@ const eventUD: Action = async ({ request }) => {
 
 	const us_id = user.user_id
 
-  const result = await db.event.update({
+	const result = await db.event.update({
 		where: { event_id: ev_id },
-			data: {
-				User: {
-				 disconnect: { user_id: us_id	}
-    		}
+		data: {
+			User: {
+				disconnect: { user_id: us_id }
 			}
-  })
+		}
+	})
 	return { result }
 }
 
 const delInterest: Action = async ({ request }) => {
-  const data = await request.formData()
+	const data = await request.formData()
 	const intrest_id = Number(data.get('int_id'))
 	console.log(intrest_id)
 
@@ -316,7 +316,7 @@ const delInterest: Action = async ({ request }) => {
 
 	const delResult = await db.interestedStudents.delete({
 		where: { intrest_id: intrest_id }
-  })
+	})
 	return { delResult }
 }
 

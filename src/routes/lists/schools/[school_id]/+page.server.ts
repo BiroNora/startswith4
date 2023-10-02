@@ -1,6 +1,16 @@
 import { error, fail, redirect } from '@sveltejs/kit'
 import { db } from '$lib/database'
-import { eventMap, dutyMap3, schType, duType, dateSlugify, slugify, my_id, dutyType, schoolType } from '../../../stores/dataStore.js'
+import {
+	eventMap,
+	dutyMap3,
+	schType,
+	duType,
+	dateSlugify,
+	slugify,
+	my_id,
+	dutyType,
+	schoolType
+} from '../../../stores/dataStore.js'
 import type { Action, Actions } from './$types'
 
 let extrType = ''
@@ -17,7 +27,7 @@ export async function load({ params }) {
 		where: { school_id: sc_id }
 	})
 
-  school_name = String(school?.name)
+	school_name = String(school?.name)
 
 	let extrSchoolType = ''
 	let extrSchoolDuty = ''
@@ -48,7 +58,7 @@ export async function load({ params }) {
 
 	const contact = await db.contact.findMany({
 		where: { school_id: sc_id },
-    orderBy: { contact_id: 'desc' }
+		orderBy: { contact_id: 'desc' }
 	})
 
 	const event = await db.event.findMany({
@@ -78,7 +88,7 @@ export async function load({ params }) {
 	const city = await db.city.findUnique({
 		where: { city_id: school?.city_id }
 	})
-  city_name = String(city?.city_name)
+	city_name = String(city?.city_name)
 
 	const region = await db.region.findUnique({
 		where: { region_id: school?.region_id }
@@ -88,7 +98,7 @@ export async function load({ params }) {
 		where: { county_id: school?.county_id }
 	})
 
-  const country = await db.country.findUnique({
+	const country = await db.country.findUnique({
 		where: { country_id: school?.country_id }
 	})
 
@@ -100,107 +110,105 @@ export async function load({ params }) {
 }
 
 const event: Action = async ({ request }) => {
-  const data = await request.formData()
-  const event_name = String(data.get('fantasy'))
-  const clos_date = data.get('meeting-time')
-  const on_duty = String(data.get('duty'))
-  const event_type = String(data.get('type'))
-  const estimated_student = Number(data.get('estimate'))
-  const note = String(data.get('message'))
-  const closing_date = new Date(String(clos_date))
+	const data = await request.formData()
+	const event_name = String(data.get('fantasy'))
+	const clos_date = data.get('meeting-time')
+	const on_duty = String(data.get('duty'))
+	const event_type = String(data.get('type'))
+	const estimated_student = Number(data.get('estimate'))
+	const note = String(data.get('message'))
+	const closing_date = new Date(String(clos_date))
 	const date = new Date(String(clos_date))
 	const year = date.getFullYear()
 	const month = date.getMonth() + 1
-	const semester = month >= 3 && month <= 9 ? 'SPRING' : 'AUTUMN'
+	const semester = month >= 3 && month <= 9 ? 'SPRING' : 'FALL'
 	console.log(year)
 	console.log(semester)
 
-  const slugDate = dateSlugify(String(clos_date))
+	const slugDate = dateSlugify(String(clos_date))
 
-  if (event_name.length < 10) {
-    return fail(400, { title: true })
-  }
-  //const school_name = 'Eventus Üzleti, Művészeti Szakgimnázium, Technikum, Gimnázium, Szakképző Iskola, Alapfokú Művészeti Iskola és Kollégium'
-  //const city_name = 'Egerszalók'
-  const cn = slugify(String(city_name?.slice(0, 12)))
-  const sn = slugify(String(school_name?.slice(0, 12)))
-  const se = slugify(event_name.slice(0, 12))
-  const slug = slugDate + '-' + cn + '-' + se + '-' + sn
+	if (event_name.length < 10) {
+		return fail(400, { title: true })
+	}
+	//const school_name = 'Eventus Üzleti, Művészeti Szakgimnázium, Technikum, Gimnázium, Szakképző Iskola, Alapfokú Művészeti Iskola és Kollégium'
+	//const city_name = 'Egerszalók'
+	const cn = slugify(String(city_name?.slice(0, 12)))
+	const sn = slugify(String(school_name?.slice(0, 12)))
+	const se = slugify(event_name.slice(0, 12))
+	const slug = slugDate + '-' + cn + '-' + se + '-' + sn
 
-  const uniqueSlug = await db.event.findUnique({
-    where: { slug }
-  })
+	const uniqueSlug = await db.event.findUnique({
+		where: { slug }
+	})
 
-  if (uniqueSlug) {
-    return fail(400, { uslug: true })
-  }
+	if (uniqueSlug) {
+		return fail(400, { uslug: true })
+	}
 
-  await db.event.create({
-    data: {
-      event_name,
-      closing_date,
+	await db.event.create({
+		data: {
+			event_name,
+			closing_date,
 			year,
 			semester,
-      on_duty,
-      event_type,
-      estimated_student,
-      note,
-      slug,
-      School: {
-        connect: {
-          school_id:  sc_id ,
-        },
-      },
-      User: {
-        connect: {
-          user_id: my_id,
-        },
-      },
-    }
-  })
-  throw redirect(303, '../../lists/events')
+			on_duty,
+			event_type,
+			estimated_student,
+			note,
+			slug,
+			School: {
+				connect: {
+					school_id: sc_id
+				}
+			},
+			User: {
+				connect: {
+					user_id: my_id
+				}
+			}
+		}
+	})
+	throw redirect(303, '../../lists/events')
 }
 
-
 const contact: Action = async ({ request }) => {
-  const data = await request.formData()
-  const contact_name = String(data.get('contactname'))
-  const contact_email = String(data.get('contactemail'))
-  const contact_phone = String(data.get('contactphone'))
-  const active_by = my_id
-  const contact_note = String(data.get('contactmessage'))
-  const active = true
+	const data = await request.formData()
+	const contact_name = String(data.get('contactname'))
+	const contact_email = String(data.get('contactemail'))
+	const contact_phone = String(data.get('contactphone'))
+	const active_by = my_id
+	const contact_note = String(data.get('contactmessage'))
+	const active = true
 
-  const contact = await db.contact.findUnique({
-    where: { contact_email }
-  })
+	const contact = await db.contact.findUnique({
+		where: { contact_email }
+	})
 
-  if ((contact)) {
-    return fail(400, { contact: true })
-  }
-  else {
-    await db.contact.create({
-      data: {
-        contact_email,
-        contact_name,
-        contact_phone,
-        contact_note,
-        User: {
-          connect: {
-            user_id: my_id,
-          },
-        },
-        active,
-        active_by,
-        School: {
-          connect: {
-            school_id:  sc_id,
-          },
-        },
-      },
-    })
-  }
-  throw redirect(303, '../../lists/contacts')
+	if (contact) {
+		return fail(400, { contact: true })
+	} else {
+		await db.contact.create({
+			data: {
+				contact_email,
+				contact_name,
+				contact_phone,
+				contact_note,
+				User: {
+					connect: {
+						user_id: my_id
+					}
+				},
+				active,
+				active_by,
+				School: {
+					connect: {
+						school_id: sc_id
+					}
+				}
+			}
+		})
+	}
+	throw redirect(303, '../../lists/contacts')
 }
 
 const school: Action = async ({ request }) => {
@@ -294,7 +302,7 @@ const school: Action = async ({ request }) => {
 	}
 
 	await db.school.update({
-    where: {school_id: sc_id },
+		where: { school_id: sc_id },
 		data: {
 			name,
 			zip_code,
@@ -326,12 +334,11 @@ const school: Action = async ({ request }) => {
 			kieg,
 			kolleg,
 			hidp,
-			nembes,
+			nembes
 		}
 	})
 
 	throw redirect(303, '../../lists/schools')
 }
-
 
 export const actions: Actions = { contact, event, school }

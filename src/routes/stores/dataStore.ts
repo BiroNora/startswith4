@@ -1,4 +1,4 @@
-export const my_id = "e01f3d1f-9cbb-4b49-a9f4-510d17c4fb6e"
+export const my_id = '3df440ed-0e1b-4f65-94da-c9901272cbcd'
 
 export function slugify(text: string) {
 	return text
@@ -17,7 +17,7 @@ export function dateSlugify(text: string) {
 	const y = date.getFullYear()
 	const m = date.getMonth() + 1
 	const d = date.getDate()
-	let day =''
+	let day = ''
 	let month = ''
 
 	if (d < 10) {
@@ -37,24 +37,24 @@ export function dateSlugify(text: string) {
 }
 
 export function seasonSlugify(text: string) {
-  const date = new Date(text)
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1
+	const date = new Date(text)
+	const year = date.getFullYear()
+	const month = date.getMonth() + 1
 
-  const semester = month >= 3 && month <= 9 ? 'SPRING' : 'AUTUMN'
+	const semester = month >= 3 && month <= 9 ? 'SPRING' : 'FALL'
 
 	const seasony = ` ${year}/${semester}`
-  return seasony
+	return seasony
 }
 
 export function timeSlugify(date: Date) {
 	const timeComponents = [date.getHours(), date.getMinutes()]
 	return timeComponents
-			.map(component => {
-					const pad = (component < 10) ? '0' : ''
-					return pad + component
-			})
-			.join(':')
+		.map((component) => {
+			const pad = component < 10 ? '0' : ''
+			return pad + component
+		})
+		.join(':')
 }
 
 export function formatDate(date: Date) {
@@ -111,11 +111,7 @@ export const eventMap = [
 	{ id: '10', name: 'ELSE *' }
 ]
 
-export const duType = [
-	'BASIC',
-	'MEDIOR',
-	'HIGH',
-]
+export const duType = ['BASIC', 'MEDIOR', 'HIGH']
 
 //                              false |basic | med-high
 // director / basic | medior-high  0  |   1  |   2
@@ -162,7 +158,7 @@ export const channelMap = [
 	{ id: '3', name: 'TEACHER' },
 	{ id: '4', name: 'FRIENDS' },
 	{ id: '5', name: 'CMM MEMBER' },
-	{ id: '6', name: 'CHLC' },	// OKTV
+	{ id: '6', name: 'CHLC' }, // OKTV
 	{ id: '7', name: 'HIGH' },
 	{ id: '8', name: 'FACEBOOK' },
 	{ id: '9', name: 'ONLINE PUBLICITY' },
