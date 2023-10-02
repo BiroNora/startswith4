@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { InterestedStudents } from '@prisma/client'
-	import { schType, seasonSlugify } from '../../stores/dataStore'
 	import type { PageServerData } from './$types'
 
   export let data: PageServerData
@@ -48,9 +47,33 @@
 
 	// Define a type for the events parameter
 	type EventWithEstimatedStudent = {
+		year: number,
+  	semester: string,
 		estimated_student?: number,
 		InterestedStudents: InterestedStudents[]
   }
+
+	function semest(eventArray: EventWithEstimatedStudent[]) {
+		// Initialize an empty object to store counts
+		const counts: Record<string, number> = {}
+
+		// Loop through the eventArray and add entries to the counts object
+		eventArray.forEach((event) => {
+			const key = `${event.year}/${event.semester}`
+			counts[key] = (counts[key] || 0) + 1
+		})
+
+		let resultString = ''
+		for (const key in counts) {
+			if (Object.prototype.hasOwnProperty.call(counts, key)) {
+				if (resultString !== '') {
+					resultString += ', '
+				}
+				resultString += `${key}:${counts[key]}`
+			}
+		}
+		return resultString
+	}
 
 	// Function to update the total event count
 	function updateTotalEventCount(filteredEvents: EventWithEstimatedStudent[]) {
@@ -266,7 +289,7 @@
 					<div>&#8470; of Schools</div>
 					<div><strong>{schoolCount}/{schools.length}</strong></div>
 				</th>
-        <th class="c v">Semester</th>
+				<th class="c v">Semester</th>
 				<th class="c v">
 					<div>&#8470; of Events &emsp;</div>
 					<div><strong id="totalEventCount">{initialTotalEventCount}</strong></div>
@@ -308,7 +331,7 @@
 					</a>
 					<!--<td><a href={`/album/${track.albumId}`}>{track.albumTitle}</a></td>-->
 
-          <td class="c w">{school.Event.map((e) => seasonSlugify(String(e.closing_date)))}</td>
+          <td class="c w">{semest(school.Event)}</td>
 					<td class="c">{school.Event.length}</td>
 					<td class="c">{add(school.Event)}</td>
 					<td class="c">{calculateInterestForSchoolEvents(school.Event)}</td>
