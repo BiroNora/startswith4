@@ -47,7 +47,9 @@
     filteredRegions = regions.filter((region) => region.country_id == selectedCountry)
     selectedRegion = null // Reset selected region
     isCountrySelected = true // Enable the region select
-    filterCounties()
+    if (filterRegions.length > 0) {
+      filterCounties()
+    }
   }
 
   // Function to filter counties based on the selected region
@@ -55,7 +57,9 @@
     filteredCounties = counties.filter((county) => county.region_id == selectedRegion)
     selectedCounty = null // Reset selected county
     isRegionSelected = true // Enable the county select
-    filterCities()
+    if (filterCounties.length > 0) {
+      filterCities()
+    }
   }
 
   // Function to filter cities based on the selected county
