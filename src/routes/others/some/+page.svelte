@@ -144,7 +144,13 @@
 
 	function searchTable() {
 		const input = document.getElementById("searchInput") as HTMLInputElement
-    const filter = input.value.toUpperCase()
+		const yearFilterSelect = document.getElementById("year") as HTMLSelectElement
+  	const semesterFilterSelect = document.getElementById("semester") as HTMLSelectElement
+
+		const filter = input.value.toUpperCase()
+		const yearFilter = yearFilterSelect.value
+  	const semesterFilter = semesterFilterSelect.value
+
 		const table = document.querySelector(".table") as HTMLTableElement
 		const rows = table.getElementsByTagName("tr")
 		const totalStudentCountCell = document.getElementById("totalStudentCount")
@@ -347,10 +353,6 @@
 
 	.v {
 		font-size: 19px;
-	}
-
-	.w {
-		font-size:xx-small;
 	}
 
 	table {
