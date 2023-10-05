@@ -104,7 +104,7 @@
 						type="submit"
 						class="secondary w z cc"
 						data-target="modal-example">
-					Confirm
+						Confirm
 					</button>
 					<button
 						type="button"
@@ -208,8 +208,7 @@
 						<button
 							type="submit"
 							class="secondary w z cc"
-							data-target="modal-example"
-							on:click={scrollToConnect}>
+							data-target="modal-example">
 							Confirm
 						</button>
 						<button

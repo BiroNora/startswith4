@@ -317,7 +317,11 @@ const delInterest: Action = async ({ request }) => {
 	const delResult = await db.interestedStudents.delete({
 		where: { intrest_id: intrest_id }
 	})
-	return { delResult }
+	if (delResult) {
+		throw redirect(303, '../../lists/events')
+	} else {
+		return fail(400)
+	}
 }
 
 export const actions: Actions = { interested, event, eventU, eventUD, delUser, delInterest }
