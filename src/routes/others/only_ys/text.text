@@ -1,0 +1,31 @@
+const schools = await db.school.findMany({
+  where: {
+    coop: true,
+    active: true,
+    User: {
+      some: {
+        NOT: {
+          user_id: undefined
+        }
+      }
+    },
+  },
+  include: {
+    User: {
+      select: {
+        name: true,
+      },
+    },
+    Event: {
+      where: {
+        // Add your filter criteria here
+        year: yearFilter,
+        semester: semesterFilter,
+      },
+      include: {
+        InterestedStudents: true,
+      },
+    },
+  },
+  orderBy: { name: 'asc' },
+});

@@ -304,7 +304,6 @@ const eventUD: Action = async ({ request }) => {
 const delInterest: Action = async ({ request }) => {
 	const data = await request.formData()
 	const intrest_id = Number(data.get('int_id'))
-	console.log(intrest_id)
 
 	const intrest = await db.interestedStudents.findUnique({
 		where: { intrest_id: intrest_id }
@@ -320,7 +319,7 @@ const delInterest: Action = async ({ request }) => {
 	if (delResult) {
 		throw redirect(303, '../../lists/events')
 	} else {
-		return fail(400)
+		return fail(400, { inters: true })
 	}
 }
 
