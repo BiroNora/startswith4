@@ -54,6 +54,7 @@
 		InterestedStudents: InterestedStudents[]
   }
 
+
 	function semest(eventArray: EventWithEstimatedStudent[]) {
 		// Initialize an empty object to store counts
 		const counts: Record<string, number> = {}

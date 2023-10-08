@@ -29,3 +29,12 @@ const schools = await db.school.findMany({
   },
   orderBy: { name: 'asc' },
 });
+
+
+function filterEventsByYearAndSemester(
+			events: EventWithEstimatedStudent[],
+			targetYear: number,
+			targetSemester: string
+		): EventWithEstimatedStudent[] {
+			return events.filter((event) => event.year === targetYear && event.semester === targetSemester);
+		}
