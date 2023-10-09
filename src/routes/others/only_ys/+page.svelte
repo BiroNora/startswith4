@@ -1,16 +1,13 @@
 <script lang="ts">
-	import type { InterestedStudents, School } from '@prisma/client'
-	import type { PageServerData } from './$types'
+	import { writable } from 'svelte/store'
 	import { semester } from '../../stores/dataStore'
+	import type { RequestPayload } from './+server'
 
-  export let data: PageServerData
-
-  const { schools, regions, cities, events, years } = data
-
+	const years = ['ALL', 2022, 2023]
 	let pageName="ONLY YS"
 
-	let yearFilter = 'ALL' // Default filter value
-  let semesterFilter = 'ALL'
+  let yearFilter = ''
+  let semesterFilter = ''
 
 	function searchTable() {
 		console.log('called')
@@ -36,24 +33,24 @@
 						break
 					}
 				}
-				if (found) {
-					rows[i].style.display = ""
-					// Get the corresponding school
-
-						let school = schools[i - 1]
-
-					// Include the InterestedStudents from the school's events if they exist
-					if (school.Event) {
-						school.Event.forEach((event: any) => {
-							if (event.InterestedStudents) {
-								filteredInterestedStudents.push(...event.InterestedStudents)
-							}
-						})
-						filteredSchoolCount++
-					}
-				} else {
-					rows[i].style.display = "none"
-				}
+				//if (found) {
+				//	rows[i].style.display = ""
+				//	// Get the corresponding school
+//
+				//		let school = schools[i - 1]
+//
+				//	// Include the InterestedStudents from the school's events if they exist
+				//	if (school.Event) {
+				//		school.Event.forEach((event: any) => {
+				//			if (event.InterestedStudents) {
+				//				filteredInterestedStudents.push(...event.InterestedStudents)
+				//			}
+				//		})
+				//		filteredSchoolCount++
+				//	}
+				//} else {
+				//	rows[i].style.display = "none"
+				//}
 			}
 		}
 	}
@@ -62,6 +59,45 @@
 		let input = document.getElementById("searchInput") as HTMLInputElement
 		input.value = ''
 		searchTable()
+	}
+
+	// Define a writable store for selectedYear
+	export const selectedYear = writable<number>(0)
+
+	let responseDataFormatted: any = null
+
+	// Function to format and set responseDataFormatted
+	function formatAndSetResponseData(responseData: any) {
+		responseDataFormatted = JSON.stringify(responseData, null, 2)
+	}
+
+	async function sendDataWithForm(event: any) {
+		event.preventDefault();
+		try {
+
+			const formData: RequestPayload = {
+				selectedYear: $selectedYear,
+				selectedSemester: semesterFilter,
+			}
+
+			const response = await fetch('http://localhost:5173/others/only_ys', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(formData),
+			});
+			console.log(JSON.stringify(formData))
+			if (response.ok) {
+				const responseData = await response.json()
+				formatAndSetResponseData(responseData)
+				console.log('RESPONSEData:' + responseData)
+			} else {
+				console.error('Server error:', response.statusText)
+			}
+		} catch (error) {
+			console.error('Error:', error);
+		}
 	}
 </script>
 
@@ -76,27 +112,33 @@
 	</hgroup>
 	<br>
 
-	<div class="semi-circular-input">
+	<form  on:submit={sendDataWithForm}>
+		<div class="semi-circular-input">
 		<label for="year">Select year</label>
-		<select bind:value={yearFilter} on:input={searchTable} name="year" id="year" class="hidden-textbox">
-			{#each years as y}
-				<option value={y}>{y} </option>
+		<select bind:value={$selectedYear} name="year" id="year" class="hidden-textbox">
+			{#each years as year}
+				<option value={year}>{year} </option>
 			{/each}
 		</select>
 	</div>
-
 	<p>Selected Year: {yearFilter}</p>
 
 	<div class="semi-circular-input">
 		<label for="semester">Select semester</label>
-		<select bind:value={semesterFilter} on:input={searchTable} name="semester" id="semester" class="hidden-textbox">
+		<select bind:value={semesterFilter} name="semester" id="semester" class="hidden-textbox">
 			{#each semester as sem}
 				<option value={sem}>{sem} </option>
 			{/each}
 		</select>
 	</div>
-
 	<p>Selected semester: {semesterFilter}</p>
+
+	<button class="btn" id="btn" type="submit">Confirm</button>
+	</form>
+
+	<div class="response-data">
+		<pre>{responseDataFormatted}</pre>
+	</div>
 
 	<div class="input-container">
 		<input
@@ -145,7 +187,7 @@
 			</tr>
 		</thead>
 
-		<!-- TABLE BODY -->
+		<!-- TABLE BODY
 
 		<tbody>
 			{#each schools as school}
@@ -167,14 +209,14 @@
 					</a>
 					<td class="c">{school.Event.map((event) => event.year)}</td>
 					<td class="c">{school.Event.map((event) => event.semester)}</td>
-					<!--<td><a href={`/album/${track.albumId}`}>{track.albumTitle}</a></td>-->
+
 					<td class="c">{school.Event.length}</td>
 					<td class="c"></td>
 					<td class="c"></td>
 					<td class="c"></td>
 				</tr>
 			{/each}
-		</tbody>
+		</tbody> -->
 	</table>
 </div>
 
@@ -263,11 +305,20 @@
     border-top-right-radius: 100px;
 		border-bottom-left-radius: 100px;
     border-bottom-right-radius: 100px;
+		width: 25%;
 	}
 
 	label {
 		padding-left: 1%;
 		font-size: 22px;
 		color: rgb(144, 132, 132);
+	}
+
+	.btn {
+		border-top-left-radius: 100px;
+    border-top-right-radius: 100px;
+		border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+		width: 25%;
 	}
 </style>
