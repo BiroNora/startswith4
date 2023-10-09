@@ -98,7 +98,7 @@ export const schoolType = [
 	['15', 'NEM BESOROLT']
 ]
 
-export const semester = ['ALL', 'SPRING', 'FALL']
+export const semester = ['', 'SPRING', 'FALL']
 
 export const eventMap = [
 	{ id: '1', name: 'PRESENTATION' },

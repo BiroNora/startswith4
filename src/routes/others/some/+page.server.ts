@@ -39,7 +39,7 @@ export const load: PageServerLoad = async () => {
 	const y = events.map((e) => e.year)
 	const distinct: number[] = [...new Set(y)]
 	const distinctStrings: string[] = distinct.map(String) // Convert numbers to strings
-	const years: string[] = ['ALL', ...distinctStrings]
+	const years: string[] = ['', ...distinctStrings]
 
 	const countries = await db.country.findMany({})
 

@@ -9,13 +9,6 @@ const schools = await db.school.findMany({
         }
       }
     },
-  },
-  include: {
-    User: {
-      select: {
-        name: true,
-      },
-    },
     Event: {
       where: {
         // Add your filter criteria here
@@ -26,6 +19,14 @@ const schools = await db.school.findMany({
         InterestedStudents: true,
       },
     },
+  },
+  include: {
+    User: {
+      select: {
+        name: true,
+      },
+    },
+
   },
   orderBy: { name: 'asc' },
 });
@@ -38,3 +39,303 @@ function filterEventsByYearAndSemester(
 		): EventWithEstimatedStudent[] {
 			return events.filter((event) => event.year === targetYear && event.semester === targetSemester);
 		}
+
+SELECT
+  i."count",
+  i.status,
+  u."name",
+  e.event_name,
+  e.estimated_student,
+  s."name",
+  s.country_id,
+  s.region_id,
+  s.county_id,
+  s.city_id,
+  s.zip_code,
+  s.address,
+  s.school_type,
+  s.duty
+FROM schools s
+JOIN "_SchoolToUser" stu
+ON stu."A" = s.school_id
+JOIN users u
+ON stu."B" = u.user_id
+JOIN events e
+USING (school_id)
+LEFT JOIN interested i
+ON e.event_id = i.event_id
+WHERE e."year" IN (2023) AND e.semester IN('FALL', 'SPRING')
+GROUP BY
+  i."count",
+  i.status,
+  u."name",
+  e.event_name,
+  e.estimated_student,
+  s."name",
+  s.country_id,
+  s.region_id,
+  s.county_id,
+  s.city_id,
+  s.zip_code,
+  s.address,
+  s.school_type,
+  s.duty
+  ;
+
+export const load: PageServerLoad = async () => {
+	const events = await db.event.findMany({
+	})
+	const y = events.map((e) => e.year)
+	const distinct: number[] = [...new Set(y)]
+	const distinctStrings: string[] = distinct.map(String) // Convert numbers to strings
+	const years: string[] = ['', ...distinctStrings]
+ return {  years }
+}
+
+export const load: PageServerLoad = async () => {
+  /*const schools = await db.school.findMany({
+		where: {
+			coop: true,
+			active: true,
+			User: {
+				some: {
+					NOT: {
+						user_id: undefined
+					}
+				}
+			},
+		},
+		include: {
+			User: {
+				select: {
+					name: true,
+				},
+			},
+			Event: {
+				where: {
+					// Add your filter criteria here
+					year: 2023,
+					semester: 'Spring',
+				},
+				include: {
+					InterestedStudents: true,
+				},
+			},
+		},
+		orderBy: { name: 'asc' },
+	})
+*/
+	const events = await db.event.findMany({
+		include: {
+			InterestedStudents: {
+			}
+		}
+	})
+
+	const y = events.map((e) => e.year)
+	const distinct: number[] = [...new Set(y)]
+	const distinctStrings: string[] = distinct.map(String) // Convert numbers to strings
+	const years: string[] = ['', ...distinctStrings]
+
+	const countries = await db.country.findMany({})
+
+	const regions = await db.region.findMany({
+		orderBy: { region_name: 'asc' }
+	})
+
+	const counties = await db.county.findMany({})
+
+	const cities = await db.city.findMany({})
+
+	const schoolsData = await db.$queryRaw`
+		SELECT
+			u."name",
+			country.country_name,
+			r.region_name,
+			county.county_name,
+			c.city_name,
+			i."count",
+			i.status,
+			e.event_name,
+			e.estimated_student,
+			s.school_id,
+			s."name",
+			s.zip_code,
+			s.address,
+			s.school_type,
+			s.duty
+		FROM schools s
+		JOIN "_SchoolToUser" stu
+			ON stu."A" = s.school_id
+		JOIN users u
+			ON stu."B" = u.user_id
+		JOIN country country
+			ON s.country_id = country.country_id
+		JOIN region r
+			ON s.region_id = r.region_id
+		JOIN county county
+			ON s.county_id = county.county_id
+		JOIN city c
+			ON s.city_id = c.city_id
+		JOIN events e
+			USING (school_id)
+		LEFT JOIN interested i
+			ON e.event_id = i.event_id
+		WHERE e."year" IN (2023) AND e.semester IN('FALL')
+		GROUP BY
+			country.country_name,
+			r.region_name,
+			county.county_name,
+			c.city_name,
+			i."count",
+			i.status,
+			u."name",
+			e.event_name,
+			e.estimated_student,
+			s.school_id,
+			s."name",
+			s.zip_code,
+			s.address,
+			s.school_type,
+			s.duty
+			;`
+
+	//console.log(schoolsData)
+	return {  years }
+}
+
+***
+
+export async function POST(request: any) {
+  const jsonData = JSON.stringify(request)
+  console.log(jsonData)
+  console.log('Request body: ' + JSON.stringify(request.params))
+  // Get the year and semester from the request body (assuming they are passed in the request)
+
+  try {
+
+    if (!('selectedYear' in request.body) ) {
+      throw new Error('year Invalid request body');
+    }
+    if (!('selectedSemester' in request.body)) {
+      throw new Error('semester request body');
+    }
+    if (!request.body) {
+      throw new Error('Invalid request body');
+    }
+    const { selectedYear, selectedSemester } = request.body;
+  console.log(selectedYear)
+    // Run the SQL query using db.$queryRaw
+    const schoolsData = await db.$queryRaw`
+      SELECT
+        u."name",
+        country.country_name,
+        r.region_name,
+        county.county_name,
+        c.city_name,
+        i."count",
+        i.status,
+        e.event_name,
+        e.estimated_student,
+        s.school_id,
+        s."name",
+        s.zip_code,
+        s.address,
+        s.school_type,
+        s.duty
+      FROM schools s
+      JOIN "_SchoolToUser" stu
+        ON stu."A" = s.school_id
+      JOIN users u
+        ON stu."B" = u.user_id
+      JOIN country country
+        ON s.country_id = country.country_id
+      JOIN region r
+        ON s.region_id = r.region_id
+      JOIN county county
+        ON s.county_id = county.county_id
+      JOIN city c
+        ON s.city_id = c.city_id
+      JOIN events e
+        USING (school_id)
+      LEFT JOIN interested i
+        ON e.event_id = i.event_id
+      WHERE e."year" IN (${selectedYear}) AND e.semester IN (${selectedSemester})
+      GROUP BY
+        country.country_name,
+        r.region_name,
+        county.county_name,
+        c.city_name,
+        i."count",
+        i.status,
+        u."name",
+        e.event_name,
+        e.estimated_student,
+        s.school_id,
+        s."name",
+        s.zip_code,
+        s.address,
+        s.school_type,
+        s.duty
+    `;
+
+    console.log(schoolsData)
+
+    // Close the Prisma client connection
+    await db.$disconnect();
+
+    const response: any = {
+      status: 200, // Set the HTTP status code to 200 (OK)
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ schoolsData }),
+    };
+
+    return response;
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+
+    // Close the Prisma client connection in case of an error
+    await db.$disconnect();
+
+    // Return an error response with status and body
+    const errorResponse: any = {
+      status: 500, // Internal Server Error
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ error: 'An error occurred' }),
+    };
+
+    return errorResponse;
+  }
+}
+
+///
+
+const response: any = {
+      status: 200, // Set the HTTP status code to 200 (OK)
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: { schoolsData },
+    };
+    const z = JSON.stringify(response)
+    console.log('RESPONSE: ' + z)
+    console.log(response)
+    return response
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+
+    // Close the Prisma client connection in case of an error
+    await db.$disconnect();
+
+    // Return an error response with status and body
+    return {
+      status: 400, // Bad Request
+      body: JSON.stringify({ error: 'Invalid JSON data' }),
+    };
+  }
