@@ -2,12 +2,15 @@
 	import { writable } from 'svelte/store'
 	import { semester } from '../../stores/dataStore'
 	import type { RequestPayload } from './+server'
+	import type { PageServerData } from './$types'
 
-	const years = ['ALL', 2022, 2023]
+	export let data: PageServerData
+
+	const { distinctYears } = data
+
 	let pageName="ONLY YS"
 
-  let yearFilter = ''
-  let semesterFilter = ''
+  let semesterFilter = 'ALL'
 
 	function searchTable() {
 		console.log('called')
@@ -76,7 +79,7 @@
 		try {
 
 			const formData: RequestPayload = {
-				selectedYear: $selectedYear,
+				selectedYear: Number($selectedYear),
 				selectedSemester: semesterFilter,
 			}
 
@@ -116,12 +119,11 @@
 		<div class="semi-circular-input">
 		<label for="year">Select year</label>
 		<select bind:value={$selectedYear} name="year" id="year" class="hidden-textbox">
-			{#each years as year}
+			{#each distinctYears as year}
 				<option value={year}>{year} </option>
 			{/each}
 		</select>
 	</div>
-	<p>Selected Year: {yearFilter}</p>
 
 	<div class="semi-circular-input">
 		<label for="semester">Select semester</label>
@@ -131,7 +133,6 @@
 			{/each}
 		</select>
 	</div>
-	<p>Selected semester: {semesterFilter}</p>
 
 	<button class="btn" id="btn" type="submit">Confirm</button>
 	</form>
@@ -320,5 +321,10 @@
 		border-bottom-left-radius: 100px;
     border-bottom-right-radius: 100px;
 		width: 25%;
+		background-color: #32bea6;
+	}
+
+	.btn:hover {
+		background-color: #11a58c;
 	}
 </style>
