@@ -45,7 +45,7 @@
 								<hgroup>
 									<li class="ld">
 										<a href="../../lists/schools/{sch.school_id}" class="aa">
-											Név: {sch.name}
+											Név: {sch.school_name}
 										</a>
 									</li>
 									<li class="ld">Telefon: {sch.dir_phone}</li>

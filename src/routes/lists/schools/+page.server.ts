@@ -10,7 +10,7 @@ export const load: PageServerLoad = async (event) => {
     include: {
       School: {
         orderBy: {
-          name: 'asc'
+          school_name: 'asc'
         }
       }
     }

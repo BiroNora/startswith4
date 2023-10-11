@@ -138,7 +138,7 @@ async function delUser() {
 
 const interested: Action = async ({ request }) => {
 	const data = await request.formData()
-	const count = Number(data.get('number'))
+	const intrest_count = Number(data.get('number'))
 	const country_id = Number(data.get('country'))
 	const region_id = Number(data.get('connect'))
 	const grade = String(data.get('grade'))
@@ -160,7 +160,7 @@ const interested: Action = async ({ request }) => {
 					event_id: event_id
 				}
 			},
-			count,
+			intrest_count,
 			grade,
 			applied,
 			work_title,
@@ -191,7 +191,7 @@ const event: Action = async ({ request }) => {
 	const note = String(data.get('message'))
 	const closing_date = new Date(String(clos_date))
 	const date = new Date(String(clos_date))
-	const year = date.getFullYear()
+	const event_year = date.getFullYear()
 	const month = date.getMonth() + 1
 	const semester = month >= 3 && month <= 9 ? 'SPRING' : 'FALL'
 
@@ -204,7 +204,7 @@ const event: Action = async ({ request }) => {
 		data: {
 			event_name,
 			closing_date,
-			year,
+			event_year,
 			semester,
 			on_duty,
 			event_type,

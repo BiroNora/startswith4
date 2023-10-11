@@ -39,7 +39,7 @@
 			// Filter InterestedStudents with status === "0" and sum their counts
 			const countWithStateZero = event.InterestedStudents
 				.filter((student: any) => student.status === '0')
-				.reduce((sum: number, student: any) => sum + student.count, 0)
+				.reduce((sum: number, student: any) => sum + student.intrest_count, 0)
 
 			return total + countWithStateZero
 		}
@@ -50,7 +50,7 @@
 		if (event.InterestedStudents) {
 			const countWithStateOne = event.InterestedStudents
 				.filter((student: any) => student.status === '1')
-				.reduce((sum: number, student: any) => sum + student.count, 0)
+				.reduce((sum: number, student: any) => sum + student.intrest_count, 0)
 
 			return total + countWithStateOne
 		}
@@ -61,7 +61,7 @@
 		if (event.InterestedStudents) {
 			const countWithStateTwo = event.InterestedStudents
 				.filter((student: any) => student.status === '2')
-				.reduce((sum: number, student: any) => sum + student.count, 0)
+				.reduce((sum: number, student: any) => sum + student.intrest_count, 0)
 
 			return total + countWithStateTwo
 		}
@@ -72,7 +72,7 @@
 		if (event.InterestedStudents) {
 			const countWithStateThree = event.InterestedStudents
 				.filter((student: any) => student.status === '3')
-				.reduce((sum: number, student: any) => sum + student.count, 0)
+				.reduce((sum: number, student: any) => sum + student.intrest_count, 0)
 
 			return total + countWithStateThree
 		}
@@ -105,7 +105,7 @@
 	function addInterest(interestedStudents: InterestedStudents[]): number {
 		return interestedStudents.reduce((total: number, student) => {
 			if (student.status === '0') {
-				return total + student.count
+				return total + student.intrest_count
 			}
 			return total
 		}, 0)
@@ -114,7 +114,7 @@
 	function addInterestOne(interestedStudents: InterestedStudents[]): number {
 		return interestedStudents.reduce((total: number, student) => {
 			if (student.status === '1') {
-				return total + student.count
+				return total + student.intrest_count
 			}
 			return total
 		}, 0)
@@ -123,7 +123,7 @@
 	function addInterestTwo(interestedStudents: InterestedStudents[]): number {
 		return interestedStudents.reduce((total: number, student) => {
 			if (student.status === '2') {
-				return total + student.count
+				return total + student.intrest_count
 			}
 			return total
 		}, 0)
@@ -132,7 +132,7 @@
 	function addInterestThree(interestedStudents: InterestedStudents[]): number {
 		return interestedStudents.reduce((total: number, student) => {
 			if (student.status === '3') {
-				return total + student.count
+				return total + student.intrest_count
 			}
 			return total
 		}, 0)
@@ -145,7 +145,7 @@
 					student => student.status === '0'
 				);
 				const countWithStatusZero = studentsWithStatusZero.reduce(
-					(sum, student) => sum + student.count,
+					(sum, student) => sum + student.intrest_count,
 					0
 				)
 				return total + countWithStatusZero
@@ -161,7 +161,7 @@
 					student => student.status === '1'
 				)
 				const countWithStatusOne = studentsWithStatusOne.reduce(
-					(sum, student) => sum + student.count,
+					(sum, student) => sum + student.intrest_count,
 					0
 				)
 				return total + countWithStatusOne
@@ -177,7 +177,7 @@
 					student => student.status === '2'
 				)
 				const countWithStatusTwo = studentsWithStatusTwo.reduce(
-					(sum, student) => sum + student.count,
+					(sum, student) => sum + student.intrest_count,
 					0
 				)
 				return total + countWithStatusTwo
@@ -193,7 +193,7 @@
 					student => student.status === '3'
 				);
 				const countWithStatusThree = studentsWithStatusThree.reduce(
-					(sum, student) => sum + student.count,
+					(sum, student) => sum + student.intrest_count,
 					0
 				)
 				return total + countWithStatusThree
@@ -375,7 +375,7 @@
 			{#each schools as school}
 				<tr>
 					<td id="nameCell" class="c">
-						{school.User.map((user) => user.name)}</td>
+						{school.User.map((user) => user.user_name)}</td>
 					{#each countries as coun}
 						{#if (school.country_id == coun.country_id)}
 							<td class="c w">{coun.country_name}</td>
@@ -397,7 +397,7 @@
 						{/if}
 					{/each}
 					<a href="../lists/all_schools/{school.school_id}" target="_blank" class="centered-link">
-						<td class="centered-link nb h">{school.name}</td>
+						<td class="centered-link nb h">{school.school_name}</td>
 					</a>
 					<td class="c w">{getType(school.school_type)}</td>
 					{#if (school.basic)}

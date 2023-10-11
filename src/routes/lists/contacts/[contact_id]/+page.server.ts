@@ -16,7 +16,7 @@ export async function load({ params }) {
 
 	const schools = await db.school.findMany({
 		where: { school_id: sc_id },
-		orderBy: { name: 'asc' }
+		orderBy: { school_name: 'asc' }
 	})
 
 	if (!contact) {
@@ -48,6 +48,5 @@ const contact: Action = async ({ request }) => {
 	})
 	throw redirect(303, '../../lists/contacts')
 }
-
 
 export const actions: Actions = { contact }

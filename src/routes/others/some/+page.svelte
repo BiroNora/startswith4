@@ -26,7 +26,7 @@
 			// Filter InterestedStudents with status === "0" and sum their counts
 			const countWithStateZero = event.InterestedStudents
 				.filter((student: any) => student.status === '0')
-				.reduce((sum: number, student: any) => sum + student.count, 0)
+				.reduce((sum: number, student: any) => sum + student.intrest_count, 0)
 
 			return total + countWithStateZero
 		}
@@ -37,7 +37,7 @@
 		if (event.InterestedStudents) {
 			const countWithStateOne = event.InterestedStudents
 				.filter((student: any) => student.status === '1')
-				.reduce((sum: number, student: any) => sum + student.count, 0)
+				.reduce((sum: number, student: any) => sum + student.intrest_count, 0)
 
 			return total + countWithStateOne
 		}
@@ -48,7 +48,7 @@
 
 	// Define a type for the events parameter
 	type EventWithEstimatedStudent = {
-		year: number,
+		event_year: number,
   	semester: string,
 		estimated_student?: number,
 		InterestedStudents: InterestedStudents[]
@@ -61,7 +61,7 @@
 
 		// Loop through the eventArray and add entries to the counts object
 		eventArray.forEach((event) => {
-			const key = `${event.year}/${event.semester}`
+			const key = `${event.event_year}/${event.semester}`
 			counts[key] = (counts[key] || 0) + 1
 		})
 
@@ -96,7 +96,7 @@
 	function addInterest(interestedStudents: InterestedStudents[]): number {
 		return interestedStudents.reduce((total: number, student) => {
 			if (student.status === '0') {
-				return total + student.count
+				return total + student.intrest_count
 			}
 			return total
 		}, 0)
@@ -105,7 +105,7 @@
 	function addInterestOne(interestedStudents: InterestedStudents[]): number {
 		return interestedStudents.reduce((total: number, student) => {
 			if (student.status === '1') {
-				return total + student.count
+				return total + student.intrest_count
 			}
 			return total
 		}, 0)
@@ -118,7 +118,7 @@
 					student => student.status === '0'
 				);
 				const countWithStatusZero = studentsWithStatusZero.reduce(
-					(sum, student) => sum + student.count,
+					(sum, student) => sum + student.intrest_count,
 					0
 				)
 				return total + countWithStatusZero
@@ -134,7 +134,7 @@
 					student => student.status === '1'
 				)
 				const countWithStatusOne = studentsWithStatusOne.reduce(
-					(sum, student) => sum + student.count,
+					(sum, student) => sum + student.intrest_count,
 					0
 				)
 				return total + countWithStatusOne
@@ -312,7 +312,7 @@
 			{#each schools as school}
 				<tr>
 					<td id="nameCell" class="c">
-						{school.User.map((user) => user.name)}</td>
+						{school.User.map((user) => user.user_name)}</td>
 					{#each regions as reg}
 						{#if (school.region_id == reg.region_id)}
 							<td class="c">{reg.region_name}</td>
@@ -324,7 +324,7 @@
 						{/if}
 					{/each}
 					<a href="../lists/all_schools/{school.school_id}" target="_blank" class="centered-link">
-						<td class="centered-link nb h">{school.name}</td>
+						<td class="centered-link nb h">{school.school_name}</td>
 					</a>
 					<!--<td><a href={`/album/${track.albumId}`}>{track.albumTitle}</a></td>-->
 					<td class="c">{school.Event.length}</td>

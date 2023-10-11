@@ -4,9 +4,9 @@ import type { PageServerLoad } from "./$types"
 
 export const load: PageServerLoad = async () => {
   const years = await db.event.findMany({
-		distinct: ['year'],
+		distinct: ["event_year"],
       select: {
-        year: true,
+        event_year: true,
       },
 	})
 
@@ -17,9 +17,9 @@ export const load: PageServerLoad = async () => {
     })
   }
 
-  const _distinctYearsNum = [...new Set(years.map(item => item.year))]
+  const _distinctYearsNum = [...new Set(years.map(item => item.event_year))]
 
-  const distinctYears = [...new Set(years.map(item => String(item.year)))]
+  const distinctYears = [...new Set(years.map(item => String(item.event_year)))]
   distinctYears.sort()
   distinctYears.unshift('ALL')
 

@@ -27,7 +27,7 @@ const school: Action = async ({ request }) => {
 	const county_id = Number(String(data.get('county')))
 	const city_id = Number(String(data.get('city')))
 	const om_id = String(data.get('om')) || null
-	const name = String(data.get('name'))
+	const school_name = String(data.get('name'))
 	const zip_code = String(data.get('zip'))
 	const address = String(data.get('address'))
 	const dir_name = String(data.get('dirname'))
@@ -179,7 +179,7 @@ const school: Action = async ({ request }) => {
 	await db.school.create({
 		data: {
 			om_id,
-			name,
+			school_name,
 			zip_code,
 			address,
 			dir_name,

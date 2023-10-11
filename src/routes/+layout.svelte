@@ -17,15 +17,6 @@
       <a href="/register/location" target="_blank">LocationR</a>
     </li>
     <li>
-      <a href="/others/iskola_reg" target="_blank">IskR</a>
-    </li>
-    <li>
-      <a href="/others/school_update" target="_blank">School_update</a>
-    </li>
-    <li>
-      <a href="/others/late" target="_blank">My_late</a>
-    </li>
-    <li>
       <a href="/others/only_ys" target="_blank">Only</a>
     </li>
     <li>

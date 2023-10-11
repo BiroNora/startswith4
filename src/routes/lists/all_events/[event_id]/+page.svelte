@@ -29,7 +29,7 @@
 				{#each data.event.User as u }
 					<ul class="ad">
 							<li class="lc">
-								Név: {u.name}
+								Név: {u.user_name}
 							</li>
 					</ul>
 				{/each}
@@ -41,7 +41,7 @@
 				<ul class="ac">
 					<li class="la">
 						<a href="../../lists/all_schools/{data.school?.school_id}" class="aa">
-							{data.school?.name}
+							{data.school?.school_name}
 							{' 🏠 '}
 							{data.cityname}
 						</a>
@@ -53,7 +53,7 @@
 			<hgroup>
 				{#each data.inters as ints}
 					<ul class="ac">
-						<li class="lb">Diákok száma: {ints.count}</li>
+						<li class="lb">Diákok száma: {ints.intrest_count}</li>
 						{#each data.countries as country}
 							{#if country.country_id == ints.country_id}
 								<li class="lb">Ország: {country.country_name}</li>

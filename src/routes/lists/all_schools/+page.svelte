@@ -96,7 +96,7 @@
                   {#if s.active && !s.coop}
                     <li class="li">
                       <a href="../lists/all_schools/{s.school_id}" class={s.User.length > 0 ? "aa" : "bb"}>
-                        { s.name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
+                        { s.school_name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
                         <strong
                           class="s1">{#if (s.basic)} BASIC {/if} {#if (s.medior)} MEDIOR {/if} {#if (s.high)} HIGH {/if}
                         </strong>
@@ -109,7 +109,7 @@
                   {:else if s.active && s.coop}
                     <li class="li">
                       <a href="../lists/all_schools/{s.school_id}" class={s.User.length > 0 ? "aa" : "bb"}>
-                        { s.name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
+                        { s.school_name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
                         <strong
                           class="s1">{#if (s.basic)} BASIC {/if} {#if (s.medior)} MEDIOR {/if} {#if (s.high)} HIGH {/if}
                         </strong>
@@ -118,7 +118,7 @@
                   {:else if !s.active && s.coop}
                     <li class="li">
                       <a href="../lists/all_schools/{s.school_id}" class={s.User.length > 0 ? "aa" : "bb"}>
-                        { s.name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
+                        { s.school_name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
                         <strong
                           class="s1">{#if (s.basic)} BASIC {/if} {#if (s.medior)} MEDIOR {/if} {#if (s.high)} HIGH {/if}
                         </strong>
@@ -131,7 +131,7 @@
                   {:else if !s.active && !s.coop}
                     <li class="li">
                       <a href="../lists/all_schools/{s.school_id}" class={s.User.length > 0 ? "aa" : "bb"}>
-                        { s.name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
+                        { s.school_name } {' 🏠 '} { r.region_name } &#10148; {coun.county_name} &#10148; { c.city_name } &#10045;
                         <strong
                           class="s1">{#if (s.basic)} BASIC {/if} {#if (s.medior)} MEDIOR {/if} {#if (s.high)} HIGH {/if}
                         </strong>

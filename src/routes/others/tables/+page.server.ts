@@ -17,7 +17,7 @@ export const load: PageServerLoad = async () => {
 		include: {
 			User: {
 				select: {
-					name: true,
+					user_name: true,
 				},
 			},
 			Event: {
@@ -26,7 +26,7 @@ export const load: PageServerLoad = async () => {
 				}
 			},
 		},
-    orderBy: { name: 'asc' },
+    orderBy: { school_name: 'asc' },
   })
 
 	const events = await db.event.findMany({

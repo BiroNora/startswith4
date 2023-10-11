@@ -28,7 +28,7 @@ export const load: PageServerLoad = async (event) => {
           active: true,
         },
       })
-      const school_name = String(schools?.name)
+      const school_name = String(schools?.school_name)
       obj.slug = school_name
 
       for (const dM of dutyMap3) {

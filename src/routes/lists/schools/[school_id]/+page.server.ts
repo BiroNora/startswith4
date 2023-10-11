@@ -27,7 +27,7 @@ export async function load({ params }) {
 		where: { school_id: sc_id }
 	})
 
-	school_name = String(school?.name)
+	school_name = String(school?.school_name)
 
 	let extrSchoolType = ''
 	let extrSchoolDuty = ''
@@ -119,11 +119,9 @@ const event: Action = async ({ request }) => {
 	const note = String(data.get('message'))
 	const closing_date = new Date(String(clos_date))
 	const date = new Date(String(clos_date))
-	const year = date.getFullYear()
+	const event_year = date.getFullYear()
 	const month = date.getMonth() + 1
 	const semester = month >= 3 && month <= 9 ? 'SPRING' : 'FALL'
-	console.log(year)
-	console.log(semester)
 
 	const slugDate = dateSlugify(String(clos_date))
 
@@ -149,7 +147,7 @@ const event: Action = async ({ request }) => {
 		data: {
 			event_name,
 			closing_date,
-			year,
+			event_year,
 			semester,
 			on_duty,
 			event_type,
@@ -213,7 +211,7 @@ const contact: Action = async ({ request }) => {
 
 const school: Action = async ({ request }) => {
 	const data = await request.formData()
-	const name = String(data.get('name'))
+	const school_name = String(data.get('name'))
 	const zip_code = String(data.get('zip'))
 	const address = String(data.get('address'))
 	const dir_name = String(data.get('dirname'))
@@ -304,7 +302,7 @@ const school: Action = async ({ request }) => {
 	await db.school.update({
 		where: { school_id: sc_id },
 		data: {
-			name,
+			school_name,
 			zip_code,
 			address,
 			dir_name,

@@ -24,9 +24,9 @@
 		<h1>School Details</h1>
 		<hgroup>
 			{#if !data.school.active || !data.school.coop}
-				<h3>{data.school.name} {' ⚠️ '}</h3>
+				<h3>{data.school.school_name} {' ⚠️ '}</h3>
 			{:else if data.school.active}
-				<h3>{data.school.name}</h3>
+				<h3>{data.school.school_name}</h3>
 			{/if}
 			<hgroup>
 				<h6>{data.school.zip_code} {data.city?.city_name} {data.school.address}</h6>
@@ -56,7 +56,7 @@
 					{#each data.school.User as u}
 						<ul class="ac">
 							<li class="lc">
-								Név: {u.name}
+								Név: {u.user_name}
 							</li>
 						</ul>
 					{/each}
@@ -100,7 +100,7 @@
 		<div class="rei">
 			<p>School Startswith User Update</p>
 		</div>
-		<p class="uni">{data.school.name}</p>
+		<p class="uni">{data.school.school_name}</p>
 		<form action="?/schoolU" method="post" use:enhance>
 			<div />
 			<div>
@@ -133,7 +133,7 @@
 		<div class="rei">
 			<p>School Startswith User Remove</p>
 		</div>
-		<p class="uni">{data.school.name}</p>
+		<p class="uni">{data.school.school_name}</p>
 		<form action="?/schoolUD" method="post" use:enhance>
 			<div />
 			<div>

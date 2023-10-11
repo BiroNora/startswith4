@@ -11,19 +11,19 @@ export async function POST({ request }) {
     try {
       const schoolsData = await db.$queryRaw`
         SELECT
-        e.year,
+        e.event_year,
         e.semester,
-          u."name",
+          u.user_name,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          i."count",
+          i.intrest_count,
           i.status,
           e.event_name,
           e.estimated_student,
           s.school_id,
-          s."name",
+          s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
@@ -47,24 +47,24 @@ export async function POST({ request }) {
           ON e.event_id = i.event_id
         WHERE e.semester IN (${selectedSemester})
         GROUP BY
-        e.year,
+        e.event_year,
         e.semester,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          i."count",
+          i.intrest_count,
           i.status,
-          u."name",
+          u.user_name,
           e.event_name,
           e.estimated_student,
           s.school_id,
-          s."name",
+          s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty
-        ORDER BY s."name"
+        ORDER BY s.school_name
       `;
 
       await db.$disconnect()
@@ -102,19 +102,19 @@ export async function POST({ request }) {
     try {
       const schoolsData = await db.$queryRaw`
         SELECT
-        e.year,
+        e.event_year,
         e.semester,
-          u."name",
+          u.user_name,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          i."count",
+          i.intrest_count,
           i.status,
           e.event_name,
           e.estimated_student,
           s.school_id,
-          s."name",
+          s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
@@ -136,26 +136,26 @@ export async function POST({ request }) {
           USING (school_id)
         LEFT JOIN interested i
           ON e.event_id = i.event_id
-        WHERE e."year" IN (${selectedYear})
+        WHERE e.event_year IN (${selectedYear})
         GROUP BY
-        e.year,
+        e.event_year,
         e.semester,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          i."count",
+          i.intrest_count,
           i.status,
-          u."name",
+          u.user_name,
           e.event_name,
           e.estimated_student,
           s.school_id,
-          s."name",
+          s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty
-        ORDER BY s."name"
+        ORDER BY s.school_name
       `;
 
       await db.$disconnect()
@@ -191,19 +191,19 @@ export async function POST({ request }) {
     try {
       const schoolsData = await db.$queryRaw`
         SELECT
-        e.year,
+        e.event_year,
         e.semester,
-          u."name",
+          u.user_name,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          i."count",
+          i.intrest_count,
           i.status,
           e.event_name,
           e.estimated_student,
           s.school_id,
-          s."name",
+          s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
@@ -226,24 +226,24 @@ export async function POST({ request }) {
         LEFT JOIN interested i
           ON e.event_id = i.event_id
         GROUP BY
-        e.year,
+        e.event_year,
         e.semester,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          i."count",
+          i.intrest_count,
           i.status,
-          u."name",
+          u.user_name,
           e.event_name,
           e.estimated_student,
           s.school_id,
-          s."name",
+          s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty
-        ORDER BY s."name"
+        ORDER BY s.school_name
       `;
 
       await db.$disconnect()
@@ -278,19 +278,19 @@ export async function POST({ request }) {
     try {
       const schoolsData = await db.$queryRaw`
         SELECT
-        e.year,
+        e.event_year,
         e.semester,
-          u."name",
+          u.user_name,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          i."count",
+          i.intrest_count,
           i.status,
           e.event_name,
           e.estimated_student,
           s.school_id,
-          s."name",
+          s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
@@ -312,26 +312,26 @@ export async function POST({ request }) {
           USING (school_id)
         LEFT JOIN interested i
           ON e.event_id = i.event_id
-        WHERE e."year" IN (${selectedYear}) AND e.semester IN (${selectedSemester})
+        WHERE e.event_year IN (${selectedYear}) AND e.semester IN (${selectedSemester})
         GROUP BY
-        e.year,
+        e.event_year,
         e.semester,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          i."count",
+          i.intrest_count,
           i.status,
-          u."name",
+          u.user_name,
           e.event_name,
           e.estimated_student,
           s.school_id,
-          s."name",
+          s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty
-        ORDER BY s."name"
+        ORDER BY s.school_name
       `;
 
       await db.$disconnect()

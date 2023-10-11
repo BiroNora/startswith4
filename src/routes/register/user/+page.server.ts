@@ -14,9 +14,9 @@ export const load: PageServerLoad = async () => {
 
 const user: Action = async ({ request }) => {
 	const data = await request.formData()
-  const name = String(data.get('name'))
+  const user_name = String(data.get('name'))
   const nationality = String(data.get('nationality'))
-  const phone = String(data.get('phone'))
+  const user_phone = String(data.get('phone'))
 	const user_email = String(data.get('email'))
   const basic = Boolean(data.get('basic'))
   const reB = String(data.get('regB'))
@@ -94,9 +94,9 @@ const user: Action = async ({ request }) => {
 
   await db.user.create({
     data: {
-      name,
+      user_name,
       nationality,
-      phone,
+      user_phone,
       user_email,
       on_duty,
       passwordHash: await bcrypt.hash(password1, 10),
@@ -118,6 +118,5 @@ const user: Action = async ({ request }) => {
 
   throw redirect(303, '/login')
 }
-
 
 export const actions: Actions = { user }

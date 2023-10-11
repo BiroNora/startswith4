@@ -3,8 +3,6 @@ import type { PageServerLoad } from './$types'
 import { db } from '$lib/database'
 import { dutyMap3 } from '../../stores/dataStore'
 
-const ev_sc_set = new Set<number>()
-
 let extrDuty = ''
 
 export const load: PageServerLoad = async (event) => {

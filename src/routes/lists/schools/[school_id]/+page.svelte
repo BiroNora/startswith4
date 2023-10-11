@@ -135,9 +135,9 @@
 		<h1>School Details</h1>
 		<hgroup>
 			{#if !data.school.active || !data.school.coop}
-				<h3>{data.school.name} {' ⚠️ '}</h3>
+				<h3>{data.school.school_name} {' ⚠️ '}</h3>
 			{:else if data.school.active}
-				<h3>{data.school.name}</h3>
+				<h3>{data.school.school_name}</h3>
 			{/if}
 			<hgroup>
 				<h6>{data.school.zip_code} {data.city?.city_name} {data.school.address}</h6>
@@ -331,7 +331,7 @@
 		<form action="?/school" method="post" use:enhance>
 			<div>
 				<label for="name">School Name</label>
-				<input type="text" value={data.school.name} name="name" id="name" required />
+				<input type="text" value={data.school.school_name} name="name" id="name" required />
 			</div>
 			<div>
 				<label for="zip">ZIP Code</label>

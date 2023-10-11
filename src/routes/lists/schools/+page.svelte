@@ -12,24 +12,24 @@
 <div class="main">
   <h1>My School List</h1>
   <ul>
-    {#each schools as { school_id, name, school_email, address, active, coop, city_id }}
+    {#each schools as { school_id, school_name, school_email, address, active, coop, city_id }}
       {#each cities as c}
         {#if city_id == c.city_id}
           {#if active && !coop}
           <li class="li">
-          <a href="../lists/schools/{school_id}" class="aa">{ name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } {' ⚠️ '} <strong>NO COOPERATION</strong></a>
+          <a href="../lists/schools/{school_id}" class="aa">{ school_name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } {' ⚠️ '} <strong>NO COOPERATION</strong></a>
           </li>
           {:else if active && coop}
           <li class="li">
-            <a href="../lists/schools/{school_id}" class="aa">{ name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } </a>
+            <a href="../lists/schools/{school_id}" class="aa">{ school_name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } </a>
           </li>
           {:else if !active && coop}
           <li class="li">
-            <a href="../lists/schools/{school_id}" class="aa">{ name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } {' ⚠️ '} <strong>NOT ACTIVE</a>
+            <a href="../lists/schools/{school_id}" class="aa">{ school_name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } {' ⚠️ '} <strong>NOT ACTIVE</a>
           </li>
           {:else if !active && !coop}
           <li class="li">
-            <a href="../lists/schools/{school_id}" class="aa">{ name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } {' ⚠️ '} <strong>NOT ACTIVE</strong></a>
+            <a href="../lists/schools/{school_id}" class="aa">{ school_name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } {' ⚠️ '} <strong>NOT ACTIVE</strong></a>
           </li>
           {/if}
         {/if}

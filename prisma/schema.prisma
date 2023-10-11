@@ -10,7 +10,7 @@ datasource db {
 model School {
   school_id    Int       @id @default(autoincrement())
   om_id        String?
-  name         String
+  school_name  String
   zip_code     String
   address      String
   dir_name     String?
@@ -74,9 +74,9 @@ model Contact {
 
 model User {
   user_id       String    @id @default(uuid())
-  name          String
+  user_name     String
   nationality   String
-  phone         String
+  user_phone    String
   user_email    String    @unique
   on_duty       String[]
   passwordHash  String
@@ -107,7 +107,7 @@ model Event {
   event_name         String
   create_date        DateTime             @default(now()) @db.Timestamptz(3)
   closing_date       DateTime             @db.Timestamptz(3)
-  year               Int
+  event_year         Int
   semester           String
   on_duty            String
   event_type         String
@@ -123,19 +123,19 @@ model Event {
 }
 
 model InterestedStudents {
-  intrest_id Int     @id @default(autoincrement())
-  event_id   Int
-  count      Int
-  grade      String
-  applied    Boolean
-  work_title String
-  channel    String
-  status     String
-  country_id Int
-  region_id  Int
-  Country    Country @relation(fields: [country_id], references: [country_id])
-  Event      Event   @relation(fields: [event_id], references: [event_id])
-  Region     Region  @relation(fields: [region_id], references: [region_id])
+  intrest_id    Int     @id @default(autoincrement())
+  event_id      Int
+  intrest_count Int
+  grade         String
+  applied       Boolean
+  work_title    String
+  channel       String
+  status        String
+  country_id    Int
+  region_id     Int
+  Country       Country @relation(fields: [country_id], references: [country_id])
+  Event         Event   @relation(fields: [event_id], references: [event_id])
+  Region        Region  @relation(fields: [region_id], references: [region_id])
 
   @@map("interested")
 }

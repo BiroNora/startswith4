@@ -45,8 +45,8 @@
 		return formattedTimestamp
 	}
 
-	function add(inters: Array<{ count?: number }>) {
-		return inters.reduce((total, inter) => total + (inter.count || 0), 0)
+	function add(inters: Array<{ intrest_count?: number }>) {
+		return inters.reduce((total, inter) => total + (inter.intrest_count || 0), 0)
 	}
 
 	let itemNumber = 0
@@ -146,7 +146,7 @@
 				<ul class="ac">
 					<li class="la">
 						<a href="../../lists/schools/{data.school?.school_id}" class="aa">
-							{data.school?.name}
+							{data.school?.school_name}
 							{' 🏠 '}
 							{data.cityname}
 						</a>
@@ -169,7 +169,7 @@
 								{index+1}. adat törlése
 							</a></p>
 						<li class="lb">
-							Diákok száma: {ints.count}
+							Diákok száma: {ints.intrest_count}
 						</li>
 						{#each data.countries as country}
 							{#if country.country_id == ints.country_id}
