@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { writable } from 'svelte/store'
-	import { semester } from '../../stores/dataStore'
+	import { duty, semester } from '../../stores/dataStore'
 	import type { RequestPayload } from './+server'
 	import type { PageServerData } from './$types'
 
@@ -10,7 +10,8 @@
 
 	let pageName="ONLY YS"
 
-  let semesterFilter = 'ALL'
+	let semesterFilter = 'ALL'
+	let dutyFilter = 'ALL'
 
 	function searchTable() {
 		console.log('called')
@@ -19,7 +20,7 @@
 		const table = document.querySelector(".table") as HTMLTableElement
 		const rows = table.getElementsByTagName("tr")
 		let filteredSchoolCount = 0
-		let filteredInterestedStudents: InterestedStudents[] = []
+		//let filteredInterestedStudents: InterestedStudents[] = []
 
 		for (let i = 0; i < rows.length; i++) {
 			const cells = rows[i].getElementsByTagName("td")
@@ -39,9 +40,9 @@
 				//if (found) {
 				//	rows[i].style.display = ""
 				//	// Get the corresponding school
-//
+				//
 				//		let school = schools[i - 1]
-//
+				//
 				//	// Include the InterestedStudents from the school's events if they exist
 				//	if (school.Event) {
 				//		school.Event.forEach((event: any) => {
@@ -65,7 +66,7 @@
 	}
 
 	// Define a writable store for selectedYear
-	export const selectedYear = writable<number>(0)
+	export const selectedYear = writable<string>('ALL')
 
 	let responseDataFormatted: any = null
 
@@ -75,12 +76,13 @@
 	}
 
 	async function sendDataWithForm(event: any) {
-		event.preventDefault();
+		event.preventDefault()
 		try {
 
 			const formData: RequestPayload = {
 				selectedYear: Number($selectedYear),
 				selectedSemester: semesterFilter,
+				selectedDuty: dutyFilter
 			}
 
 			const response = await fetch('http://localhost:5173/others/only_ys', {
@@ -99,7 +101,7 @@
 				console.error('Server error:', response.statusText)
 			}
 		} catch (error) {
-			console.error('Error:', error);
+			console.error('Error:', error)
 		}
 	}
 </script>
@@ -117,7 +119,7 @@
 
 	<form  on:submit={sendDataWithForm}>
 		<div class="semi-circular-input">
-		<label for="year">Select year</label>
+		<label for="year">Select Year</label>
 		<select bind:value={$selectedYear} name="year" id="year" class="hidden-textbox">
 			{#each distinctYears as year}
 				<option value={year}>{year} </option>
@@ -126,10 +128,19 @@
 	</div>
 
 	<div class="semi-circular-input">
-		<label for="semester">Select semester</label>
+		<label for="semester">Select Semester</label>
 		<select bind:value={semesterFilter} name="semester" id="semester" class="hidden-textbox">
 			{#each semester as sem}
 				<option value={sem}>{sem} </option>
+			{/each}
+		</select>
+	</div>
+
+	<div class="semi-circular-input">
+		<label for="duty">Select Duty</label>
+		<select bind:value={dutyFilter} name="duty" id="duty" class="hidden-textbox">
+			{#each duty as d}
+				<option value={d.id}>{d.name} </option>
 			{/each}
 		</select>
 	</div>
@@ -161,14 +172,18 @@
 		<thead>
 			<tr>
         <th class="c v">Startswith Contact</th>
+				<th class="c v">Country</th>
         <th class="c v">Region</th>
+				<th class="c v">County</th>
         <th class="c v">City</th>
 				<th class="c v">
 					<div>&#8470; of Schools</div>
 					<!--<div><strong>{schoolCount}/{schools.length}</strong></div>-->
 				</th>
-				<th class="c v">Year</th>
-				<th class="c v">Semester</th>
+				<th class="c v">School Type</th>
+				<th class="c b">BAS</th>
+        <th class="c b">MED</th>
+        <th class="c b">HIGH</th>
 				<th class="c v">
 					<div>&#8470; of Events &emsp;</div>
 					<!--<div><strong id="totalEventCount">{initialTotalEventCount}</strong></div>-->
@@ -184,6 +199,14 @@
         <th class="c v">
 					<div>&#8470; of ADMITTED &emsp;</div>
 					<!--<div><strong id="totalInterestedStudentCountOne">{initialTotalIntrStudentCountOne}</strong></div>-->
+				</th>
+				<th class="c v">
+					<div>&#8470; of REJECTED &emsp;</div>
+					<!--<div><strong id="totalInterestedStudentCountTwo">{initialTotalIntrStudentCountTwo}</strong></div>-->
+				</th>
+        <th class="c v">
+					<div>&nbsp;&nbsp;&nbsp; &#8470; of &emsp; IN PROGRESS </div>
+					<!--<div><strong id="totalInterestedStudentCountThree">{initialTotalIntrStudentCountThree}</strong></div>-->
 				</th>
 			</tr>
 		</thead>
@@ -230,6 +253,11 @@
 
 	.c {
 		text-align: center
+	}
+
+	.b {
+		width: 7%;
+		font-size: x-small;
 	}
 
 	.h {

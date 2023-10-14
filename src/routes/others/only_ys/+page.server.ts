@@ -17,11 +17,9 @@ export const load: PageServerLoad = async () => {
     })
   }
 
-  const _distinctYearsNum = [...new Set(years.map(item => item.event_year))]
-
   const distinctYears = [...new Set(years.map(item => String(item.event_year)))]
   distinctYears.sort()
   distinctYears.unshift('ALL')
 
-  return { distinctYears, _distinctYearsNum }
+  return { distinctYears }
 }

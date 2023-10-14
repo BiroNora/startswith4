@@ -99,6 +99,13 @@ export const schoolType = [
 ]
 
 export const semester = ['ALL', 'SPRING', 'FALL']
+//export const duty = ['ALL', 'BASIC', 'MEDIOR', 'HIGH']//
+export const duty = [
+	{ id: 'ALL', name: 'ALL' },
+	{ id: '1', name: 'BASIC' },
+	{ id: '2', name: 'MEDIOR' },
+	{ id: '3', name: 'HIGH' }
+]
 
 export const eventMap = [
 	{ id: '1', name: 'PRESENTATION' },
