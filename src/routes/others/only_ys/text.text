@@ -1,3 +1,12 @@
+Our endeavors?
+ChatGPT
+Certainly, I'm here to help with any questions or guidance related
+to your endeavors or any other topics you might be interested in.
+Whether you need advice on a specific project, information
+on a particular subject, or assistance with a task,
+feel free to ask, and I'll do my best to provide useful insights and information.
+Please let me know how I can assist you further!
+
 const schools = await db.school.findMany({
   where: {
     coop: true,
