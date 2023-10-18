@@ -5,6 +5,7 @@
 	import type { PageServerData } from './$types'
 
 	export let data: PageServerData
+	export const responseData = writable([])
 
 	const { distinctYears, regions } = data
 
@@ -70,6 +71,7 @@
 	export const selectedRegion = writable('ALL')
 
 	let responseDataFormatted: any = null
+	let schoolsData = []
 
 	// Function to format and set responseDataFormatted
 	function formatAndSetResponseData(responseData: any) {
@@ -98,6 +100,7 @@
 			if (response.ok) {
 				const responseData = await response.json()
 				formatAndSetResponseData(responseData)
+				schoolsData = responseData.schoolsData
 				console.log('RESPONSEData:' + responseData)
 			} else {
 				console.error('Server error:', response.statusText)
@@ -222,6 +225,12 @@
 				</th>
 			</tr>
 		</thead>
+
+		<tbody>
+			{#each schoolsData as school}
+			<td class="c">{school.school_name}</td>
+			{/each}
+		</tbody>
 
 		<!-- TABLE BODY
 
