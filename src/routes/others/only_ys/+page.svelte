@@ -6,7 +6,7 @@
 
 	export let data: PageServerData
 
-	const { distinctYears } = data
+	const { distinctYears, regions } = data
 
 	let pageName="ONLY YS"
 
@@ -67,6 +67,7 @@
 
 	// Define a writable store for selectedYear
 	export const selectedYear = writable<string>('ALL')
+	export const selectedRegion = writable('ALL')
 
 	let responseDataFormatted: any = null
 
@@ -82,7 +83,8 @@
 			const formData: RequestPayload = {
 				selectedYear: Number($selectedYear),
 				selectedSemester: semesterFilter,
-				selectedDuty: dutyFilter
+				selectedDuty: dutyFilter,
+				selectedRegion: Number($selectedRegion)
 			}
 
 			const response = await fetch('http://localhost:5173/others/only_ys', {
@@ -141,6 +143,16 @@
 		<select bind:value={dutyFilter} name="duty" id="duty" class="hidden-textbox">
 			{#each duty as d}
 				<option value={d.id}>{d.name} </option>
+			{/each}
+		</select>
+	</div>
+
+	<div class="semi-circular-input">
+		<label for="region">Select Region</label>
+		<select bind:value={$selectedRegion} name="region" id="region" class="hidden-textbox">
+			<option value="ALL">ALL</option>
+			{#each regions as reg}
+				<option value={reg.region_id}>{reg.region_name} </option>
 			{/each}
 		</select>
 	</div>

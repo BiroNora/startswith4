@@ -21,5 +21,20 @@ export const load: PageServerLoad = async () => {
   distinctYears.sort()
   distinctYears.unshift('ALL')
 
-  return { distinctYears }
+  const regions = await db.region.findMany({})
+
+  if (!regions) {
+    return fail(400, {
+      error: true,
+      message: 'Something went wrong. Please try it later.'
+    })
+  }
+
+  //regions.unshift({
+  //  region_id: 0,
+  //  region_name: 'ALL',
+  //  country_id: 0,
+  //})
+
+  return { distinctYears, regions }
 }
