@@ -1,18 +1,23 @@
 import { db } from '$lib/database'
 
 export async function POST({ request }) {
-  const requestBody = await request.text()
-  const formData = JSON.parse(requestBody)
-  const { selectedYear, selectedSemester, selectedDuty, selectedRegion } = formData
-  console.log('selY ' + selectedYear)
-  console.log('selS ' + selectedSemester)
-  console.log('selD ' + selectedDuty)
-  console.log('selR ' + selectedRegion)
+	const requestBody = await request.text()
+	const formData = JSON.parse(requestBody)
+	const { selectedYear, selectedSemester, selectedDuty, selectedRegion } = formData
+	console.log('selY ' + selectedYear)
+	console.log('selS ' + selectedSemester)
+	console.log('selD ' + selectedDuty)
+	console.log('selR ' + selectedRegion)
 
-  if (selectedYear == null && selectedSemester != 'ALL' && selectedDuty == 'ALL' && selectedRegion == null) {
-    console.log('year all, semest string, duty all, reg all')
-    try {
-      const schoolsData = await db.$queryRaw`
+	if (
+		selectedYear == null &&
+		selectedSemester != 'ALL' &&
+		selectedDuty == 'ALL' &&
+		selectedRegion == null
+	) {
+		console.log('year all, semest string, duty all, reg all')
+		try {
+			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
           SELECT
               e.school_id,
@@ -66,7 +71,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           COALESCE(ec.event_count, 0) AS event_count,
           COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
           COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
@@ -113,7 +120,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           ec.event_count,
           es.sum_estimated_student,
           total_intrest_count_status_0,
@@ -122,42 +131,47 @@ export async function POST({ request }) {
           total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
-      `;
+      `
 
-      await db.$disconnect()
-      // Create a JSON response object
-      const responseBody = JSON.stringify({ schoolsData })
-      const responseHeaders = {
-        'Content-Type': 'application/json',
-      }
-      const responseStatus = 200
+			await db.$disconnect()
+			// Create a JSON response object
+			const responseBody = JSON.stringify({ schoolsData })
+			const responseHeaders = {
+				'Content-Type': 'application/json'
+			}
+			const responseStatus = 200
 
-      // Create a Response object and return it
-      const response = new Response(responseBody, {
-        status: responseStatus,
-        headers: responseHeaders,
-      })
+			// Create a Response object and return it
+			const response = new Response(responseBody, {
+				status: responseStatus,
+				headers: responseHeaders
+			})
 
-      return response
-    } catch (error) {
-      console.error('Error:', error)
+			return response
+		} catch (error) {
+			console.error('Error:', error)
 
-      // Return an error response
-      const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
-        status: 500, // Internal Server Error
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+			// Return an error response
+			const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
+				status: 500, // Internal Server Error
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-      return errorResponse
-    }
-  }
+			return errorResponse
+		}
+	}
 
-  if (selectedYear != null && selectedSemester == 'ALL' && selectedDuty == 'ALL' && selectedRegion == null) {
-    console.log('year num, semester all, duty all, reg all')
-    try {
-      const schoolsData = await db.$queryRaw`
+	if (
+		selectedYear != null &&
+		selectedSemester == 'ALL' &&
+		selectedDuty == 'ALL' &&
+		selectedRegion == null
+	) {
+		console.log('year num, semester all, duty all, reg all')
+		try {
+			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
           SELECT
               e.school_id,
@@ -211,7 +225,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           COALESCE(ec.event_count, 0) AS event_count,
           COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
           COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
@@ -258,7 +274,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           ec.event_count,
           es.sum_estimated_student,
           total_intrest_count_status_0,
@@ -267,42 +285,47 @@ export async function POST({ request }) {
           total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
-      `;
+      `
 
-      await db.$disconnect()
+			await db.$disconnect()
 
-      const responseBody = JSON.stringify({ schoolsData })
-      const responseHeaders = {
-        'Content-Type': 'application/json',
-      }
-      const responseStatus = 200
+			const responseBody = JSON.stringify({ schoolsData })
+			const responseHeaders = {
+				'Content-Type': 'application/json'
+			}
+			const responseStatus = 200
 
-      const response = new Response(responseBody, {
-        status: responseStatus,
-        headers: responseHeaders,
-      })
+			const response = new Response(responseBody, {
+				status: responseStatus,
+				headers: responseHeaders
+			})
 
-      return response
-    } catch (error) {
-      console.error('Error:', error)
+			return response
+		} catch (error) {
+			console.error('Error:', error)
 
-      const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
-        status: 500, // Internal Server Error
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+			const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
+				status: 500, // Internal Server Error
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-      return errorResponse
-    }
-  }
+			return errorResponse
+		}
+	}
 
-  // ALL, ALL, ALL, ALL
+	// ALL, ALL, ALL, ALL
 
-  if (selectedYear == null && selectedSemester == 'ALL' && selectedDuty == 'ALL' && selectedRegion == null) {
-    console.log('year all, semester all, duty all, reg all')
-    try {
-      const schoolsData = await db.$queryRaw`
+	if (
+		selectedYear == null &&
+		selectedSemester == 'ALL' &&
+		selectedDuty == 'ALL' &&
+		selectedRegion == null
+	) {
+		console.log('year all, semester all, duty all, reg all')
+		try {
+			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
           SELECT
               e.school_id,
@@ -353,7 +376,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           COALESCE(ec.event_count, 0) AS event_count,
           COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
           COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
@@ -399,7 +424,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           ec.event_count,
           es.sum_estimated_student,
           total_intrest_count_status_0,
@@ -408,39 +435,44 @@ export async function POST({ request }) {
           total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
-      `;
+      `
 
-      await db.$disconnect()
+			await db.$disconnect()
 
-      const responseBody = JSON.stringify({ schoolsData })
-      const responseHeaders = {
-        'Content-Type': 'application/json',
-      }
-      const responseStatus = 200
-      const response = new Response(responseBody, {
-        status: responseStatus,
-        headers: responseHeaders,
-      })
+			const responseBody = JSON.stringify({ schoolsData })
+			const responseHeaders = {
+				'Content-Type': 'application/json'
+			}
+			const responseStatus = 200
+			const response = new Response(responseBody, {
+				status: responseStatus,
+				headers: responseHeaders
+			})
 
-      return response
-    } catch (error) {
-      console.error('Error:', error)
+			return response
+		} catch (error) {
+			console.error('Error:', error)
 
-      const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
-        status: 500, // Internal Server Error
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+			const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
+				status: 500, // Internal Server Error
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-      return errorResponse
-    }
-  }
+			return errorResponse
+		}
+	}
 
-  if (selectedYear != null && selectedSemester != 'ALL' && selectedDuty == 'ALL' && selectedRegion == null) {
-    console.log('year num, semester string, duty all, reg all')
-    try {
-      const schoolsData = await db.$queryRaw`
+	if (
+		selectedYear != null &&
+		selectedSemester != 'ALL' &&
+		selectedDuty == 'ALL' &&
+		selectedRegion == null
+	) {
+		console.log('year num, semester string, duty all, reg all')
+		try {
+			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
           SELECT
               e.school_id,
@@ -497,7 +529,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           COALESCE(ec.event_count, 0) AS event_count,
           COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
           COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
@@ -545,7 +579,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           ec.event_count,
           es.sum_estimated_student,
           total_intrest_count_status_0,
@@ -554,40 +590,45 @@ export async function POST({ request }) {
           total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
-      `;
+      `
 
-      await db.$disconnect()
+			await db.$disconnect()
 
-      const responseBody = JSON.stringify({ schoolsData })
-      const responseHeaders = {
-        'Content-Type': 'application/json',
-      }
-      const responseStatus = 200
+			const responseBody = JSON.stringify({ schoolsData })
+			const responseHeaders = {
+				'Content-Type': 'application/json'
+			}
+			const responseStatus = 200
 
-      const response = new Response(responseBody, {
-        status: responseStatus,
-        headers: responseHeaders,
-      })
+			const response = new Response(responseBody, {
+				status: responseStatus,
+				headers: responseHeaders
+			})
 
-      return response
-    } catch (error) {
-      console.error('Error:', error)
+			return response
+		} catch (error) {
+			console.error('Error:', error)
 
-      const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
-        status: 500, // Internal Server Error
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+			const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
+				status: 500, // Internal Server Error
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-      return errorResponse
-    }
-  }
+			return errorResponse
+		}
+	}
 
-  if (selectedYear == null && selectedSemester != 'ALL' && selectedDuty != 'ALL' && selectedRegion == null) {
-    console.log('year all, semest string, duty string, reg all')
-    try {
-      const schoolsData = await db.$queryRaw`
+	if (
+		selectedYear == null &&
+		selectedSemester != 'ALL' &&
+		selectedDuty != 'ALL' &&
+		selectedRegion == null
+	) {
+		console.log('year all, semest string, duty string, reg all')
+		try {
+			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
           SELECT
               e.school_id,
@@ -644,7 +685,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           COALESCE(ec.event_count, 0) AS event_count,
           COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
           COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
@@ -692,7 +735,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           ec.event_count,
           es.sum_estimated_student,
           total_intrest_count_status_0,
@@ -701,42 +746,47 @@ export async function POST({ request }) {
           total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
-      `;
+      `
 
-      await db.$disconnect()
-      // Create a JSON response object
-      const responseBody = JSON.stringify({ schoolsData })
-      const responseHeaders = {
-        'Content-Type': 'application/json',
-      }
-      const responseStatus = 200
+			await db.$disconnect()
+			// Create a JSON response object
+			const responseBody = JSON.stringify({ schoolsData })
+			const responseHeaders = {
+				'Content-Type': 'application/json'
+			}
+			const responseStatus = 200
 
-      // Create a Response object and return it
-      const response = new Response(responseBody, {
-        status: responseStatus,
-        headers: responseHeaders,
-      })
+			// Create a Response object and return it
+			const response = new Response(responseBody, {
+				status: responseStatus,
+				headers: responseHeaders
+			})
 
-      return response
-    } catch (error) {
-      console.error('Error:', error)
+			return response
+		} catch (error) {
+			console.error('Error:', error)
 
-      // Return an error response
-      const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
-        status: 500, // Internal Server Error
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+			// Return an error response
+			const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
+				status: 500, // Internal Server Error
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-      return errorResponse
-    }
-  }
+			return errorResponse
+		}
+	}
 
-  if (selectedYear != null && selectedSemester == 'ALL' && selectedDuty != 'ALL' && selectedRegion == null) {
-    console.log('year num, semester all, duty string, reg all')
-    try {
-      const schoolsData = await db.$queryRaw`
+	if (
+		selectedYear != null &&
+		selectedSemester == 'ALL' &&
+		selectedDuty != 'ALL' &&
+		selectedRegion == null
+	) {
+		console.log('year num, semester all, duty string, reg all')
+		try {
+			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
           SELECT
               e.school_id,
@@ -793,7 +843,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           COALESCE(ec.event_count, 0) AS event_count,
           COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
           COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
@@ -841,7 +893,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           ec.event_count,
           es.sum_estimated_student,
           total_intrest_count_status_0,
@@ -850,40 +904,45 @@ export async function POST({ request }) {
           total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
-      `;
+      `
 
-      await db.$disconnect()
+			await db.$disconnect()
 
-      const responseBody = JSON.stringify({ schoolsData })
-      const responseHeaders = {
-        'Content-Type': 'application/json',
-      }
-      const responseStatus = 200
+			const responseBody = JSON.stringify({ schoolsData })
+			const responseHeaders = {
+				'Content-Type': 'application/json'
+			}
+			const responseStatus = 200
 
-      const response = new Response(responseBody, {
-        status: responseStatus,
-        headers: responseHeaders,
-      })
+			const response = new Response(responseBody, {
+				status: responseStatus,
+				headers: responseHeaders
+			})
 
-      return response
-    } catch (error) {
-      console.error('Error:', error)
+			return response
+		} catch (error) {
+			console.error('Error:', error)
 
-      const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
-        status: 500, // Internal Server Error
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+			const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
+				status: 500, // Internal Server Error
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-      return errorResponse
-    }
-  }
+			return errorResponse
+		}
+	}
 
-  if (selectedYear == null && selectedSemester == 'ALL' && selectedDuty != 'ALL' && selectedRegion == null) {
-    console.log('year all, semester all, duty string, reg all')
-    try {
-      const schoolsData = await db.$queryRaw`
+	if (
+		selectedYear == null &&
+		selectedSemester == 'ALL' &&
+		selectedDuty != 'ALL' &&
+		selectedRegion == null
+	) {
+		console.log('year all, semester all, duty string, reg all')
+		try {
+			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
           SELECT
               e.school_id,
@@ -937,7 +996,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           COALESCE(ec.event_count, 0) AS event_count,
           COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
           COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
@@ -984,7 +1045,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           ec.event_count,
           es.sum_estimated_student,
           total_intrest_count_status_0,
@@ -993,39 +1056,44 @@ export async function POST({ request }) {
           total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
-      `;
+      `
 
-      await db.$disconnect()
+			await db.$disconnect()
 
-      const responseBody = JSON.stringify({ schoolsData })
-      const responseHeaders = {
-        'Content-Type': 'application/json',
-      }
-      const responseStatus = 200
-      const response = new Response(responseBody, {
-        status: responseStatus,
-        headers: responseHeaders,
-      })
+			const responseBody = JSON.stringify({ schoolsData })
+			const responseHeaders = {
+				'Content-Type': 'application/json'
+			}
+			const responseStatus = 200
+			const response = new Response(responseBody, {
+				status: responseStatus,
+				headers: responseHeaders
+			})
 
-      return response
-    } catch (error) {
-      console.error('Error:', error)
+			return response
+		} catch (error) {
+			console.error('Error:', error)
 
-      const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
-        status: 500, // Internal Server Error
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+			const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
+				status: 500, // Internal Server Error
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-      return errorResponse
-    }
-  }
+			return errorResponse
+		}
+	}
 
-  if (selectedYear != null && selectedSemester != 'ALL' && selectedDuty != 'ALL' && selectedRegion == null) {
-    console.log('year num, semester string, duty string, reg all')
-    try {
-      const schoolsData = await db.$queryRaw`
+	if (
+		selectedYear != null &&
+		selectedSemester != 'ALL' &&
+		selectedDuty != 'ALL' &&
+		selectedRegion == null
+	) {
+		console.log('year num, semester string, duty string, reg all')
+		try {
+			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
           SELECT
               e.school_id,
@@ -1085,7 +1153,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           COALESCE(ec.event_count, 0) AS event_count,
           COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
           COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
@@ -1134,7 +1204,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           ec.event_count,
           es.sum_estimated_student,
           total_intrest_count_status_0,
@@ -1143,42 +1215,47 @@ export async function POST({ request }) {
           total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
-      `;
+      `
 
-      await db.$disconnect()
+			await db.$disconnect()
 
-      const responseBody = JSON.stringify({ schoolsData })
-      const responseHeaders = {
-        'Content-Type': 'application/json',
-      }
-      const responseStatus = 200
+			const responseBody = JSON.stringify({ schoolsData })
+			const responseHeaders = {
+				'Content-Type': 'application/json'
+			}
+			const responseStatus = 200
 
-      const response = new Response(responseBody, {
-        status: responseStatus,
-        headers: responseHeaders,
-      })
+			const response = new Response(responseBody, {
+				status: responseStatus,
+				headers: responseHeaders
+			})
 
-      return response
-    } catch (error) {
-      console.error('Error:', error)
+			return response
+		} catch (error) {
+			console.error('Error:', error)
 
-      const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
-        status: 500, // Internal Server Error
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+			const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
+				status: 500, // Internal Server Error
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-      return errorResponse
-    }
-  }
+			return errorResponse
+		}
+	}
 
-  // REGION
+	// REGION
 
-  if (selectedYear == null && selectedSemester != 'ALL' && selectedDuty == 'ALL' && selectedRegion != null) {
-    console.log('year all, semest string, duty all, reg num')
-    try {
-      const schoolsData = await db.$queryRaw`
+	if (
+		selectedYear == null &&
+		selectedSemester != 'ALL' &&
+		selectedDuty == 'ALL' &&
+		selectedRegion != null
+	) {
+		console.log('year all, semest string, duty all, reg num')
+		try {
+			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
           SELECT
               e.school_id,
@@ -1236,7 +1313,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           COALESCE(ec.event_count, 0) AS event_count,
           COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
           COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
@@ -1284,7 +1363,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           ec.event_count,
           es.sum_estimated_student,
           total_intrest_count_status_0,
@@ -1293,42 +1374,47 @@ export async function POST({ request }) {
           total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
-      `;
+      `
 
-      await db.$disconnect()
-      // Create a JSON response object
-      const responseBody = JSON.stringify({ schoolsData })
-      const responseHeaders = {
-        'Content-Type': 'application/json',
-      }
-      const responseStatus = 200
+			await db.$disconnect()
+			// Create a JSON response object
+			const responseBody = JSON.stringify({ schoolsData })
+			const responseHeaders = {
+				'Content-Type': 'application/json'
+			}
+			const responseStatus = 200
 
-      // Create a Response object and return it
-      const response = new Response(responseBody, {
-        status: responseStatus,
-        headers: responseHeaders,
-      })
+			// Create a Response object and return it
+			const response = new Response(responseBody, {
+				status: responseStatus,
+				headers: responseHeaders
+			})
 
-      return response
-    } catch (error) {
-      console.error('Error:', error)
+			return response
+		} catch (error) {
+			console.error('Error:', error)
 
-      // Return an error response
-      const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
-        status: 500, // Internal Server Error
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+			// Return an error response
+			const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
+				status: 500, // Internal Server Error
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-      return errorResponse
-    }
-  }
+			return errorResponse
+		}
+	}
 
-  if (selectedYear != null && selectedSemester == 'ALL' && selectedDuty == 'ALL' && selectedRegion != null) {
-    console.log('year num, semester all, duty all, reg num')
-    try {
-      const schoolsData = await db.$queryRaw`
+	if (
+		selectedYear != null &&
+		selectedSemester == 'ALL' &&
+		selectedDuty == 'ALL' &&
+		selectedRegion != null
+	) {
+		console.log('year num, semester all, duty all, reg num')
+		try {
+			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
           SELECT
               e.school_id,
@@ -1386,7 +1472,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           COALESCE(ec.event_count, 0) AS event_count,
           COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
           COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
@@ -1434,7 +1522,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           ec.event_count,
           es.sum_estimated_student,
           total_intrest_count_status_0,
@@ -1443,40 +1533,45 @@ export async function POST({ request }) {
           total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
-      `;
+      `
 
-      await db.$disconnect()
+			await db.$disconnect()
 
-      const responseBody = JSON.stringify({ schoolsData })
-      const responseHeaders = {
-        'Content-Type': 'application/json',
-      }
-      const responseStatus = 200
+			const responseBody = JSON.stringify({ schoolsData })
+			const responseHeaders = {
+				'Content-Type': 'application/json'
+			}
+			const responseStatus = 200
 
-      const response = new Response(responseBody, {
-        status: responseStatus,
-        headers: responseHeaders,
-      })
+			const response = new Response(responseBody, {
+				status: responseStatus,
+				headers: responseHeaders
+			})
 
-      return response
-    } catch (error) {
-      console.error('Error:', error)
+			return response
+		} catch (error) {
+			console.error('Error:', error)
 
-      const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
-        status: 500, // Internal Server Error
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+			const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
+				status: 500, // Internal Server Error
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-      return errorResponse
-    }
-  }
+			return errorResponse
+		}
+	}
 
-  if (selectedYear == null && selectedSemester == 'ALL' && selectedDuty == 'ALL' && selectedRegion != null) {
-    console.log('year all, semester all, duty all, reg num')
-    try {
-      const schoolsData = await db.$queryRaw`
+	if (
+		selectedYear == null &&
+		selectedSemester == 'ALL' &&
+		selectedDuty == 'ALL' &&
+		selectedRegion != null
+	) {
+		console.log('year all, semester all, duty all, reg num')
+		try {
+			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
           SELECT
               e.school_id,
@@ -1531,7 +1626,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           COALESCE(ec.event_count, 0) AS event_count,
           COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
           COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
@@ -1578,7 +1675,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           ec.event_count,
           es.sum_estimated_student,
           total_intrest_count_status_0,
@@ -1587,39 +1686,44 @@ export async function POST({ request }) {
           total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
-      `;
+      `
 
-      await db.$disconnect()
+			await db.$disconnect()
 
-      const responseBody = JSON.stringify({ schoolsData })
-      const responseHeaders = {
-        'Content-Type': 'application/json',
-      }
-      const responseStatus = 200
-      const response = new Response(responseBody, {
-        status: responseStatus,
-        headers: responseHeaders,
-      })
+			const responseBody = JSON.stringify({ schoolsData })
+			const responseHeaders = {
+				'Content-Type': 'application/json'
+			}
+			const responseStatus = 200
+			const response = new Response(responseBody, {
+				status: responseStatus,
+				headers: responseHeaders
+			})
 
-      return response
-    } catch (error) {
-      console.error('Error:', error)
+			return response
+		} catch (error) {
+			console.error('Error:', error)
 
-      const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
-        status: 500, // Internal Server Error
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+			const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
+				status: 500, // Internal Server Error
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-      return errorResponse
-    }
-  }
+			return errorResponse
+		}
+	}
 
-  if (selectedYear != null && selectedSemester != 'ALL' && selectedDuty == 'ALL' && selectedRegion != null) {
-    console.log('year num, semester string, duty all, reg num')
-    try {
-      const schoolsData = await db.$queryRaw`
+	if (
+		selectedYear != null &&
+		selectedSemester != 'ALL' &&
+		selectedDuty == 'ALL' &&
+		selectedRegion != null
+	) {
+		console.log('year num, semester string, duty all, reg num')
+		try {
+			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
           SELECT
               e.school_id,
@@ -1680,7 +1784,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           COALESCE(ec.event_count, 0) AS event_count,
           COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
           COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
@@ -1729,7 +1835,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           ec.event_count,
           es.sum_estimated_student,
           total_intrest_count_status_0,
@@ -1738,42 +1846,47 @@ export async function POST({ request }) {
           total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
-      `;
+      `
 
-      await db.$disconnect()
+			await db.$disconnect()
 
-      const responseBody = JSON.stringify({ schoolsData })
-      const responseHeaders = {
-        'Content-Type': 'application/json',
-      }
-      const responseStatus = 200
+			const responseBody = JSON.stringify({ schoolsData })
+			const responseHeaders = {
+				'Content-Type': 'application/json'
+			}
+			const responseStatus = 200
 
-      const response = new Response(responseBody, {
-        status: responseStatus,
-        headers: responseHeaders,
-      })
+			const response = new Response(responseBody, {
+				status: responseStatus,
+				headers: responseHeaders
+			})
 
-      return response
-    } catch (error) {
-      console.error('Error:', error)
+			return response
+		} catch (error) {
+			console.error('Error:', error)
 
-      const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
-        status: 500, // Internal Server Error
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+			const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
+				status: 500, // Internal Server Error
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-      return errorResponse
-    }
-  }
+			return errorResponse
+		}
+	}
 
-  // selectedDuty != 'ALL'
+	// selectedDuty != 'ALL'
 
-  if (selectedYear == null && selectedSemester != 'ALL' && selectedDuty != 'ALL' && selectedRegion != null) {
-    console.log('year all, semest string, duty string, reg num')
-    try {
-      const schoolsData = await db.$queryRaw`
+	if (
+		selectedYear == null &&
+		selectedSemester != 'ALL' &&
+		selectedDuty != 'ALL' &&
+		selectedRegion != null
+	) {
+		console.log('year all, semest string, duty string, reg num')
+		try {
+			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
           SELECT
               e.school_id,
@@ -1834,7 +1947,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           COALESCE(ec.event_count, 0) AS event_count,
           COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
           COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
@@ -1883,7 +1998,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           ec.event_count,
           es.sum_estimated_student,
           total_intrest_count_status_0,
@@ -1892,42 +2009,47 @@ export async function POST({ request }) {
           total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
-      `;
+      `
 
-      await db.$disconnect()
-      // Create a JSON response object
-      const responseBody = JSON.stringify({ schoolsData })
-      const responseHeaders = {
-        'Content-Type': 'application/json',
-      }
-      const responseStatus = 200
+			await db.$disconnect()
+			// Create a JSON response object
+			const responseBody = JSON.stringify({ schoolsData })
+			const responseHeaders = {
+				'Content-Type': 'application/json'
+			}
+			const responseStatus = 200
 
-      // Create a Response object and return it
-      const response = new Response(responseBody, {
-        status: responseStatus,
-        headers: responseHeaders,
-      })
+			// Create a Response object and return it
+			const response = new Response(responseBody, {
+				status: responseStatus,
+				headers: responseHeaders
+			})
 
-      return response
-    } catch (error) {
-      console.error('Error:', error)
+			return response
+		} catch (error) {
+			console.error('Error:', error)
 
-      // Return an error response
-      const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
-        status: 500, // Internal Server Error
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+			// Return an error response
+			const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
+				status: 500, // Internal Server Error
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-      return errorResponse
-    }
-  }
+			return errorResponse
+		}
+	}
 
-  if (selectedYear != null && selectedSemester == 'ALL' && selectedDuty != 'ALL' && selectedRegion != null) {
-    console.log('year num, semester all, duty string, reg num')
-    try {
-      const schoolsData = await db.$queryRaw`
+	if (
+		selectedYear != null &&
+		selectedSemester == 'ALL' &&
+		selectedDuty != 'ALL' &&
+		selectedRegion != null
+	) {
+		console.log('year num, semester all, duty string, reg num')
+		try {
+			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
           SELECT
               e.school_id,
@@ -1988,7 +2110,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           COALESCE(ec.event_count, 0) AS event_count,
           COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
           COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
@@ -2037,7 +2161,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           ec.event_count,
           es.sum_estimated_student,
           total_intrest_count_status_0,
@@ -2046,40 +2172,45 @@ export async function POST({ request }) {
           total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
-      `;
+      `
 
-      await db.$disconnect()
+			await db.$disconnect()
 
-      const responseBody = JSON.stringify({ schoolsData })
-      const responseHeaders = {
-        'Content-Type': 'application/json',
-      }
-      const responseStatus = 200
+			const responseBody = JSON.stringify({ schoolsData })
+			const responseHeaders = {
+				'Content-Type': 'application/json'
+			}
+			const responseStatus = 200
 
-      const response = new Response(responseBody, {
-        status: responseStatus,
-        headers: responseHeaders,
-      })
+			const response = new Response(responseBody, {
+				status: responseStatus,
+				headers: responseHeaders
+			})
 
-      return response
-    } catch (error) {
-      console.error('Error:', error)
+			return response
+		} catch (error) {
+			console.error('Error:', error)
 
-      const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
-        status: 500, // Internal Server Error
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+			const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
+				status: 500, // Internal Server Error
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-      return errorResponse
-    }
-  }
+			return errorResponse
+		}
+	}
 
-  if (selectedYear == null && selectedSemester == 'ALL' && selectedDuty != 'ALL' && selectedRegion != null) {
-    console.log('year all, semester all, duty string, reg num')
-    try {
-      const schoolsData = await db.$queryRaw`
+	if (
+		selectedYear == null &&
+		selectedSemester == 'ALL' &&
+		selectedDuty != 'ALL' &&
+		selectedRegion != null
+	) {
+		console.log('year all, semester all, duty string, reg num')
+		try {
+			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
           SELECT
               e.school_id,
@@ -2137,7 +2268,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           COALESCE(ec.event_count, 0) AS event_count,
           COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
           COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
@@ -2185,7 +2318,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           ec.event_count,
           es.sum_estimated_student,
           total_intrest_count_status_0,
@@ -2194,39 +2329,44 @@ export async function POST({ request }) {
           total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
-      `;
+      `
 
-      await db.$disconnect()
+			await db.$disconnect()
 
-      const responseBody = JSON.stringify({ schoolsData })
-      const responseHeaders = {
-        'Content-Type': 'application/json',
-      }
-      const responseStatus = 200
-      const response = new Response(responseBody, {
-        status: responseStatus,
-        headers: responseHeaders,
-      })
+			const responseBody = JSON.stringify({ schoolsData })
+			const responseHeaders = {
+				'Content-Type': 'application/json'
+			}
+			const responseStatus = 200
+			const response = new Response(responseBody, {
+				status: responseStatus,
+				headers: responseHeaders
+			})
 
-      return response
-    } catch (error) {
-      console.error('Error:', error)
+			return response
+		} catch (error) {
+			console.error('Error:', error)
 
-      const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
-        status: 500, // Internal Server Error
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+			const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
+				status: 500, // Internal Server Error
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-      return errorResponse
-    }
-  }
+			return errorResponse
+		}
+	}
 
-  if (selectedYear != null && selectedSemester != 'ALL' && selectedDuty != 'ALL' && selectedRegion != null) {
-    console.log('year num, semester string, duty string, reg num')
-    try {
-      const schoolsData = await db.$queryRaw`
+	if (
+		selectedYear != null &&
+		selectedSemester != 'ALL' &&
+		selectedDuty != 'ALL' &&
+		selectedRegion != null
+	) {
+		console.log('year num, semester string, duty string, reg num')
+		try {
+			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
           SELECT
               e.school_id,
@@ -2290,7 +2430,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           COALESCE(ec.event_count, 0) AS event_count,
           COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
           COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
@@ -2340,7 +2482,9 @@ export async function POST({ request }) {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           ec.event_count,
           es.sum_estimated_student,
           total_intrest_count_status_0,
@@ -2349,40 +2493,40 @@ export async function POST({ request }) {
           total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
-      `;
+      `
 
-      await db.$disconnect()
+			await db.$disconnect()
 
-      const responseBody = JSON.stringify({ schoolsData })
-      const responseHeaders = {
-        'Content-Type': 'application/json',
-      }
-      const responseStatus = 200
+			const responseBody = JSON.stringify({ schoolsData })
+			const responseHeaders = {
+				'Content-Type': 'application/json'
+			}
+			const responseStatus = 200
 
-      const response = new Response(responseBody, {
-        status: responseStatus,
-        headers: responseHeaders,
-      })
+			const response = new Response(responseBody, {
+				status: responseStatus,
+				headers: responseHeaders
+			})
 
-      return response
-    } catch (error) {
-      console.error('Error:', error)
+			return response
+		} catch (error) {
+			console.error('Error:', error)
 
-      const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
-        status: 500, // Internal Server Error
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+			const errorResponse = new Response(JSON.stringify({ error: 'An error occurred' }), {
+				status: 500, // Internal Server Error
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-      return errorResponse
-    }
-  }
+			return errorResponse
+		}
+	}
 }
 
 export type RequestPayload = {
-  selectedYear: number
-  selectedSemester: string
-  selectedDuty: string
-  selectedRegion: number
+	selectedYear: number
+	selectedSemester: string
+	selectedDuty: string
+	selectedRegion: number
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { writable } from 'svelte/store'
-	import { duty, semester } from '../../stores/dataStore'
+	import { duty, schType, semester } from '../../stores/dataStore'
 	import type { RequestPayload } from './+server'
 	import type { PageServerData } from './$types'
 
@@ -13,6 +13,20 @@
 
 	let semesterFilter = 'ALL'
 	let dutyFilter = 'ALL'
+	let schoolCount: number
+
+	function getType(arr: string[]): string {
+		let types: string = ''
+
+		arr.forEach((value: string) => {
+			const index: number = parseInt(value, 10) - 1 // Convert value to integer and subtract 1 to match array index
+			if (index >= 0 && index < schType.length) {
+				types += schType[index] + ', '
+			}
+		})
+		types = types.slice(0, -2)
+		return types
+	}
 
 	function searchTable() {
 		console.log('called')
@@ -71,7 +85,7 @@
 	export const selectedRegion = writable('ALL')
 
 	let responseDataFormatted: any = null
-	let schoolsData = []
+	let schoolsData: any = []
 
 	// Function to format and set responseDataFormatted
 	function formatAndSetResponseData(responseData: any) {
@@ -101,6 +115,7 @@
 				const responseData = await response.json()
 				formatAndSetResponseData(responseData)
 				schoolsData = responseData.schoolsData
+				schoolCount= schoolsData.length
 				console.log('RESPONSEData:' + responseData)
 			} else {
 				console.error('Server error:', response.statusText)
@@ -124,7 +139,7 @@
 
 	<form  on:submit={sendDataWithForm}>
 		<div class="semi-circular-input">
-		<label for="year">Select Year</label>
+		<label for="year">Select Event Year</label>
 		<select bind:value={$selectedYear} name="year" id="year" class="hidden-textbox">
 			{#each distinctYears as year}
 				<option value={year}>{year} </option>
@@ -133,7 +148,7 @@
 	</div>
 
 	<div class="semi-circular-input">
-		<label for="semester">Select Semester</label>
+		<label for="semester">Select Event Semester</label>
 		<select bind:value={semesterFilter} name="semester" id="semester" class="hidden-textbox">
 			{#each semester as sem}
 				<option value={sem}>{sem} </option>
@@ -142,7 +157,7 @@
 	</div>
 
 	<div class="semi-circular-input">
-		<label for="duty">Select Duty</label>
+		<label for="duty">Select Event Duty</label>
 		<select bind:value={dutyFilter} name="duty" id="duty" class="hidden-textbox">
 			{#each duty as d}
 				<option value={d.id}>{d.name} </option>
@@ -151,7 +166,7 @@
 	</div>
 
 	<div class="semi-circular-input">
-		<label for="region">Select Region</label>
+		<label for="region">Select School Region</label>
 		<select bind:value={$selectedRegion} name="region" id="region" class="hidden-textbox">
 			<option value="ALL">ALL</option>
 			{#each regions as reg}
@@ -162,11 +177,41 @@
 
 	<button class="btn" id="btn" type="submit">Confirm</button>
 	</form>
+<!--"schoolsData": [
+    {
+      "user_names": "Aaron Milles",
+      "country_name": "Magyarország",
+      "region_name": "Budapest",
+      "county_name": "Budapest",
+      "city_name": "Budapest II. kerület",
+      "school_id": 6,
+      "school_name": "2. Kerületi Szakiskola",
+      "zip_code": "1029",
+      "address": "Ábránd utca 20-22.",
+      "school_type": [
+        "4",
+        "5",
+        "7",
+        "8",
+        "11",
+        "13"
+      ],
+      "duty": [
+        "1"
+      ],
+      "event_count": 0,
+      "sum_estimated_student": 0,
+      "total_intrest_count_status_0": 0,
+      "total_intrest_count_status_1": 0,
+      "total_intrest_count_status_2": 0,
+      "total_intrest_count_status_3": 0,
+      "active": true
+    },
 
-	<div class="response-data">
-		<pre>{responseDataFormatted}</pre>
-	</div>
-
+		<div class="response-data">
+				<pre>{responseDataFormatted}</pre>
+			</div>
+	-->
 	<div class="input-container">
 		<input
 		type="search"
@@ -193,7 +238,7 @@
         <th class="c v">City</th>
 				<th class="c v">
 					<div>&#8470; of Schools</div>
-					<!--<div><strong>{schoolCount}/{schools.length}</strong></div>-->
+					<div><strong>{schoolCount}</strong></div>
 				</th>
 				<th class="c v">School Type</th>
 				<th class="c b">BAS</th>
@@ -228,40 +273,42 @@
 
 		<tbody>
 			{#each schoolsData as school}
-			<td class="c">{school.school_name}</td>
-			{/each}
-		</tbody>
-
-		<!-- TABLE BODY
-
-		<tbody>
-			{#each schools as school}
 				<tr>
-					<td id="nameCell" class="c">
-						{school.User.map((user) => user.name)}</td>
-					{#each regions as reg}
-						{#if (school.region_id == reg.region_id)}
-							<td class="c">{reg.region_name}</td>
-						{/if}
-					{/each}
-					{#each cities as city}
-						{#if (school.city_id == city.city_id)}
-							<td class="c">{city.city_name}</td>
-						{/if}
-					{/each}
+					<td id="nameCell" class="c">{school.user_names}</td>
+					<td class="c w">{school.country_name}</td>
+					<td class="c w">{school.region_name}</td>
+					<td class="c w">{school.county_name}</td>
+					<td class="c">{school.city_name}</td>
 					<a href="../lists/all_schools/{school.school_id}" target="_blank" class="centered-link">
-						<td class="centered-link nb h">{school.name}</td>
+						<td class="centered-link nb h">{school.school_name}</td>
 					</a>
-					<td class="c">{school.Event.map((event) => event.year)}</td>
-					<td class="c">{school.Event.map((event) => event.semester)}</td>
+					<td class="c w">{getType(school.school_type)}</td>
 
-					<td class="c">{school.Event.length}</td>
-					<td class="c"></td>
-					<td class="c"></td>
-					<td class="c"></td>
+						{#if school.basic == true}
+							<td class="c g">&#10003;</td>
+						{:else}
+							<td></td>
+						{/if}
+						{#if school.medior == true}
+							<td class="c g">&#10003;</td>
+						{:else}
+							<td></td>
+						{/if}
+						{#if school.high == true}
+							<td class="c g">&#10003;</td>
+						{:else}
+							<td></td>
+						{/if}
+
+					<td class="c">{school.event_count}</td>
+					<td class="c">{school.sum_estimated_student}</td>
+					<td class="c">{school.total_intrest_count_status_0}</td>
+					<td class="c">{school.total_intrest_count_status_1}</td>
+					<td class="c">{school.total_intrest_count_status_2}</td>
+					<td class="c">{school.total_intrest_count_status_3}</td>
 				</tr>
 			{/each}
-		</tbody> -->
+		</tbody>
 	</table>
 </div>
 
@@ -281,12 +328,21 @@
 		font-size: x-small;
 	}
 
+	.g {
+		color: #32bea6;
+		font-weight: 900;
+	}
+
 	.h {
 		color: #32bea6;
 	}
 
 	.v {
-		font-size: 19px;
+		font-size: 17px;
+	}
+
+	.w {
+		font-size:xx-small;
 	}
 
 	table {

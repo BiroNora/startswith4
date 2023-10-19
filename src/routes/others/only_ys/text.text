@@ -423,7 +423,9 @@ const response: any = {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -472,7 +474,9 @@ const response: any = {
           s.zip_code,
           s.address,
           s.school_type,
-          s.duty,
+          s.basic,
+          s.medior,
+          s.high,
           s.active,
           total_intrest_count_status_0,
           total_intrest_count_status_1,
@@ -485,3 +489,200 @@ const response: any = {
         ORDER BY s.school_name
       `;
 
+
+{
+  "schoolsData": [
+    {
+      "user_names": "Aaron Milles",
+      "country_name": "Magyarország",
+      "region_name": "Budapest",
+      "county_name": "Budapest",
+      "city_name": "Budapest II. kerület",
+      "school_id": 6,
+      "school_name": "2. Kerületi Szakiskola",
+      "zip_code": "1029",
+      "address": "Ábránd utca 20-22.",
+      "school_type": [
+        "4",
+        "5",
+        "7",
+        "8",
+        "11",
+        "13"
+      ],
+      "duty": [
+        "1"
+      ],
+      "event_count": 0,
+      "sum_estimated_student": 0,
+      "total_intrest_count_status_0": 0,
+      "total_intrest_count_status_1": 0,
+      "total_intrest_count_status_2": 0,
+      "total_intrest_count_status_3": 0,
+      "active": true
+    },
+    {
+      "user_names": "Aaron Milles, John Wick",
+      "country_name": "Magyarország",
+      "region_name": "Budapest",
+      "county_name": "Budapest",
+      "city_name": "Budapest VI. kerület",
+      "school_id": 2,
+      "school_name": "6. Kerületi Általános Iskola és Szakközépiskola",
+      "zip_code": "1066",
+      "address": "Zichy Jenő utca 26.",
+      "school_type": [
+        "1",
+        "3",
+        "4"
+      ],
+      "duty": [
+        "1"
+      ],
+      "event_count": 5,
+      "sum_estimated_student": 480,
+      "total_intrest_count_status_0": 0,
+      "total_intrest_count_status_1": 20,
+      "total_intrest_count_status_2": 0,
+      "total_intrest_count_status_3": 7,
+      "active": true
+    },
+    {
+      "user_names": "John Wick",
+      "country_name": "Magyarország",
+      "region_name": "Budapest",
+      "county_name": "Budapest",
+      "city_name": "Budapest IX. kerület",
+      "school_id": 3,
+      "school_name": "9. Kerületi Iskola",
+      "zip_code": "1095",
+      "address": "Máriássy utca 122-124.",
+      "school_type": [
+        "4",
+        "5",
+        "7",
+        "9"
+      ],
+      "duty": [
+        "1"
+      ],
+      "event_count": 0,
+      "sum_estimated_student": 0,
+      "total_intrest_count_status_0": 0,
+      "total_intrest_count_status_1": 0,
+      "total_intrest_count_status_2": 0,
+      "total_intrest_count_status_3": 0,
+      "active": true
+    },
+    {
+      "user_names": "Aaron Milles",
+      "country_name": "Magyarország",
+      "region_name": "Dél-Alföld",
+      "county_name": "Csongrád-Csanád",
+      "city_name": "Szeged",
+      "school_id": 4,
+      "school_name": "Dugonics András Piarista Gimnázium, Alapfokú Művészeti Iskola és Kollégium",
+      "zip_code": "6724",
+      "address": "Bálint Sándor utca 14.",
+      "school_type": [
+        "2",
+        "3",
+        "8",
+        "13"
+      ],
+      "duty": [
+        "2",
+        "3"
+      ],
+      "event_count": 1,
+      "sum_estimated_student": 122,
+      "total_intrest_count_status_0": 10,
+      "total_intrest_count_status_1": 0,
+      "total_intrest_count_status_2": 0,
+      "total_intrest_count_status_3": 0,
+      "active": true
+    },
+    {
+      "user_names": "Aaron Milles",
+      "country_name": "Magyarország",
+      "region_name": "Dél-Alföld",
+      "county_name": "Békés",
+      "city_name": "Orosháza",
+      "school_id": 5,
+      "school_name": "Orosházi Táncsics Mihály Gimnázium, Szakgimnázium és Kollégium",
+      "zip_code": "5900",
+      "address": "Táncsics u. 2-4.",
+      "school_type": [
+        "2",
+        "3",
+        "5",
+        "13"
+      ],
+      "duty": [
+        "2",
+        "3"
+      ],
+      "event_count": 0,
+      "sum_estimated_student": 0,
+      "total_intrest_count_status_0": 0,
+      "total_intrest_count_status_1": 0,
+      "total_intrest_count_status_2": 0,
+      "total_intrest_count_status_3": 0,
+      "active": true
+    },
+    {
+      "user_names": "Aaron Milles",
+      "country_name": "Magyarország",
+      "region_name": "Észak-Alföld",
+      "county_name": "Szabolcs-Szatmár-Bereg",
+      "city_name": "Szakoly",
+      "school_id": 7,
+      "school_name": "Szakolyi Arany János Általános Iskola, Szakközépiskola és Gimnázium",
+      "zip_code": "4234",
+      "address": "Mátyás király u. 10",
+      "school_type": [
+        "1",
+        "2",
+        "4",
+        "7",
+        "8",
+        "13"
+      ],
+      "duty": [
+        "1"
+      ],
+      "event_count": 1,
+      "sum_estimated_student": 50,
+      "total_intrest_count_status_0": 0,
+      "total_intrest_count_status_1": 0,
+      "total_intrest_count_status_2": 0,
+      "total_intrest_count_status_3": 0,
+      "active": true
+    },
+    {
+      "user_names": "John Wick",
+      "country_name": "Magyarország",
+      "region_name": "Budapest",
+      "county_name": "Budapest",
+      "city_name": "Budapest I. kerület",
+      "school_id": 1,
+      "school_name": "Vasszeg Iskola",
+      "zip_code": "1013",
+      "address": "Apród utca 9-11.",
+      "school_type": [
+        "1",
+        "4"
+      ],
+      "duty": [
+        "1"
+      ],
+      "event_count": 0,
+      "sum_estimated_student": 0,
+      "total_intrest_count_status_0": 0,
+      "total_intrest_count_status_1": 0,
+      "total_intrest_count_status_2": 0,
+      "total_intrest_count_status_3": 0,
+      "active": true
+    }
+  ]
+}
