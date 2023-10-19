@@ -44,47 +44,35 @@ export async function POST({ request }) {
             AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
           GROUP BY s.school_id
         ),
-              IntrestCountStatusByEvent AS (
+              EstimatedStudent AS (
           SELECT
-            e.event_id,
-            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS ev_intrest_count_status_0,
-            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS ev_intrest_count_status_1,
-            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS ev_intrest_count_status_2,
-            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS ev_intrest_count_status_3
-          FROM events e
-          LEFT JOIN interested i ON e.event_id = i.event_id
+            s.school_id,
+            CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
           WHERE e.semester IN (${selectedSemester})
-          GROUP BY e.event_id
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
         )
         SELECT
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
           ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ic.intrest_count_status_0 AS total_intrest_count_status_0,
-          ic.intrest_count_status_1 AS total_intrest_count_status_1,
-          ic.intrest_count_status_2 AS total_intrest_count_status_2,
-          ic.intrest_count_status_3 AS total_intrest_count_status_3,
-          CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student,
-          ev_intrest_count_status_0,
-          ev_intrest_count_status_1,
-          ev_intrest_count_status_2,
-          ev_intrest_count_status_3,
-          e.event_name,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          COALESCE(ec.event_count, 0) AS event_count,
+          COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
+          COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
+          COALESCE(ic.intrest_count_status_1, 0) AS total_intrest_count_status_1,
+          COALESCE(ic.intrest_count_status_2, 0) AS total_intrest_count_status_2,
+          COALESCE(ic.intrest_count_status_3, 0) AS total_intrest_count_status_3,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -109,40 +97,30 @@ export async function POST({ request }) {
           ON s.school_id = ua.school_id
         LEFT JOIN IntrestCountStatus ic
           ON s.school_id = ic.school_id
-        LEFT JOIN IntrestCountStatusByEvent ev
-          ON e.event_id = ev.event_id
+        LEFT JOIN EstimatedStudent es
+          ON s.school_id = es.school_id
         WHERE e.semester IN (${selectedSemester})
           AND s.active = true
           AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
         GROUP BY
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
+          ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ua.user_names,
-          e.event_name,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
-          s.active,
+          ec.event_count,
+          es.sum_estimated_student,
           total_intrest_count_status_0,
           total_intrest_count_status_1,
           total_intrest_count_status_2,
           total_intrest_count_status_3,
-          ev_intrest_count_status_0,
-          ev_intrest_count_status_1,
-          ev_intrest_count_status_2,
-          ev_intrest_count_status_3
+          s.active
         ORDER BY s.school_name
       `;
 
@@ -195,30 +173,51 @@ export async function POST({ request }) {
           FROM "_SchoolToUser" stu
           JOIN users u ON stu."B" = u.user_id
           GROUP BY stu."A"
+          ),
+              IntrestCountStatus AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE e.event_year IN (${selectedYear})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
+          ),
+              EstimatedStudent AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          WHERE e.event_year IN (${selectedYear})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
         )
         SELECT
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
           ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
-          CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
-          CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
-          CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          COALESCE(ec.event_count, 0) AS event_count,
+          COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
+          COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
+          COALESCE(ic.intrest_count_status_1, 0) AS total_intrest_count_status_1,
+          COALESCE(ic.intrest_count_status_2, 0) AS total_intrest_count_status_2,
+          COALESCE(ic.intrest_count_status_3, 0) AS total_intrest_count_status_3,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -241,28 +240,31 @@ export async function POST({ request }) {
           ON s.school_id = ec.school_id
         LEFT JOIN UserAggregates ua
           ON s.school_id = ua.school_id
+        LEFT JOIN IntrestCountStatus ic
+          ON s.school_id = ic.school_id
+        LEFT JOIN EstimatedStudent es
+          ON s.school_id = es.school_id
         WHERE e.event_year IN (${selectedYear})
           AND s.active = true
           AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
         GROUP BY
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
+          ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ua.user_names,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          ec.event_count,
+          es.sum_estimated_student,
+          total_intrest_count_status_0,
+          total_intrest_count_status_1,
+          total_intrest_count_status_2,
+          total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
       `;
@@ -315,30 +317,49 @@ export async function POST({ request }) {
           FROM "_SchoolToUser" stu
           JOIN users u ON stu."B" = u.user_id
           GROUP BY stu."A"
+          ),
+              IntrestCountStatus AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
+          ),
+              EstimatedStudent AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          WHERE s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
         )
         SELECT
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          COALESCE(ec.event_count, 0) AS event_count,
-          e.event_year,
-          e.semester,
           ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
-          CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
-          CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
-          CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          COALESCE(ec.event_count, 0) AS event_count,
+          COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
+          COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
+          COALESCE(ic.intrest_count_status_1, 0) AS total_intrest_count_status_1,
+          COALESCE(ic.intrest_count_status_2, 0) AS total_intrest_count_status_2,
+          COALESCE(ic.intrest_count_status_3, 0) AS total_intrest_count_status_3,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -361,27 +382,30 @@ export async function POST({ request }) {
           ON s.school_id = ec.school_id
         LEFT JOIN UserAggregates ua
           ON s.school_id = ua.school_id
+        LEFT JOIN IntrestCountStatus ic
+          ON s.school_id = ic.school_id
+        LEFT JOIN EstimatedStudent es
+          ON s.school_id = es.school_id
         WHERE s.active = true
           AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
         GROUP BY
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
+          ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ua.user_names,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          ec.event_count,
+          es.sum_estimated_student,
+          total_intrest_count_status_0,
+          total_intrest_count_status_1,
+          total_intrest_count_status_2,
+          total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
       `;
@@ -433,30 +457,53 @@ export async function POST({ request }) {
           FROM "_SchoolToUser" stu
           JOIN users u ON stu."B" = u.user_id
           GROUP BY stu."A"
+          ),
+              IntrestCountStatus AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE e.event_year IN (${selectedYear})
+            AND e.semester IN (${selectedSemester})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
+          ),
+              EstimatedStudent AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          WHERE e.event_year IN (${selectedYear})
+            AND e.semester IN (${selectedSemester})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
         )
         SELECT
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
           ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
-          CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
-          CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
-          CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          COALESCE(ec.event_count, 0) AS event_count,
+          COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
+          COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
+          COALESCE(ic.intrest_count_status_1, 0) AS total_intrest_count_status_1,
+          COALESCE(ic.intrest_count_status_2, 0) AS total_intrest_count_status_2,
+          COALESCE(ic.intrest_count_status_3, 0) AS total_intrest_count_status_3,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -479,29 +526,32 @@ export async function POST({ request }) {
           ON s.school_id = ec.school_id
         LEFT JOIN UserAggregates ua
           ON s.school_id = ua.school_id
+        LEFT JOIN IntrestCountStatus ic
+          ON s.school_id = ic.school_id
+        LEFT JOIN EstimatedStudent es
+          ON s.school_id = es.school_id
         WHERE e.event_year IN (${selectedYear})
           AND e.semester IN (${selectedSemester})
           AND s.active = true
           AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
         GROUP BY
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
+          ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ua.user_names,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          ec.event_count,
+          es.sum_estimated_student,
+          total_intrest_count_status_0,
+          total_intrest_count_status_1,
+          total_intrest_count_status_2,
+          total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
       `;
@@ -554,31 +604,53 @@ export async function POST({ request }) {
           FROM "_SchoolToUser" stu
           JOIN users u ON stu."B" = u.user_id
           GROUP BY stu."A"
+          ),
+              IntrestCountStatus AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE e.semester IN (${selectedSemester})
+            AND e.on_duty IN (${selectedDuty})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
+          ),
+              EstimatedStudent AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          WHERE e.semester IN (${selectedSemester})
+            AND e.on_duty IN (${selectedDuty})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
         )
         SELECT
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
           ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
-          CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
-          CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
-          CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
-          e.event_name,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          COALESCE(ec.event_count, 0) AS event_count,
+          COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
+          COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
+          COALESCE(ic.intrest_count_status_1, 0) AS total_intrest_count_status_1,
+          COALESCE(ic.intrest_count_status_2, 0) AS total_intrest_count_status_2,
+          COALESCE(ic.intrest_count_status_3, 0) AS total_intrest_count_status_3,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -601,30 +673,32 @@ export async function POST({ request }) {
           ON s.school_id = ec.school_id
         LEFT JOIN UserAggregates ua
           ON s.school_id = ua.school_id
+        LEFT JOIN IntrestCountStatus ic
+          ON s.school_id = ic.school_id
+        LEFT JOIN EstimatedStudent es
+          ON s.school_id = es.school_id
         WHERE e.semester IN (${selectedSemester})
           AND e.on_duty IN (${selectedDuty})
           AND s.active = true
           AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
         GROUP BY
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
+          ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ua.user_names,
-          e.event_name,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          ec.event_count,
+          es.sum_estimated_student,
+          total_intrest_count_status_0,
+          total_intrest_count_status_1,
+          total_intrest_count_status_2,
+          total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
       `;
@@ -679,30 +753,53 @@ export async function POST({ request }) {
           FROM "_SchoolToUser" stu
           JOIN users u ON stu."B" = u.user_id
           GROUP BY stu."A"
+          ),
+              IntrestCountStatus AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE e.event_year IN (${selectedYear})
+            AND e.on_duty IN (${selectedDuty})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
+          ),
+              EstimatedStudent AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          WHERE e.event_year IN (${selectedYear})
+            AND e.on_duty IN (${selectedDuty})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
         )
         SELECT
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
           ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
-          CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
-          CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
-          CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          COALESCE(ec.event_count, 0) AS event_count,
+          COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
+          COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
+          COALESCE(ic.intrest_count_status_1, 0) AS total_intrest_count_status_1,
+          COALESCE(ic.intrest_count_status_2, 0) AS total_intrest_count_status_2,
+          COALESCE(ic.intrest_count_status_3, 0) AS total_intrest_count_status_3,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -725,29 +822,32 @@ export async function POST({ request }) {
           ON s.school_id = ec.school_id
         LEFT JOIN UserAggregates ua
           ON s.school_id = ua.school_id
+        LEFT JOIN IntrestCountStatus ic
+          ON s.school_id = ic.school_id
+        LEFT JOIN EstimatedStudent es
+          ON s.school_id = es.school_id
         WHERE e.event_year IN (${selectedYear})
           AND e.on_duty IN (${selectedDuty})
           AND s.active = true
           AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
         GROUP BY
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
+          ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ua.user_names,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          ec.event_count,
+          es.sum_estimated_student,
+          total_intrest_count_status_0,
+          total_intrest_count_status_1,
+          total_intrest_count_status_2,
+          total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
       `;
@@ -799,30 +899,51 @@ export async function POST({ request }) {
           FROM "_SchoolToUser" stu
           JOIN users u ON stu."B" = u.user_id
           GROUP BY stu."A"
+          ),
+              IntrestCountStatus AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE e.on_duty IN (${selectedDuty})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
+          ),
+              EstimatedStudent AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          WHERE e.on_duty IN (${selectedDuty})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
         )
         SELECT
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
           ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
-          CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
-          CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
-          CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          COALESCE(ec.event_count, 0) AS event_count,
+          COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
+          COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
+          COALESCE(ic.intrest_count_status_1, 0) AS total_intrest_count_status_1,
+          COALESCE(ic.intrest_count_status_2, 0) AS total_intrest_count_status_2,
+          COALESCE(ic.intrest_count_status_3, 0) AS total_intrest_count_status_3,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -845,28 +966,31 @@ export async function POST({ request }) {
           ON s.school_id = ec.school_id
         LEFT JOIN UserAggregates ua
           ON s.school_id = ua.school_id
+        LEFT JOIN IntrestCountStatus ic
+          ON s.school_id = ic.school_id
+        LEFT JOIN EstimatedStudent es
+          ON s.school_id = es.school_id
         WHERE e.on_duty IN (${selectedDuty})
           AND s.active = true
           AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
         GROUP BY
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
+          ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ua.user_names,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          ec.event_count,
+          es.sum_estimated_student,
+          total_intrest_count_status_0,
+          total_intrest_count_status_1,
+          total_intrest_count_status_2,
+          total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
       `;
@@ -919,30 +1043,55 @@ export async function POST({ request }) {
           FROM "_SchoolToUser" stu
           JOIN users u ON stu."B" = u.user_id
           GROUP BY stu."A"
+          ),
+              IntrestCountStatus AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE e.event_year IN (${selectedYear})
+            AND e.semester IN (${selectedSemester})
+            AND e.on_duty IN (${selectedDuty})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
+          ),
+              EstimatedStudent AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          WHERE e.event_year IN (${selectedYear})
+            AND e.semester IN (${selectedSemester})
+            AND e.on_duty IN (${selectedDuty})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
         )
         SELECT
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
           ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
-          CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
-          CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
-          CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          COALESCE(ec.event_count, 0) AS event_count,
+          COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
+          COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
+          COALESCE(ic.intrest_count_status_1, 0) AS total_intrest_count_status_1,
+          COALESCE(ic.intrest_count_status_2, 0) AS total_intrest_count_status_2,
+          COALESCE(ic.intrest_count_status_3, 0) AS total_intrest_count_status_3,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -965,30 +1114,33 @@ export async function POST({ request }) {
           ON s.school_id = ec.school_id
         LEFT JOIN UserAggregates ua
           ON s.school_id = ua.school_id
+        LEFT JOIN IntrestCountStatus ic
+          ON s.school_id = ic.school_id
+        LEFT JOIN EstimatedStudent es
+          ON s.school_id = es.school_id
         WHERE e.event_year IN (${selectedYear})
           AND e.semester IN (${selectedSemester})
           AND e.on_duty IN (${selectedDuty})
           AND s.active = true
           AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
         GROUP BY
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
+          ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ua.user_names,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          ec.event_count,
+          es.sum_estimated_student,
+          total_intrest_count_status_0,
+          total_intrest_count_status_1,
+          total_intrest_count_status_2,
+          total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
       `;
@@ -1032,7 +1184,9 @@ export async function POST({ request }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
+          JOIN schools s USING (school_id)
           WHERE e.semester IN (${selectedSemester})
+            AND s.region_id IN(${selectedRegion})
           GROUP BY e.school_id
           ),
               UserAggregates AS (
@@ -1042,31 +1196,53 @@ export async function POST({ request }) {
           FROM "_SchoolToUser" stu
           JOIN users u ON stu."B" = u.user_id
           GROUP BY stu."A"
+          ),
+              IntrestCountStatus AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE e.semester IN (${selectedSemester})
+            AND s.region_id IN(${selectedRegion})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
+          ),
+              EstimatedStudent AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          WHERE e.semester IN (${selectedSemester})
+            AND s.region_id IN(${selectedRegion})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
         )
         SELECT
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
           ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
-          CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
-          CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
-          CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
-          e.event_name,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          COALESCE(ec.event_count, 0) AS event_count,
+          COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
+          COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
+          COALESCE(ic.intrest_count_status_1, 0) AS total_intrest_count_status_1,
+          COALESCE(ic.intrest_count_status_2, 0) AS total_intrest_count_status_2,
+          COALESCE(ic.intrest_count_status_3, 0) AS total_intrest_count_status_3,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -1089,30 +1265,32 @@ export async function POST({ request }) {
           ON s.school_id = ec.school_id
         LEFT JOIN UserAggregates ua
           ON s.school_id = ua.school_id
-        WHERE s.region_id IN(${selectedRegion})
-          AND e.semester IN (${selectedSemester})
+        LEFT JOIN IntrestCountStatus ic
+          ON s.school_id = ic.school_id
+        LEFT JOIN EstimatedStudent es
+          ON s.school_id = es.school_id
+        WHERE e.semester IN (${selectedSemester})
+          AND s.region_id IN(${selectedRegion})
           AND s.active = true
           AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
         GROUP BY
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
+          ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ua.user_names,
-          e.event_name,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          ec.event_count,
+          es.sum_estimated_student,
+          total_intrest_count_status_0,
+          total_intrest_count_status_1,
+          total_intrest_count_status_2,
+          total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
       `;
@@ -1156,7 +1334,9 @@ export async function POST({ request }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
+          JOIN schools s USING (school_id)
           WHERE e.event_year IN (${selectedYear})
+            AND s.region_id IN(${selectedRegion})
           GROUP BY e.school_id
           ),
               UserAggregates AS (
@@ -1166,30 +1346,53 @@ export async function POST({ request }) {
           FROM "_SchoolToUser" stu
           JOIN users u ON stu."B" = u.user_id
           GROUP BY stu."A"
+          ),
+              IntrestCountStatus AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE e.event_year IN (${selectedYear})
+            AND s.region_id IN(${selectedRegion})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
+          ),
+              EstimatedStudent AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          WHERE e.event_year IN (${selectedYear})
+            AND s.region_id IN(${selectedRegion})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
         )
         SELECT
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
           ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
-          CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
-          CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
-          CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          COALESCE(ec.event_count, 0) AS event_count,
+          COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
+          COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
+          COALESCE(ic.intrest_count_status_1, 0) AS total_intrest_count_status_1,
+          COALESCE(ic.intrest_count_status_2, 0) AS total_intrest_count_status_2,
+          COALESCE(ic.intrest_count_status_3, 0) AS total_intrest_count_status_3,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -1212,29 +1415,32 @@ export async function POST({ request }) {
           ON s.school_id = ec.school_id
         LEFT JOIN UserAggregates ua
           ON s.school_id = ua.school_id
-        WHERE s.region_id IN(${selectedRegion})
-          AND e.event_year IN (${selectedYear})
+        LEFT JOIN IntrestCountStatus ic
+          ON s.school_id = ic.school_id
+        LEFT JOIN EstimatedStudent es
+          ON s.school_id = es.school_id
+        WHERE e.event_year IN (${selectedYear})
+          AND s.region_id IN(${selectedRegion})
           AND s.active = true
           AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
         GROUP BY
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
+          ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ua.user_names,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          ec.event_count,
+          es.sum_estimated_student,
+          total_intrest_count_status_0,
+          total_intrest_count_status_1,
+          total_intrest_count_status_2,
+          total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
       `;
@@ -1276,6 +1482,8 @@ export async function POST({ request }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
+          JOIN schools s USING (school_id)
+          WHERE s.region_id IN(${selectedRegion})
           GROUP BY e.school_id
           ),
               UserAggregates AS (
@@ -1285,30 +1493,51 @@ export async function POST({ request }) {
           FROM "_SchoolToUser" stu
           JOIN users u ON stu."B" = u.user_id
           GROUP BY stu."A"
+          ),
+              IntrestCountStatus AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE s.region_id IN(${selectedRegion})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
+          ),
+              EstimatedStudent AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          WHERE s.region_id IN(${selectedRegion})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
         )
         SELECT
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          COALESCE(ec.event_count, 0) AS event_count,
-          e.event_year,
-          e.semester,
           ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
-          CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
-          CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
-          CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          COALESCE(ec.event_count, 0) AS event_count,
+          COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
+          COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
+          COALESCE(ic.intrest_count_status_1, 0) AS total_intrest_count_status_1,
+          COALESCE(ic.intrest_count_status_2, 0) AS total_intrest_count_status_2,
+          COALESCE(ic.intrest_count_status_3, 0) AS total_intrest_count_status_3,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -1331,28 +1560,31 @@ export async function POST({ request }) {
           ON s.school_id = ec.school_id
         LEFT JOIN UserAggregates ua
           ON s.school_id = ua.school_id
+        LEFT JOIN IntrestCountStatus ic
+          ON s.school_id = ic.school_id
+        LEFT JOIN EstimatedStudent es
+          ON s.school_id = es.school_id
         WHERE s.region_id IN(${selectedRegion})
           AND s.active = true
           AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
         GROUP BY
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
+          ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ua.user_names,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          ec.event_count,
+          es.sum_estimated_student,
+          total_intrest_count_status_0,
+          total_intrest_count_status_1,
+          total_intrest_count_status_2,
+          total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
       `;
@@ -1393,8 +1625,10 @@ export async function POST({ request }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
+          JOIN schools s USING (school_id)
           WHERE e.event_year IN (${selectedYear})
             AND e.semester IN (${selectedSemester})
+            AND s.region_id IN(${selectedRegion})
           GROUP BY e.school_id
           ),
               UserAggregates AS (
@@ -1404,30 +1638,55 @@ export async function POST({ request }) {
           FROM "_SchoolToUser" stu
           JOIN users u ON stu."B" = u.user_id
           GROUP BY stu."A"
+          ),
+              IntrestCountStatus AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE e.event_year IN (${selectedYear})
+            AND e.semester IN (${selectedSemester})
+            AND s.region_id IN(${selectedRegion})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
+          ),
+              EstimatedStudent AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          WHERE e.event_year IN (${selectedYear})
+            AND e.semester IN (${selectedSemester})
+            AND s.region_id IN(${selectedRegion})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
         )
         SELECT
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
           ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
-          CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
-          CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
-          CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          COALESCE(ec.event_count, 0) AS event_count,
+          COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
+          COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
+          COALESCE(ic.intrest_count_status_1, 0) AS total_intrest_count_status_1,
+          COALESCE(ic.intrest_count_status_2, 0) AS total_intrest_count_status_2,
+          COALESCE(ic.intrest_count_status_3, 0) AS total_intrest_count_status_3,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -1450,30 +1709,33 @@ export async function POST({ request }) {
           ON s.school_id = ec.school_id
         LEFT JOIN UserAggregates ua
           ON s.school_id = ua.school_id
-        WHERE s.region_id IN(${selectedRegion})
-          AND e.event_year IN (${selectedYear})
+        LEFT JOIN IntrestCountStatus ic
+          ON s.school_id = ic.school_id
+        LEFT JOIN EstimatedStudent es
+          ON s.school_id = es.school_id
+        WHERE e.event_year IN (${selectedYear})
           AND e.semester IN (${selectedSemester})
+          AND s.region_id IN(${selectedRegion})
           AND s.active = true
           AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
         GROUP BY
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
+          ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ua.user_names,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          ec.event_count,
+          es.sum_estimated_student,
+          total_intrest_count_status_0,
+          total_intrest_count_status_1,
+          total_intrest_count_status_2,
+          total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
       `;
@@ -1517,8 +1779,10 @@ export async function POST({ request }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
+          JOIN schools s USING (school_id)
           WHERE e.semester IN (${selectedSemester})
             AND e.on_duty IN (${selectedDuty})
+            AND s.region_id IN(${selectedRegion})
           GROUP BY e.school_id
           ),
               UserAggregates AS (
@@ -1528,31 +1792,55 @@ export async function POST({ request }) {
           FROM "_SchoolToUser" stu
           JOIN users u ON stu."B" = u.user_id
           GROUP BY stu."A"
+          ),
+              IntrestCountStatus AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE e.semester IN (${selectedSemester})
+            AND e.on_duty IN (${selectedDuty})
+            AND s.region_id IN(${selectedRegion})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
+          ),
+              EstimatedStudent AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          WHERE e.semester IN (${selectedSemester})
+            AND e.on_duty IN (${selectedDuty})
+            AND s.region_id IN(${selectedRegion})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
         )
         SELECT
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
           ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
-          CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
-          CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
-          CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
-          e.event_name,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          COALESCE(ec.event_count, 0) AS event_count,
+          COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
+          COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
+          COALESCE(ic.intrest_count_status_1, 0) AS total_intrest_count_status_1,
+          COALESCE(ic.intrest_count_status_2, 0) AS total_intrest_count_status_2,
+          COALESCE(ic.intrest_count_status_3, 0) AS total_intrest_count_status_3,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -1575,31 +1863,33 @@ export async function POST({ request }) {
           ON s.school_id = ec.school_id
         LEFT JOIN UserAggregates ua
           ON s.school_id = ua.school_id
-        WHERE s.region_id IN(${selectedRegion})
-          AND e.semester IN (${selectedSemester})
+        LEFT JOIN IntrestCountStatus ic
+          ON s.school_id = ic.school_id
+        LEFT JOIN EstimatedStudent es
+          ON s.school_id = es.school_id
+        WHERE e.semester IN (${selectedSemester})
           AND e.on_duty IN (${selectedDuty})
+          AND s.region_id IN(${selectedRegion})
           AND s.active = true
           AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
         GROUP BY
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
+          ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ua.user_names,
-          e.event_name,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          ec.event_count,
+          es.sum_estimated_student,
+          total_intrest_count_status_0,
+          total_intrest_count_status_1,
+          total_intrest_count_status_2,
+          total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
       `;
@@ -1643,8 +1933,10 @@ export async function POST({ request }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
+          JOIN schools s USING (school_id)
           WHERE e.event_year IN (${selectedYear})
             AND e.on_duty IN (${selectedDuty})
+            AND s.region_id IN(${selectedRegion})
           GROUP BY e.school_id
           ),
               UserAggregates AS (
@@ -1654,30 +1946,55 @@ export async function POST({ request }) {
           FROM "_SchoolToUser" stu
           JOIN users u ON stu."B" = u.user_id
           GROUP BY stu."A"
+          ),
+              IntrestCountStatus AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE e.event_year IN (${selectedYear})
+            AND e.on_duty IN (${selectedDuty})
+            AND s.region_id IN(${selectedRegion})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
+          ),
+              EstimatedStudent AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          WHERE e.event_year IN (${selectedYear})
+            AND e.on_duty IN (${selectedDuty})
+            AND s.region_id IN(${selectedRegion})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
         )
         SELECT
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
           ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
-          CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
-          CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
-          CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          COALESCE(ec.event_count, 0) AS event_count,
+          COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
+          COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
+          COALESCE(ic.intrest_count_status_1, 0) AS total_intrest_count_status_1,
+          COALESCE(ic.intrest_count_status_2, 0) AS total_intrest_count_status_2,
+          COALESCE(ic.intrest_count_status_3, 0) AS total_intrest_count_status_3,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -1700,30 +2017,33 @@ export async function POST({ request }) {
           ON s.school_id = ec.school_id
         LEFT JOIN UserAggregates ua
           ON s.school_id = ua.school_id
-        WHERE s.region_id IN(${selectedRegion})
-          AND e.event_year IN (${selectedYear})
+        LEFT JOIN IntrestCountStatus ic
+          ON s.school_id = ic.school_id
+        LEFT JOIN EstimatedStudent es
+          ON s.school_id = es.school_id
+        WHERE e.event_year IN (${selectedYear})
           AND e.on_duty IN (${selectedDuty})
+          AND s.region_id IN(${selectedRegion})
           AND s.active = true
           AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
         GROUP BY
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
+          ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ua.user_names,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          ec.event_count,
+          es.sum_estimated_student,
+          total_intrest_count_status_0,
+          total_intrest_count_status_1,
+          total_intrest_count_status_2,
+          total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
       `;
@@ -1765,7 +2085,9 @@ export async function POST({ request }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
+          JOIN schools s USING (school_id)
           WHERE e.on_duty IN (${selectedDuty})
+            AND s.region_id IN(${selectedRegion})
           GROUP BY e.school_id
           ),
               UserAggregates AS (
@@ -1775,30 +2097,53 @@ export async function POST({ request }) {
           FROM "_SchoolToUser" stu
           JOIN users u ON stu."B" = u.user_id
           GROUP BY stu."A"
+          ),
+              IntrestCountStatus AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE e.on_duty IN (${selectedDuty})
+            AND s.region_id IN(${selectedRegion})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
+          ),
+              EstimatedStudent AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          WHERE e.on_duty IN (${selectedDuty})
+            AND s.region_id IN(${selectedRegion})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
         )
         SELECT
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
           ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
-          CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
-          CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
-          CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          COALESCE(ec.event_count, 0) AS event_count,
+          COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
+          COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
+          COALESCE(ic.intrest_count_status_1, 0) AS total_intrest_count_status_1,
+          COALESCE(ic.intrest_count_status_2, 0) AS total_intrest_count_status_2,
+          COALESCE(ic.intrest_count_status_3, 0) AS total_intrest_count_status_3,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -1821,29 +2166,32 @@ export async function POST({ request }) {
           ON s.school_id = ec.school_id
         LEFT JOIN UserAggregates ua
           ON s.school_id = ua.school_id
-        WHERE s.region_id IN(${selectedRegion})
-          AND e.on_duty IN (${selectedDuty})
+        LEFT JOIN IntrestCountStatus ic
+          ON s.school_id = ic.school_id
+        LEFT JOIN EstimatedStudent es
+          ON s.school_id = es.school_id
+        WHERE e.on_duty IN (${selectedDuty})
+          AND s.region_id IN(${selectedRegion})
           AND s.active = true
           AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
         GROUP BY
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
+          ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ua.user_names,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          ec.event_count,
+          es.sum_estimated_student,
+          total_intrest_count_status_0,
+          total_intrest_count_status_1,
+          total_intrest_count_status_2,
+          total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
       `;
@@ -1884,9 +2232,11 @@ export async function POST({ request }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
+          JOIN schools s USING (school_id)
           WHERE e.event_year IN (${selectedYear})
             AND e.semester IN (${selectedSemester})
             AND e.on_duty IN (${selectedDuty})
+            AND s.region_id IN(${selectedRegion})
           GROUP BY e.school_id
           ),
               UserAggregates AS (
@@ -1896,30 +2246,57 @@ export async function POST({ request }) {
           FROM "_SchoolToUser" stu
           JOIN users u ON stu."B" = u.user_id
           GROUP BY stu."A"
+          ),
+              IntrestCountStatus AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE e.event_year IN (${selectedYear})
+            AND e.semester IN (${selectedSemester})
+            AND e.on_duty IN (${selectedDuty})
+            AND s.region_id IN(${selectedRegion})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
+          ),
+              EstimatedStudent AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          WHERE e.event_year IN (${selectedYear})
+            AND e.semester IN (${selectedSemester})
+            AND e.on_duty IN (${selectedDuty})
+            AND s.region_id IN(${selectedRegion})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
         )
         SELECT
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
           ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
-          CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
-          CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
-          CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          COALESCE(ec.event_count, 0) AS event_count,
+          COALESCE(es.sum_estimated_student, 0) AS sum_estimated_student,
+          COALESCE(ic.intrest_count_status_0, 0) AS total_intrest_count_status_0,
+          COALESCE(ic.intrest_count_status_1, 0) AS total_intrest_count_status_1,
+          COALESCE(ic.intrest_count_status_2, 0) AS total_intrest_count_status_2,
+          COALESCE(ic.intrest_count_status_3, 0) AS total_intrest_count_status_3,
           s.active
         FROM schools s
         JOIN "_SchoolToUser" stu
@@ -1942,31 +2319,34 @@ export async function POST({ request }) {
           ON s.school_id = ec.school_id
         LEFT JOIN UserAggregates ua
           ON s.school_id = ua.school_id
-        WHERE s.region_id IN(${selectedRegion})
-          AND e.event_year IN (${selectedYear})
+        LEFT JOIN IntrestCountStatus ic
+          ON s.school_id = ic.school_id
+        LEFT JOIN EstimatedStudent es
+          ON s.school_id = es.school_id
+        WHERE e.event_year IN (${selectedYear})
           AND e.semester IN (${selectedSemester})
           AND e.on_duty IN (${selectedDuty})
+          AND s.region_id IN(${selectedRegion})
           AND s.active = true
           AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
         GROUP BY
-          e.event_name,
-          e.on_duty,
-          e.event_type,
-          ec.event_count,
-          e.event_year,
-          e.semester,
+          ua.user_names,
           country.country_name,
           r.region_name,
           county.county_name,
           c.city_name,
-          ua.user_names,
-          e.estimated_student,
           s.school_id,
           s.school_name,
           s.zip_code,
           s.address,
           s.school_type,
           s.duty,
+          ec.event_count,
+          es.sum_estimated_student,
+          total_intrest_count_status_0,
+          total_intrest_count_status_1,
+          total_intrest_count_status_2,
+          total_intrest_count_status_3,
           s.active
         ORDER BY s.school_name
       `;
