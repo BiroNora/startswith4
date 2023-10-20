@@ -6,14 +6,29 @@
 
 	export let data: PageServerData
 	export const responseData = writable([])
+	export const selectedYear = writable<string>('ALL')
+	export const selectedRegion = writable('ALL')
 
-	const { distinctYears, regions } = data
+	const { distinctYears, regions, schoolsCount } = data
 
 	let pageName="ONLY YS"
 
 	let semesterFilter = 'ALL'
 	let dutyFilter = 'ALL'
-	let schoolCount: number
+	let responseDataFormatted: any = null
+	let schoolsData: any = []
+	let schoolsLength = 0
+	let totalEventCount = 0
+	let sumEstStudents = 0
+	let totIntrestStatus_0 = 0
+	let totIntrestStatus_1 = 0
+	let totIntrestStatus_2 = 0
+	let totIntrestStatus_3 = 0
+
+	// For JSON visualization
+	function formatAndSetResponseData(responseData: any) {
+		responseDataFormatted = JSON.stringify(responseData, null, 2)
+	}
 
 	function getType(arr: string[]): string {
 		let types: string = ''
@@ -28,68 +43,58 @@
 		return types
 	}
 
-	function searchTable() {
-		console.log('called')
-		const input = document.getElementById("searchInput") as HTMLInputElement
-		const filter = input.value.toUpperCase()
-		const table = document.querySelector(".table") as HTMLTableElement
-		const rows = table.getElementsByTagName("tr")
-		let filteredSchoolCount = 0
-		//let filteredInterestedStudents: InterestedStudents[] = []
-
-		for (let i = 0; i < rows.length; i++) {
-			const cells = rows[i].getElementsByTagName("td")
-
-			if (i !== 0) { // Skip the header row
-				let found = false
-
-				for (let j = 0; j < cells.length; j++) {
-					const cell = cells[j]
-					const text = cell.textContent || cell.innerText
-
-					if (text.toUpperCase().indexOf(filter) > -1) {
-						found = true
-						break
-					}
-				}
-				//if (found) {
-				//	rows[i].style.display = ""
-				//	// Get the corresponding school
-				//
-				//		let school = schools[i - 1]
-				//
-				//	// Include the InterestedStudents from the school's events if they exist
-				//	if (school.Event) {
-				//		school.Event.forEach((event: any) => {
-				//			if (event.InterestedStudents) {
-				//				filteredInterestedStudents.push(...event.InterestedStudents)
-				//			}
-				//		})
-				//		filteredSchoolCount++
-				//	}
-				//} else {
-				//	rows[i].style.display = "none"
-				//}
-			}
+	function calcTotalEventCount(schoolsData: any) {
+		totalEventCount = 0
+		for (const school of schoolsData) {
+			totalEventCount += school.event_count
 		}
+
+		return totalEventCount
 	}
 
-	function clearInput() {
-		let input = document.getElementById("searchInput") as HTMLInputElement
-		input.value = ''
-		searchTable()
+	function calcTotalEstStudents(data: any) {
+		sumEstStudents = 0
+		for (const school of data) {
+			sumEstStudents += school.sum_estimated_student
+		}
+
+		return sumEstStudents
 	}
 
-	// Define a writable store for selectedYear
-	export const selectedYear = writable<string>('ALL')
-	export const selectedRegion = writable('ALL')
+	function calcTotIntrest_0(data: any) {
+		totIntrestStatus_0 = 0
+		for (const school of data) {
+			totIntrestStatus_0 += school.total_intrest_count_status_0
+		}
 
-	let responseDataFormatted: any = null
-	let schoolsData: any = []
+		return totIntrestStatus_0
+	}
 
-	// Function to format and set responseDataFormatted
-	function formatAndSetResponseData(responseData: any) {
-		responseDataFormatted = JSON.stringify(responseData, null, 2)
+	function calcTotIntrest_1(data: any) {
+		totIntrestStatus_1 = 0
+		for (const school of data) {
+			totIntrestStatus_1 += school.total_intrest_count_status_1
+		}
+
+		return totIntrestStatus_1
+	}
+
+	function calcTotIntrest_2(data: any) {
+		totIntrestStatus_2 = 0
+		for (const school of data) {
+			totIntrestStatus_2 += school.total_intrest_count_status_2
+		}
+
+		return totIntrestStatus_2
+	}
+
+	function calcTotIntrest_3(data: any) {
+		totIntrestStatus_3 = 0
+		for (const school of data) {
+			totIntrestStatus_3 += school.total_intrest_count_status_3
+		}
+
+		return totIntrestStatus_3
 	}
 
 	async function sendDataWithForm(event: any) {
@@ -110,19 +115,72 @@
 				},
 				body: JSON.stringify(formData),
 			});
-			console.log(JSON.stringify(formData))
+			console.log(JSON.stringify(formData));
 			if (response.ok) {
-				const responseData = await response.json()
-				formatAndSetResponseData(responseData)
-				schoolsData = responseData.schoolsData
-				schoolCount= schoolsData.length
-				console.log('RESPONSEData:' + responseData)
-			} else {
-				console.error('Server error:', response.statusText)
-			}
+				const responseData = await response.json();
+					//formatAndSetResponseData(responseData);
+					schoolsData = responseData.schoolsData;
+					console.log('RESPONSEData:' + responseData);
+					schoolsLength = schoolsData.length;
+				} else {
+					console.error('Server error:', response.statusText);
+				}
 		} catch (error) {
-			console.error('Error:', error)
+				console.error('Error:', error);
 		}
+	}
+
+	function searchTable() {
+		const input = document.getElementById("searchInput") as HTMLInputElement
+		const filter = input.value.toUpperCase()
+		const table = document.querySelector(".table") as HTMLTableElement
+		const rows = table.getElementsByTagName("tr")
+
+		let count = 0
+		totalEventCount = 0
+		sumEstStudents = 0
+		totIntrestStatus_0 = 0
+		totIntrestStatus_1 = 0
+		totIntrestStatus_2 = 0
+		totIntrestStatus_3 = 0
+
+		for (let i = 0; i < rows.length; i++) {
+			const cells = rows[i].getElementsByTagName("td")
+
+			if (i !== 0) { // Skip the header row
+				let found = false
+
+				for (let j = 0; j < cells.length; j++) {
+					const cell = cells[j]
+					const text = cell.textContent || cell.innerText
+
+					if (text.toUpperCase().indexOf(filter) > -1) {
+						found = true
+						break
+					}
+				}
+				if (found) {
+					rows[i].style.display = ""
+					let school = schoolsData[i - 1]
+					count ++
+					totalEventCount += school.event_count
+					sumEstStudents += school.sum_estimated_student
+					totIntrestStatus_0 += school.total_intrest_count_status_0
+					totIntrestStatus_1 += school.total_intrest_count_status_1
+					totIntrestStatus_2 += school.total_intrest_count_status_2
+					totIntrestStatus_3 += school.total_intrest_count_status_3
+				} else {
+					rows[i].style.display = "none"
+				}
+			}
+		}
+		schoolsLength = count
+	}
+
+	function clearInput() {
+		let input = document.getElementById("searchInput") as HTMLInputElement
+		input.value = ''
+		searchTable()
 	}
 </script>
 
@@ -133,13 +191,15 @@
 <div class="main">
 	<hgroup>
 		<h1 >ONLY YS</h1>
-		<p><i>&emsp;*Active and cooperative schools with Startswith contact</i></p>
+		<i>&emsp;*Active and cooperative schools only with Startswith contact</i>
+		<br>
+		<i>&emsp;**Semesters: Spring — months between the 3th & 9th months; Autumn — others</i>
 	</hgroup>
 	<br>
 
 	<form  on:submit={sendDataWithForm}>
 		<div class="semi-circular-input">
-		<label for="year">Select Event Year</label>
+		<label for="year"><i>Select </i> Event Year</label>
 		<select bind:value={$selectedYear} name="year" id="year" class="hidden-textbox">
 			{#each distinctYears as year}
 				<option value={year}>{year} </option>
@@ -148,7 +208,7 @@
 	</div>
 
 	<div class="semi-circular-input">
-		<label for="semester">Select Event Semester</label>
+		<label for="semester"><i>Select </i> Event Semester</label>
 		<select bind:value={semesterFilter} name="semester" id="semester" class="hidden-textbox">
 			{#each semester as sem}
 				<option value={sem}>{sem} </option>
@@ -157,7 +217,7 @@
 	</div>
 
 	<div class="semi-circular-input">
-		<label for="duty">Select Event Duty</label>
+		<label for="duty"><i>Select </i> Event Duty</label>
 		<select bind:value={dutyFilter} name="duty" id="duty" class="hidden-textbox">
 			{#each duty as d}
 				<option value={d.id}>{d.name} </option>
@@ -166,7 +226,7 @@
 	</div>
 
 	<div class="semi-circular-input">
-		<label for="region">Select School Region</label>
+		<label for="region"><i>Select </i> School Region</label>
 		<select bind:value={$selectedRegion} name="region" id="region" class="hidden-textbox">
 			<option value="ALL">ALL</option>
 			{#each regions as reg}
@@ -238,35 +298,35 @@
         <th class="c v">City</th>
 				<th class="c v">
 					<div>&#8470; of Schools</div>
-					<div><strong>{schoolCount}</strong></div>
+					<div><strong>{schoolsLength}/{schoolsCount}</strong></div>
 				</th>
 				<th class="c v">School Type</th>
 				<th class="c b">BAS</th>
         <th class="c b">MED</th>
-        <th class="c b">HIGH</th>
+        <th class="c d">HIGH</th>
 				<th class="c v">
 					<div>&#8470; of Events &emsp;</div>
-					<!--<div><strong id="totalEventCount">{initialTotalEventCount}</strong></div>-->
+					<div><strong>{totalEventCount}/{calcTotalEventCount(schoolsData)}</strong></div>
 				</th>
         <th class="c v">
 					<div>&#8470; of Est./Pres. Students</div>
-					<!--<div><strong id="totalStudentCount">{initialTotalStudentCount}</strong></div>-->
+					<div><strong>{sumEstStudents}/{calcTotalEstStudents(schoolsData)}</strong></div>
 				</th>
 				<th class="c v">
 					<div>&#8470; of Interested Students</div>
-					<!--<div><strong id="totalInterestedStudentCount">{initialTotalIntrStudentCount}</strong></div>-->
+					<div><strong>{totIntrestStatus_0}/{calcTotIntrest_0(schoolsData)}</strong></div>
 				</th>
         <th class="c v">
 					<div>&#8470; of ADMITTED &emsp;</div>
-					<!--<div><strong id="totalInterestedStudentCountOne">{initialTotalIntrStudentCountOne}</strong></div>-->
+					<div><strong>{totIntrestStatus_1}/{calcTotIntrest_1(schoolsData)}</strong></div>
 				</th>
 				<th class="c v">
 					<div>&#8470; of REJECTED &emsp;</div>
-					<!--<div><strong id="totalInterestedStudentCountTwo">{initialTotalIntrStudentCountTwo}</strong></div>-->
+					<div><strong>{totIntrestStatus_2}/{calcTotIntrest_2(schoolsData)}</strong></div>
 				</th>
         <th class="c v">
 					<div>&nbsp;&nbsp;&nbsp; &#8470; of &emsp; IN PROGRESS </div>
-					<!--<div><strong id="totalInterestedStudentCountThree">{initialTotalIntrStudentCountThree}</strong></div>-->
+					<div><strong>{totIntrestStatus_3}/{calcTotIntrest_3(schoolsData)}</strong></div>
 				</th>
 			</tr>
 		</thead>
@@ -284,21 +344,21 @@
 					</a>
 					<td class="c w">{getType(school.school_type)}</td>
 
-						{#if school.basic == true}
-							<td class="c g">&#10003;</td>
-						{:else}
-							<td></td>
-						{/if}
-						{#if school.medior == true}
-							<td class="c g">&#10003;</td>
-						{:else}
-							<td></td>
-						{/if}
-						{#if school.high == true}
-							<td class="c g">&#10003;</td>
-						{:else}
-							<td></td>
-						{/if}
+					{#if school.basic == true}
+						<td class="c g">&#10003;</td>
+					{:else}
+						<td></td>
+					{/if}
+					{#if school.medior == true}
+						<td class="c g">&#10003;</td>
+					{:else}
+						<td></td>
+					{/if}
+					{#if school.high == true}
+						<td class="c g">&#10003;</td>
+					{:else}
+						<td></td>
+					{/if}
 
 					<td class="c">{school.event_count}</td>
 					<td class="c">{school.sum_estimated_student}</td>
@@ -324,8 +384,14 @@
 	}
 
 	.b {
-		width: 7%;
+		width: 6%;
 		font-size: x-small;
+	}
+
+	.d {
+		width: 5%;
+		font-size: x-small;
+		font-stretch: condensed;
 	}
 
 	.g {
@@ -417,6 +483,7 @@
 	label {
 		padding-left: 1%;
 		font-size: 22px;
+		font-weight: 400;
 		color: rgb(144, 132, 132);
 	}
 

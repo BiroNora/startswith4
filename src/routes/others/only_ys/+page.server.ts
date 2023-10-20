@@ -30,11 +30,26 @@ export const load: PageServerLoad = async () => {
     })
   }
 
-  //regions.unshift({
-  //  region_id: 0,
-  //  region_name: 'ALL',
-  //  country_id: 0,
-  //})
+  const schoolsCount = await db.school.count({
+    where: {
+			coop: true,
+			active: true,
+			User: {
+				some: {
+					NOT: {
+						user_id: undefined
+					}
+				}
+			},
+		},
+  })
 
-  return { distinctYears, regions }
+  if (!schoolsCount) {
+    return fail(400, {
+      error: true,
+      message: 'Something went wrong. Please try it later.'
+    })
+  }
+
+  return { distinctYears, regions, schoolsCount }
 }
