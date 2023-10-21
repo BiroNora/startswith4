@@ -9,7 +9,17 @@
 	export const selectedYear = writable<string>('ALL')
 	export const selectedRegion = writable('ALL')
 
-	const { distinctYears, regions, schoolsCount } = data
+	const {
+		distinctYears,
+		regions,
+		schoolsCount,
+		totalEvents,
+		totalEstStudents,
+		totalIntrest0,
+		totalIntrest1,
+		totalIntrest2,
+		totalIntrest3
+	} = data
 
 	let pageName="ONLY YS"
 
@@ -287,7 +297,12 @@
     &#10007;
   	</button>
 	</div>
-
+	{totalEvents}
+	{totalEstStudents}
+	{totalIntrest0}
+	{totalIntrest1}
+	{totalIntrest2}
+	{totalIntrest3}
 	<table class="table">
 		<thead>
 			<tr>
