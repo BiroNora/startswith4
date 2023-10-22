@@ -1,0 +1,688 @@
+Our endeavors?
+ChatGPT
+Certainly, I'm here to help with any questions or guidance related
+to your endeavors or any other topics you might be interested in.
+Whether you need advice on a specific project, information
+on a particular subject, or assistance with a task,
+feel free to ask, and I'll do my best to provide useful insights and information.
+Please let me know how I can assist you further!
+
+const schools = await db.school.findMany({
+  where: {
+    coop: true,
+    active: true,
+    User: {
+      some: {
+        NOT: {
+          user_id: undefined
+        }
+      }
+    },
+    Event: {
+      where: {
+        // Add your filter criteria here
+        year: yearFilter,
+        semester: semesterFilter,
+      },
+      include: {
+        InterestedStudents: true,
+      },
+    },
+  },
+  include: {
+    User: {
+      select: {
+        name: true,
+      },
+    },
+
+  },
+  orderBy: { name: 'asc' },
+});
+
+
+function filterEventsByYearAndSemester(
+			events: EventWithEstimatedStudent[],
+			targetYear: number,
+			targetSemester: string
+		): EventWithEstimatedStudent[] {
+			return events.filter((event) => event.year === targetYear && event.semester === targetSemester);
+		}
+
+SELECT
+  i."count",
+  i.status,
+  u."name",
+  e.event_name,
+  e.estimated_student,
+  s."name",
+  s.country_id,
+  s.region_id,
+  s.county_id,
+  s.city_id,
+  s.zip_code,
+  s.address,
+  s.school_type,
+  s.duty
+FROM schools s
+JOIN "_SchoolToUser" stu
+ON stu."A" = s.school_id
+JOIN users u
+ON stu."B" = u.user_id
+JOIN events e
+USING (school_id)
+LEFT JOIN interested i
+ON e.event_id = i.event_id
+WHERE e."year" IN (2023) AND e.semester IN('FALL', 'SPRING')
+GROUP BY
+  i."count",
+  i.status,
+  u."name",
+  e.event_name,
+  e.estimated_student,
+  s."name",
+  s.country_id,
+  s.region_id,
+  s.county_id,
+  s.city_id,
+  s.zip_code,
+  s.address,
+  s.school_type,
+  s.duty
+  ;
+
+export const load: PageServerLoad = async () => {
+	const events = await db.event.findMany({
+	})
+	const y = events.map((e) => e.year)
+	const distinct: number[] = [...new Set(y)]
+	const distinctStrings: string[] = distinct.map(String) // Convert numbers to strings
+	const years: string[] = ['', ...distinctStrings]
+ return {  years }
+}
+
+export const load: PageServerLoad = async () => {
+  /*const schools = await db.school.findMany({
+		where: {
+			coop: true,
+			active: true,
+			User: {
+				some: {
+					NOT: {
+						user_id: undefined
+					}
+				}
+			},
+		},
+		include: {
+			User: {
+				select: {
+					name: true,
+				},
+			},
+			Event: {
+				where: {
+					// Add your filter criteria here
+					year: 2023,
+					semester: 'Spring',
+				},
+				include: {
+					InterestedStudents: true,
+				},
+			},
+		},
+		orderBy: { name: 'asc' },
+	})
+*/
+	const events = await db.event.findMany({
+		include: {
+			InterestedStudents: {
+			}
+		}
+	})
+
+	const y = events.map((e) => e.year)
+	const distinct: number[] = [...new Set(y)]
+	const distinctStrings: string[] = distinct.map(String) // Convert numbers to strings
+	const years: string[] = ['', ...distinctStrings]
+
+	const countries = await db.country.findMany({})
+
+	const regions = await db.region.findMany({
+		orderBy: { region_name: 'asc' }
+	})
+
+	const counties = await db.county.findMany({})
+
+	const cities = await db.city.findMany({})
+
+	const schoolsData = await db.$queryRaw`
+		SELECT
+			u."name",
+			country.country_name,
+			r.region_name,
+			county.county_name,
+			c.city_name,
+			i."count",
+			i.status,
+			e.event_name,
+			e.estimated_student,
+			s.school_id,
+			s."name",
+			s.zip_code,
+			s.address,
+			s.school_type,
+			s.duty
+		FROM schools s
+		JOIN "_SchoolToUser" stu
+			ON stu."A" = s.school_id
+		JOIN users u
+			ON stu."B" = u.user_id
+		JOIN country country
+			ON s.country_id = country.country_id
+		JOIN region r
+			ON s.region_id = r.region_id
+		JOIN county county
+			ON s.county_id = county.county_id
+		JOIN city c
+			ON s.city_id = c.city_id
+		JOIN events e
+			USING (school_id)
+		LEFT JOIN interested i
+			ON e.event_id = i.event_id
+		WHERE e."year" IN (2023) AND e.semester IN('FALL')
+		GROUP BY
+			country.country_name,
+			r.region_name,
+			county.county_name,
+			c.city_name,
+			i."count",
+			i.status,
+			u."name",
+			e.event_name,
+			e.estimated_student,
+			s.school_id,
+			s."name",
+			s.zip_code,
+			s.address,
+			s.school_type,
+			s.duty
+			;`
+
+	//console.log(schoolsData)
+	return {  years }
+}
+
+***
+
+export async function POST(request: any) {
+  const jsonData = JSON.stringify(request)
+  console.log(jsonData)
+  console.log('Request body: ' + JSON.stringify(request.params))
+  // Get the year and semester from the request body (assuming they are passed in the request)
+
+  try {
+
+    if (!('selectedYear' in request.body) ) {
+      throw new Error('year Invalid request body');
+    }
+    if (!('selectedSemester' in request.body)) {
+      throw new Error('semester request body');
+    }
+    if (!request.body) {
+      throw new Error('Invalid request body');
+    }
+    const { selectedYear, selectedSemester } = request.body;
+  console.log(selectedYear)
+    // Run the SQL query using db.$queryRaw
+    const schoolsData = await db.$queryRaw`
+      SELECT
+        u."name",
+        country.country_name,
+        r.region_name,
+        county.county_name,
+        c.city_name,
+        i."count",
+        i.status,
+        e.event_name,
+        e.estimated_student,
+        s.school_id,
+        s."name",
+        s.zip_code,
+        s.address,
+        s.school_type,
+        s.duty
+      FROM schools s
+      JOIN "_SchoolToUser" stu
+        ON stu."A" = s.school_id
+      JOIN users u
+        ON stu."B" = u.user_id
+      JOIN country country
+        ON s.country_id = country.country_id
+      JOIN region r
+        ON s.region_id = r.region_id
+      JOIN county county
+        ON s.county_id = county.county_id
+      JOIN city c
+        ON s.city_id = c.city_id
+      JOIN events e
+        USING (school_id)
+      LEFT JOIN interested i
+        ON e.event_id = i.event_id
+      WHERE e."year" IN (${selectedYear}) AND e.semester IN (${selectedSemester})
+      GROUP BY
+        country.country_name,
+        r.region_name,
+        county.county_name,
+        c.city_name,
+        i."count",
+        i.status,
+        u."name",
+        e.event_name,
+        e.estimated_student,
+        s.school_id,
+        s."name",
+        s.zip_code,
+        s.address,
+        s.school_type,
+        s.duty
+    `;
+
+    console.log(schoolsData)
+
+    // Close the Prisma client connection
+    await db.$disconnect();
+
+    const response: any = {
+      status: 200, // Set the HTTP status code to 200 (OK)
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ schoolsData }),
+    };
+
+    return response;
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+
+    // Close the Prisma client connection in case of an error
+    await db.$disconnect();
+
+    // Return an error response with status and body
+    const errorResponse: any = {
+      status: 500, // Internal Server Error
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ error: 'An error occurred' }),
+    };
+
+    return errorResponse;
+  }
+}
+
+///
+
+const response: any = {
+      status: 200, // Set the HTTP status code to 200 (OK)
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: { schoolsData },
+    };
+    const z = JSON.stringify(response)
+    console.log('RESPONSE: ' + z)
+    console.log(response)
+    return response
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error);
+
+    // Close the Prisma client connection in case of an error
+    await db.$disconnect();
+
+    // Return an error response with status and body
+    return {
+      status: 400, // Bad Request
+      body: JSON.stringify({ error: 'Invalid JSON data' }),
+    };
+  }
+
+  2023.10.19.
+
+  const schoolsData = await db.$queryRaw`
+        WITH EventCounts AS (
+          SELECT
+              e.school_id,
+              COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
+          FROM events e
+          WHERE e.semester IN (${selectedSemester})
+          GROUP BY e.school_id
+          ),
+              UserAggregates AS (
+          SELECT
+            stu."A" AS school_id,
+            STRING_AGG(u.user_name, ', ') AS user_names
+          FROM "_SchoolToUser" stu
+          JOIN users u ON stu."B" = u.user_id
+          GROUP BY stu."A"
+        ),
+              IntrestCountStatus AS (
+          SELECT
+            s.school_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3
+          FROM schools s
+          JOIN events e ON s.school_id = e.school_id
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE e.semester IN (${selectedSemester})
+            AND s.active = true
+            AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+          GROUP BY s.school_id
+        ),
+              IntrestCountStatusByEvent AS (
+          SELECT
+            e.event_id,
+            CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS ev_intrest_count_status_0,
+            CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS ev_intrest_count_status_1,
+            CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS ev_intrest_count_status_2,
+            CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS ev_intrest_count_status_3
+          FROM events e
+          LEFT JOIN interested i ON e.event_id = i.event_id
+          WHERE e.semester IN (${selectedSemester})
+          GROUP BY e.event_id
+        )
+        SELECT
+          e.event_name,
+          e.on_duty,
+          e.event_type,
+          ec.event_count,
+          e.event_year,
+          e.semester,
+          ua.user_names,
+          country.country_name,
+          r.region_name,
+          county.county_name,
+          c.city_name,
+          ic.intrest_count_status_0 AS total_intrest_count_status_0,
+          ic.intrest_count_status_1 AS total_intrest_count_status_1,
+          ic.intrest_count_status_2 AS total_intrest_count_status_2,
+          ic.intrest_count_status_3 AS total_intrest_count_status_3,
+          CAST(SUM(e.estimated_student) AS INTEGER) AS sum_estimated_student,
+          ev_intrest_count_status_0,
+          ev_intrest_count_status_1,
+          ev_intrest_count_status_2,
+          ev_intrest_count_status_3,
+          e.event_name,
+          e.estimated_student,
+          s.school_id,
+          s.school_name,
+          s.zip_code,
+          s.address,
+          s.school_type,
+          s.basic,
+          s.medior,
+          s.high,
+          s.active
+        FROM schools s
+        JOIN "_SchoolToUser" stu
+          ON stu."A" = s.school_id
+        JOIN users u
+          ON stu."B" = u.user_id
+        JOIN country country
+          ON s.country_id = country.country_id
+        JOIN region r
+          ON s.region_id = r.region_id
+        JOIN county county
+          ON s.county_id = county.county_id
+        JOIN city c
+          ON s.city_id = c.city_id
+        JOIN events e
+          USING (school_id)
+        LEFT JOIN interested i
+          ON e.event_id = i.event_id
+        LEFT JOIN EventCounts ec
+          ON s.school_id = ec.school_id
+        LEFT JOIN UserAggregates ua
+          ON s.school_id = ua.school_id
+        LEFT JOIN IntrestCountStatus ic
+          ON s.school_id = ic.school_id
+        LEFT JOIN IntrestCountStatusByEvent ev
+          ON e.event_id = ev.event_id
+        WHERE e.semester IN (${selectedSemester})
+          AND s.active = true
+          AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
+        GROUP BY
+          e.event_name,
+          e.on_duty,
+          e.event_type,
+          ec.event_count,
+          e.event_year,
+          e.semester,
+          country.country_name,
+          r.region_name,
+          county.county_name,
+          c.city_name,
+          ua.user_names,
+          e.event_name,
+          e.estimated_student,
+          s.school_id,
+          s.school_name,
+          s.zip_code,
+          s.address,
+          s.school_type,
+          s.basic,
+          s.medior,
+          s.high,
+          s.active,
+          total_intrest_count_status_0,
+          total_intrest_count_status_1,
+          total_intrest_count_status_2,
+          total_intrest_count_status_3,
+          ev_intrest_count_status_0,
+          ev_intrest_count_status_1,
+          ev_intrest_count_status_2,
+          ev_intrest_count_status_3
+        ORDER BY s.school_name
+      `;
+
+
+{
+  "schoolsData": [
+    {
+      "user_names": "Aaron Milles",
+      "country_name": "Magyarország",
+      "region_name": "Budapest",
+      "county_name": "Budapest",
+      "city_name": "Budapest II. kerület",
+      "school_id": 6,
+      "school_name": "2. Kerületi Szakiskola",
+      "zip_code": "1029",
+      "address": "Ábránd utca 20-22.",
+      "school_type": [
+        "4",
+        "5",
+        "7",
+        "8",
+        "11",
+        "13"
+      ],
+      "duty": [
+        "1"
+      ],
+      "event_count": 0,
+      "sum_estimated_student": 0,
+      "total_intrest_count_status_0": 0,
+      "total_intrest_count_status_1": 0,
+      "total_intrest_count_status_2": 0,
+      "total_intrest_count_status_3": 0,
+      "active": true
+    },
+    {
+      "user_names": "Aaron Milles, John Wick",
+      "country_name": "Magyarország",
+      "region_name": "Budapest",
+      "county_name": "Budapest",
+      "city_name": "Budapest VI. kerület",
+      "school_id": 2,
+      "school_name": "6. Kerületi Általános Iskola és Szakközépiskola",
+      "zip_code": "1066",
+      "address": "Zichy Jenő utca 26.",
+      "school_type": [
+        "1",
+        "3",
+        "4"
+      ],
+      "duty": [
+        "1"
+      ],
+      "event_count": 5,
+      "sum_estimated_student": 480,
+      "total_intrest_count_status_0": 0,
+      "total_intrest_count_status_1": 20,
+      "total_intrest_count_status_2": 0,
+      "total_intrest_count_status_3": 7,
+      "active": true
+    },
+    {
+      "user_names": "John Wick",
+      "country_name": "Magyarország",
+      "region_name": "Budapest",
+      "county_name": "Budapest",
+      "city_name": "Budapest IX. kerület",
+      "school_id": 3,
+      "school_name": "9. Kerületi Iskola",
+      "zip_code": "1095",
+      "address": "Máriássy utca 122-124.",
+      "school_type": [
+        "4",
+        "5",
+        "7",
+        "9"
+      ],
+      "duty": [
+        "1"
+      ],
+      "event_count": 0,
+      "sum_estimated_student": 0,
+      "total_intrest_count_status_0": 0,
+      "total_intrest_count_status_1": 0,
+      "total_intrest_count_status_2": 0,
+      "total_intrest_count_status_3": 0,
+      "active": true
+    },
+    {
+      "user_names": "Aaron Milles",
+      "country_name": "Magyarország",
+      "region_name": "Dél-Alföld",
+      "county_name": "Csongrád-Csanád",
+      "city_name": "Szeged",
+      "school_id": 4,
+      "school_name": "Dugonics András Piarista Gimnázium, Alapfokú Művészeti Iskola és Kollégium",
+      "zip_code": "6724",
+      "address": "Bálint Sándor utca 14.",
+      "school_type": [
+        "2",
+        "3",
+        "8",
+        "13"
+      ],
+      "duty": [
+        "2",
+        "3"
+      ],
+      "event_count": 1,
+      "sum_estimated_student": 122,
+      "total_intrest_count_status_0": 10,
+      "total_intrest_count_status_1": 0,
+      "total_intrest_count_status_2": 0,
+      "total_intrest_count_status_3": 0,
+      "active": true
+    },
+    {
+      "user_names": "Aaron Milles",
+      "country_name": "Magyarország",
+      "region_name": "Dél-Alföld",
+      "county_name": "Békés",
+      "city_name": "Orosháza",
+      "school_id": 5,
+      "school_name": "Orosházi Táncsics Mihály Gimnázium, Szakgimnázium és Kollégium",
+      "zip_code": "5900",
+      "address": "Táncsics u. 2-4.",
+      "school_type": [
+        "2",
+        "3",
+        "5",
+        "13"
+      ],
+      "duty": [
+        "2",
+        "3"
+      ],
+      "event_count": 0,
+      "sum_estimated_student": 0,
+      "total_intrest_count_status_0": 0,
+      "total_intrest_count_status_1": 0,
+      "total_intrest_count_status_2": 0,
+      "total_intrest_count_status_3": 0,
+      "active": true
+    },
+    {
+      "user_names": "Aaron Milles",
+      "country_name": "Magyarország",
+      "region_name": "Észak-Alföld",
+      "county_name": "Szabolcs-Szatmár-Bereg",
+      "city_name": "Szakoly",
+      "school_id": 7,
+      "school_name": "Szakolyi Arany János Általános Iskola, Szakközépiskola és Gimnázium",
+      "zip_code": "4234",
+      "address": "Mátyás király u. 10",
+      "school_type": [
+        "1",
+        "2",
+        "4",
+        "7",
+        "8",
+        "13"
+      ],
+      "duty": [
+        "1"
+      ],
+      "event_count": 1,
+      "sum_estimated_student": 50,
+      "total_intrest_count_status_0": 0,
+      "total_intrest_count_status_1": 0,
+      "total_intrest_count_status_2": 0,
+      "total_intrest_count_status_3": 0,
+      "active": true
+    },
+    {
+      "user_names": "John Wick",
+      "country_name": "Magyarország",
+      "region_name": "Budapest",
+      "county_name": "Budapest",
+      "city_name": "Budapest I. kerület",
+      "school_id": 1,
+      "school_name": "Vasszeg Iskola",
+      "zip_code": "1013",
+      "address": "Apród utca 9-11.",
+      "school_type": [
+        "1",
+        "4"
+      ],
+      "duty": [
+        "1"
+      ],
+      "event_count": 0,
+      "sum_estimated_student": 0,
+      "total_intrest_count_status_0": 0,
+      "total_intrest_count_status_1": 0,
+      "total_intrest_count_status_2": 0,
+      "total_intrest_count_status_3": 0,
+      "active": true
+    }
+  ]
+}
