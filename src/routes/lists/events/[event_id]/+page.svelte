@@ -251,7 +251,7 @@
 			<div>
 				<label for="grade">Grade</label>
 				<select name="grade" id="grade" class="hidden-textbox">
-					{#each gradeMap as item, index (item.id)}
+					{#each gradeMap as item (item.id)}
 						<option value={item.id}>{item.name}</option>
 					{/each}
 				</select>

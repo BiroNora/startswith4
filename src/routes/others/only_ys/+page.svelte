@@ -297,12 +297,12 @@
     &#10007;
   	</button>
 	</div>
-	{totalEvents}
-	{totalEstStudents}
-	{totalIntrest0}
-	{totalIntrest1}
-	{totalIntrest2}
-	{totalIntrest3}
+	<div class="sticky">
+		<i>Event Year: </i>{$selectedYear},&emsp;
+		<i>Event Semester: </i>{semesterFilter},&emsp;
+		<i>Event Duty: </i>{dutyFilter},&emsp;
+		<i>School Region: </i>{$selectedRegion}
+	</div>
 	<table class="table">
 		<thead>
 			<tr>
@@ -312,8 +312,9 @@
 				<th class="c v">County</th>
         <th class="c v">City</th>
 				<th class="c v">
-					<div>&#8470; of Schools</div>
-					<div><strong>{schoolsLength}/{schoolsCount}</strong></div>
+					<div>&#8470; of Schools &emsp;</div>
+					<div><strong>{schoolsLength}</strong></div>
+					<div><strong class="i">&sum;: { schoolsCount}</strong></div>
 				</th>
 				<th class="c v">School Type</th>
 				<th class="c b">BAS</th>
@@ -322,26 +323,32 @@
 				<th class="c v">
 					<div>&#8470; of Events &emsp;</div>
 					<div><strong>{totalEventCount}/{calcTotalEventCount(schoolsData)}</strong></div>
+					<div><strong class="i">&sum;: { totalEvents}</strong></div>
 				</th>
         <th class="c v">
 					<div>&#8470; of Est./Pres. Students</div>
 					<div><strong>{sumEstStudents}/{calcTotalEstStudents(schoolsData)}</strong></div>
+					<div ><strong class="i">&sum;: { totalEstStudents}</strong></div>
 				</th>
 				<th class="c v">
 					<div>&#8470; of Interested Students</div>
 					<div><strong>{totIntrestStatus_0}/{calcTotIntrest_0(schoolsData)}</strong></div>
+					<div><strong class="i">&sum;: { totalIntrest0}</strong></div>
 				</th>
         <th class="c v">
 					<div>&#8470; of ADMITTED &emsp;</div>
 					<div><strong>{totIntrestStatus_1}/{calcTotIntrest_1(schoolsData)}</strong></div>
+					<div><strong class="i">&sum;: { totalIntrest1}</strong></div>
 				</th>
 				<th class="c v">
 					<div>&#8470; of REJECTED &emsp;</div>
 					<div><strong>{totIntrestStatus_2}/{calcTotIntrest_2(schoolsData)}</strong></div>
+					<div><strong class="i">&sum;: { totalIntrest2}</strong></div>
 				</th>
         <th class="c v">
 					<div>&nbsp;&nbsp;&nbsp; &#8470; of &emsp; IN PROGRESS </div>
 					<div><strong>{totIntrestStatus_3}/{calcTotIntrest_3(schoolsData)}</strong></div>
+					<div><strong class="i">&sum;: { totalIntrest3}</strong></div>
 				</th>
 			</tr>
 		</thead>
@@ -418,6 +425,10 @@
 		color: #32bea6;
 	}
 
+	.i {
+		color: #32bea6;
+		font-weight: 700;
+	}
 	.v {
 		font-size: 17px;
 	}
@@ -465,9 +476,21 @@
 	th {
     background-color:#fafdfd;
     position: sticky;
+    top: 40px;
+    z-index: 2;
+		padding-top: 10px;
+  }
+
+	.sticky {
+		background-color: white;
+    position: sticky;
     top: 0;
     z-index: 1;
-  }
+    height: 40px;
+    width: 100%;
+		padding: 5px;
+		color: #32bea6;
+	}
 
 	.input-container {
 		position: relative;
