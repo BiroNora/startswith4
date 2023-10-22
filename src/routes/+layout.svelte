@@ -8,25 +8,16 @@
       <a href="/">Home</a>
     </li>
     <li>
-      <a href="/register/user" target="_blank">UserR</a>
+      <a href="/register/user" target="_blank">User_R</a>
     </li>
     <li>
-      <a href="/register/school" target="_blank">SchoolR</a>
+      <a href="/register/school" target="_blank">School_R</a>
     </li>
     <li>
-      <a href="/register/location" target="_blank">LocationR</a>
+      <a href="/register/location" target="_blank">Location_R</a>
     </li>
     <li>
-      <a href="/others/only_ys" target="_blank">Only</a>
-    </li>
-    <li>
-      <a href="/others/some" target="_blank">Some</a>
-    </li>
-    <li>
-      <a href="/others/table_date" target="_blank">Table Date</a>
-    </li>
-    <li>
-      <a href="/others/tables" target="_blank">Tables</a>
+      <a href="/tables/school_event" target="_blank">School_Event</a>
     </li>
     <li>
       <a href="/lists/all_schools" target="_blank">All Schools List</a>
