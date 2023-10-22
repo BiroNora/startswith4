@@ -34,6 +34,8 @@
 	let totIntrestStatus_1 = 0
 	let totIntrestStatus_2 = 0
 	let totIntrestStatus_3 = 0
+	let filtering = 'OFF'
+	$: {$selectedRegion}
 
 	// For JSON visualization
 	function formatAndSetResponseData(responseData: any) {
@@ -153,6 +155,11 @@
 		totIntrestStatus_1 = 0
 		totIntrestStatus_2 = 0
 		totIntrestStatus_3 = 0
+		filtering = 'ON'
+
+		if (input.value == "") {
+			filtering = 'OFF'
+		}
 
 		for (let i = 0; i < rows.length; i++) {
 			const cells = rows[i].getElementsByTagName("td")
@@ -191,6 +198,7 @@
 		let input = document.getElementById("searchInput") as HTMLInputElement
 		input.value = ''
 		searchTable()
+		filtering = 'OFF'
 	}
 </script>
 
@@ -247,41 +255,11 @@
 
 	<button class="btn" id="btn" type="submit">Confirm</button>
 	</form>
-<!--"schoolsData": [
-    {
-      "user_names": "Aaron Milles",
-      "country_name": "Magyarország",
-      "region_name": "Budapest",
-      "county_name": "Budapest",
-      "city_name": "Budapest II. kerület",
-      "school_id": 6,
-      "school_name": "2. Kerületi Szakiskola",
-      "zip_code": "1029",
-      "address": "Ábránd utca 20-22.",
-      "school_type": [
-        "4",
-        "5",
-        "7",
-        "8",
-        "11",
-        "13"
-      ],
-      "duty": [
-        "1"
-      ],
-      "event_count": 0,
-      "sum_estimated_student": 0,
-      "total_intrest_count_status_0": 0,
-      "total_intrest_count_status_1": 0,
-      "total_intrest_count_status_2": 0,
-      "total_intrest_count_status_3": 0,
-      "active": true
-    },
 
-		<div class="response-data">
+	<!--<div class="response-data">
 				<pre>{responseDataFormatted}</pre>
-			</div>
-	-->
+		</div>-->
+
 	<div class="input-container">
 		<input
 		type="search"
@@ -300,8 +278,24 @@
 	<div class="sticky">
 		<i>Event Year: </i>{$selectedYear},&emsp;
 		<i>Event Semester: </i>{semesterFilter},&emsp;
-		<i>Event Duty: </i>{dutyFilter},&emsp;
-		<i>School Region: </i>{$selectedRegion}
+		<i>Event Duty: </i>
+		{#each duty as item (item.id)}
+			{#if dutyFilter == item.id}
+				{item.name}
+			{/if}
+		{/each},&emsp;
+		<i>School Region: </i>
+			{#if ($selectedRegion != 'ALL')}
+				{#each regions as reg}
+					{#if (reg.region_id == $selectedRegion)}
+						{reg.region_name}
+					{/if}
+				{/each}
+			{:else}
+				ALL
+			{/if}
+		,&emsp;
+		<i>Filtering: </i>{filtering}
 	</div>
 	<table class="table">
 		<thead>
