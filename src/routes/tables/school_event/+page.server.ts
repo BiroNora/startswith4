@@ -24,6 +24,15 @@ export const load: PageServerLoad = async () => {
   distinctYears.sort()
   distinctYears.unshift('ALL')
 
+  const countries = await db.country.findMany({})
+
+  if (!countries) {
+    return fail(400, {
+      error: true,
+      message: 'Something went wrong. Please try it later.'
+    })
+  }
+
   const regions = await db.region.findMany({})
 
   if (!regions) {
@@ -143,6 +152,7 @@ export const load: PageServerLoad = async () => {
 
   return {
     distinctYears,
+    countries,
     regions,
     schoolsCount,
     totalEvents,

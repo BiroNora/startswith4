@@ -8,9 +8,11 @@
 	export const responseData = writable([])
 	export const selectedYear = writable<string>('ALL')
 	export const selectedRegion = writable('ALL')
+	export const selectedCountry = writable('ALL')
 
 	const {
 		distinctYears,
+		countries,
 		regions,
 		schoolsCount,
 		totalEvents,
@@ -36,7 +38,7 @@
 	let totIntrestStatus_3 = 0
 	let filtering = 'OFF'
 	let isElementVisible = false
-	$: {$selectedRegion}
+	$: {$selectedRegion, $selectedCountry}
 
 	// For JSON visualization
 	function formatAndSetResponseData(responseData: any) {
@@ -118,7 +120,8 @@
 				selectedYear: Number($selectedYear),
 				selectedSemester: semesterFilter,
 				selectedDuty: dutyFilter,
-				selectedRegion: Number($selectedRegion)
+				selectedRegion: Number($selectedRegion),
+				selectedCountry: Number($selectedCountry)
 			}
 
 			const response = await fetch('http://localhost:5173/tables/school_event', {
@@ -245,6 +248,16 @@
 	</div>
 
 	<div class="semi-circular-input">
+		<label for="country"><i>Select </i> School Country</label>
+		<select bind:value={$selectedCountry} name="country" id="country" class="hidden-textbox">
+			<option value="ALL">ALL</option>
+			{#each countries as country}
+				<option value={country.country_id}>{country.country_name} </option>
+			{/each}
+		</select>
+	</div>
+
+	<div class="semi-circular-input">
 		<label for="region"><i>Select </i> School Region</label>
 		<select bind:value={$selectedRegion} name="region" id="region" class="hidden-textbox">
 			<option value="ALL">ALL</option>
@@ -294,6 +307,17 @@
 					{item.name}
 				{/if}
 			{/each},&emsp;
+			<i>School Country: </i>
+				{#if ($selectedCountry != 'ALL')}
+					{#each countries as country}
+						{#if (country.country_id == $selectedCountry)}
+							{country.country_name}
+						{/if}
+					{/each}
+				{:else}
+					ALL
+				{/if}
+			,&emsp;
 			<i>School Region: </i>
 				{#if ($selectedRegion != 'ALL')}
 					{#each regions as reg}
