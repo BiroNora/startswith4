@@ -44,7 +44,23 @@
   let selCountry: any
   let selRegion: any
 
+	function calcPerc(x: any, y: any) {
+		let percentage = 0
+		if (x !== 0) {
+			percentage = (x * 100) / y
+		} else {
+			percentage = 0
+		}
+		return Math.round(percentage)
+	}
+
 	$: {$selectedRegion, $selectedCountry}
+	$: totEvCount = calcTotalEventCount(schoolsData)
+	$: calTotEstStud = calcTotalEstStudents(schoolsData)
+	$: calTotIntr_0 = calcTotIntrest_0(schoolsData)
+	$: calTotIntr_1 = calcTotIntrest_1(schoolsData)
+	$: calTotIntr_2 = calcTotIntrest_2(schoolsData)
+	$: calTotIntr_3 = calcTotIntrest_3(schoolsData)
 
 	function updateContent() {
     selYear = $selectedYear
@@ -219,6 +235,8 @@
 		searchTable()
 		filtering = 'OFF'
 	}
+
+
 </script>
 
 <svelte:head>
@@ -358,50 +376,68 @@
 				<th class="c v">County</th>
         <th class="c v">City</th>
 				<th class="c v">
-					<div>&#8470; of Schools</div>
+					<div>&#8470; of</div>
+					<div>Schools</div>
 					<br>
-					<div><strong>{schoolsLength}</strong></div>
-					<div><strong class="i">&sum;: { schoolsCount}</strong></div>
+					<div><strong>{schoolsLength}/{ schoolsCount}</strong></div>
+					<br>
+					<div><strong class="c i">&sum;: { schoolsCount}</strong></div>
+					<div class="c h">{calcPerc(schoolsLength, schoolsCount)} %</div>
 				</th>
 				<th class="c v">School Type</th>
 				<th class="c b">BAS</th>
         <th class="c b">MED</th>
         <th class="c d">HIGH</th>
 				<th class="c v">
-					<div>&#8470; of Events </div>
+					<div>&#8470; of</div>
+					<div>Events</div>
 					<br>
 					<div><strong>{totalEventCount}/{calcTotalEventCount(schoolsData)}</strong></div>
-					<div><strong class="i">&sum;: { totalEvents}</strong></div>
+					<div class="c">{calcPerc(totalEventCount, totEvCount)} %</div>
+					<div><strong class="c i">&sum;: { totalEvents}</strong></div>
+					<div class="c h">{calcPerc(totalEventCount, totalEvents)} %</div>
 				</th>
         <th class="c v">
-					<div>&#8470; of Est./Pres. Students</div>
-					<br>
+					<div>&#8470; of</div>
+					<div>Est./Pres. Students</div>
 					<div><strong>{sumEstStudents}/{calcTotalEstStudents(schoolsData)}</strong></div>
-					<div ><strong class="i">&sum;: { totalEstStudents}</strong></div>
+					<div class="c">{calcPerc(sumEstStudents, calTotEstStud)} %</div>
+					<div ><strong class="c i">&sum;: { totalEstStudents}</strong></div>
+					<div class="c h">{calcPerc(sumEstStudents, totalEstStudents)} %</div>
 				</th>
 				<th class="c v">
-					<div>&#8470; of Interested Students</div>
-					<br>
+					<div>&#8470; of</div>
+					<div>Interested Students</div>
 					<div><strong>{totIntrestStatus_0}/{calcTotIntrest_0(schoolsData)}</strong></div>
-					<div><strong class="i">&sum;: { totalIntrest0}</strong></div>
+					<div class="c">{calcPerc(totIntrestStatus_0, calTotIntr_0)} %</div>
+					<div><strong class="c i">&sum;: { totalIntrest0}</strong></div>
+					<div class="c h">{calcPerc(totIntrestStatus_0, totalIntrest0)} %</div>
 				</th>
         <th class="c v">
-					<div>&#8470; of ADMITTED</div>
+					<div>&#8470; of</div>
+					<div>ADMITTED</div>
 					<br>
 					<div><strong>{totIntrestStatus_1}/{calcTotIntrest_1(schoolsData)}</strong></div>
-					<div><strong class="i">&sum;: { totalIntrest1}</strong></div>
+					<div class="c">{calcPerc(totIntrestStatus_1, calTotIntr_1)} %</div>
+					<div><strong class="c i">&sum;: { totalIntrest1}</strong></div>
+					<div class="c h">{calcPerc(totIntrestStatus_1, totalIntrest1)} %</div>
 				</th>
 				<th class="c v">
-					<div>&#8470; of REJECTED</div>
+					<div>&#8470; of</div>
+					<div>REJECTED</div>
 					<br>
 					<div><strong>{totIntrestStatus_2}/{calcTotIntrest_2(schoolsData)}</strong></div>
-					<div><strong class="i">&sum;: { totalIntrest2}</strong></div>
+					<div class="c">{calcPerc(totIntrestStatus_2, calTotIntr_2)} %</div>
+					<div><strong class="c i">&sum;: { totalIntrest2}</strong></div>
+					<div class="c h">{calcPerc(totIntrestStatus_2, totalIntrest2)} %</div>
 				</th>
         <th class="c v">
-					<div>&#8470; of IN&nbsp;PROGRESS</div>
-					<br>
+					<div>&#8470; of</div>
+					<div>IN PROGRESS</div>
 					<div><strong>{totIntrestStatus_3}/{calcTotIntrest_3(schoolsData)}</strong></div>
-					<div><strong class="i">&sum;: { totalIntrest3}</strong></div>
+					<div class="c">{calcPerc(totIntrestStatus_3, calTotIntr_3)} %</div>
+					<div><strong class="c i">&sum;: { totalIntrest3}</strong></div>
+					<div class="c h">{calcPerc(totIntrestStatus_3, totalIntrest3)} %</div>
 				</th>
 			</tr>
 		</thead>
@@ -480,7 +516,7 @@
 
 	.i {
 		color: #32bea6;
-		font-weight: 700;
+		font-weight: 600;
 	}
 	.v {
 		font-size: 17px;
