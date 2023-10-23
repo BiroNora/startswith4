@@ -38,7 +38,22 @@
 	let totIntrestStatus_3 = 0
 	let filtering = 'OFF'
 	let isElementVisible = false
+	let selYear: any
+  let selSemest: any
+	let selDuty: any
+  let selCountry: any
+  let selRegion: any
+
 	$: {$selectedRegion, $selectedCountry}
+
+	function updateContent() {
+    selYear = $selectedYear
+    selSemest = semesterFilter
+		selDuty = dutyFilter
+    selCountry = $selectedCountry
+    selRegion = $selectedRegion
+		isElementVisible = true
+  }
 
 	// For JSON visualization
 	function formatAndSetResponseData(responseData: any) {
@@ -271,7 +286,7 @@
 		class="btn"
 		id="btn"
 		type="submit"
-		on:click|once={() => isElementVisible = !isElementVisible}
+		on:click={updateContent}
 		>
 		Confirm
 	</button>
@@ -299,36 +314,37 @@
 
 	{#if isElementVisible}
 		<div class="sticky" id="stickyLine">
-			<i>Event Year: </i>{$selectedYear},&emsp;
-			<i>Event Semester: </i>{semesterFilter},&emsp;
+			<i>Event Year: </i>{selYear} &nbsp;&nbsp;
+			<i>Event Semester: </i>{selSemest} &nbsp;&nbsp;
 			<i>Event Duty: </i>
 			{#each duty as item (item.id)}
-				{#if dutyFilter == item.id}
+				{#if selDuty == item.id}
 					{item.name}
 				{/if}
-			{/each},&emsp;
+			{/each}
+			&nbsp;&nbsp;
 			<i>School Country: </i>
-				{#if ($selectedCountry != 'ALL')}
+				{#if (selCountry != 'ALL')}
 					{#each countries as country}
-						{#if (country.country_id == $selectedCountry)}
+						{#if (country.country_id == selCountry)}
 							{country.country_name}
 						{/if}
 					{/each}
 				{:else}
 					ALL
 				{/if}
-			,&emsp;
+			&nbsp;&nbsp;
 			<i>School Region: </i>
-				{#if ($selectedRegion != 'ALL')}
+				{#if (selRegion != 'ALL')}
 					{#each regions as reg}
-						{#if (reg.region_id == $selectedRegion)}
+						{#if (reg.region_id == selRegion)}
 							{reg.region_name}
 						{/if}
 					{/each}
 				{:else}
 					ALL
 				{/if}
-			,&emsp;
+			&nbsp;&nbsp;
 			<i>Filtering: </i>{filtering}
 		</div>
 	{/if}
@@ -574,4 +590,5 @@
 	.btn:hover {
 		background-color: #11a58c;
 	}
+
 </style>
