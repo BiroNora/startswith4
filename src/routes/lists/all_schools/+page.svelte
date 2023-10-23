@@ -212,9 +212,10 @@
   }
 
   .z {
-    color: #32bea6;
+    color: rgb(144, 132, 132);
     font-size: medium;
     font-weight: 400;
+    font-style: italic;
   }
 
   .input-container {

@@ -11,7 +11,11 @@
 </svelte:head>
 
 <div class="main">
-  <h1>My Event List</h1>
+  <hgroup>
+    <h1>My Event List<i></h1>
+    <h4 class="z">Number of events:&nbsp;{events.length}</h4>
+  </hgroup>
+  <br>
   <ul>
     {#each events as ev}
       <li class="li">
@@ -53,6 +57,13 @@
     padding-left: 5%;
     text-indent: -6%;
     line-height: 2;
+  }
+
+  .z {
+    color: rgb(144, 132, 132);
+    font-size: medium;
+    font-weight: 400;
+    font-style: italic;
   }
 
   .flower {
