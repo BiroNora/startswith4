@@ -182,3 +182,20 @@ export const gradeMap = [
 	{ id: '4', name: 'CLASS 11' },
 	{ id: '5', name: 'CLASS 12' }
 ]
+
+export const subjectMap = [
+	{ id: '1', name: 'ART' },
+	{ id: '2', name: 'BUSINESS' },
+	{ id: '3', name: 'CLIMATE CHANGE' },
+	{ id: '4', name: 'CULTURE' },
+	{ id: '5', name: 'ECONOMICS' },
+	{ id: '6', name: 'ENVIRONMENTAL PROTECTION' }, // OKTV
+	{ id: '7', name: 'MEDIA' },
+	{ id: '8', name: 'PHILOSOPHY' },
+	{ id: '9', name: 'POLITICS' },
+	{ id: '10', name: 'SCIENCE' },
+	{ id: '11', name: 'SOCIETY' },
+	{ id: '12', name: 'SPORT' },
+	{ id: '13', name: 'TECHNOLOGY' },
+	{ id: '14', name: 'ELSE*' },
+]

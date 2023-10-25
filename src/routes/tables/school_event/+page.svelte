@@ -248,7 +248,7 @@
 		<h1 >Schools* and Events**</h1>
 		<i>&emsp;*Active and cooperative schools only with Startswith contact</i>
 		<br>
-		<i>&emsp;**Semesters: Spring — months between the 3th & 9th months; Autumn — others</i>
+		<i>&emsp;**Semesters: Spring — months between the 3th & 9th months inclusive; Autumn — others</i>
 	</hgroup>
 	<br>
 

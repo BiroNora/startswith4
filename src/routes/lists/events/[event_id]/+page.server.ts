@@ -96,7 +96,9 @@ export async function load({ params }) {
 
 	const countries = await db.country.findMany({})
 
-	const regions = await db.region.findMany({})
+	const regions = await db.region.findMany({
+		orderBy: { region_name: 'asc' }
+	})
 
 	if (!event) {
 		throw error(404, 'School not found')

@@ -30,10 +30,11 @@
 			{/if}
 			<hgroup>
 				<h6>{data.school.zip_code} {data.city?.city_name} {data.school.address}</h6>
-				<p>
+				<div>
 					{data.country?.country_name} / {data.region?.region_name} régió / {data.county?.county_name}
 					megye
-				</p>
+					<br>
+					<div class="z">Number of Events:&nbsp;{data.event.length}</div>
 			</hgroup>
 			<br />
 			<h4 class="h41">Adatok</h4>
@@ -77,7 +78,10 @@
 					{/each}
 				</hgroup>
 			</ul>
-			<h4 class="h42">Események</h4>
+			<hgroup>
+				<h4 class="h42">Események</h4>
+				<h4 class="y">Number of Events:&nbsp;{data.event.length}</h4>
+			</hgroup>
 			<br />
 			<ul class="aa">
 				{#each data.event as e}
@@ -197,6 +201,20 @@
 		line-height: normal;
 		font-size: 22px;
 	}
+
+	.z {
+    color: rgb(144, 132, 132);
+    font-size: medium;
+    font-weight: 400;
+    font-style: italic;
+  }
+
+	.y {
+    color: #32bea6;
+    font-size: medium;
+    font-weight: 400;
+    font-style: italic;
+  }
 
 	.la {
 		list-style-position: inside;

@@ -7,6 +7,7 @@
 		formatDate,
 		gradeMap,
 		statusMap,
+		subjectMap,
 		timeSlugify
 	} from '../../../stores/dataStore.js'
 	import type { ActionData } from './$types'
@@ -153,7 +154,7 @@
 					</li>
 				</ul>
 			</hgroup>
-			<li class="lb">Érdeklődők,  összesen {add(data.inters)} diák <strong class="st">(a rögzítés sorrendjében, legfelül a legutoljára rögzített) </strong>:</li>
+			<li class="lb">Érdeklődők,&emsp;<p class="z"> összesen {add(data.inters)} diák </p><strong class="st">(a rögzítés sorrendjében, legfelül a legutoljára rögzített) </strong>:</li>
 			<hgroup>
 				{#each data.inters as ints, index}
 					<ul class="ac">
@@ -251,8 +252,8 @@
 			<div>
 				<label for="grade">Grade</label>
 				<select name="grade" id="grade" class="hidden-textbox">
-					{#each gradeMap as item (item.id)}
-						<option value={item.id}>{item.name}</option>
+					{#each gradeMap as grade, index (grade.id)}
+						<option value={grade.id}>{grade.name}</option>
 					{/each}
 				</select>
 			</div>
@@ -267,23 +268,26 @@
 			<div>
 				<label for="channel">Channeled by</label>
 				<select name="channel" id="channel" class="hidden-textbox">
-					{#each channelMap as item (item.id)}
-						<option value={item.id}>{item.name}</option>
+					{#each channelMap as channel, index (channel.id)}
+						<option value={channel.id}>{channel.name}</option>
 					{/each}
 				</select>
 			</div>
 			<button type="button" on:click={() => isWork()} class="contrast outline cgb">Apply</button>
 			<fieldset disabled={isInput}>
-				<input type="hidden" name="apply" value={isInput} />
 				<div>
-					<label for="work">Title of Work</label>
-					<input type="text" name="work" id="work" required />
+					<label for="subject">Subject</label>
+					<select name="subject" id="subject" class="hidden-textbox">
+						{#each subjectMap as subject, index (subject.id)}
+							<option value={subject.id}>{subject.name}</option>
+						{/each}
+					</select>
 				</div>
 				<div>
 					<label for="status">Status</label>
 					<select name="status" id="status" class="hidden-textbox">
-						{#each statusMap as item (item.id)}
-							<option value={item.id}>{item.name}</option>
+						{#each statusMap as status, index (status.id)}
+							<option value={status.id}>{status.name}</option>
 						{/each}
 					</select>
 				</div>
@@ -299,6 +303,7 @@
 			>
 		</form>
 	</div>
+
 
 	<!-- Event update form -->
 
@@ -334,16 +339,16 @@
 			<div>
 				<label for="duty">On Duty</label>
 				<select bind:value={data.onduty} name="duty" id="duty" class="hidden-textbox">
-					{#each dutyMap3 as item (item.id)}
-						<option value={item.id}>{item.name} </option>
+					{#each dutyMap3 as du (du.id)}
+						<option value={du.id}>{du.name} </option>
 					{/each}
 				</select>
 			</div>
 			<div>
 				<label for="type">Event Type</label>
 				<select bind:value={data.eventtype} name="type" id="type" class="hidden-textbox">
-					{#each eventMap as item (item.id)}
-						<option value={item.id}>{item.name}</option>
+					{#each eventMap as ev (ev.id)}
+						<option value={ev.id}>{ev.name}</option>
 					{/each}
 				</select>
 				<p><i class="iii">in case of * please leave a comment</i></p>
@@ -414,8 +419,6 @@
 		<p class="uni">{data.event.event_name}</p>
 		<form action="?/eventUD" method="post" use:enhance>
 			<div>
-			</div>
-			<div>
 				<label for="email">Email</label>
 				<input type="text" name="email" id="email" required />
 			</div>
@@ -431,8 +434,8 @@
 				type="button"
 				on:click={scrollToConnect}
 				id="backToTop"
-				class="contrast outline cgb h44">Cancel &#10070; Jump to the Top</button
-			>
+				class="contrast outline cgb h44">Cancel &#10070; Jump to the Top
+			</button>
 		</form>
 	</div>
 	<div>
@@ -517,6 +520,13 @@
 		font-size: 20px;
 		font-style: italic;
 	}
+
+	.z {
+    color: rgb(144, 132, 132);
+    font-size: medium;
+    font-weight: 400;
+    font-style: italic;
+  }
 
 	.la {
 		list-style-type: none;

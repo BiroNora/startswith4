@@ -67,7 +67,7 @@
 						{/each}
 						<li class="lb">Csatorna, ahonnan értesült a programról: {ints.channel}</li>
 						{#if ints.applied == true}
-							<li class="lb">Jelentkezési mű címe: {ints.work_title}</li>
+							<li class="lb">Jelentkezési téma: {ints.work_title}</li>
 							<li class="lb">Státusza: {ints.status}</li>
 						{:else}
 							<li class="lb">Nem jelentkezett</li>

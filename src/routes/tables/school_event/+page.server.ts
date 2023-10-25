@@ -24,7 +24,9 @@ export const load: PageServerLoad = async () => {
   distinctYears.sort()
   distinctYears.unshift('ALL')
 
-  const countries = await db.country.findMany({})
+  const countries = await db.country.findMany({
+    orderBy: { country_name: 'asc' }
+  })
 
   if (!countries) {
     return fail(400, {
@@ -33,7 +35,9 @@ export const load: PageServerLoad = async () => {
     })
   }
 
-  const regions = await db.region.findMany({})
+  const regions = await db.region.findMany({
+    orderBy: { region_name: 'asc' }
+  })
 
   if (!regions) {
     return fail(400, {
