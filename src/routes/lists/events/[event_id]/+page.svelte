@@ -185,7 +185,11 @@
 						{/each}
 						<li class="lb">Csatorna, ahonnan értesült a programról: {ints.channel}</li>
 						{#if ints.applied == true}
-							<li class="lb">Jelentkezési téma: {ints.work_title}</li>
+							{#each subjectMap as subject (subject.id)}
+								{#if (ints.work_title == subject.id)}
+									<li class="lb">Jelentkezési téma: {subject.name}</li>
+								{/if}
+							{/each}
 							<li class="lb">Státusza: {ints.status}</li>
 						{:else}
 							<li class="lb">Nem jelentkezett</li>

@@ -128,7 +128,7 @@ model InterestedStudents {
   intrest_count Int
   grade         String
   applied       Boolean
-  work_title    String
+  work_title    String // subject!!
   channel       String
   status        String
   country_id    Int

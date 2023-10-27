@@ -146,12 +146,16 @@ const interested: Action = async ({ request }) => {
 	const grade = String(data.get('grade'))
 	const channel = String(data.get('channel'))
 	const apply = Boolean(data.get('apply'))
-	const work_title = String(data.get('work'))
+	let work_title = String(data.get('work'))
 	let status = String(data.get('status'))
 	const event_id = ev_id
 	const applied = apply
 
-	if (status === 'null') {
+	if (applied == false || work_title === 'null') {
+		work_title = '0'
+	}
+
+	if (applied == false || status === 'null') {
 		status = '0'
 	}
 
