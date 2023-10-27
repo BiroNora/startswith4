@@ -20,6 +20,9 @@
       <a href="/tables/school_event" target="_blank">School_Event</a>
     </li>
     <li>
+      <a href="/tables/event_intrest" target="_blank">Event_Intrest</a>
+    </li>
+    <li>
       <a href="/lists/all_schools" target="_blank">All Schools List</a>
     </li>
     <li>
