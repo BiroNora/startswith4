@@ -275,6 +275,7 @@
 				</select>
 			</div>
 			<button type="button" on:click={() => isWork()} class="contrast outline cgb">Apply</button>
+			<input type="hidden" name="apply" value={isInput} />
 			<fieldset disabled={isInput}>
 				<div>
 					<label for="subject">Subject</label>

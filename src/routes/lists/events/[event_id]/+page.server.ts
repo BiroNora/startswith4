@@ -156,7 +156,7 @@ const interested: Action = async ({ request }) => {
 	const grade = String(data.get('grade'))
 	const channel = String(data.get('channel'))
 	const apply = Boolean(data.get('apply'))
-	let work_title = String(data.get('work'))
+	let work_title = String(data.get('subject'))
 	let status = String(data.get('status'))
 	const event_id = ev_id
 	const applied = apply
