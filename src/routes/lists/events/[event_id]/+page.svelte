@@ -17,6 +17,8 @@
 	let formattedTimestamp
 	let showEventModal = false
 	let showIntrestModal = false
+	let itemNumber = 0
+	let selectedIntrestId = 0
 
 	function isWork() {
 		if (isInput == true) {
@@ -50,15 +52,10 @@
 		return inters.reduce((total, inter) => total + (inter.intrest_count || 0), 0)
 	}
 
-	let itemNumber = 0
-
   // Function to set the itemNumber
   function setItemNumber(index: number) {
     itemNumber = index + 1
   }
-
-	// Variable to store the selected intrest_id
-  let selectedIntrestId = 0
 
   // Function to set the selected intrest_id
   function setSelectedIntrestId(intrest_id: number) {
@@ -249,7 +246,7 @@
 				<label for="country">Country</label>
 				<select name="country" id="country">
 					{#each data.countries as country}
-						<option value={country.country_id}>{country.country_name}</option>
+						<option value={country.country_id} selected={country.country_id === data.schoolCountry}>{country.country_name}</option>
 					{/each}
 				</select>
 			</div>
@@ -265,7 +262,7 @@
 				<label for="connect">Connected by / Region</label>
 				<select name="connect" id="connect">
 					{#each data.regions as region}
-						<option value={region.region_id}>{region.region_name}</option>
+						<option value={region.region_id} selected={region.region_id === data.schoolRegion}>{region.region_name}</option>
 					{/each}
 				</select>
 			</div>

@@ -96,9 +96,17 @@ export async function load({ params }) {
 
 	const countries = await db.country.findMany({})
 
+	const countryId = school?.country_id
+
+	const schoolCountry = countries.find((country) => country.country_id === countryId)?.country_id
+
 	const regions = await db.region.findMany({
 		orderBy: { region_name: 'asc' }
 	})
+
+	const regionId = school?.region_id
+
+	const schoolRegion = regions.find((region) => region.region_id === regionId)?.region_id
 
 	if (!event) {
 		throw error(404, 'School not found')
@@ -114,7 +122,9 @@ export async function load({ params }) {
 		onduty,
 		eventtype,
 		cldate,
-		user
+		user,
+		schoolCountry,
+		schoolRegion
 	}
 }
 
