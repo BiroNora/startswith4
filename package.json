@@ -36,6 +36,7 @@
 	"dependencies": {
 		"@picocss/pico": "^1.5.10",
 		"@prisma/client": "^5.4.2",
-		"bcrypt": "^5.1.0"
+		"bcrypt": "^5.1.0",
+		"chart.js": "^4.4.0"
 	}
 }

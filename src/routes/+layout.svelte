@@ -17,6 +17,9 @@
       <a href="/register/location" target="_blank">Location_R</a>
     </li>
     <li>
+      <a href="/tables/table" target="_blank">Table</a>
+    </li>
+    <li>
       <a href="/tables/school_event" target="_blank">School_Event</a>
     </li>
     <li>
