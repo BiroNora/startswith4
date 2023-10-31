@@ -20,6 +20,9 @@
       <a href="/tables/table" target="_blank">Table</a>
     </li>
     <li>
+      <a href="/tables/chart_table" target="_blank">Chart_Table</a>
+    </li>
+    <li>
       <a href="/tables/school_event" target="_blank">School_Event</a>
     </li>
     <li>
