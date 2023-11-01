@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { writable } from 'svelte/store'
-	import { duty, gradeMap, schType, semester, statusMap } from '../../stores/dataStore'
+	import { duty, gradeMap, schType, semester, statusMap, subjectMap } from '../../stores/dataStore'
 	import type { RequestPayload } from './+server'
 	import type { PageServerData } from './$types'
 	import { Chart } from 'chart.js/auto'
@@ -31,13 +31,9 @@
 	let responseDataFormatted: any = null
 	let statusCountry: any = []
 	let statusGrade: any = []
-	let schoolsLength = 0
-	let totalEventCount = 0
-	let sumEstStudents = 0
-	let totIntrestStatus_0 = 0
-	let totIntrestStatus_1 = 0
-	let totIntrestStatus_2 = 0
-	let totIntrestStatus_3 = 0
+	let admittedGrade: any = []
+	let intrestSubjects: any = []
+	let admittedSubjects: any = []
 	let filtering = 'OFF'
 	let isElementVisible = false
 	let selYear: any
@@ -56,6 +52,10 @@
 		intrest_count_status_2: number
 		intrest_count_status_3: number
 		intert: number
+	}
+
+	function calcPerc(x: any, y: any): number {
+    return x !== 0 ? Math.round((x * 100) / y) : 0
 	}
 
 	function updateContent() {
@@ -111,6 +111,9 @@
 					formatAndSetResponseData(responseData)
 					statusCountry = responseData.statusCountry
 					statusGrade = responseData.statusGrade
+					admittedGrade = responseData.admittedGrade
+					intrestSubjects = responseData.intrestSubjects
+					admittedSubjects = responseData.admittedSubjects
 					console.log('RESPONSEData:' + responseData)
 					createChart()
 			} else {
@@ -121,69 +124,14 @@
 		}
 	}
 
-	function searchTable() {
-		const input = document.getElementById("searchInput") as HTMLInputElement
-		const filter = input.value.toUpperCase()
-		const table = document.querySelector(".table") as HTMLTableElement
-		const rows = table.getElementsByTagName("tr")
-
-		let count = 0
-		totalEventCount = 0
-		sumEstStudents = 0
-		totIntrestStatus_0 = 0
-		totIntrestStatus_1 = 0
-		totIntrestStatus_2 = 0
-		totIntrestStatus_3 = 0
-		filtering = 'ON'
-
-		if (input.value == "") {
-			filtering = 'OFF'
-		}
-
-		for (let i = 0; i < rows.length; i++) {
-			const cells = rows[i].getElementsByTagName("td")
-
-			if (i !== 0) { // Skip the header row
-				let found = false
-
-				for (let j = 0; j < cells.length; j++) {
-					const cell = cells[j]
-					const text = cell.textContent || cell.innerText
-
-					if (text.toUpperCase().indexOf(filter) > -1) {
-						found = true
-						break
-					}
-				}
-				if (found) {
-					rows[i].style.display = ""
-					let school = schoolsData[i - 1]
-					count ++
-					totalEventCount += school.event_count
-					sumEstStudents += school.sum_estimated_student
-					totIntrestStatus_0 += school.total_intrest_count_status_0
-					totIntrestStatus_1 += school.total_intrest_count_status_1
-					totIntrestStatus_2 += school.total_intrest_count_status_2
-					totIntrestStatus_3 += school.total_intrest_count_status_3
-				} else {
-					rows[i].style.display = "none"
-				}
-			}
-		}
-		schoolsLength = count
-	}
-
-	function clearInput() {
-		let input = document.getElementById("searchInput") as HTMLInputElement
-		input.value = ''
-		searchTable()
-		filtering = 'OFF'
-	}
-
 	function createChart() {
 		let chartCanvas1: HTMLElement | null = document.getElementById('chartCanvas1')
 		let chartCanvas2: HTMLElement | null = document.getElementById('chartCanvas2')
+		let chartCanvas3: HTMLElement | null = document.getElementById('chartCanvas3')
+		let chartCanvas4: HTMLElement | null = document.getElementById('chartCanvas4')
+		let chartCanvas5: HTMLElement | null = document.getElementById('chartCanvas5')
 
+		// Data of chartCanvas1
 		let countryNames = statusCountry.map((item: StatusCountry) => item.country_name)
 		let dataVal = statusCountry.map((item: StatusCountry) => item.total_intrest_count)
 		let dataAppl = statusCountry.map((item: StatusCountry) => item.intert)
@@ -192,7 +140,7 @@
 		let dataValues2 = statusCountry.map((item: StatusCountry) => item.intrest_count_status_2)
 		let dataValues3 = statusCountry.map((item: StatusCountry) => item.intrest_count_status_3)
 
-		let datasets = [
+		let datasets1 = [
 			{
 				label: 'INTERESTED TOTAL',
 				backgroundColor: 'rgb(25.1, 2, 71.4)',
@@ -231,39 +179,169 @@
 			},
 		]
 
-		let chart1 = new Chart(chartCanvas1, {
+		// Data of chartCanvas2
+		let gardeNames = Array.from({ length: 5 }, (_, i) => gradeMap[i].name)
+
+		const statusValuesMap: { [key: string]: number } = {}
+		for (let i = 1; i <= 5; i++) {
+			const grStatus = `intrest_grade_status_${i}`
+			statusValuesMap[grStatus] = statusGrade[0][grStatus] || 0 // Use 0 as default if value is not present
+		}
+
+		const gradeTotal = Object.values(statusValuesMap).reduce((sum, value) => sum + value, 0)
+
+		const gradeData: number[] = []
+		for (let i = 1; i <= 5; i++) {
+			const grade = `intrest_grade_status_${i}`
+			gradeData[i - 1] = calcPerc(statusValuesMap[grade], gradeTotal)
+			console.log(`${gradeData[i - 1]} for ${grade}`)
+		}
+
+		let gradeColors = ['rgb(251, 2, 71)', 'rgb(255, 99, 132)', 'rgb(100, 99, 132)', 'rgb(54, 162, 235)', 'rgb(75, 192, 192)']
+
+		// Data of chartCanvas3
+		let admittedNames = Array.from({ length: 5 }, (_, i) => gradeMap[i].name)
+
+		const admittedValuesMap: { [key: string]: number } = {}
+		for (let i = 1; i <= 5; i++) {
+			const adStatus = `intrest_grade_status_${i}`
+			admittedValuesMap[adStatus] = admittedGrade[0][adStatus] || 0 // Use 0 as default if value is not present
+		}
+
+		const admittedTotal = Object.values(admittedValuesMap).reduce((sum, value) => sum + value, 0)
+
+		const admittedData: number[] = []
+		for (let i = 1; i <= 5; i++) {
+			const admit = `intrest_grade_status_${i}`
+			admittedData[i - 1] = calcPerc(admittedValuesMap[admit], admittedTotal)
+			console.log(`${admittedData[i - 1]} for ${admit}`)
+		}
+
+		let admittedColors = ['rgb(251, 2, 71)', 'rgb(255, 99, 132)', 'rgb(100, 99, 132)', 'rgb(54, 162, 235)', 'rgb(75, 192, 192)']
+
+		// Data of chartCanvas4
+		const subjectNames = Array.from({ length: 14 }, (_, i) => subjectMap[i].name)
+
+		const subjectValuesMap: { [key: string]: number } = {}
+		for (let i = 1; i <= 14; i++) {
+				const workTitle = `intrest_work_title_${i}`
+				subjectValuesMap[workTitle] = intrestSubjects[0][workTitle] || 0 // Use 0 as default if value is not present
+		}
+
+		const subjectTotal = Object.values(subjectValuesMap).reduce((sum, value) => sum + value, 0)
+
+		const subjectsInter: number[] = []
+		for (let i = 1; i <= 14; i++) {
+			const workTitle = `intrest_work_title_${i}`
+			subjectsInter[i - 1] = calcPerc(subjectValuesMap[workTitle], subjectTotal)
+		}
+
+		let subjectColors = [
+			'rgb(251, 2, 71)',
+			'rgb(255, 199, 132)',
+			'rgb(100, 199, 132)',
+			'rgb(54, 162, 235)',
+			'rgb(75, 192, 192)',
+			'rgb(251, 12, 71)',
+			'rgb(255, 99, 132)',
+			'rgb(100, 99, 132)',
+			'rgb(54, 182, 235)',
+			'rgb(175, 192, 192)',
+			'rgb(251, 202, 71)',
+			'rgb(255, 70, 132)',
+			'rgb(100, 56, 132)',
+			'rgb(54, 162, 135)',
+			'rgb(175, 92, 192)']
+
+		new Chart(chartCanvas1, {
 			type: 'bar', // Chart type (e.g., 'bar', 'doughnut', etc.)
 			data: {
 				labels: countryNames,
-				datasets: datasets,
+				datasets: datasets1,
 			},
-			plugins: {
-				datalabels: {
-					color: 'black', // Color of the data labels
-					anchor: 'end', // Position of the labels (e.g., 'end', 'center', 'start')
-					align: 'top', // Alignment of the labels (e.g., 'top', 'center', 'bottom')
-					font: {
-						weight: 'bold', // Font weight of the labels
-					},
-					formatter: (context: any) => {
-						// Display the dataset value on top of the bar
-						return context.dataset.data[context.dataIndex]
+			options: {
+				plugins: {
+					title: {
+						display: true,
+						text: 'Interested Students and their Status per Country',
+						font: {
+							size: 20,
+						},
 					},
 				},
 			},
   	})
 
-		var chart2 = new Chart(chartCanvas2,{
+		new Chart(chartCanvas2, {
 			type: 'doughnut', // Doughnut chart type
 			data: {
-				labels: ['Label A', 'Label B', 'Label C'],
+				labels: gardeNames,
 				datasets: [
 					{
-						data: [40, 30, 20],
-						backgroundColor: ['rgb(255, 99, 132)', 'rgb(255, 159, 64)', 'rgb(75, 192, 192)'],
+						data: gradeData,
+						backgroundColor: gradeColors,
 					},
 				],
 			},
+			options: {
+				plugins: {
+					title: {
+						display: true,
+						text: 'Grade Percentage Proportion of Interested Students',
+						font: {
+							size: 20,
+						},
+					},
+				},
+  		},
+		})
+
+		new Chart(chartCanvas3, {
+			type: 'doughnut', // Doughnut chart type
+			data: {
+				labels: admittedNames,
+				datasets: [
+					{
+						data: admittedData,
+						backgroundColor: admittedColors,
+					},
+				],
+			},
+			options: {
+				plugins: {
+					title: {
+						display: true,
+						text: 'Grade Percentage Proportion of Admitted Students',
+						font: {
+							size: 20,
+						},
+					},
+				},
+  		},
+		})
+
+		new Chart(chartCanvas4, {
+			type: 'doughnut', // Doughnut chart type
+			data: {
+				labels: subjectNames,
+				datasets: [
+					{
+						data: subjectsInter,
+						backgroundColor: subjectColors,
+					},
+				],
+			},
+			options: {
+				plugins: {
+					title: {
+						display: true,
+						text: 'Subject Percentage Proportion of Interested Students',
+						font: {
+							size: 20,
+						},
+					},
+				},
+  		},
 		})
 	}
 </script>
@@ -343,22 +421,6 @@
 		<pre>{responseDataFormatted}</pre>
 	</div>
 
-	<div class="input-container">
-		<input
-		type="search"
-		id="searchInput"
-		placeholder="Search for items..."
-		on:input={searchTable}
-		/>
-		<button
-    type="button"
-    class="clear-button secondary outline"
-    on:click={clearInput}
-  	>
-    &#10007;
-  	</button>
-	</div>
-
 	{#if isElementVisible}
 		<div class="sticky" id="stickyLine">
 			<i>Event Year: </i>{selYear} &nbsp;&nbsp;
@@ -399,9 +461,29 @@
 
 	<div class="e">
 		<canvas id="chartCanvas1"></canvas>
-		<canvas id="chartCanvas2"></canvas>
 	</div>
+	<br>
+	<br>
+	<div class="container">
+		<div class="f">
+			<canvas id="chartCanvas2"></canvas>
+		</div>
+		<br>
+		<br>
+		<div class="f">
+			<canvas id="chartCanvas3"></canvas>
+		</div>
+	</div>
+	<br>
+	<div class="container">
+		<div class="f">
+			<canvas id="chartCanvas4"></canvas>
+		</div>
+		<br>
+		<br>
 
+	</div>
+	<br>
 </div>
 
 <style>
@@ -411,89 +493,30 @@
     padding-right: 0.5%;
   }
 
-	.c {
-		text-align: center
-	}
-
-	.b {
-		width: 6%;
-		font-size: x-small;
-	}
-
-	.d {
-		width: 5%;
-		font-size: x-small;
-		font-stretch: condensed;
+	.container {
+		display: flex; /* or inline-flex */
+		width: 100%;
+		flex-direction: row;
+		justify-content: space-around;
+		gap: 8%;
+		padding-top: 2%;
+		padding-bottom: 4%;
 	}
 
 	.e {
   width: 60%;
+	padding-top: 4%;
+	padding-bottom: 3%;
+	padding-left: 3%;
 	}
 
-	.g {
-		color: #32bea6;
-		font-weight: 900;
-	}
-
-	.h {
-		color: #32bea6;
-	}
-
-	.i {
-		color: #32bea6;
-		font-weight: 600;
-	}
-	.v {
-		font-size: 17px;
-	}
-
-	.w {
-		font-size:xx-small;
-	}
-
-	table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-
-  th, td {
-    padding: 8px;
-    text-align: left;
-  }
-
-	tr:nth-child(even) {
-  	background-color: #f2f2f2;
+	.f {
+  width: 50%;
 	}
 
 	i {
 		font-weight: 300;
 	}
-
-	.nb {
-    text-align: center;
-	}
-
-	.centered-link {
-		height: 100%; /* Optional: If you want the link to take up the full height of the cell */
-		display:table-cell;
-		align-items:center;
-		justify-content:space-around;
-		flex-direction: column;
-		text-align:center;
-		vertical-align: middle;
-		width: 100%;
-		border: none; /* Remove border */
-		outline: none; /* Remove focus outline (optional, for better accessibility) */
-		text-decoration-color: #32bea6;
-	}
-
-	th {
-    background-color:#fafdfd;
-    position: sticky;
-    top: 40px;
-    z-index: 2;
-		padding-top: 10px;
-  }
 
 	.sticky {
 		background-color: white;
@@ -503,24 +526,6 @@
     height: 40px;
     width: 100%;
 		padding: 5px;
-		color: #32bea6;
-	}
-
-	.input-container {
-		position: relative;
-	}
-
-	.clear-button {
-		position: absolute;
-		width: auto;
-		top: 35%;
-		right: 38px;
-		transform: translateY(-50%);
-		background: none;
-		border: none;
-		cursor: pointer;
-		padding: 0;
-		font-size: 1.2rem;
 		color: #32bea6;
 	}
 

@@ -41,7 +41,12 @@ export async function POST({ request }) {
           CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
           CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
           CAST(SUM(i.intrest_count) AS INTEGER) AS total_intrest_count,
-          CAST(SUM(CASE WHEN i.status != '0' THEN i.intrest_count ELSE 0 end) AS INTEGER) AS intert
+          CAST(SUM(CASE WHEN i.status != '0' THEN i.intrest_count ELSE 0 end) AS INTEGER) AS intert,
+          CAST(SUM(CASE WHEN i.grade = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_grade_status_1,
+          CAST(SUM(CASE WHEN i.grade = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_grade_status_2,
+          CAST(SUM(CASE WHEN i.grade = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_grade_status_3,
+          CAST(SUM(CASE WHEN i.grade = '4' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_grade_status_4,
+          CAST(SUM(CASE WHEN i.grade = '5' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_grade_status_5
         FROM interested i
         JOIN Country c
         ON i.country_id = c.country_id
@@ -66,11 +71,6 @@ export async function POST({ request }) {
             GROUP BY stu."A"
           )
         SELECT
-          c.country_name,
-          CAST(SUM(CASE WHEN i.status = '0' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_0,
-          CAST(SUM(CASE WHEN i.status = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_1,
-          CAST(SUM(CASE WHEN i.status = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_2,
-          CAST(SUM(CASE WHEN i.status = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_count_status_3,
           CAST(SUM(CASE WHEN i.grade = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_grade_status_1,
           CAST(SUM(CASE WHEN i.grade = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_grade_status_2,
           CAST(SUM(CASE WHEN i.grade = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_grade_status_3,
@@ -88,12 +88,117 @@ export async function POST({ request }) {
         WHERE e.semester IN (${selectedSemester})
           AND s.coop = TRUE
           AND s.active = TRUE
-        GROUP BY c.country_name
       `
+      const admittedGrade = await db.$queryRaw`
+        WITH UserAggregates AS (
+          SELECT
+            stu."A" AS school_id,
+            STRING_AGG(u.user_name, ', ') AS user_names
+          FROM "_SchoolToUser" stu
+          JOIN users u ON stu."B" = u.user_id
+          GROUP BY stu."A"
+        )
+        SELECT
+          CAST(SUM(CASE WHEN i.grade = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_grade_status_1,
+          CAST(SUM(CASE WHEN i.grade = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_grade_status_2,
+          CAST(SUM(CASE WHEN i.grade = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_grade_status_3,
+          CAST(SUM(CASE WHEN i.grade = '4' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_grade_status_4,
+          CAST(SUM(CASE WHEN i.grade = '5' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_grade_status_5
+        FROM interested i
+        JOIN events e
+        ON e.event_id = i.event_id
+        JOIN schools s
+        ON e.school_id = s.school_id
+        JOIN UserAggregates ua
+        ON s.school_id = ua.school_id
+        WHERE e.semester IN (${selectedSemester})
+          AND s.coop = TRUE
+          AND s.active = TRUE
+          AND i.status = '1'
+      `
+    const intrestSubjects = await db.$queryRaw`
+      WITH UserAggregates AS (
+        SELECT
+          stu."A" AS school_id,
+          STRING_AGG(u.user_name, ', ') AS user_names
+        FROM "_SchoolToUser" stu
+        JOIN users u ON stu."B" = u.user_id
+        GROUP BY stu."A"
+      )
+        SELECT
+          CAST(SUM(CASE WHEN i.work_title = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_1,
+          CAST(SUM(CASE WHEN i.work_title = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_2,
+          CAST(SUM(CASE WHEN i.work_title = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_3,
+          CAST(SUM(CASE WHEN i.work_title = '4' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_4,
+          CAST(SUM(CASE WHEN i.work_title = '5' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_5,
+          CAST(SUM(CASE WHEN i.work_title = '6' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_6,
+          CAST(SUM(CASE WHEN i.work_title = '7' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_7,
+          CAST(SUM(CASE WHEN i.work_title = '8' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_8,
+          CAST(SUM(CASE WHEN i.work_title = '9' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_9,
+          CAST(SUM(CASE WHEN i.work_title = '10' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_10,
+          CAST(SUM(CASE WHEN i.work_title = '11' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_11,
+          CAST(SUM(CASE WHEN i.work_title = '12' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_12,
+          CAST(SUM(CASE WHEN i.work_title = '13' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_13,
+          CAST(SUM(CASE WHEN i.work_title = '14' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_14
+        FROM interested i
+        JOIN events e
+        ON e.event_id = i.event_id
+        JOIN schools s
+        ON e.school_id = s.school_id
+        JOIN UserAggregates ua
+        ON s.school_id = ua.school_id
+        WHERE e.semester IN (${selectedSemester})
+          AND s.coop = TRUE
+          AND s.active = TRUE
+    `
+
+const admittedSubjects = await db.$queryRaw`
+  WITH UserAggregates AS (
+    SELECT
+      stu."A" AS school_id,
+      STRING_AGG(u.user_name, ', ') AS user_names
+    FROM "_SchoolToUser" stu
+    JOIN users u ON stu."B" = u.user_id
+    GROUP BY stu."A"
+  )
+    SELECT
+      CAST(SUM(CASE WHEN i.work_title = '1' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_1,
+      CAST(SUM(CASE WHEN i.work_title = '2' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_2,
+      CAST(SUM(CASE WHEN i.work_title = '3' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_3,
+      CAST(SUM(CASE WHEN i.work_title = '4' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_4,
+      CAST(SUM(CASE WHEN i.work_title = '5' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_5,
+      CAST(SUM(CASE WHEN i.work_title = '6' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_6,
+      CAST(SUM(CASE WHEN i.work_title = '7' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_7,
+      CAST(SUM(CASE WHEN i.work_title = '8' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_8,
+      CAST(SUM(CASE WHEN i.work_title = '9' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_9,
+      CAST(SUM(CASE WHEN i.work_title = '10' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_10,
+      CAST(SUM(CASE WHEN i.work_title = '11' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_11,
+      CAST(SUM(CASE WHEN i.work_title = '12' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_12,
+      CAST(SUM(CASE WHEN i.work_title = '13' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_13,
+      CAST(SUM(CASE WHEN i.work_title = '14' THEN i.intrest_count ELSE 0 END) AS INTEGER) AS intrest_work_title_14
+    FROM interested i
+    JOIN events e
+    ON e.event_id = i.event_id
+    JOIN schools s
+    ON e.school_id = s.school_id
+    JOIN UserAggregates ua
+    ON s.school_id = ua.school_id
+    WHERE e.semester IN (${selectedSemester})
+      AND s.coop = TRUE
+      AND s.active = TRUE
+      AND i.status = '1'
+`
 
     await db.$disconnect()
     // Create a JSON response object
-    const responseBody = JSON.stringify({ statusCountry, statusGrade })
+    const responseBody = JSON.stringify(
+      {
+        statusCountry,
+        statusGrade,
+        admittedGrade,
+        intrestSubjects,
+        admittedSubjects
+      })
 			const responseHeaders = {
 				'Content-Type': 'application/json'
 			}
