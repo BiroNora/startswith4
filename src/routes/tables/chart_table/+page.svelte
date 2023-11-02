@@ -41,6 +41,29 @@
 	let selDuty: any
   let selCountry: any
   let selRegion: any
+	const gradeMapLength: number = Object.keys(gradeMap).length
+	const subjectMapLength: number = Object.keys(subjectMap).length
+	const gradeNames = Array.from({ length: gradeMapLength }, (_, i) => gradeMap[i].name)
+	const subjectNames = Array.from({ length: subjectMapLength }, (_, i) => subjectMap[i].name)
+	let gradeData: number[] = []
+	let subjectData: number[] = []
+	let gradeColors = ['rgb(251, 2, 71)', 'rgb(255, 99, 132)', 'rgb(100, 99, 132)', 'rgb(54, 162, 235)', 'rgb(75, 192, 192)']
+	let subjectColors = [
+			'rgb(251, 2, 71)',
+			'rgb(255, 199, 132)',
+			'rgb(100, 199, 132)',
+			'rgb(54, 162, 235)',
+			'rgb(75, 192, 192)',
+			'rgb(251, 12, 71)',
+			'rgb(255, 99, 132)',
+			'rgb(100, 99, 132)',
+			'rgb(54, 182, 235)',
+			'rgb(175, 192, 192)',
+			'rgb(251, 202, 71)',
+			'rgb(255, 70, 132)',
+			'rgb(100, 56, 132)',
+			'rgb(54, 162, 135)',
+			'rgb(175, 92, 192)']
 
 	$: {$selectedRegion, $selectedCountry}
 
@@ -114,7 +137,6 @@
 					admittedGrade = responseData.admittedGrade
 					intrestSubjects = responseData.intrestSubjects
 					admittedSubjects = responseData.admittedSubjects
-					console.log('RESPONSEData:' + responseData)
 					createChart()
 			} else {
 				console.error('Server error:', response.statusText)
@@ -125,11 +147,31 @@
 	}
 
 	function createChart() {
-		let chartCanvas1: HTMLElement | null = document.getElementById('chartCanvas1')
-		let chartCanvas2: HTMLElement | null = document.getElementById('chartCanvas2')
-		let chartCanvas3: HTMLElement | null = document.getElementById('chartCanvas3')
-		let chartCanvas4: HTMLElement | null = document.getElementById('chartCanvas4')
-		let chartCanvas5: HTMLElement | null = document.getElementById('chartCanvas5')
+		let chartCanvas1: HTMLCanvasElement | null = document.getElementById('chartCanvas1') as HTMLCanvasElement
+		let chartCanvas2: HTMLCanvasElement | null = document.getElementById('chartCanvas2') as HTMLCanvasElement
+		let chartCanvas3: HTMLCanvasElement | null = document.getElementById('chartCanvas3') as HTMLCanvasElement
+		let chartCanvas4: HTMLCanvasElement | null = document.getElementById('chartCanvas4') as HTMLCanvasElement
+		let chartCanvas5: HTMLCanvasElement | null = document.getElementById('chartCanvas5') as HTMLCanvasElement
+
+		const canvasIds: string[] = [
+			'chartCanvas1',
+			'chartCanvas2',
+			'chartCanvas3',
+			'chartCanvas4',
+			'chartCanvas5'
+		]
+		const existingCharts: Chart[] = []
+
+		canvasIds.forEach((canvasId) => {
+			const canvas: HTMLCanvasElement | null = document.getElementById(canvasId) as HTMLCanvasElement
+			if (canvas) {
+				const existingChart: Chart | undefined = Chart.getChart(canvas)
+				if (existingChart) {
+					existingCharts.push(existingChart)
+					existingChart.destroy()
+				}
+			}
+		})
 
 		// Data of chartCanvas1
 		let countryNames = statusCountry.map((item: StatusCountry) => item.country_name)
@@ -179,79 +221,43 @@
 			},
 		]
 
-		// Data of chartCanvas2
-		let gardeNames = Array.from({ length: 5 }, (_, i) => gradeMap[i].name)
+		// Data of chartCanvas2, chartCanvas3
+		function calculateGradeData(array: any): number[] {
+			gradeData = []
 
-		const statusValuesMap: { [key: string]: number } = {}
-		for (let i = 1; i <= 5; i++) {
-			const grStatus = `intrest_grade_status_${i}`
-			statusValuesMap[grStatus] = statusGrade[0][grStatus] || 0 // Use 0 as default if value is not present
+			const statusValuesMap: { [key: string]: number } = {}
+			for (let i = 1; i <= gradeMapLength; i++) {
+				const grStatus = `intrest_grade_status_${i}`
+				statusValuesMap[grStatus] = array[0][grStatus] || 0 // Use 0 as default if value is not present
+			}
+
+			const gradeTotal = Object.values(statusValuesMap).reduce((sum, value) => sum + value, 0)
+
+			for (let i = 1; i <= gradeMapLength; i++) {
+				const grade = `intrest_grade_status_${i}`
+				gradeData.push(calcPerc(statusValuesMap[grade], gradeTotal))
+			}
+			return gradeData
 		}
 
-		const gradeTotal = Object.values(statusValuesMap).reduce((sum, value) => sum + value, 0)
+		// Data of chartCanvas4, chartCanvas5
+		function calculateSubjectData(array: any): number[] {
+			subjectData = []
 
-		const gradeData: number[] = []
-		for (let i = 1; i <= 5; i++) {
-			const grade = `intrest_grade_status_${i}`
-			gradeData[i - 1] = calcPerc(statusValuesMap[grade], gradeTotal)
-			console.log(`${gradeData[i - 1]} for ${grade}`)
-		}
-
-		let gradeColors = ['rgb(251, 2, 71)', 'rgb(255, 99, 132)', 'rgb(100, 99, 132)', 'rgb(54, 162, 235)', 'rgb(75, 192, 192)']
-
-		// Data of chartCanvas3
-		let admittedNames = Array.from({ length: 5 }, (_, i) => gradeMap[i].name)
-
-		const admittedValuesMap: { [key: string]: number } = {}
-		for (let i = 1; i <= 5; i++) {
-			const adStatus = `intrest_grade_status_${i}`
-			admittedValuesMap[adStatus] = admittedGrade[0][adStatus] || 0 // Use 0 as default if value is not present
-		}
-
-		const admittedTotal = Object.values(admittedValuesMap).reduce((sum, value) => sum + value, 0)
-
-		const admittedData: number[] = []
-		for (let i = 1; i <= 5; i++) {
-			const admit = `intrest_grade_status_${i}`
-			admittedData[i - 1] = calcPerc(admittedValuesMap[admit], admittedTotal)
-			console.log(`${admittedData[i - 1]} for ${admit}`)
-		}
-
-		let admittedColors = ['rgb(251, 2, 71)', 'rgb(255, 99, 132)', 'rgb(100, 99, 132)', 'rgb(54, 162, 235)', 'rgb(75, 192, 192)']
-
-		// Data of chartCanvas4
-		const subjectNames = Array.from({ length: 14 }, (_, i) => subjectMap[i].name)
-
-		const subjectValuesMap: { [key: string]: number } = {}
-		for (let i = 1; i <= 14; i++) {
+			const subjectValuesMap: { [key: string]: number } = {}
+			for (let i = 1; i <= subjectMapLength; i++) {
 				const workTitle = `intrest_work_title_${i}`
-				subjectValuesMap[workTitle] = intrestSubjects[0][workTitle] || 0 // Use 0 as default if value is not present
+				subjectValuesMap[workTitle] = array[0][workTitle] || 0 // Use 0 as default if value is not present
+			}
+
+			const subjectTotal = Object.values(subjectValuesMap).reduce((sum, value) => sum + value, 0)
+
+			for (let i = 1; i <= subjectMapLength; i++) {
+				const workTitle = `intrest_work_title_${i}`
+				subjectData.push(calcPerc(subjectValuesMap[workTitle], subjectTotal))
+			}
+			return subjectData
 		}
-
-		const subjectTotal = Object.values(subjectValuesMap).reduce((sum, value) => sum + value, 0)
-
-		const subjectsInter: number[] = []
-		for (let i = 1; i <= 14; i++) {
-			const workTitle = `intrest_work_title_${i}`
-			subjectsInter[i - 1] = calcPerc(subjectValuesMap[workTitle], subjectTotal)
-		}
-
-		let subjectColors = [
-			'rgb(251, 2, 71)',
-			'rgb(255, 199, 132)',
-			'rgb(100, 199, 132)',
-			'rgb(54, 162, 235)',
-			'rgb(75, 192, 192)',
-			'rgb(251, 12, 71)',
-			'rgb(255, 99, 132)',
-			'rgb(100, 99, 132)',
-			'rgb(54, 182, 235)',
-			'rgb(175, 192, 192)',
-			'rgb(251, 202, 71)',
-			'rgb(255, 70, 132)',
-			'rgb(100, 56, 132)',
-			'rgb(54, 162, 135)',
-			'rgb(175, 92, 192)']
 
 		new Chart(chartCanvas1, {
 			type: 'bar', // Chart type (e.g., 'bar', 'doughnut', etc.)
@@ -275,10 +281,10 @@
 		new Chart(chartCanvas2, {
 			type: 'doughnut', // Doughnut chart type
 			data: {
-				labels: gardeNames,
+				labels: gradeNames,
 				datasets: [
 					{
-						data: gradeData,
+						data: calculateGradeData(statusGrade),
 						backgroundColor: gradeColors,
 					},
 				],
@@ -299,11 +305,11 @@
 		new Chart(chartCanvas3, {
 			type: 'doughnut', // Doughnut chart type
 			data: {
-				labels: admittedNames,
+				labels: gradeNames,
 				datasets: [
 					{
-						data: admittedData,
-						backgroundColor: admittedColors,
+						data: calculateGradeData(admittedGrade),
+						backgroundColor: gradeColors,
 					},
 				],
 			},
@@ -326,7 +332,7 @@
 				labels: subjectNames,
 				datasets: [
 					{
-						data: subjectsInter,
+						data: calculateSubjectData(intrestSubjects),
 						backgroundColor: subjectColors,
 					},
 				],
@@ -336,6 +342,30 @@
 					title: {
 						display: true,
 						text: 'Subject Percentage Proportion of Interested Students',
+						font: {
+							size: 20,
+						},
+					},
+				},
+  		},
+		})
+
+		new Chart(chartCanvas5, {
+			type: 'doughnut', // Doughnut chart type
+			data: {
+				labels: subjectNames,
+				datasets: [
+					{
+						data: calculateSubjectData(admittedSubjects),
+						backgroundColor: subjectColors,
+					},
+				],
+			},
+			options: {
+				plugins: {
+					title: {
+						display: true,
+						text: 'Subject Percentage Proportion of Admitted Students',
 						font: {
 							size: 20,
 						},
@@ -481,7 +511,9 @@
 		</div>
 		<br>
 		<br>
-
+		<div class="f">
+			<canvas id="chartCanvas5"></canvas>
+		</div>
 	</div>
 	<br>
 </div>
