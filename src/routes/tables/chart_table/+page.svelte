@@ -34,7 +34,8 @@
 	let admittedGrade: any = []
 	let intrestSubjects: any = []
 	let admittedSubjects: any = []
-	let filtering = 'OFF'
+	let regionIntrest: any = []
+  let regionAdmitted: any = []
 	let isElementVisible = false
 	let selYear: any
   let selSemest: any
@@ -75,6 +76,15 @@
 		intrest_count_status_2: number
 		intrest_count_status_3: number
 		intert: number
+	}
+
+	interface RegionIntrest {
+		region_name: string
+		intrest_count: number
+	}
+
+	interface RegionAdmitted {
+		intrest_count: number
 	}
 
 	function calcPerc(x: any, y: any): number {
@@ -137,6 +147,8 @@
 					admittedGrade = responseData.admittedGrade
 					intrestSubjects = responseData.intrestSubjects
 					admittedSubjects = responseData.admittedSubjects
+					regionIntrest = responseData.regionIntrest
+        	regionAdmitted = responseData.regionAdmitted
 					createChart()
 			} else {
 				console.error('Server error:', response.statusText)
@@ -152,13 +164,17 @@
 		let chartCanvas3: HTMLCanvasElement | null = document.getElementById('chartCanvas3') as HTMLCanvasElement
 		let chartCanvas4: HTMLCanvasElement | null = document.getElementById('chartCanvas4') as HTMLCanvasElement
 		let chartCanvas5: HTMLCanvasElement | null = document.getElementById('chartCanvas5') as HTMLCanvasElement
+		let chartCanvas6: HTMLCanvasElement | null = document.getElementById('chartCanvas6') as HTMLCanvasElement
+		let chartCanvas7: HTMLCanvasElement | null = document.getElementById('chartCanvas7') as HTMLCanvasElement
 
 		const canvasIds: string[] = [
 			'chartCanvas1',
 			'chartCanvas2',
 			'chartCanvas3',
 			'chartCanvas4',
-			'chartCanvas5'
+			'chartCanvas5',
+			'chartCanvas6',
+			'chartCanvas7'
 		]
 		const existingCharts: Chart[] = []
 
@@ -258,6 +274,26 @@
 			}
 			return subjectData
 		}
+
+		// Data of chartCanvas6
+		let regionNames = regionIntrest.map((item: RegionIntrest) => item.region_name)
+		let regIntrest = regionIntrest.map((item: RegionIntrest) => item.intrest_count)
+		let regAdmitted = regionAdmitted.map((item: RegionAdmitted) => item.intrest_count)
+
+		let regionIntr = [
+			{
+				label: 'INTERESTED STUDENTS',
+				backgroundColor: 'rgb(25.1, 2, 71.4)',
+				borderColor: 'rgb(255, 99, 132)',
+				data: regIntrest,
+			},
+			{
+				label: 'APPLIED STUDENTS',
+				backgroundColor: 'rgb(255, 99, 132)',
+				borderColor: 'rgb(255, 99, 132)',
+				data: regAdmitted,
+			},
+		]
 
 		new Chart(chartCanvas1, {
 			type: 'bar', // Chart type (e.g., 'bar', 'doughnut', etc.)
@@ -373,6 +409,26 @@
 				},
   		},
 		})
+
+		new Chart(chartCanvas6, {
+			type: 'bar', // Chart type (e.g., 'bar', 'doughnut', etc.)
+			data: {
+				labels: regionNames,
+				datasets: regionIntr,
+			},
+			options: {
+				plugins: {
+					title: {
+						display: true,
+						text: 'Interested / Applied Students Are Informed by Center',
+						font: {
+							size: 20,
+						},
+					},
+				},
+			},
+  	})
+
 	}
 </script>
 
@@ -397,54 +453,54 @@
 				<option value={year}>{year} </option>
 			{/each}
 		</select>
-	</div>
+		</div>
 
-	<div class="semi-circular-input">
-		<label for="semester"><i>Select </i> Event Semester</label>
-		<select bind:value={semesterFilter} name="semester" id="semester" class="hidden-textbox">
-			{#each semester as sem}
-				<option value={sem}>{sem} </option>
-			{/each}
-		</select>
-	</div>
+		<div class="semi-circular-input">
+			<label for="semester"><i>Select </i> Event Semester</label>
+			<select bind:value={semesterFilter} name="semester" id="semester" class="hidden-textbox">
+				{#each semester as sem}
+					<option value={sem}>{sem} </option>
+				{/each}
+			</select>
+		</div>
 
-	<div class="semi-circular-input">
-		<label for="duty"><i>Select </i> Event Duty</label>
-		<select bind:value={dutyFilter} name="duty" id="duty" class="hidden-textbox">
-			{#each duty as d}
-				<option value={d.id}>{d.name} </option>
-			{/each}
-		</select>
-	</div>
+		<div class="semi-circular-input">
+			<label for="duty"><i>Select </i> Event Duty</label>
+			<select bind:value={dutyFilter} name="duty" id="duty" class="hidden-textbox">
+				{#each duty as d}
+					<option value={d.id}>{d.name} </option>
+				{/each}
+			</select>
+		</div>
 
-	<div class="semi-circular-input">
-		<label for="country"><i>Select </i> School Country</label>
-		<select bind:value={$selectedCountry} name="country" id="country" class="hidden-textbox">
-			<option value="ALL">ALL</option>
-			{#each countries as country}
-				<option value={country.country_id}>{country.country_name} </option>
-			{/each}
-		</select>
-	</div>
+		<div class="semi-circular-input">
+			<label for="country"><i>Select </i> School Country</label>
+			<select bind:value={$selectedCountry} name="country" id="country" class="hidden-textbox">
+				<option value="ALL">ALL</option>
+				{#each countries as country}
+					<option value={country.country_id}>{country.country_name} </option>
+				{/each}
+			</select>
+		</div>
 
-	<div class="semi-circular-input">
-		<label for="region"><i>Select </i> School Region</label>
-		<select bind:value={$selectedRegion} name="region" id="region" class="hidden-textbox">
-			<option value="ALL">ALL</option>
-			{#each regions as reg}
-				<option value={reg.region_id}>{reg.region_name} </option>
-			{/each}
-		</select>
-	</div>
+		<div class="semi-circular-input">
+			<label for="region"><i>Select </i> School Region</label>
+			<select bind:value={$selectedRegion} name="region" id="region" class="hidden-textbox">
+				<option value="ALL">ALL</option>
+				{#each regions as reg}
+					<option value={reg.region_id}>{reg.region_name} </option>
+				{/each}
+			</select>
+		</div>
 
-	<button
-		class="btn"
-		id="btn"
-		type="submit"
-		on:click={updateContent}
-		>
-		Confirm
-	</button>
+		<button
+			class="btn"
+			id="btn"
+			type="submit"
+			on:click={updateContent}
+			>
+			Confirm
+		</button>
 	</form>
 
 	<div class="response-data">
@@ -484,40 +540,47 @@
 					ALL
 				{/if}
 			&nbsp;&nbsp;
-			<i>Filtering: </i>{filtering}
 		</div>
 	{/if}
 	<br>
-
+	<br>
+	<br>
+	<br>
 	<div class="e">
 		<canvas id="chartCanvas1"></canvas>
 	</div>
-	<br>
-	<br>
+		<br>
+		<br>
+		<br>
 	<div class="container">
 		<div class="f">
 			<canvas id="chartCanvas2"></canvas>
 		</div>
-		<br>
-		<br>
 		<div class="f">
 			<canvas id="chartCanvas3"></canvas>
 		</div>
 	</div>
-	<br>
+		<br>
+		<br>
+		<br>
 	<div class="container">
 		<div class="f">
 			<canvas id="chartCanvas4"></canvas>
 		</div>
-		<br>
-		<br>
 		<div class="f">
 			<canvas id="chartCanvas5"></canvas>
 		</div>
 	</div>
-	<br>
+		<br>
+		<br>
+		<br>
+	<div class="e">
+		<canvas id="chartCanvas6"></canvas>
+	</div>
+		<br>
+		<br>
+		<br>
 </div>
-
 <style>
   .main {
     padding-left: 0.5%;
