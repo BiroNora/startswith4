@@ -7,6 +7,10 @@ on a particular subject, or assistance with a task,
 feel free to ask, and I'll do my best to provide useful insights and information.
 Please let me know how I can assist you further!
 
+select * from public.interested where event_id IN (2, 4, 7, 9, 11, 12, 13, 14)
+and region_id = 4 and status = '1'
+order by channel;
+
 const schools = await db.school.findMany({
   where: {
     coop: true,
