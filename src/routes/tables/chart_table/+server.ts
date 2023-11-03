@@ -3,24 +3,18 @@ import { db } from '$lib/database'
 export async function POST({ request }) {
 	const requestBody = await request.text()
 	const formData = JSON.parse(requestBody)
-	const {
-    selectedYear,
-    selectedSemester,
-    selectedDuty,
-    selectedCountry,
-    selectedRegion
-  } = formData
+	const { selectedYear, selectedSemester, selectedDuty, selectedCountry, selectedRegion } = formData
 	console.log('selY ' + selectedYear)
 	console.log('selS ' + selectedSemester)
 	console.log('selD ' + selectedDuty)
-  console.log('selC ' + selectedCountry)
+	console.log('selC ' + selectedCountry)
 	console.log('selR ' + selectedRegion)
 
 	if (
 		selectedYear == null &&
 		selectedSemester != 'ALL' &&
 		selectedDuty == 'ALL' &&
-    selectedCountry == null &&
+		selectedCountry == null &&
 		selectedRegion == null
 	) {
 		console.log('year all, semest string, duty all, country all, reg all')
@@ -61,7 +55,7 @@ export async function POST({ request }) {
           AND s.active = TRUE
         GROUP BY c.country_name
       `
-      const statusGrade = await db.$queryRaw`
+			const statusGrade = await db.$queryRaw`
         WITH UserAggregates AS (
             SELECT
               stu."A" AS school_id,
@@ -89,7 +83,7 @@ export async function POST({ request }) {
           AND s.coop = TRUE
           AND s.active = TRUE
       `
-      const admittedGrade = await db.$queryRaw`
+			const admittedGrade = await db.$queryRaw`
         WITH UserAggregates AS (
           SELECT
             stu."A" AS school_id,
@@ -116,7 +110,7 @@ export async function POST({ request }) {
           AND s.active = TRUE
           AND i.status = '1'
       `
-      const intrestSubjects = await db.$queryRaw`
+			const subjectIntrest = await db.$queryRaw`
         WITH UserAggregates AS (
           SELECT
             stu."A" AS school_id,
@@ -152,7 +146,7 @@ export async function POST({ request }) {
           AND s.active = TRUE
       `
 
-      const admittedSubjects = await db.$queryRaw`
+			const subjectAdmitted = await db.$queryRaw`
         WITH UserAggregates AS (
           SELECT
             stu."A" AS school_id,
@@ -189,7 +183,7 @@ export async function POST({ request }) {
           AND i.status = '1'
       `
 
-      const regionIntrest = await db.$queryRaw`
+			const regionIntrest = await db.$queryRaw`
         WITH UserAggregates AS (
           SELECT
             stu."A" AS school_id,
@@ -216,7 +210,7 @@ export async function POST({ request }) {
         GROUP BY r.region_name
       `
 
-      const regionAdmitted = await db.$queryRaw`
+			const regionAdmitted = await db.$queryRaw`
         WITH UserAggregates AS (
           SELECT
             stu."A" AS school_id,
@@ -243,19 +237,72 @@ export async function POST({ request }) {
           AND i.status = '1'
         GROUP BY r.region_name
       `
+			const channelIntrest = await db.$queryRaw`
+        WITH UserAggregates AS (
+          SELECT
+            stu."A" AS school_id,
+            STRING_AGG(u.user_name, ', ') AS user_names
+          FROM "_SchoolToUser" stu
+          JOIN users u ON stu."B" = u.user_id
+          GROUP BY stu."A"
+        )
+        SELECT
+          i.channel,
+          CAST(SUM(i.intrest_count) AS INTEGER) AS intrest_count
+        FROM interested i
+        JOIN events e
+        ON e.event_id = i.event_id
+        JOIN schools s
+        ON e.school_id = s.school_id
+        JOIN UserAggregates ua
+        ON s.school_id = ua.school_id
+        WHERE e.semester IN (${selectedSemester})
+          AND s.coop = TRUE
+          AND s.active = TRUE
+        GROUP BY i.channel
+        ORDER BY CAST(i.channel AS INTEGER) ASC
+      `
 
-    await db.$disconnect()
-    // Create a JSON response object
-    const responseBody = JSON.stringify(
-      {
-        statusCountry,
-        statusGrade,
-        admittedGrade,
-        intrestSubjects,
-        admittedSubjects,
-        regionIntrest,
-        regionAdmitted
-      })
+			const channelAdmitted = await db.$queryRaw`
+        WITH UserAggregates AS (
+          SELECT
+            stu."A" AS school_id,
+            STRING_AGG(u.user_name, ', ') AS user_names
+          FROM "_SchoolToUser" stu
+          JOIN users u ON stu."B" = u.user_id
+          GROUP BY stu."A"
+        )
+        SELECT
+          i.channel,
+          CAST(SUM(i.intrest_count) AS INTEGER) AS intrest_count
+        FROM interested i
+        JOIN events e
+        ON e.event_id = i.event_id
+        JOIN schools s
+        ON e.school_id = s.school_id
+        JOIN UserAggregates ua
+        ON s.school_id = ua.school_id
+        WHERE e.semester IN (${selectedSemester})
+          AND s.coop = TRUE
+          AND s.active = TRUE
+          AND i.status = '1'
+        GROUP BY i.channel
+        ORDER BY CAST(i.channel AS INTEGER) ASC
+      `
+
+			await db.$disconnect()
+			// Create a JSON response object
+			const responseBody = JSON.stringify({
+				statusCountry,
+				statusGrade,
+				admittedGrade,
+				subjectIntrest,
+				subjectAdmitted,
+				regionIntrest,
+				regionAdmitted,
+				channelIntrest,
+				channelAdmitted
+			})
 			const responseHeaders = {
 				'Content-Type': 'application/json'
 			}
@@ -287,7 +334,7 @@ export async function POST({ request }) {
 		selectedYear != null &&
 		selectedSemester == 'ALL' &&
 		selectedDuty == 'ALL' &&
-    selectedCountry == null &&
+		selectedCountry == null &&
 		selectedRegion == null
 	) {
 		console.log('year num, semester all, duty all, country all, reg all')
@@ -446,7 +493,7 @@ export async function POST({ request }) {
 		selectedYear == null &&
 		selectedSemester == 'ALL' &&
 		selectedDuty == 'ALL' &&
-    selectedCountry == null &&
+		selectedCountry == null &&
 		selectedRegion == null
 	) {
 		console.log('year all, semester all, duty all, country all, reg all')
@@ -598,7 +645,7 @@ export async function POST({ request }) {
 		selectedYear != null &&
 		selectedSemester != 'ALL' &&
 		selectedDuty == 'ALL' &&
-    selectedCountry == null &&
+		selectedCountry == null &&
 		selectedRegion == null
 	) {
 		console.log('year num, semester string, duty all, country all, reg all')
@@ -759,7 +806,7 @@ export async function POST({ request }) {
 		selectedYear == null &&
 		selectedSemester != 'ALL' &&
 		selectedDuty != 'ALL' &&
-    selectedCountry == null &&
+		selectedCountry == null &&
 		selectedRegion == null
 	) {
 		console.log('year all, semest string, duty string, country all, reg all')
@@ -922,7 +969,7 @@ export async function POST({ request }) {
 		selectedYear != null &&
 		selectedSemester == 'ALL' &&
 		selectedDuty != 'ALL' &&
-    selectedCountry == null &&
+		selectedCountry == null &&
 		selectedRegion == null
 	) {
 		console.log('year num, semester all, duty string, country all, reg all')
@@ -1238,7 +1285,7 @@ export async function POST({ request }) {
 		selectedYear != null &&
 		selectedSemester != 'ALL' &&
 		selectedDuty != 'ALL' &&
-    selectedCountry == null &&
+		selectedCountry == null &&
 		selectedRegion == null
 	) {
 		console.log('year num, semester string, duty string, country all, reg all')
@@ -1399,13 +1446,13 @@ export async function POST({ request }) {
 		}
 	}
 
-  // Country NUM, region ALL
+	// Country NUM, region ALL
 
-  if (
+	if (
 		selectedYear == null &&
 		selectedSemester != 'ALL' &&
 		selectedDuty == 'ALL' &&
-    selectedCountry != null &&
+		selectedCountry != null &&
 		selectedRegion == null
 	) {
 		console.log('year all, semest string, duty all, country num, reg all')
@@ -1568,7 +1615,7 @@ export async function POST({ request }) {
 		selectedYear != null &&
 		selectedSemester == 'ALL' &&
 		selectedDuty == 'ALL' &&
-    selectedCountry != null &&
+		selectedCountry != null &&
 		selectedRegion == null
 	) {
 		console.log('year num, semester all, duty all, country num, reg all')
@@ -1729,7 +1776,7 @@ export async function POST({ request }) {
 		selectedYear == null &&
 		selectedSemester == 'ALL' &&
 		selectedDuty == 'ALL' &&
-    selectedCountry != null &&
+		selectedCountry != null &&
 		selectedRegion == null
 	) {
 		console.log('year all, semester all, duty all, country num, reg all')
@@ -1885,7 +1932,7 @@ export async function POST({ request }) {
 		selectedYear != null &&
 		selectedSemester != 'ALL' &&
 		selectedDuty == 'ALL' &&
-    selectedCountry != null &&
+		selectedCountry != null &&
 		selectedRegion == null
 	) {
 		console.log('year num, semester string, duty all, country num, reg all')
@@ -2051,7 +2098,7 @@ export async function POST({ request }) {
 		selectedYear == null &&
 		selectedSemester != 'ALL' &&
 		selectedDuty != 'ALL' &&
-    selectedCountry != null &&
+		selectedCountry != null &&
 		selectedRegion == null
 	) {
 		console.log('year all, semest string, duty string, country num, reg all')
@@ -2218,7 +2265,7 @@ export async function POST({ request }) {
 		selectedYear != null &&
 		selectedSemester == 'ALL' &&
 		selectedDuty != 'ALL' &&
-    selectedCountry != null &&
+		selectedCountry != null &&
 		selectedRegion == null
 	) {
 		console.log('year num, semester all, duty string, country num, reg all')
@@ -2383,7 +2430,7 @@ export async function POST({ request }) {
 		selectedYear == null &&
 		selectedSemester == 'ALL' &&
 		selectedDuty != 'ALL' &&
-    selectedCountry != null &&
+		selectedCountry != null &&
 		selectedRegion == null
 	) {
 		console.log('year all, semester all, duty string, country num, reg all')
@@ -2543,7 +2590,7 @@ export async function POST({ request }) {
 		selectedYear != null &&
 		selectedSemester != 'ALL' &&
 		selectedDuty != 'ALL' &&
-    selectedCountry != null &&
+		selectedCountry != null &&
 		selectedRegion == null
 	) {
 		console.log('year num, semester string, duty string, country num, reg all')
@@ -2714,7 +2761,7 @@ export async function POST({ request }) {
 		selectedYear == null &&
 		selectedSemester != 'ALL' &&
 		selectedDuty == 'ALL' &&
-    selectedCountry != null &&
+		selectedCountry != null &&
 		selectedRegion != null
 	) {
 		console.log('year all, semest string, duty all, country num, reg num')
@@ -2882,7 +2929,7 @@ export async function POST({ request }) {
 		selectedYear != null &&
 		selectedSemester == 'ALL' &&
 		selectedDuty == 'ALL' &&
-    selectedCountry != null &&
+		selectedCountry != null &&
 		selectedRegion != null
 	) {
 		console.log('year num, semester all, duty all, country num, reg num')
@@ -3047,7 +3094,7 @@ export async function POST({ request }) {
 		selectedYear == null &&
 		selectedSemester == 'ALL' &&
 		selectedDuty == 'ALL' &&
-    selectedCountry != null &&
+		selectedCountry != null &&
 		selectedRegion != null
 	) {
 		console.log('year all, semester all, duty all, country num, reg num')
@@ -3206,7 +3253,7 @@ export async function POST({ request }) {
 		selectedYear != null &&
 		selectedSemester != 'ALL' &&
 		selectedDuty == 'ALL' &&
-    selectedCountry != null &&
+		selectedCountry != null &&
 		selectedRegion != null
 	) {
 		console.log('year num, semester string, duty all, country num, reg num')
@@ -3376,7 +3423,7 @@ export async function POST({ request }) {
 		selectedYear == null &&
 		selectedSemester != 'ALL' &&
 		selectedDuty != 'ALL' &&
-    selectedCountry != null &&
+		selectedCountry != null &&
 		selectedRegion != null
 	) {
 		console.log('year all, semest string, duty string, country num, reg num')
@@ -3546,7 +3593,7 @@ export async function POST({ request }) {
 		selectedYear != null &&
 		selectedSemester == 'ALL' &&
 		selectedDuty != 'ALL' &&
-    selectedCountry != null &&
+		selectedCountry != null &&
 		selectedRegion != null
 	) {
 		console.log('year num, semester all, duty string, country num, reg num')
@@ -3714,7 +3761,7 @@ export async function POST({ request }) {
 		selectedYear == null &&
 		selectedSemester == 'ALL' &&
 		selectedDuty != 'ALL' &&
-    selectedCountry != null &&
+		selectedCountry != null &&
 		selectedRegion != null
 	) {
 		console.log('year all, semester all, duty string, country num, reg num')
@@ -3873,13 +3920,13 @@ export async function POST({ request }) {
 		}
 	}
 
-  // NUMS AND STRINGS!
+	// NUMS AND STRINGS!
 
 	if (
 		selectedYear != null &&
 		selectedSemester != 'ALL' &&
 		selectedDuty != 'ALL' &&
-    selectedCountry != null &&
+		selectedCountry != null &&
 		selectedRegion != null
 	) {
 		console.log('year num, semester string, duty string, country num, reg num')
@@ -4047,13 +4094,13 @@ export async function POST({ request }) {
 		}
 	}
 
-  // COUNTRY ALL, 2.REGION NUM
+	// COUNTRY ALL, 2.REGION NUM
 
 	if (
 		selectedYear == null &&
 		selectedSemester != 'ALL' &&
 		selectedDuty == 'ALL' &&
-    selectedCountry == null &&
+		selectedCountry == null &&
 		selectedRegion != null
 	) {
 		console.log('year all, semest string, duty all, country all, reg num')
@@ -4215,7 +4262,7 @@ export async function POST({ request }) {
 		selectedYear != null &&
 		selectedSemester == 'ALL' &&
 		selectedDuty == 'ALL' &&
-    selectedCountry == null &&
+		selectedCountry == null &&
 		selectedRegion != null
 	) {
 		console.log('year num, semester all, duty all, country all, reg num')
@@ -4375,7 +4422,7 @@ export async function POST({ request }) {
 		selectedYear == null &&
 		selectedSemester == 'ALL' &&
 		selectedDuty == 'ALL' &&
-    selectedCountry == null &&
+		selectedCountry == null &&
 		selectedRegion != null
 	) {
 		console.log('year all, semester all, duty all, country all, reg num')
@@ -4530,7 +4577,7 @@ export async function POST({ request }) {
 		selectedYear != null &&
 		selectedSemester != 'ALL' &&
 		selectedDuty == 'ALL' &&
-    selectedCountry == null &&
+		selectedCountry == null &&
 		selectedRegion != null
 	) {
 		console.log('year num, semester string, duty all, country all, reg num')
@@ -4696,7 +4743,7 @@ export async function POST({ request }) {
 		selectedYear == null &&
 		selectedSemester != 'ALL' &&
 		selectedDuty != 'ALL' &&
-    selectedCountry == null &&
+		selectedCountry == null &&
 		selectedRegion != null
 	) {
 		console.log('year all, semest string, duty string, country all, reg num')
@@ -4862,7 +4909,7 @@ export async function POST({ request }) {
 		selectedYear != null &&
 		selectedSemester == 'ALL' &&
 		selectedDuty != 'ALL' &&
-    selectedCountry == null &&
+		selectedCountry == null &&
 		selectedRegion != null
 	) {
 		console.log('year num, semester all, duty string, country all, reg num')
@@ -5026,7 +5073,7 @@ export async function POST({ request }) {
 		selectedYear == null &&
 		selectedSemester == 'ALL' &&
 		selectedDuty != 'ALL' &&
-    selectedCountry == null &&
+		selectedCountry == null &&
 		selectedRegion != null
 	) {
 		console.log('year all, semester all, duty string, country all, reg num')
@@ -5185,7 +5232,7 @@ export async function POST({ request }) {
 		selectedYear != null &&
 		selectedSemester != 'ALL' &&
 		selectedDuty != 'ALL' &&
-    selectedCountry == null &&
+		selectedCountry == null &&
 		selectedRegion != null
 	) {
 		console.log('year num, semester string, duty string, country all, reg num')
@@ -5355,5 +5402,5 @@ export type RequestPayload = {
 	selectedSemester: string
 	selectedDuty: string
 	selectedRegion: number
-  selectedCountry: number
+	selectedCountry: number
 }
