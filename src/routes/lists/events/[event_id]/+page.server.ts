@@ -155,11 +155,11 @@ const interested: Action = async ({ request }) => {
 	const region_id = Number(data.get('connect'))
 	const grade = String(data.get('grade'))
 	const channel = String(data.get('channel'))
-	const apply = Boolean(data.get('apply'))
+	const apply = String(data.get('apply'))
 	let work_title = String(data.get('subject'))
 	let status = String(data.get('status'))
 	const event_id = ev_id
-	const applied = apply
+	const applied = apply !== 'true'
 
 	if (applied == false || work_title === 'null') {
 		work_title = '0'

@@ -14,20 +14,16 @@
 
 	let pageName = 'My Event Details'
 	let isInput = true
+	let input = false
 	let formattedTimestamp
 	let showEventModal = false
 	let showIntrestModal = false
 	let itemNumber = 0
 	let selectedIntrestId = 0
 
-	function isWork() {
-		if (isInput == true) {
-			isInput = false
-		} else {
-			isInput = true
-		}
-		return isInput
-	}
+	function toggleIsInput() {
+    isInput = !isInput
+  }
 
 	function scrollToConnect() {
 		window.scrollTo({
@@ -253,7 +249,7 @@
 			<div>
 				<label for="grade">Grade</label>
 				<select name="grade" id="grade" class="hidden-textbox">
-					{#each gradeMap as grade, index (grade.id)}
+					{#each gradeMap as grade (grade.id)}
 						<option value={grade.id}>{grade.name}</option>
 					{/each}
 				</select>
@@ -269,18 +265,18 @@
 			<div>
 				<label for="channel">Channeled by</label>
 				<select name="channel" id="channel" class="hidden-textbox">
-					{#each channelMap as channel, index (channel.id)}
+					{#each channelMap as channel (channel.id)}
 						<option value={channel.id}>{channel.name}</option>
 					{/each}
 				</select>
 			</div>
-			<button type="button" on:click={() => isWork()} class="contrast outline cgb">Apply</button>
+			<button type="button" on:click={toggleIsInput} class="contrast outline cgb">Apply</button>
 			<input type="hidden" name="apply" value={isInput} />
 			<fieldset disabled={isInput}>
 				<div>
 					<label for="subject">Subject</label>
 					<select name="subject" id="subject" class="hidden-textbox">
-						{#each subjectMap as subject, index (subject.id)}
+						{#each subjectMap as subject (subject.id)}
 							<option value={subject.id}>{subject.name}</option>
 						{/each}
 					</select>
@@ -288,7 +284,7 @@
 				<div>
 					<label for="status">Status</label>
 					<select name="status" id="status" class="hidden-textbox">
-						{#each statusMap as status, index (status.id)}
+						{#each statusMap as status (status.id)}
 							<option value={status.id}>{status.name}</option>
 						{/each}
 					</select>
@@ -684,10 +680,10 @@
     font-weight: 500;
   }
 
-
 	.cc {
     background-color: #32bea6;
     border: 1em solide #32bea6;
+		color: white;
   }
 
   .cc:hover {
