@@ -4,6 +4,7 @@ import { db } from '$lib/database'
 import { dutyMap3, my_id } from '../../stores/dataStore'
 
 let extrDuty = ''
+let eventIdsInProgress: number[]
 
 export const load: PageServerLoad = async (event) => {
   const user = await db.user.findUnique({
@@ -40,6 +41,30 @@ export const load: PageServerLoad = async (event) => {
     }
   }
 
+  const eventsInterStatInProgress = await db.user.findUnique({
+    where: { user_id: my_id },
+    include: {
+      Event: {
+        where: {
+          InterestedStudents: {
+            some: {
+              status: '3',
+            },
+          },
+        },
+        orderBy: {
+          closing_date: 'desc',
+        },
+      },
+    },
+  })
+
+  const eventsInProgress = eventsInterStatInProgress?.Event
+
+  if (eventsInProgress) {
+    eventIdsInProgress = eventsInProgress.map(event => event.event_id)
+  }
+  
   event.setHeaders({
     'Cashe-Control': 'public, max-age=0, s-maxage=60'
   })
@@ -48,5 +73,5 @@ export const load: PageServerLoad = async (event) => {
     throw error(404, 'School not found')
   }
 
-  return { events }
+  return { events, eventIdsInProgress }
 }

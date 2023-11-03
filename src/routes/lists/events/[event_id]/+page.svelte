@@ -14,7 +14,6 @@
 
 	let pageName = 'My Event Details'
 	let isInput = true
-	let input = false
 	let formattedTimestamp
 	let showEventModal = false
 	let showIntrestModal = false
