@@ -975,6 +975,7 @@ export async function POST({ request }) {
 		selectedYear == null &&
 		selectedSemester == 'ALL' &&
 		selectedDuty != 'ALL' &&
+    selectedCountry == null &&
 		selectedRegion == null
 	) {
 		console.log('year all, semester all, duty string, country all, reg all')

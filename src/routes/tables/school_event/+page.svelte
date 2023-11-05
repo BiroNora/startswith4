@@ -69,6 +69,7 @@
     selCountry = $selectedCountry
     selRegion = $selectedRegion
 		isElementVisible = true
+		clearInput()
   }
 
 	// For JSON visualization
@@ -332,7 +333,7 @@
 
 	{#if isElementVisible}
 		<div class="sticky" id="stickyLine">
-			<i>Event Year: </i>{selYear} &nbsp;&nbsp;
+			<i class="j">Event Year: </i>{selYear} &nbsp;&nbsp;
 			<i>Event Semester: </i>{selSemest} &nbsp;&nbsp;
 			<i>Event Duty: </i>
 			{#each duty as item (item.id)}
@@ -518,6 +519,11 @@
 		color: #32bea6;
 		font-weight: 600;
 	}
+
+	.j {
+		padding-left: 1%;
+	}
+
 	.v {
 		font-size: 17px;
 	}
