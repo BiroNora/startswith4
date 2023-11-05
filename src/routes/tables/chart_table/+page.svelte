@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { writable } from 'svelte/store'
-	import { duty, gradeMap, schType, semester, statusMap, subjectMap } from '../../stores/dataStore'
+	import { channelMap, duty, gradeMap, semester, statusMap, subjectMap } from '../../stores/dataStore'
 	import type { RequestPayload } from './+server'
 	import type { PageServerData } from './$types'
 	import { Chart } from 'chart.js/auto'
@@ -14,14 +14,7 @@
 	const {
 		distinctYears,
 		countries,
-		regions,
-		schoolsCount,
-		totalEvents,
-		totalEstStudents,
-		totalIntrest0,
-		totalIntrest1,
-		totalIntrest2,
-		totalIntrest3
+		regions
 	} = data
 
 	let pageName = 'CHART_TABLE'
@@ -127,19 +120,6 @@
 		responseDataFormatted = JSON.stringify(responseData, null, 2)
 	}
 
-	function getType(arr: string[]): string {
-		let types: string = ''
-
-		arr.forEach((value: string) => {
-			const index: number = parseInt(value, 10) - 1 // Convert value to integer and subtract 1 to match array index
-			if (index >= 0 && index < schType.length) {
-				types += schType[index] + ', '
-			}
-		})
-		types = types.slice(0, -2)
-		return types
-	}
-
 	async function sendDataWithForm(event: any) {
 		event.preventDefault()
 		try {
@@ -163,7 +143,7 @@
 
 			if (response.ok) {
 				const responseData = await response.json()
-				formatAndSetResponseData(responseData)
+				//formatAndSetResponseData(responseData)
 				statusCountry = responseData.statusCountry
 				statusGrade = responseData.statusGrade
 				admittedGrade = responseData.admittedGrade
@@ -216,6 +196,7 @@
 		]
 		const existingCharts: Chart[] = []
 
+		// Destroy canvas if existing
 		canvasIds.forEach((canvasId) => {
 			const canvas: HTMLCanvasElement | null = document.getElementById(
 				canvasId
@@ -332,19 +313,16 @@
 
 			// Create arrays of intrest_counts for both regionIntrest and regionAdmitted
 			for (const item of data) {
-				intrCount.push(item.intrest_count);
-				const admittedItem = admittedData.find((admitted) => admitted.region_name === item.region_name);
-				addmCount.push(admittedItem ? admittedItem.intrest_count : 0);
+				intrCount.push(item.intrest_count)
+				const admittedItem = admittedData.find((admitted) => admitted.region_name === item.region_name)
+				addmCount.push(admittedItem ? admittedItem.intrest_count : 0)
 			}
 
-			return [intrCount, addmCount];
+			return [intrCount, addmCount]
 		}
 
 		// Get the two arrays of intrest counts for RegionIntrest and RegionAdmitted
 		const [countIntr, countAdm] =	aggrIntrCounts(regionIntrest, regionAdmitted)
-
-		console.log(countIntr)
-		console.log(countAdm)
 
 		const chartData = [
 			{
@@ -362,22 +340,48 @@
 		]
 
 		// Data of chartCanvas7
-		let channelNames = channelIntrest.map((item: ChannelIntrest) => item.channel)
-		let chanIntrest = channelIntrest.map((item: ChannelIntrest) => item.intrest_count)
-		let chanAdmitted = channelAdmitted.map((item: ChannelAdmitted) => item.intrest_count)
+		const channelNamesInt = channelIntrest.map((item: any) => item.channel)
+		const channelNames = channelNamesInt.map((id: any) => {
+			const channel = channelMap.find((item) => item.id === id)
+			return channel ? channel.name : 'Unknown'
+		})
 
-		let channelIntr = [
+		function aggrChannelCounts(
+			data: ChannelIntrest[], admittedData: ChannelAdmitted[]): [number[], number[]] {
+			const intrChCount: number[] = []
+			const addmChCount: number[] = []
+
+			// Create a map of region_name to intrest_count from regionIntrest
+			const intrestMap: Record<string, number> = {}
+			for (const item of data) {
+				intrestMap[item.channel] = item.intrest_count
+			}
+
+			// Create arrays of intrest_counts for both regionIntrest and regionAdmitted
+			for (const item of data) {
+				intrChCount.push(item.intrest_count)
+				const admittedItem = admittedData.find((admitted) => admitted.channel === item.channel)
+				addmChCount.push(admittedItem ? admittedItem.intrest_count : 0)
+			}
+
+			return [intrChCount, addmChCount]
+		}
+
+		// Get the two arrays of intrest counts for RegionIntrest and RegionAdmitted
+		const [countChIntr, countChAdm] =	aggrChannelCounts(channelIntrest, channelAdmitted)
+
+		const chart7Data = [
 			{
 				label: 'INTERESTED STUDENTS',
 				backgroundColor: 'rgb(25.1, 2, 71.4)',
 				borderColor: 'rgb(255, 99, 132)',
-				data: chanIntrest
+				data: countChIntr
 			},
 			{
 				label: 'APPLIED STUDENTS',
 				backgroundColor: 'rgb(255, 99, 132)',
 				borderColor: 'rgb(255, 99, 132)',
-				data: chanAdmitted
+				data: countChAdm
 			}
 		]
 
@@ -519,7 +523,7 @@
 			type: 'bar', // Chart type (e.g., 'bar', 'doughnut', etc.)
 			data: {
 				labels: channelNames,
-				datasets: channelIntr
+				datasets: chart7Data
 			},
 			options: {
 				plugins: {
@@ -542,15 +546,15 @@
 
 <div class="main">
 	<hgroup>
-		<h1>Chart Table, Schools* and Events**</h1>
-		<i>&emsp;*Active and cooperative schools only with Startswith contact</i>
+		<h1>Chart Tables* of and Events** and Interested Students</h1>
+		<i>&emsp;*Events only with active and cooperative schools</i>
 		<br />
 		<i>&emsp;**Semesters: Spring — months between the 3th & 9th months inclusive; Autumn — others</i
 		>
 	</hgroup>
 	<br />
 
-	<form on:submit={sendDataWithForm}>
+	<form on:submit={sendDataWithForm} id="top">
 		<div class="semi-circular-input">
 			<label for="year"><i>Select </i> Event Year</label>
 			<select bind:value={$selectedYear} name="year" id="year" class="hidden-textbox">
@@ -601,13 +605,13 @@
 		<button class="btn" id="btn" type="submit" on:click={updateContent}> Confirm </button>
 	</form>
 
-	<div class="response-data">
+	 <!--<div class="response-data">
 		<pre>{responseDataFormatted}</pre>
-	</div>
+	</div>-->
 
 	{#if isElementVisible}
-		<div class="sticky" id="stickyLine">
-			<i>Event Year: </i>{selYear} &nbsp;&nbsp;
+		<div class="sticky select1" id="stickyLine">
+			<i class="h">Event Year: </i>{selYear} &nbsp;&nbsp;
 			<i>Event Semester: </i>{selSemest} &nbsp;&nbsp;
 			<i>Event Duty: </i>
 			{#each duty as item (item.id)}
@@ -640,17 +644,10 @@
 			&nbsp;&nbsp;
 		</div>
 	{/if}
-	<br />
-	<br />
-	<br />
-	<br />
-	<div class="e">
+	<div class="e" style="margin-bottom: 3rem;">
 		<canvas id="chartCanvas1" />
 	</div>
-	<br />
-	<br />
-	<br />
-	<div class="container">
+	<div class="container" style="margin-bottom: 3rem;">
 		<div class="f">
 			<canvas id="chartCanvas2" />
 		</div>
@@ -658,10 +655,7 @@
 			<canvas id="chartCanvas3" />
 		</div>
 	</div>
-	<br />
-	<br />
-	<br />
-	<div class="container">
+	<div class="container" style="margin-bottom: 3rem;">
 		<div class="f">
 			<canvas id="chartCanvas4" />
 		</div>
@@ -669,21 +663,13 @@
 			<canvas id="chartCanvas5" />
 		</div>
 	</div>
-	<br />
-	<br />
-	<br />
-	<div class="g">
+	<div class="g" style="margin-bottom: 3rem;">
 		<canvas id="chartCanvas6" />
 	</div>
-	<br />
-	<br />
-	<br />
-	<div class="e">
+	<div class="e" style="margin-bottom: 3rem;">
 		<canvas id="chartCanvas7" />
 	</div>
-	<br />
-	<br />
-	<br />
+	<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 </div>
 
 <style>
@@ -704,14 +690,14 @@
 	}
 
 	.e {
-		width: 60%;
+		width: 90%;
 		padding-top: 4%;
 		padding-bottom: 3%;
 		padding-left: 3%;
 	}
 
 	.f {
-		width: 50%;
+		width: 90%;
 	}
 
 	.g {
@@ -721,12 +707,16 @@
 		padding-left: 3%;
 	}
 
+	.h {
+		padding-left: 2%;
+	}
+
 	i {
 		font-weight: 300;
 	}
 
 	.sticky {
-		background-color: white;
+		background-color: rgb(246, 242, 242);
 		position: sticky;
 		top: 0;
 		z-index: 1;
@@ -742,6 +732,13 @@
 		border-bottom-left-radius: 100px;
 		border-bottom-right-radius: 100px;
 		width: 25%;
+	}
+
+	.select1 {
+		border-top-left-radius: 100px;
+		border-top-right-radius: 100px;
+		border-bottom-left-radius: 100px;
+		border-bottom-right-radius: 100px;
 	}
 
 	label {
@@ -763,4 +760,18 @@
 	.btn:hover {
 		background-color: #11a58c;
 	}
+
+	.flower {
+    font-size: 140%;
+    color: #a0a9a8;
+    padding-bottom: 3%;
+		text-decoration: none; /* Remove underline */
+  }
+
+  .flower:hover {
+    font-size: 140%;
+    color: #32bea6;
+    padding-bottom: 3%;
+		text-decoration: none; /* Remove underline */
+  }
 </style>
