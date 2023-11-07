@@ -317,22 +317,7 @@ const school: Action = async ({ request }) => {
 			active_by,
 			basic,
 			medior,
-			high,
-			altisk,
-			gimn,
-			szakgimn,
-			szakkoz,
-			szakisk,
-			techn,
-			szakkepz,
-			almuv,
-			muvokt,
-			keszseg,
-			fejl,
-			kieg,
-			kolleg,
-			hidp,
-			nembes
+			high
 		}
 	})
 

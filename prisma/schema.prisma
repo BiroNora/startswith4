@@ -37,21 +37,6 @@ model School {
   basic        Boolean
   medior       Boolean
   high         Boolean
-  altisk       Boolean
-  gimn         Boolean
-  szakgimn     Boolean
-  szakkoz      Boolean
-  szakisk      Boolean
-  techn        Boolean
-  szakkepz     Boolean
-  almuv        Boolean
-  muvokt       Boolean
-  keszseg      Boolean
-  fejl         Boolean
-  kieg         Boolean
-  kolleg       Boolean
-  hidp         Boolean
-  nembes       Boolean
 
   @@map("schools")
 }

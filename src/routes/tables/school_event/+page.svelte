@@ -147,7 +147,6 @@
 	async function sendDataWithForm(event: any) {
 		event.preventDefault()
 		try {
-
 			const formData: RequestPayload = {
 				selectedYear: Number($selectedYear),
 				selectedSemester: semesterFilter,
@@ -236,8 +235,6 @@
 		searchTable()
 		filtering = 'OFF'
 	}
-
-
 </script>
 
 <svelte:head>
@@ -380,9 +377,9 @@
 					<div>&#8470; of</div>
 					<div>Schools</div>
 					<br>
-					<div><strong>{schoolsLength}/{ schoolsCount}</strong></div>
+					<div><strong>{schoolsLength}/{schoolsCount}</strong></div>
 					<br>
-					<div><strong class="c i">&sum;: { schoolsCount}</strong></div>
+					<div><strong class="c i">&sum;: {schoolsCount}</strong></div>
 					<div class="c h">{calcPerc(schoolsLength, schoolsCount)} %</div>
 				</th>
 				<th class="c v">School Type</th>
@@ -395,7 +392,7 @@
 					<br>
 					<div><strong>{totalEventCount}/{calcTotalEventCount(schoolsData)}</strong></div>
 					<div class="c">{calcPerc(totalEventCount, totEvCount)} %</div>
-					<div><strong class="c i">&sum;: { totalEvents}</strong></div>
+					<div><strong class="c i">&sum;: {totalEvents}</strong></div>
 					<div class="c h">{calcPerc(totalEventCount, totalEvents)} %</div>
 				</th>
         <th class="c v">
@@ -403,7 +400,7 @@
 					<div>Est./Pres. Students</div>
 					<div><strong>{sumEstStudents}/{calcTotalEstStudents(schoolsData)}</strong></div>
 					<div class="c">{calcPerc(sumEstStudents, calTotEstStud)} %</div>
-					<div ><strong class="c i">&sum;: { totalEstStudents}</strong></div>
+					<div ><strong class="c i">&sum;: {totalEstStudents}</strong></div>
 					<div class="c h">{calcPerc(sumEstStudents, totalEstStudents)} %</div>
 				</th>
 				<th class="c v">
@@ -411,7 +408,7 @@
 					<div>Interested Students</div>
 					<div><strong>{totIntrestStatus_0}/{calcTotIntrest_0(schoolsData)}</strong></div>
 					<div class="c">{calcPerc(totIntrestStatus_0, calTotIntr_0)} %</div>
-					<div><strong class="c i">&sum;: { totalIntrest0}</strong></div>
+					<div><strong class="c i">&sum;: {totalIntrest0}</strong></div>
 					<div class="c h">{calcPerc(totIntrestStatus_0, totalIntrest0)} %</div>
 				</th>
         <th class="c v">
@@ -420,7 +417,7 @@
 					<br>
 					<div><strong>{totIntrestStatus_1}/{calcTotIntrest_1(schoolsData)}</strong></div>
 					<div class="c">{calcPerc(totIntrestStatus_1, calTotIntr_1)} %</div>
-					<div><strong class="c i">&sum;: { totalIntrest1}</strong></div>
+					<div><strong class="c i">&sum;: {totalIntrest1}</strong></div>
 					<div class="c h">{calcPerc(totIntrestStatus_1, totalIntrest1)} %</div>
 				</th>
 				<th class="c v">
@@ -429,7 +426,7 @@
 					<br>
 					<div><strong>{totIntrestStatus_2}/{calcTotIntrest_2(schoolsData)}</strong></div>
 					<div class="c">{calcPerc(totIntrestStatus_2, calTotIntr_2)} %</div>
-					<div><strong class="c i">&sum;: { totalIntrest2}</strong></div>
+					<div><strong class="c i">&sum;: {totalIntrest2}</strong></div>
 					<div class="c h">{calcPerc(totIntrestStatus_2, totalIntrest2)} %</div>
 				</th>
         <th class="c v">
@@ -437,7 +434,7 @@
 					<div>IN PROGRESS</div>
 					<div><strong>{totIntrestStatus_3}/{calcTotIntrest_3(schoolsData)}</strong></div>
 					<div class="c">{calcPerc(totIntrestStatus_3, calTotIntr_3)} %</div>
-					<div><strong class="c i">&sum;: { totalIntrest3}</strong></div>
+					<div><strong class="c i">&sum;: {totalIntrest3}</strong></div>
 					<div class="c h">{calcPerc(totIntrestStatus_3, totalIntrest3)} %</div>
 				</th>
 			</tr>
