@@ -37,6 +37,9 @@
 	let selDuty: any
 	let selCountry: any
 	let selRegion: any
+	const distinctYearsArray = distinctYears || []
+	const countriesArray = countries || []
+	const regionsArray = regions || []
 	const gradeMapLength: number = Object.keys(gradeMap).length
 	const subjectMapLength: number = Object.keys(subjectMap).length
 	const gradeNames = Array.from({ length: gradeMapLength }, (_, i) => gradeMap[i].name)
@@ -52,7 +55,7 @@
 	]
 	let subjectColors = [
 		'rgb(251, 2, 71)',
-		'rgb(255, 199, 132)',
+		'rgb(255, 216, 132)',
 		'rgb(100, 199, 132)',
 		'rgb(54, 162, 235)',
 		'rgb(75, 192, 192)',
@@ -61,8 +64,8 @@
 		'rgb(100, 99, 132)',
 		'rgb(54, 182, 235)',
 		'rgb(175, 192, 192)',
-		'rgb(251, 202, 71)',
-		'rgb(255, 70, 132)',
+		'rgb(252, 169, 3)',
+		'rgb(16, 52, 166)',
 		'rgb(100, 56, 132)',
 		'rgb(54, 162, 135)',
 		'rgb(175, 92, 192)'
@@ -222,38 +225,32 @@
 		let datasets1 = [
 			{
 				label: 'INTERESTED TOTAL',
-				backgroundColor: 'rgb(25.1, 2, 71.4)',
-				borderColor: 'rgb(255, 99, 132)',
+				backgroundColor: 'rgb(251, 2, 71)',
 				data: dataVal
 			},
 			{
 				label: 'INTERESTED / NOT APPLIED',
-				backgroundColor: 'rgb(255, 99, 132)',
-				borderColor: 'rgb(255, 99, 132)',
+				backgroundColor: 'rgb(235, 120, 143)',
 				data: dataValues0
 			},
 			{
 				label: 'INTERESTED / APPLIED',
-				backgroundColor: 'rgb(100, 99, 132)',
-				borderColor: 'rgb(255, 99, 132)',
+				backgroundColor: 'rgb(93, 43, 110)',
 				data: dataAppl
 			},
 			{
 				label: statusMap[0].name,
-				backgroundColor: 'rgb(54, 162, 235)',
-				borderColor: 'rgb(54, 162, 235)',
+				backgroundColor: 'rgb(50, 190, 166)',
 				data: dataValues1
 			},
 			{
 				label: statusMap[1].name,
-				backgroundColor: 'rgb(75, 192, 192)',
-				borderColor: 'rgb(75, 192, 192)',
+				backgroundColor: 'rgb(135, 167, 196)',
 				data: dataValues2
 			},
 			{
 				label: statusMap[2].name,
-				backgroundColor: 'rgb(255, 205, 86)',
-				borderColor: 'rgb(255, 205, 86)',
+				backgroundColor: 'rgb(242, 196, 97)',
 				data: dataValues3
 			}
 		]
@@ -327,14 +324,12 @@
 		const chartData = [
 			{
 				label: 'INTERESTED STUDENTS',
-				backgroundColor: 'rgb(25.1, 2, 71.4)',
-				borderColor: 'rgb(255, 99, 132)',
+				backgroundColor: 'rgb(251, 2, 71)',
 				data: countIntr
 			},
 			{
 				label: 'APPLIED STUDENTS',
-				backgroundColor: 'rgb(255, 99, 132)',
-				borderColor: 'rgb(255, 99, 132)',
+				backgroundColor: 'rgb(50, 190, 166)',
 				data: countAdm
 			}
 		]
@@ -373,14 +368,12 @@
 		const chart7Data = [
 			{
 				label: 'INTERESTED STUDENTS',
-				backgroundColor: 'rgb(25.1, 2, 71.4)',
-				borderColor: 'rgb(255, 99, 132)',
+				backgroundColor: 'rgb(251, 2, 71)',
 				data: countChIntr
 			},
 			{
 				label: 'APPLIED STUDENTS',
-				backgroundColor: 'rgb(255, 99, 132)',
-				borderColor: 'rgb(255, 99, 132)',
+				backgroundColor: 'rgb(50, 190, 166)',
 				data: countChAdm
 			}
 		]
@@ -546,7 +539,7 @@
 
 <div class="main">
 	<hgroup>
-		<h1>Chart Tables* of and Events** and Interested Students</h1>
+		<h1>Chart Tables* of Events** and Interested Students</h1>
 		<i>&emsp;*Events only with active and cooperative schools</i>
 		<br />
 		<i>&emsp;**Semesters: Spring — months between the 3th & 9th months inclusive; Autumn — others</i
@@ -558,7 +551,7 @@
 		<div class="semi-circular-input">
 			<label for="year"><i>Select </i> Event Year</label>
 			<select bind:value={$selectedYear} name="year" id="year" class="hidden-textbox">
-				{#each distinctYears as year}
+				{#each distinctYearsArray as year}
 					<option value={year}>{year} </option>
 				{/each}
 			</select>
@@ -586,7 +579,7 @@
 			<label for="country"><i>Select </i> School Country</label>
 			<select bind:value={$selectedCountry} name="country" id="country" class="hidden-textbox">
 				<option value="ALL">ALL</option>
-				{#each countries as country}
+				{#each countriesArray as country}
 					<option value={country.country_id}>{country.country_name} </option>
 				{/each}
 			</select>
@@ -596,7 +589,7 @@
 			<label for="region"><i>Select </i> School Region</label>
 			<select bind:value={$selectedRegion} name="region" id="region" class="hidden-textbox">
 				<option value="ALL">ALL</option>
-				{#each regions as reg}
+				{#each regionsArray as reg}
 					<option value={reg.region_id}>{reg.region_name} </option>
 				{/each}
 			</select>
@@ -622,7 +615,7 @@
 			&nbsp;&nbsp;
 			<i>School Country: </i>
 			{#if selCountry != 'ALL'}
-				{#each countries as country}
+				{#each countriesArray as country}
 					{#if country.country_id == selCountry}
 						{country.country_name}
 					{/if}
@@ -633,9 +626,9 @@
 			&nbsp;&nbsp;
 			<i>School Region: </i>
 			{#if selRegion != 'ALL'}
-				{#each regions as reg}
-					{#if reg.region_id == selRegion}
-						{reg.region_name}
+				{#each regionsArray as region}
+					{#if region.region_id == selRegion}
+						{region.region_name}
 					{/if}
 				{/each}
 			{:else}

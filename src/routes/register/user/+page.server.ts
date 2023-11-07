@@ -5,11 +5,18 @@ import bcrypt from 'bcrypt'
 import { db } from '$lib/database'
 
 export const load: PageServerLoad = async () => {
-  const regio = await db.region.findMany({
+  const regions = await db.region.findMany({
     orderBy: { region_name: 'asc' },
   })
 
-  return {regio}
+  if (!regions) {
+    return fail(400, {
+      error: true,
+      message: 'Something went wrong. Please try it later.'
+    })
+  }
+
+  return {regions}
 }
 
 const user: Action = async ({ request }) => {

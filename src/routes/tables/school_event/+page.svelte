@@ -43,6 +43,9 @@
 	let selDuty: any
   let selCountry: any
   let selRegion: any
+	const distinctYearsArray = distinctYears || []
+	const countriesArray = countries || []
+	const regionsArray = regions || []
 
 	function calcPerc(x: any, y: any) {
 		let percentage = 0
@@ -254,7 +257,7 @@
 		<div class="semi-circular-input">
 		<label for="year"><i>Select </i> Event Year</label>
 		<select bind:value={$selectedYear} name="year" id="year" class="hidden-textbox">
-			{#each distinctYears as year}
+			{#each distinctYearsArray as year}
 				<option value={year}>{year} </option>
 			{/each}
 		</select>
@@ -282,7 +285,7 @@
 		<label for="country"><i>Select </i> School Country</label>
 		<select bind:value={$selectedCountry} name="country" id="country" class="hidden-textbox">
 			<option value="ALL">ALL</option>
-			{#each countries as country}
+			{#each countriesArray as country}
 				<option value={country.country_id}>{country.country_name} </option>
 			{/each}
 		</select>
@@ -292,7 +295,7 @@
 		<label for="region"><i>Select </i> School Region</label>
 		<select bind:value={$selectedRegion} name="region" id="region" class="hidden-textbox">
 			<option value="ALL">ALL</option>
-			{#each regions as reg}
+			{#each regionsArray as reg}
 				<option value={reg.region_id}>{reg.region_name} </option>
 			{/each}
 		</select>
@@ -341,7 +344,7 @@
 			&nbsp;&nbsp;
 			<i>School Country: </i>
 				{#if (selCountry != 'ALL')}
-					{#each countries as country}
+					{#each countriesArray as country}
 						{#if (country.country_id == selCountry)}
 							{country.country_name}
 						{/if}
@@ -352,7 +355,7 @@
 			&nbsp;&nbsp;
 			<i>School Region: </i>
 				{#if (selRegion != 'ALL')}
-					{#each regions as reg}
+					{#each regionsArray as reg}
 						{#if (reg.region_id == selRegion)}
 							{reg.region_name}
 						{/if}

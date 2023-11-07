@@ -3,13 +3,14 @@
 	import type { ActionData, PageServerData } from './$types'
 	import { dutyMap } from '../../stores/dataStore'
 	export let data: PageServerData
-	const { regio } = data
+	const { regions } = data
 
 	let yesB = true
 	let yesM = false
 	let yesH = false
 	let yesS = false
 	let yesD = false
+	const regionsArray = regions || []
 
 	let pageName = 'Register to Startswith'
 
@@ -46,8 +47,8 @@
 			<input type="checkbox" name="basic" bind:checked={yesB} />
 			BASIC
 			<select name="regB" id="sel-B" class="hidden-textbox">
-				{#each regio as reg}
-					<option value={reg.region_id}>{reg.region_name}</option>
+				{#each regionsArray as regio}
+					<option value={regio.region_id}>{regio.region_name}</option>
 				{/each}
 			</select>
 		</div>
@@ -55,8 +56,8 @@
 			<input type="checkbox" name="medior" bind:checked={yesM} />
 			MEDIOR
 			<select name="regM" id="sel-M" class="hidden-textbox">
-				{#each regio as reg}
-					<option value={reg.region_id}>{reg.region_name}</option>
+				{#each regionsArray as regio}
+					<option value={regio.region_id}>{regio.region_name}</option>
 				{/each}
 			</select>
 		</div>
@@ -64,8 +65,8 @@
 			<input type="checkbox" name="high" bind:checked={yesH} />
 			HIGH
 			<select name="regH" id="sel-H" class="hidden-textbox">
-				{#each regio as reg}
-					<option value={reg.region_id}>{reg.region_name}</option>
+				{#each regionsArray as regio}
+					<option value={regio.region_id}>{regio.region_name}</option>
 				{/each}
 			</select>
 		</div>
@@ -73,8 +74,8 @@
 			<input type="checkbox" name="superior" bind:checked={yesS} />
 			SUPERIOR
 			<select name="regS" id="sel-S" class="hidden-textbox">
-				{#each regio as reg}
-					<option value={reg.region_id}>{reg.region_name}</option>
+				{#each regionsArray as regio}
+					<option value={regio.region_id}>{regio.region_name}</option>
 				{/each}
 			</select>
 		</div>

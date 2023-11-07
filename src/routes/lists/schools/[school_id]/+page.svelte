@@ -194,7 +194,6 @@
 		<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 	</div>
 
-
 	<!-- Event form -->
 
 	<div class="grid element-to-position" id="section_event" >
