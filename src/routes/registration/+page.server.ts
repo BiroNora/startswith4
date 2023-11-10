@@ -1,4 +1,4 @@
-import { dutyType } from './../../stores/dataStore';
+import { dutyType } from '../stores/dataStore';
 import { fail, redirect} from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 import bcrypt from 'bcrypt'
@@ -123,7 +123,7 @@ const user: Action = async ({ request }) => {
     }
   })
 
-  throw redirect(303, '/login')
+  throw redirect(303, '/lists/activities')
 }
 
 export const actions: Actions = { user }

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
+	import { dutyMap } from '../stores/dataStore'
 	import type { ActionData, PageServerData } from './$types'
-	import { dutyMap } from '../../stores/dataStore'
 	export let data: PageServerData
 	const { regions } = data
 

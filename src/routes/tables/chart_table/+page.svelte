@@ -548,7 +548,7 @@
 	<br />
 
 	<form on:submit={sendDataWithForm} id="top">
-		<div class="semi-circular-input">
+		<div >
 			<label for="year"><i>Select </i> Event Year</label>
 			<select bind:value={$selectedYear} name="year" id="year" class="hidden-textbox">
 				{#each distinctYearsArray as year}
@@ -557,7 +557,7 @@
 			</select>
 		</div>
 
-		<div class="semi-circular-input">
+		<div >
 			<label for="semester"><i>Select </i> Event Semester</label>
 			<select bind:value={semesterFilter} name="semester" id="semester" class="hidden-textbox">
 				{#each semester as sem}
@@ -566,7 +566,7 @@
 			</select>
 		</div>
 
-		<div class="semi-circular-input">
+		<div >
 			<label for="duty"><i>Select </i> Event Duty</label>
 			<select bind:value={dutyFilter} name="duty" id="duty" class="hidden-textbox">
 				{#each duty as d}
@@ -575,7 +575,7 @@
 			</select>
 		</div>
 
-		<div class="semi-circular-input">
+		<div >
 			<label for="country"><i>Select </i> School Country</label>
 			<select bind:value={$selectedCountry} name="country" id="country" class="hidden-textbox">
 				<option value="ALL">ALL</option>
@@ -585,7 +585,7 @@
 			</select>
 		</div>
 
-		<div class="semi-circular-input">
+		<div >
 			<label for="region"><i>Select </i> School Region</label>
 			<select bind:value={$selectedRegion} name="region" id="region" class="hidden-textbox">
 				<option value="ALL">ALL</option>

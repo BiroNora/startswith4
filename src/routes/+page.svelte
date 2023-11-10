@@ -1,6 +1,6 @@
 <div class="container">
 	<h1>Welcome to Startswith</h1>
-	<p>Visit <a href="/register/school">kit.svelte.dev</a> to read the documentation</p>
+	<p>Please <a href="/login">Log in</a> or <a href="/registration">Register</a></p>
 </div>
 
 <style>
