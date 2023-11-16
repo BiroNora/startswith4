@@ -113,17 +113,7 @@ const user: Action = async ({ request }) => {
 			passwordHash: await bcrypt.hash(password1, 10),
 			userAuthToken: crypto.randomUUID(),
 			active,
-			active_by,
-			basic,
-			reB,
-			medior,
-			reM,
-			high,
-			reH,
-			superior,
-			reS,
-			director,
-			reD
+			active_by
 		}
 	})
 

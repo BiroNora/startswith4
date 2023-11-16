@@ -328,7 +328,7 @@
 				data: countIntr
 			},
 			{
-				label: 'APPLIED STUDENTS',
+				label: 'ADMITTED STUDENTS',
 				backgroundColor: 'rgb(50, 190, 166)',
 				data: countAdm
 			}
@@ -372,7 +372,7 @@
 				data: countChIntr
 			},
 			{
-				label: 'APPLIED STUDENTS',
+				label: 'ADMITTED STUDENTS',
 				backgroundColor: 'rgb(50, 190, 166)',
 				data: countChAdm
 			}
