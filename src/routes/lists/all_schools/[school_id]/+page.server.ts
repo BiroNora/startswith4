@@ -1,8 +1,7 @@
 import { error, fail } from '@sveltejs/kit'
-import { db } from '$lib/database'
+import { db } from '$lib/database.js'
 import { eventMap, dutyMap3, schType, duType } from '../../../stores/dataStore.js'
 import type { Action, Actions } from './$types'
-
 
 let extrType = ''
 let extrDuty = ''
@@ -13,7 +12,7 @@ export async function load({ params }) {
 
 	const school = await db.school.findUnique({
 		where: { school_id: sc_id },
-		include: { User: true}
+		include: { User: true }
 	})
 
 	let extrSchoolType = ''
@@ -45,7 +44,7 @@ export async function load({ params }) {
 
 	const contact = await db.contact.findMany({
 		where: { school_id: sc_id },
-    orderBy: { contact_id: 'desc' }
+		orderBy: { contact_id: 'desc' }
 	})
 
 	const event = await db.event.findMany({
@@ -72,7 +71,7 @@ export async function load({ params }) {
 		}
 	}
 
-  const user = school?.User
+	const user = school?.User
 
 	const city = await db.city.findUnique({
 		where: { city_id: school?.city_id }
@@ -86,7 +85,7 @@ export async function load({ params }) {
 		where: { county_id: school?.county_id }
 	})
 
-  const country = await db.country.findUnique({
+	const country = await db.country.findUnique({
 		where: { country_id: school?.country_id }
 	})
 
@@ -98,11 +97,11 @@ export async function load({ params }) {
 }
 
 const schoolU: Action = async ({ request }) => {
-  const data = await request.formData()
+	const data = await request.formData()
 	const email = String(data.get('email'))
 
 	const user = await db.user.findUnique({
-		where: {user_email: email}
+		where: { user_email: email }
 	})
 
 	if (!user) {
@@ -110,13 +109,13 @@ const schoolU: Action = async ({ request }) => {
 	}
 
 	const one = await db.school.findUnique({
-		where: {school_id: sc_id},
+		where: { school_id: sc_id },
 		include: { User: true }
 	})
 
 	let alreadycontact = false
 
-	one?.User.forEach(function(item) {
+	one?.User.forEach(function (item) {
 		if (item.user_email == email) {
 			alreadycontact = true
 		}
@@ -129,24 +128,24 @@ const schoolU: Action = async ({ request }) => {
 	const us_id = user.user_id
 
 	const contactresult = await db.school.update({
-		where: {school_id: sc_id},
-    data: {
+		where: { school_id: sc_id },
+		data: {
 			User: {
 				connect: {
 					user_id: us_id
 				}
 			}
-    }
-  })
-  return { contactresult }
+		}
+	})
+	return { contactresult }
 }
 
 const schoolUD: Action = async ({ request }) => {
-  const data = await request.formData()
+	const data = await request.formData()
 	const email = String(data.get('email'))
 
 	const user = await db.user.findUnique({
-		where: {user_email: email}
+		where: { user_email: email }
 	})
 
 	if (!user) {
@@ -154,13 +153,13 @@ const schoolUD: Action = async ({ request }) => {
 	}
 
 	const one = await db.school.findUnique({
-		where: {school_id: sc_id},
+		where: { school_id: sc_id },
 		include: { User: true }
 	})
 
 	let already = false
 
-	one?.User.forEach(function(item) {
+	one?.User.forEach(function (item) {
 		if (item.user_email == email) {
 			already = true
 		}
@@ -173,14 +172,14 @@ const schoolUD: Action = async ({ request }) => {
 	const us_id = user.user_id
 
 	const result = await db.school.update({
-		where: {school_id: sc_id},
-    data: {
+		where: { school_id: sc_id },
+		data: {
 			User: {
-				disconnect: {	user_id: us_id }
+				disconnect: { user_id: us_id }
 			}
-    }
-  })
-  return { result }
+		}
+	})
+	return { result }
 }
 
 export const actions: Actions = { schoolU, schoolUD }

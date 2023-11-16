@@ -105,9 +105,9 @@ const location: Action = async ({ request }) => {
 		citycounty
 	) {
 		return fail(400, {
-      error: true,
-      message: 'Location already exists.'
-    })
+			error: true,
+			message: 'Location already exists.'
+		})
 	}
 
 	if (!countryifexists?.country_name) {

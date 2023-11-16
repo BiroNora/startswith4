@@ -1,5 +1,5 @@
 import { error, fail, redirect } from '@sveltejs/kit'
-import { db } from '$lib/database'
+import { db } from '$lib/database.js'
 import {
 	eventMap,
 	dutyMap3,

@@ -145,7 +145,7 @@ const school: Action = async ({ request }) => {
 	}
 
 	const schoolomid = await db.school.findFirst({
-		where: { om_id: `${ om_id }` }
+		where: { om_id: `${om_id}` }
 	})
 	if (schoolomid) {
 		return fail(400, { omid: true })
@@ -198,7 +198,7 @@ const school: Action = async ({ request }) => {
 			active_by,
 			User: {
 				connect: {
-					user_id: user_id,
+					user_id: user_id
 				}
 			},
 			basic,

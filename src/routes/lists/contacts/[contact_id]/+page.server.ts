@@ -27,7 +27,7 @@ export async function load({ params }) {
 }
 
 const contact: Action = async ({ request }) => {
-  const data = await request.formData()
+	const data = await request.formData()
 	const contact_email = String(data.get('contactemail'))
 	const contact_name = String(data.get('contactname'))
 	const contact_phone = String(data.get('contactphone'))
@@ -36,7 +36,7 @@ const contact: Action = async ({ request }) => {
 	const active_by = my_id
 
 	await db.contact.update({
-    where: {contact_id: cont_id },
+		where: { contact_id: cont_id },
 		data: {
 			contact_email,
 			contact_name,

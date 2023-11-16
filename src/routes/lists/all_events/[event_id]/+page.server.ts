@@ -1,4 +1,4 @@
-import { channelMap, gradeMap, statusMap } from './../../../stores/dataStore';
+import { channelMap, gradeMap, statusMap } from './../../../stores/dataStore'
 import { error } from '@sveltejs/kit'
 import { db } from '$lib/database'
 import { dutyMap3, eventMap } from '../../../stores/dataStore'
@@ -48,19 +48,19 @@ export async function load({ params }) {
 	sc_id = Number(event?.school_id)
 
 	const school = await db.school.findUnique({
-		where: { school_id: sc_id },
+		where: { school_id: sc_id }
 	})
 
 	const cityid = school?.city_id
 
 	const city = await db.city.findUnique({
-		where: { city_id: cityid}
+		where: { city_id: cityid }
 	})
 	cityname = String(city?.city_name)
 
 	const inters = await db.interestedStudents.findMany({
 		where: { event_id: ev_id },
-		orderBy: {intrest_id: 'desc'}
+		orderBy: { intrest_id: 'desc' }
 	})
 
 	if (inters) {
