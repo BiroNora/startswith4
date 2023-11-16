@@ -451,9 +451,11 @@
 					<td class="c w">{school.region_name}</td>
 					<td class="c w">{school.county_name}</td>
 					<td class="c">{school.city_name}</td>
-					<a href="../lists/all_schools/{school.school_id}" target="_blank" class="centered-link">
-						<td class="centered-link nb h">{school.school_name}</td>
-					</a>
+					<td class="centered-link c h">
+						<a href="../lists/all_schools/{school.school_id}" target="_blank" class="h">
+						{school.school_name}
+						</a>
+					</td>
 					<td class="c w">{getType(school.school_type)}</td>
 
 					{#if school.basic == true}
@@ -548,10 +550,6 @@
 
 	i {
 		font-weight: 300;
-	}
-
-	.nb {
-    text-align: center;
 	}
 
 	.centered-link {
