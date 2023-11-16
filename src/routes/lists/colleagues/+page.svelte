@@ -12,16 +12,16 @@
 			.filter((number) => number % 10 !== 0)
   		.map((number) => number.toString())
 
-			for (let i = 0; i < array.length; i++) {
-				const char1 = array[i].charAt(0)
-				const duty = dutyType.find((item) => item[0] === char1)
-				const char2 = array[i].charAt(1)
-				const region = data.regs.find((reg) => reg.region_id === Number(char2))?.region_name
+		for (let i = 0; i < array.length; i++) {
+			const char1 = array[i].charAt(0)
+			const duty = dutyType.find((item) => item[0] === char1)
+			const char2 = array[i].charAt(1)
+			const region = data.regs.find((reg) => reg.region_id === Number(char2))?.region_name
 
 			if (duty && region) {
-      	result.push(`${duty[1]}: ${region}`)
-    	}
-  	}
+				result.push(`${duty[1]}: ${region}`)
+			}
+		}
 
   	return result.join(', ')
 	}
@@ -74,7 +74,6 @@
     const deleteButton = document.querySelector(".clear-button")
     deleteButton!.addEventListener("click", clearInput)
   })
-
 </script>
 
 <svelte:head>
@@ -98,6 +97,11 @@
     </button>
   </div>
 
+	<div id="itemCount" class="z" style="display: none;" >
+		<span id="length" ></span>
+		&nbsp; Colleagues
+	</div>
+	<br>
   <ul id="list">
     {#each data.users as user}
 			<li class="li aa">
@@ -111,7 +115,7 @@
       </li>
     {/each}
   </ul>
-	
+
   <br>
   <a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 </div>
@@ -128,6 +132,13 @@
     font-weight: 400;
     line-height: normal;
     font-size: 23px;
+  }
+
+	.z {
+    color: rgb(144, 132, 132);
+    font-size: medium;
+    font-weight: 400;
+    font-style: italic;
   }
 
 	.li {

@@ -219,7 +219,7 @@
   }
 
   .input-container {
-  position: relative;
+    position: relative;
   }
 
   .clear-button {

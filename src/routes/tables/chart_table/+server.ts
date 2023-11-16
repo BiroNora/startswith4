@@ -4,11 +4,11 @@ export async function POST({ request }) {
 	const requestBody = await request.text()
 	const formData = JSON.parse(requestBody)
 	const { selectedYear, selectedSemester, selectedDuty, selectedCountry, selectedRegion } = formData
-	console.log('selY ' + selectedYear)
-	console.log('selS ' + selectedSemester)
-	console.log('selD ' + selectedDuty)
-	console.log('selC ' + selectedCountry)
-	console.log('selR ' + selectedRegion)
+	//console.log('selY ' + selectedYear)
+	//console.log('selS ' + selectedSemester)
+	//console.log('selD ' + selectedDuty)
+	//console.log('selC ' + selectedCountry)
+	//console.log('selR ' + selectedRegion)
 
 	if (
 		selectedYear == null &&
