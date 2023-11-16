@@ -63,7 +63,7 @@ model User {
   nationality   String
   user_phone    String
   user_email    String    @unique
-  on_duty       String[]
+  on_duty       Int[]
   passwordHash  String
   userAuthToken String    @unique
   createdAt     DateTime  @default(now()) @db.Timestamptz(3)
@@ -73,16 +73,6 @@ model User {
   Contact       Contact[]
   Event         Event[]
   School        School[]
-  basic         Boolean
-  reB           String
-  medior        Boolean
-  reM           String
-  high          Boolean
-  reH           String
-  superior      Boolean
-  reS           String
-  director      Boolean
-  reD           String
 
   @@map("users")
 }
