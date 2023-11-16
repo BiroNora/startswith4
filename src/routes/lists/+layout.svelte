@@ -17,6 +17,9 @@
         <a href="/tables/school_event" target="_blank">School_Event</a>
       </li>
       <li>
+        <a href="/lists/colleagues" target="_blank">Colleagues</a>
+      </li>
+      <li>
         <a href="/lists/all_schools" target="_blank">All Schools List</a>
       </li>
       <li>
