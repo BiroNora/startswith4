@@ -4,7 +4,6 @@ import { db } from '$lib/database'
 export const handle: Handle = async ({ event, resolve }) => {
   // get cookies from browser
   const session = event.cookies.get('session')
-  console.log(session)
 
   if (!session) {
     // if there is no session load page as normal

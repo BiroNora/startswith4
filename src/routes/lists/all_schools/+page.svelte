@@ -21,7 +21,7 @@
       // Loop through all list items
       for (let i = 0; i < items.length; i++) {
         const text = items[i].textContent?.toLowerCase() || ""
-        console.log(text)
+        
         if (text.indexOf(filter) > -1 || filter == "") {
           items[i].style.display = ""
           matchingItemCount++
