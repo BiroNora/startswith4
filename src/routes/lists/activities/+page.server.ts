@@ -4,7 +4,10 @@ import type { Action, Actions } from './$types'
 
 const today = new Date()
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function load({ params }) {
+export async function load({ locals }) {
+	if (!locals.user) {
+    throw redirect(302, '/auth/login')
+  }
 	const activities = await db.activity.findMany({
 		where: {
 			end_date: {

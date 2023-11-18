@@ -99,7 +99,6 @@
 
 		{#if form?.user}
 			<p class="error">Email is taken.</p>
-			else
 		{/if}
 
 		{#if form?.invalid}

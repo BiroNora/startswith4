@@ -7,7 +7,6 @@ import {
 	duType,
 	dateSlugify,
 	slugify,
-	my_id,
 	dutyType,
 	schoolType
 } from '../../../stores/dataStore.js'
@@ -18,9 +17,18 @@ let extrDuty = ''
 let sc_id: number
 let school_name = ''
 let city_name = ''
+let my_id: string
+let active_by: string
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function load({ params }) {
+export async function load({ params, locals }) {
+	if (!locals.user) {
+    throw redirect(302, '/auth/login')
+  }
+
+	my_id = locals.user.email
+	active_by = locals.user.name
+
 	sc_id = Number(params.school_id)
 
 	const school = await db.school.findUnique({
@@ -161,7 +169,7 @@ const event: Action = async ({ request }) => {
 			},
 			User: {
 				connect: {
-					user_id: my_id
+					user_email: my_id
 				}
 			}
 		}
@@ -174,7 +182,6 @@ const contact: Action = async ({ request }) => {
 	const contact_name = String(data.get('contactname'))
 	const contact_email = String(data.get('contactemail'))
 	const contact_phone = String(data.get('contactphone'))
-	const active_by = my_id
 	const contact_note = String(data.get('contactmessage'))
 	const active = true
 
@@ -193,7 +200,7 @@ const contact: Action = async ({ request }) => {
 				contact_note,
 				User: {
 					connect: {
-						user_id: my_id
+						user_email: my_id
 					}
 				},
 				active,
@@ -239,7 +246,6 @@ const school: Action = async ({ request }) => {
 	const coop = Boolean(data.get('coop'))
 	const note = String(data.get('note'))
 	const active = Boolean(data.get('active'))
-	const active_by = my_id
 	const school_type = []
 	const duty = []
 

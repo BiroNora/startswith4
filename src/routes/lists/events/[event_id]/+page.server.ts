@@ -1,4 +1,4 @@
-import { channelMap, gradeMap, my_id, statusMap } from './../../../stores/dataStore'
+import { channelMap, gradeMap, statusMap } from './../../../stores/dataStore'
 import { error, fail, redirect } from '@sveltejs/kit'
 import { db } from '$lib/database'
 import { dutyMap3, eventMap } from '../../../stores/dataStore'
@@ -16,7 +16,13 @@ let onduty = ''
 let eventtype = ''
 let cldate = ''
 
-export async function load({ params }) {
+export async function load({ params, locals }) {
+	if (!locals.user) {
+    throw redirect(302, '/auth/login')
+  }
+
+	const my_id = locals.user.email
+
 	ev_id = Number(params.event_id)
 
 	const event = await db.event.findUnique({
@@ -88,10 +94,8 @@ export async function load({ params }) {
 		}
 	}
 
-	const user_id = my_id
-
 	const user = await db.user.findUnique({
-		where: { user_id: user_id }
+		where: { user_email: my_id }
 	})
 
 	const countries = await db.country.findMany({})

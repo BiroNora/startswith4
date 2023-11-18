@@ -1,11 +1,14 @@
-import { error } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import { db } from '$lib/database'
 import { dutyMap3 } from '../../stores/dataStore'
 
 let extrDuty = ''
 
-export const load: PageServerLoad = async (event) => {
+export const load: PageServerLoad = async ({ locals }) => {
+	if (!locals.user) {
+    throw redirect(302, '/auth/login')
+  }
 	const events = await db.event.findMany({
 		// Todo! user_id comes from cookies
 		orderBy: { closing_date: 'desc' }
@@ -32,9 +35,9 @@ export const load: PageServerLoad = async (event) => {
 		}
 	}
 
-	event.setHeaders({
-		'Cashe-Control': 'public, max-age=0, s-maxage=60'
-	})
+	//event.setHeaders({
+	//	'Cashe-Control': 'public, max-age=0, s-maxage=60'
+	//})
 
 	if (!events) {
 		throw error(404, 'School not found')

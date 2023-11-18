@@ -1,5 +1,5 @@
 import { channelMap, gradeMap, statusMap } from './../../../stores/dataStore'
-import { error } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
 import { db } from '$lib/database'
 import { dutyMap3, eventMap } from '../../../stores/dataStore'
 
@@ -16,7 +16,11 @@ let eventtype = ''
 let cldate = ''
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function load({ params }) {
+export async function load({ params, locals }) {
+	if (!locals.user) {
+    throw redirect(302, '/auth/login')
+  }
+	
 	ev_id = Number(params.event_id)
 
 	const event = await db.event.findUnique({

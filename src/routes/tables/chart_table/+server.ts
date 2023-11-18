@@ -1,6 +1,11 @@
 import { db } from '$lib/database'
+import { redirect } from '@sveltejs/kit'
 
-export async function POST({ request }) {
+export async function POST({ request, locals }) {
+  if (!locals.user) {
+    throw redirect(302, '/auth/login')
+  }
+  
 	const requestBody = await request.text()
 	const formData = JSON.parse(requestBody)
 	const { selectedYear, selectedSemester, selectedDuty, selectedCountry, selectedRegion } = formData

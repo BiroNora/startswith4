@@ -3,7 +3,11 @@ import type { Action, Actions, PageServerLoad } from './$types'
 import { db } from '$lib/database'
 import { dutyType, schoolType } from '../../stores/dataStore'
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
+	if (!locals.user) {
+    throw redirect(302, '/auth/login')
+  }
+
 	const countries = await db.country.findMany({
 		orderBy: { country_name: 'asc' }
 	})

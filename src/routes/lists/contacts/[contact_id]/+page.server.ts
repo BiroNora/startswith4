@@ -1,11 +1,17 @@
 import { error, redirect } from '@sveltejs/kit'
 import { db } from '$lib/database'
 import type { Action, Actions } from './$types'
-import { my_id } from '../../../stores/dataStore'
 
 let cont_id: number
+let active_by: string
 
-export async function load({ params }) {
+export async function load({ params, locals }) {
+	if (!locals.user) {
+    throw redirect(302, '/auth/login')
+  }
+
+	active_by = locals.user.name
+
 	cont_id = Number(params.contact_id)
 
 	const contact = await db.contact.findUnique({
@@ -33,7 +39,6 @@ const contact: Action = async ({ request }) => {
 	const contact_phone = String(data.get('contactphone'))
 	const contact_note = String(data.get('contactmessage'))
 	const active = Boolean(data.get('active'))
-	const active_by = my_id
 
 	await db.contact.update({
 		where: { contact_id: cont_id },

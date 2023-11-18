@@ -1,8 +1,11 @@
-import { error } from '@sveltejs/kit'
+import { error, redirect } from '@sveltejs/kit'
 import { db } from '$lib/database'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function load({ params }) {
+export async function load({ locals }) {
+  if (!locals.user) {
+    throw redirect(302, '/auth/login')
+  }
 	const users = await db.user.findMany({
     orderBy: { user_name: 'asc' }
   })

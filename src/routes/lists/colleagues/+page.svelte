@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { dutyType } from '../../stores/dataStore.js'
+	import { dutyMap, dutyType } from '../../stores/dataStore.js'
 
 	let pageName = 'Colleagues'
+  let region: string | undefined
 
 	export let data
 
@@ -16,7 +17,13 @@
 			const char1 = array[i].charAt(0)
 			const duty = dutyType.find((item) => item[0] === char1)
 			const char2 = array[i].charAt(1)
-			const region = data.regs.find((reg) => reg.region_id === Number(char2))?.region_name
+      console.log(char1)
+      if (char1 == '5') {
+        const onDuty = dutyMap.find((item) => item.id === char2)
+        region = onDuty ? onDuty.name : 'Unknown'
+      } else {
+        region = data.regs.find((reg) => reg.region_id === Number(char2))?.region_name
+      }
 
 			if (duty && region) {
 				result.push(`${duty[1]}: ${region}`)

@@ -4,7 +4,11 @@ import type { Actions } from './$types'
 
 let act_id: number
 
-export async function load({ params }) {
+export async function load({ params, locals }) {
+	if (!locals.user) {
+    throw redirect(302, '/auth/login')
+  }
+
 	act_id = Number(params.act_id)
 
 	const activity = await db.activity.findUnique({

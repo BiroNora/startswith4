@@ -4,7 +4,11 @@ import bcrypt from 'bcrypt'
 import { db } from '$lib/database'
 import { dutyType } from '../../stores/dataStore'
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
+	if (locals.user) {
+		throw redirect(302, '/lists/activities')
+	}
+
 	const regions = await db.region.findMany({
 		orderBy: { region_name: 'asc' }
 	})
@@ -77,11 +81,11 @@ const user: Action = async ({ request }) => {
 		return fail(400, { regions: true })
 	}
 
-	on_duty.push(regionB)
-	on_duty.push(regionM)
-	on_duty.push(regionH)
-	on_duty.push(regionS)
-	on_duty.push(regionD)
+	on_duty.push(Number(regionB))
+	on_duty.push(Number(regionM))
+	on_duty.push(Number(regionH))
+	on_duty.push(Number(regionS))
+	on_duty.push(Number(regionD))
 
 	if (
 		typeof user_email != 'string' ||
