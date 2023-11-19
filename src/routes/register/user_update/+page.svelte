@@ -1,18 +1,60 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { dutyMap } from '../../stores/dataStore'
+	import { duty, dutyMap, dutyType } from '../../stores/dataStore'
 	import type { ActionData, PageServerData } from './$types'
 	export let data: PageServerData
-	const { regions } = data
+	const { regions, user } = data
 
-	let yesB = true
+  let region: string | undefined
+
+  const array = user?.on_duty
+    .filter((number) => number % 10 !== 0)
+    .map((number) => number.toString())
+
+	let yesB = false
 	let yesM = false
 	let yesH = false
 	let yesS = false
 	let yesD = false
+  let yesBreg = 0
+	let yesMreg = 0
+	let yesHreg = 0
+	let yesSreg = 0
+	let yesDuty = ''
 	const regionsArray = regions || []
 
-	let pageName = 'Register to Startswith'
+  for (let i = 0; i < array!.length; i++) {
+    const char1 = array![i].charAt(0)
+    const char2 = array![i].charAt(1)
+
+    if (char1 === '1') {
+      yesB = true
+      const region = regions?.find((reg) => reg.region_id === Number(char2))
+      yesBreg = region?.region_id ?? yesBreg
+    }
+    if (char1 === '2') {
+      yesM = true
+      const region = regions!.find((reg) => reg.region_id === Number(char2))
+      yesMreg = region?.region_id ?? yesMreg
+    }
+    if (char1 === '3') {
+      yesH = true
+      const region = regions!.find((reg) => reg.region_id === Number(char2))
+      yesHreg = region?.region_id ?? yesHreg
+    }
+    if (char1 === '4') {
+      yesS = true
+      const region = regions!.find((reg) => reg.region_id === Number(char2))
+      yesSreg = region?.region_id ?? yesSreg
+    }
+    if (char1 === '5') {
+      yesD = true
+      const duty = dutyMap!.find((d) => d.id === char2)
+      yesDuty = duty?.id ?? yesDuty
+      }
+    }
+
+	let pageName = 'Update User'
 
 	export let form: ActionData
 </script>
@@ -23,30 +65,26 @@
 
 <div class="grid">
 	<div class="rei">
-		<p>Register to Startswith</p>
+		<p>Update Startswith's User Data</p>
 	</div>
 	<br />
 	<form action="?/user" method="post" use:enhance>
 		<div>
 			<label for="name">Name</label>
-			<input type="text" name="name" id="name" required />
+			<input type="text" name="name" id="name" value={user?.user_name} required />
 		</div>
 		<div>
 			<label for="nationality">Nationality</label>
-			<input type="text" name="nationality" id="nationality" required />
+			<input type="text" name="nationality" id="nationality" value={user?.nationality} required />
 		</div>
 		<div>
 			<label for="phone">Phone</label>
-			<input type="text" name="phone" id="phone" required />
-		</div>
-		<div>
-			<label for="email">Email</label>
-			<input type="text" name="email" id="email" required />
+			<input type="text" name="phone" id="phone" value={user?.user_phone} required />
 		</div>
 		<div class="second">
 			<input type="checkbox" name="basic" bind:checked={yesB} />
 			BASIC
-			<select name="regB" id="sel-B" class="hidden-textbox">
+			<select bind:value={yesBreg} name="regB" id="sel-B" class="hidden-textbox">
 				{#each regionsArray as regio}
 					<option value={regio.region_id}>{regio.region_name}</option>
 				{/each}
@@ -55,7 +93,7 @@
 		<div>
 			<input type="checkbox" name="medior" bind:checked={yesM} />
 			MEDIOR
-			<select name="regM" id="sel-M" class="hidden-textbox">
+			<select bind:value={yesMreg} name="regM" id="sel-M" class="hidden-textbox">
 				{#each regionsArray as regio}
 					<option value={regio.region_id}>{regio.region_name}</option>
 				{/each}
@@ -64,7 +102,7 @@
 		<div>
 			<input type="checkbox" name="high" bind:checked={yesH} />
 			HIGH
-			<select name="regH" id="sel-H" class="hidden-textbox">
+			<select bind:value={yesHreg} name="regH" id="sel-H" class="hidden-textbox">
 				{#each regionsArray as regio}
 					<option value={regio.region_id}>{regio.region_name}</option>
 				{/each}
@@ -73,7 +111,7 @@
 		<div>
 			<input type="checkbox" name="superior" bind:checked={yesS} />
 			SUPERIOR
-			<select name="regS" id="sel-S" class="hidden-textbox">
+			<select bind:value={yesSreg} name="regS" id="sel-S" class="hidden-textbox">
 				{#each regionsArray as regio}
 					<option value={regio.region_id}>{regio.region_name}</option>
 				{/each}
@@ -82,7 +120,7 @@
 		<div class="dir">
 			<input type="checkbox" name="director" bind:checked={yesD} />
 			DIRECTOR
-			<select name="regD" id="sel-D" class="hidden-textbox">
+			<select bind:value={yesDuty} name="regD" id="sel-D" class="hidden-textbox">
 				{#each dutyMap as item, index (item.id)}
 					<option value={item.id}>{item.name}</option>
 				{/each}
@@ -105,15 +143,15 @@
 			<p class="error">Confirm password.</p>
 		{/if}
 
+		{#if form?.regions}
+			<p class="error">One duty must be choosen.</p>
+		{/if}
+
 		{#if form?.passw}
 			<p class="error">The password must be at least 8 characters long,
 				and must include at least one lowercase and uppercase letter,
 				at least one numeric digit and at least one special character
 				(such as !, @, #, $, %, ^, &, *).</p>
-		{/if}
-
-		{#if form?.regions}
-			<p class="error">One duty must be choosen.</p>
 		{/if}
 
 		<button class="btn" id="btn" type="submit">Register</button>

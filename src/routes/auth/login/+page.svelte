@@ -40,6 +40,15 @@
       Login
     </button>
   </form>
+  <form action="?/forgot" method="POST">
+    <button
+      class="contrast outline cgb h44 btn-outline"
+      id="btn"
+      type="submit"
+      >
+      Forgot Password?
+    </button>
+  </form>
 </div>
 
 <style>
@@ -53,6 +62,11 @@
   .w {
     width: 25%;
   }
+
+  .h44 {
+		color: #83918f;
+		border-color: #83918f;
+	}
 
   input {
 		border-top-left-radius: 100px;
@@ -79,6 +93,19 @@
 
 	.btn:hover {
 		background-color: #11a58c;
+	}
+
+  .btn-outline {
+		border-top-left-radius: 100px;
+    border-top-right-radius: 100px;
+		border-bottom-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+		width: 25%;
+    border-color: #32bea6;
+	}
+
+	.btn-outline:hover {
+		border-color: #6c7776;
 	}
 
   .error {

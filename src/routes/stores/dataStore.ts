@@ -60,6 +60,14 @@ export function formatDate(date: Date) {
 	return formatter.format(date)
 }
 
+export function isStrongPassword(password: string): boolean {
+  if (password.length < 8 || !password.match(/([A-Z]|[a-z]|[0-9]|[-_+!@#$%^&*(){}[\]:;",.<>?])+/)) {
+		return false
+	}
+
+  return true
+}
+
 export const schType = [
 	'ÁLTALÁNOS ISKOLA',
 	'GIMNÁZIUM',

@@ -2,25 +2,34 @@ import { fail, redirect } from '@sveltejs/kit'
 import type { Action, Actions, PageServerLoad } from './$types'
 import bcrypt from 'bcrypt'
 import { db } from '$lib/database'
-import { dutyType, isStrongPassword } from '../../stores/dataStore'
+import { dutyType } from '../../stores/dataStore'
+
+let userEmail: string
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (locals.user) {
-		throw redirect(302, '/lists/activities')
+	if (!locals.user) {
+		throw redirect(302, '/auth/login')
 	}
 
+  userEmail = locals.user.email
+
 	const regions = await db.region.findMany({
+    select: { region_id: true, region_name: true},
 		orderBy: { region_name: 'asc' }
 	})
 
-	if (!regions) {
+  const user = await db.user.findUnique({
+    where: {user_email: userEmail}
+  })
+
+	if (!regions || !user) {
 		return fail(400, {
 			error: true,
 			message: 'Something went wrong. Please try it later.'
 		})
 	}
 
-	return { regions }
+	return { regions, user }
 }
 
 const user: Action = async ({ request }) => {
@@ -99,10 +108,6 @@ const user: Action = async ({ request }) => {
 		return fail(400, { invalid: true })
 	}
 
-	if (!isStrongPassword(password1)) {
-		return fail(400, { passw: true })
-	}
-
 	const user = await db.user.findUnique({
 		where: { user_email }
 	})
@@ -111,12 +116,12 @@ const user: Action = async ({ request }) => {
 		return fail(400, { user: true })
 	}
 
-	await db.user.create({
+	await db.user.update({
+    where: { user_email: userEmail},
 		data: {
 			user_name,
 			nationality,
 			user_phone,
-			user_email,
 			on_duty,
 			passwordHash: await bcrypt.hash(password1, 10),
 			userAuthToken: crypto.randomUUID(),
