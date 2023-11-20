@@ -5,16 +5,17 @@ export async function POST({ request, locals }) {
   if (!locals.user) {
     throw redirect(302, '/auth/login')
   }
-  
+
 	const requestBody = await request.text()
 	const formData = JSON.parse(requestBody)
-	const { selectedYear, selectedSemester, selectedDuty, selectedCountry, selectedRegion } = formData
-	console.log('selY ' + selectedYear)
-	console.log('selS ' + selectedSemester)
-	console.log('selD ' + selectedDuty)
-	console.log('selC ' + selectedCountry)
-	console.log('selR ' + selectedRegion)
-
+	const {
+    selectedYear,
+    selectedSemester,
+    selectedDuty,
+    selectedCountry,
+    selectedRegion
+  } = formData
+	
 	if (
 		selectedYear == null &&
 		selectedSemester != 'ALL' &&

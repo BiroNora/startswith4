@@ -8,6 +8,7 @@ export async function load({ locals }) {
 	if (!locals.user) {
     throw redirect(302, '/auth/login')
   }
+	
 	const activities = await db.activity.findMany({
 		where: {
 			end_date: {

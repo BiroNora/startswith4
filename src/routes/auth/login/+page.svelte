@@ -40,15 +40,13 @@
       Login
     </button>
   </form>
-  <form action="?/forgot" method="POST">
-    <button
-      class="contrast outline cgb h44 btn-outline"
-      id="btn"
-      type="submit"
-      >
-      Forgot Password?
-    </button>
-  </form>
+  <a
+    href="../auth/forgot_password"
+    role="button"
+    class="cgb h44 btn-outline secondary outline"
+    >
+    Forgot Password?
+  </a>
 </div>
 
 <style>
