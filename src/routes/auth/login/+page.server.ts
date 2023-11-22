@@ -33,7 +33,10 @@ const login: Action = async ({ cookies, request }) => {
 	// generate new auth token just in case
 	const authenticatedUser = await db.user.update({
 		where: { user_email: user.user_email },
-		data: { userAuthToken: crypto.randomUUID() }
+		data: {
+			userAuthToken: crypto.randomUUID(),
+			resetToken: ''
+		 },
 	})
 
 	cookies.set('session', authenticatedUser.userAuthToken, {

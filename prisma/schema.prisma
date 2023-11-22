@@ -58,21 +58,23 @@ model Contact {
 }
 
 model User {
-  user_id       String    @id @default(uuid())
-  user_name     String
-  nationality   String
-  user_phone    String
-  user_email    String    @unique
-  on_duty       Int[]
-  passwordHash  String
-  userAuthToken String    @unique
-  createdAt     DateTime  @default(now()) @db.Timestamptz(3)
-  updatedAt     DateTime  @updatedAt @db.Timestamptz(3)
-  active        Boolean
-  active_by     String
-  Contact       Contact[]
-  Event         Event[]
-  School        School[]
+  user_id          String    @id @default(uuid())
+  user_name        String
+  nationality      String
+  user_phone       String
+  user_email       String    @unique
+  on_duty          Int[]
+  passwordHash     String
+  userAuthToken    String    @unique
+  resetToken       String? // Nullable, as it might not be set
+  resetTokenExpiry DateTime? // Nullable, as it might not be set
+  createdAt        DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt        DateTime  @updatedAt @db.Timestamptz(3)
+  active           Boolean
+  active_by        String
+  Contact          Contact[]
+  Event            Event[]
+  School           School[]
 
   @@map("users")
 }
