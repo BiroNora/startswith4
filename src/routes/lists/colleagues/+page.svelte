@@ -4,6 +4,7 @@
 
 	let pageName = 'Colleagues'
   let region: string | undefined
+  let matchingItemCount: number
 
 	export let data
 
@@ -43,12 +44,11 @@
       const lengthElement = document.getElementById("length")
       const itemCountElement = document.getElementById("itemCount") // Get the itemCount element
 
-      let matchingItemCount = 0
+      matchingItemCount = 0
 
       // Loop through all list items
       for (let i = 0; i < items.length; i++) {
         const text = items[i].textContent?.toLowerCase() || ""
-        console.log(text)
         if (text.indexOf(filter) > -1 || filter == "") {
           items[i].style.display = ""
           matchingItemCount++
@@ -57,13 +57,14 @@
         }
       }
       // Update the length element with the matching item count
-      lengthElement!.textContent = matchingItemCount.toString()
+      if (lengthElement) {
+        lengthElement.textContent = matchingItemCount.toString()
+      }
 
       if (filter == "") {
         itemCountElement!.style.display = "none" // Hide the itemCount element
       } else {
         itemCountElement!.style.display = "block" // Show the itemCount element
-        console.log(itemCountElement?.childElementCount)
       }
     }
 
@@ -104,9 +105,18 @@
     </button>
   </div>
 
-	<div id="itemCount" class="z" style="display: none;" >
-		<span id="length" ></span>
-		&nbsp; Colleagues
+  <div id="itemCount" class="z" style="display: none;" >
+    {#if matchingItemCount === 0}
+      &nbsp; No Result
+    {/if}
+    {#if matchingItemCount === 1}
+		  <span id="length" >{matchingItemCount}</span>
+      &nbsp; Colleague
+    {/if}
+    {#if matchingItemCount > 1}
+      <span id="length" >{matchingItemCount}</span>
+		  &nbsp; Colleagues
+    {/if}
 	</div>
 	<br>
   <ul id="list">

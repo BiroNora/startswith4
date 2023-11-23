@@ -15,7 +15,7 @@
         <a href="/register/location" target="_blank">Location_R</a>
       </li>
       <li>
-        <a href="/register/user_update" target="_blank">User Data</a>
+        <a href="/register/user_update" target="_blank">User_Data</a>
       </li>
       <li>
         <a href="/tables/chart_table" target="_blank">Chart_Table</a>
