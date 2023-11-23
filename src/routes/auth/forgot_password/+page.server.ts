@@ -46,14 +46,16 @@ const forgot: Action = async ({ request }) => {
     },
   })
 
-  await transporter.sendMail({
+  const is_sent = await transporter.sendMail({
     from: 'sfjproba27@gmail.com',
     to: userEmail,
     subject: 'Password Reset',
     text: `Click the following link to reset your password: ${resetLink}`,
   })
 
-  throw redirect(302, '/auth/check')
+  if (is_sent) {
+    return { sent: true}
+  }
 }
 
 export const actions: Actions = { forgot }

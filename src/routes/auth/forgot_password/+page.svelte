@@ -14,14 +14,11 @@
   <h1>Forgot Password</h1>
 
   <form action="?/forgot" method="POST">
+    {#if !form?.sent}
     <div class="w">
       <label for="email">Enter your email</label>
       <input id="email" name="email" type="email" required />
     </div>
-
-    {#if form?.credentials}
-      <p class="error">Wrong credential.</p>
-    {/if}
 
     <button
       class="btn"
@@ -30,6 +27,15 @@
       >
       Send Request
     </button>
+    {/if}
+
+    {#if form?.credentials}
+      <p class="error">Wrong credential.</p>
+    {/if}
+
+    {#if form?.sent}
+      <h1 >Please, check your emailbox.</h1>
+    {/if}
   </form>
 </div>
 
