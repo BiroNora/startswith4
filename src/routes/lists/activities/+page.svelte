@@ -1,8 +1,13 @@
 <script lang="ts">
+	import { onMount } from 'svelte'
 	import { dateSlugify, dutyMap } from '../../stores/dataStore.js'
 	import type { ActionData } from './$types'
 
 	let pageName = 'Activity List'
+	let matchingItemCount: number
+
+	export let data
+	export let form: ActionData
 
 	function scrollToConnect() {
 		window.scrollTo({
@@ -10,8 +15,55 @@
 		})
 	}
 
-	export let data
-	export let form: ActionData
+	// Search
+	onMount(() => {
+    // Define a function to handle the search
+    function handleSearch() {
+      const input = document.getElementById("searchInput") as HTMLInputElement
+      const list = document.getElementById("list") as HTMLUListElement
+      const filter = input.value.toLowerCase()
+      const items = list.getElementsByTagName("li")
+      const lengthElement = document.getElementById("length")
+      const itemCountElement = document.getElementById("itemCount") // Get the itemCount element
+
+      matchingItemCount = 0
+
+      // Loop through all list items
+      for (let i = 0; i < items.length; i++) {
+        const text = items[i].textContent?.toLowerCase() || ""
+        if (text.indexOf(filter) > -1 || filter == "") {
+          items[i].style.display = ""
+          matchingItemCount++
+        } else {
+          items[i].style.display = "none"
+        }
+      }
+      // Update the length element with the matching item count
+      if (lengthElement) {
+        lengthElement.textContent = matchingItemCount.toString()
+      }
+
+      if (filter == "") {
+        itemCountElement!.style.display = "none" // Hide the itemCount element
+      } else {
+        itemCountElement!.style.display = "block" // Show the itemCount element
+      }
+    }
+
+    function clearInput() {
+      let input = document.getElementById("searchInput") as HTMLInputElement
+      input.value = ''
+      handleSearch()
+    }
+
+    // Add an event listener to the input element
+    const input = document.getElementById("searchInput") as HTMLInputElement
+    input.addEventListener("input", handleSearch)
+
+    // Attach the clearInput function to the delete button
+    const deleteButton = document.querySelector(".clear-button")
+    deleteButton!.addEventListener("click", clearInput)
+  })
 </script>
 
 <svelte:head>
@@ -31,7 +83,37 @@
       &nbsp; &nbsp;
     </hgroup>
     <br />
-    <ul>
+
+		<div class="input-container">
+			<input
+				type="search"
+				id="searchInput"
+				placeholder="Search for items..."
+			>
+			<button
+				type="button"
+				class="clear-button secondary outline"
+			>
+				&#10007;
+			</button>
+		</div>
+
+		<div id="itemCount" class="z" style="display: none;" >
+			{#if matchingItemCount === 0}
+				&nbsp; No Result
+			{/if}
+			{#if matchingItemCount === 1}
+				<span id="length" >{matchingItemCount}</span>
+				&nbsp; Activity
+			{/if}
+			{#if matchingItemCount > 1}
+				<span id="length" >{matchingItemCount}</span>
+				&nbsp; Activities
+			{/if}
+		</div>
+		<br>
+
+    <ul id="list">
       {#each data.activities as act}
 			<li class="li">
 				<a href="../lists/activities/{act.act_id}" class="ab">
@@ -41,6 +123,11 @@
 					&#10087
 					{act.act_note}
 					{' 🏠 '}
+					{#each dutyMap as item, index (item.id)}
+						{#if act.on_duty === item.id}
+							{item.name}:
+						{/if}
+					{/each}
 					{#each data.regio as reg}
 						{#if act.region_id == reg.region_id}
 							{reg.region_name}
@@ -174,6 +261,13 @@
 		border-color: #83918f;
 	}
 
+	.z {
+    color: rgb(144, 132, 132);
+    font-size: medium;
+    font-weight: 400;
+    font-style: italic;
+  }
+
 	label {
 		padding: 6px;
 	}
@@ -227,6 +321,24 @@
 		color: #83918f;
 		border-color: #83918f;
 	}
+
+	.input-container {
+  	position: relative;
+  }
+
+  .clear-button {
+    position: absolute;
+    width: auto;
+    top: 35%;
+    right: 38px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 1.2rem;
+    color: #32bea6;
+  }
 
 	.error {
 		color: tomato;
