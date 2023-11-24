@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
 	import type { ActionData } from './$types'
-	import { dutyMap3, eventMap, formatDate } from '../../../stores/dataStore.js'
+	import { dutyMap, eventMap, formatDate } from '../../../stores/dataStore.js'
 
 	let pageName = 'My School Details'
 
@@ -142,7 +142,8 @@
 			<hgroup>
 				<h6>{data.school.zip_code} {data.city?.city_name} {data.school.address}</h6>
 				<p>
-					{data.country?.country_name} / {data.region?.region_name} régió / {data.county?.county_name}
+					{data.country?.country_name} / {data.region?.region_name} régió / {data.county
+						?.county_name}
 					megye
 				</p>
 				<a href="#section_event" class="aa"> &#9758; Esemény hozzáadása </a> &nbsp; &nbsp;
@@ -191,20 +192,19 @@
 			</ul>
 		</hgroup>
 		<br />
-		<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
+		<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a
+		>
 	</div>
 
 	<!-- Event form -->
 
-	<div class="grid element-to-position" id="section_event" >
+	<div class="grid element-to-position" id="section_event">
 		<div class="rei">
 			<p>Event Register</p>
 		</div>
 		<form action="?/event" method="post" use:enhance>
 			<div>
-				<label for="fantasy">
-					Event Name *
-				</label>
+				<label for="fantasy"> Event Name * </label>
 				<input
 					type="text"
 					name="fantasy"
@@ -229,7 +229,7 @@
 			<div>
 				<label for="duty">On Duty</label>
 				<select name="duty" id="duty" class="hidden-textbox">
-					{#each dutyMap3 as item, index (item.id)}
+					{#each dutyMap as item, index (item.id)}
 						<option value={item.id}>{item.name}</option>
 					{/each}
 				</select>
@@ -248,7 +248,7 @@
 				<input type="number" name="estimate" id="estimate" required />
 			</div>
 			<label for="message">Note</label>
-				<textarea id="message" name="message" rows="2" cols="50" />
+			<textarea id="message" name="message" rows="2" cols="50" />
 
 			{#if form?.inactsu}
 				<p class="error">Something went wrong.</p>
@@ -283,7 +283,7 @@
 		<div class="rei">
 			<p class="h43">Contact Register</p>
 		</div>
-  	<br>
+		<br />
 		<form action="?/contact" method="post" use:enhance>
 			<div>
 				<label for="name">Name</label>
@@ -297,9 +297,9 @@
 				<label for="phone">Phone</label>
 				<input type="text" name="contactphone" id="contactphone" required />
 			</div>
-			<br>
-				<label for="message">Note</label>
-				<textarea id="message" name="contactmessage" rows="2" cols="50"></textarea>
+			<br />
+			<label for="message">Note</label>
+			<textarea id="message" name="contactmessage" rows="2" cols="50" />
 
 			{#if form?.contact}
 				<p class="error">Contact already exists.</p>
@@ -326,7 +326,7 @@
 		<div class="rei">
 			<p>School Update</p>
 		</div>
-		<br>
+		<br />
 		<form action="?/school" method="post" use:enhance>
 			<div>
 				<label for="name">School Name</label>

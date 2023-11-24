@@ -1,7 +1,7 @@
 import { channelMap, gradeMap, statusMap } from './../../../stores/dataStore'
 import { error, redirect } from '@sveltejs/kit'
 import { db } from '$lib/database'
-import { dutyMap3, eventMap } from '../../../stores/dataStore'
+import { dutyMap, eventMap } from '../../../stores/dataStore'
 
 let extrType = ''
 let extrDuty = ''
@@ -18,9 +18,9 @@ let cldate = ''
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function load({ params, locals }) {
 	if (!locals.user) {
-    throw redirect(302, '/auth/login')
-  }
-	
+		throw redirect(302, '/auth/login')
+	}
+
 	ev_id = Number(params.event_id)
 
 	const event = await db.event.findUnique({
@@ -35,7 +35,7 @@ export async function load({ params, locals }) {
 	if (event) {
 		extrDuty = event.on_duty
 		extrType = event.event_type
-		for (const dM of dutyMap3) {
+		for (const dM of dutyMap) {
 			if (extrDuty == dM.id) {
 				extrDuty = dM.name
 			}

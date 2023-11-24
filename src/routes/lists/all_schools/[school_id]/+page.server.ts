@@ -1,6 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit'
 import { db } from '$lib/database.js'
-import { eventMap, dutyMap3, schType, duType } from '../../../stores/dataStore.js'
+import { eventMap, dutyMap, schType, duType } from '../../../stores/dataStore.js'
 import type { Action, Actions } from './$types'
 
 let extrType = ''
@@ -9,8 +9,8 @@ let sc_id: number
 
 export async function load({ params, locals }) {
 	if (!locals.user) {
-    throw redirect(302, '/auth/login')
-  }
+		throw redirect(302, '/auth/login')
+	}
 
 	sc_id = Number(params.school_id)
 
@@ -60,7 +60,7 @@ export async function load({ params, locals }) {
 		for (const obj of event) {
 			extrDuty = obj.on_duty
 			extrType = obj.event_type
-			for (const dM of dutyMap3) {
+			for (const dM of dutyMap) {
 				if (extrDuty == dM.id) {
 					extrDuty = dM.name
 				}

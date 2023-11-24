@@ -34,6 +34,7 @@
   	return result.join(', ')
 	}
 
+  // Search
 	onMount(() => {
     // Define a function to handle the search
     function handleSearch() {

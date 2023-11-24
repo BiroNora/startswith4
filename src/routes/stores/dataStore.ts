@@ -61,11 +61,11 @@ export function formatDate(date: Date) {
 }
 
 export function isStrongPassword(password: string): boolean {
-  if (password.length < 8 || !password.match(/([A-Z]|[a-z]|[0-9]|[-_+!@#$%^&*(){}[\]:;",.<>?])+/)) {
+	if (password.length < 8 || !password.match(/([A-Z]|[a-z]|[0-9]|[-_+!@#$%^&*(){}[\]:;",.<>?])+/)) {
 		return false
 	}
 
-  return true
+	return true
 }
 
 export const schType = [
@@ -153,11 +153,6 @@ export const statusType = [
 // For director's duty
 export const dutyMap = [
 	{ id: '1', name: 'BASIC' },
-	{ id: '2', name: 'MEDIOR-HIGH' }
-]
-
-export const dutyMap3 = [
-	{ id: '1', name: 'BASIC' },
 	{ id: '2', name: 'MEDIOR' },
 	{ id: '3', name: 'HIGH' }
 ]
@@ -203,5 +198,5 @@ export const subjectMap = [
 	{ id: '11', name: 'SOCIETY' },
 	{ id: '12', name: 'SPORT' },
 	{ id: '13', name: 'TECHNOLOGY' },
-	{ id: '14', name: 'ELSE*' },
+	{ id: '14', name: 'ELSE*' }
 ]

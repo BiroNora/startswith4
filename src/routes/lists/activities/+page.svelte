@@ -31,7 +31,6 @@
       &nbsp; &nbsp;
     </hgroup>
     <br />
-
     <ul>
       {#each data.activities as act}
 			<li class="li">

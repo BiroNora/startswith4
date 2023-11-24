@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms'
 	import {
 		channelMap,
-		dutyMap3,
+		dutyMap,
 		eventMap,
 		formatDate,
 		gradeMap,
@@ -21,8 +21,8 @@
 	let selectedIntrestId = 0
 
 	function toggleIsInput() {
-    isInput = !isInput
-  }
+		isInput = !isInput
+	}
 
 	function scrollToConnect() {
 		window.scrollTo({
@@ -47,15 +47,15 @@
 		return inters.reduce((total, inter) => total + (inter.intrest_count || 0), 0)
 	}
 
-  // Function to set the itemNumber
-  function setItemNumber(index: number) {
-    itemNumber = index + 1
-  }
+	// Function to set the itemNumber
+	function setItemNumber(index: number) {
+		itemNumber = index + 1
+	}
 
-  // Function to set the selected intrest_id
-  function setSelectedIntrestId(intrest_id: number) {
-    selectedIntrestId = intrest_id;
-  }
+	// Function to set the selected intrest_id
+	function setSelectedIntrestId(intrest_id: number) {
+		selectedIntrestId = intrest_id
+	}
 
 	export let data
 	export let form: ActionData
@@ -66,16 +66,15 @@
 </svelte:head>
 
 <div id="top" class="main">
-	<h1> Event Details &nbsp;&nbsp;&nbsp;&nbsp;
+	<h1>
+		Event Details &nbsp;&nbsp;&nbsp;&nbsp;
 		<a
 			href="#section4_event"
 			role="button"
 			class="secondary outline ag h44 w"
 			on:click={() => (showEventModal = true)}
 		>
-			<strong	class="error1">
-				&nbsp;&#10008;
-			</strong>
+			<strong class="error1"> &nbsp;&#10008; </strong>
 			&nbsp; Esemény törlése* &nbsp;
 		</a>
 	</h1>
@@ -86,24 +85,23 @@
 		<form action="?/delUser" method="post" use:enhance>
 			<article>
 				<h3>Az esemény adatai véglegesen törlődnek.</h3>
-				<strong	class="g">
-						&nbsp;* esemény abban az esetben törölhető, ha nincs hozzárendelt érdeklődő diák, illetve, ha az eseménynek egy gazdája van
+				<strong class="g">
+					&nbsp;* esemény abban az esetben törölhető, ha nincs hozzárendelt érdeklődő diák, illetve,
+					ha az eseménynek egy gazdája van
 				</strong>
 				{#if form?.intern}
 					<p class="ah">&nbsp; Az eseményt nem lehet törölni.</p>
 				{/if}
 				<footer>
-					<button
-						type="submit"
-						class="secondary w z cc"
-						data-target="modal-example">
+					<button type="submit" class="secondary w z cc" data-target="modal-example">
 						Confirm
 					</button>
 					<button
 						type="button"
 						class="secondary outline h44 w z"
 						data-target="modal-example"
-						on:click={() => (showEventModal = false)}>
+						on:click={() => (showEventModal = false)}
+					>
 						Cancel
 					</button>
 				</footer>
@@ -117,14 +115,12 @@
 			<a href="#section_interested" class="aa"> &#9758; Érdeklődő diákok hozzáadása </a>
 		</hgroup>
 		<br />
-		<h4 class="h41"> Adatok </h4>
+		<h4 class="h41">Adatok</h4>
 		<a href="#section_event" class="ad"> &#9758; Esemény adatainak módosítása </a>
 		<a href="#section2_event" class="ae"> &#9758; Startswith kapcsolat hozzáadása </a>
 		<a href="#section3_event" class="af">
-			<strong class="error1">
-				&#10008;
-			</strong>
-			&nbsp;  Startswith kapcsolat törlése
+			<strong class="error1"> &#10008; </strong>
+			&nbsp; Startswith kapcsolat törlése
 		</a>
 		<ul class="ab">
 			<li class="lb">
@@ -146,21 +142,28 @@
 					</li>
 				</ul>
 			</hgroup>
-			<li class="lb">Érdeklődők,&emsp;<p class="z"> összesen {add(data.inters)} diák </p><strong class="st">(a rögzítés sorrendjében, legfelül a legutoljára rögzített) </strong>:</li>
+			<li class="lb">
+				Érdeklődők,&emsp;
+				<p class="z">összesen {add(data.inters)} diák</p>
+				<strong class="st">(a rögzítés sorrendjében, legfelül a legutoljára rögzített) </strong>:
+			</li>
 			<hgroup>
 				{#each data.inters as ints, index}
 					<ul class="ac">
 						<p class="lc">
-							<input type="hidden" name="int_id" value={ints.intrest_id}>
-							<a href="#inter"
+							<input type="hidden" name="int_id" value={ints.intrest_id} />
+							<a
+								href="#inter"
 								class="aa"
 								on:click={() => {
 									setItemNumber(index)
 									setSelectedIntrestId(ints.intrest_id)
 									showIntrestModal = true
-								}}>
-								{index+1}. adat törlése
-							</a></p>
+								}}
+							>
+								{index + 1}. adat törlése
+							</a>
+						</p>
 						<li class="lb">
 							Diákok száma: {ints.intrest_count}
 						</li>
@@ -178,7 +181,7 @@
 						<li class="lb">Csatorna, ahonnan értesült a programról: {ints.channel}</li>
 						{#if ints.applied == true}
 							{#each subjectMap as subject (subject.id)}
-								{#if (ints.work_title == subject.id)}
+								{#if ints.work_title == subject.id}
 									<li class="lb">Jelentkezési téma: {subject.name}</li>
 								{/if}
 							{/each}
@@ -194,36 +197,32 @@
 			<!-- Interested delete modal -->
 
 			{#if showIntrestModal}
-			<form action="?/delInterest" method="post" use:enhance id="inter">
-				<article>
-					<h3>A(z) {itemNumber}. adat véglegesen törlődik.</h3>
-					{#if form?.interest}
-						<p class="ah">&nbsp; Az adatot nem lehet törölni.</p>
-					{/if}
-					<input type="hidden" name="int_id" value={selectedIntrestId}>
-					<footer>
-						<button
-							type="submit"
-							class="secondary w z cc"
-							data-target="modal-example">
-							Confirm
-						</button>
-						<button
-							type="button"
-							class="secondary outline h44 w z"
-							data-target="modal-example"
-							on:click={() => (showIntrestModal = false, scrollToConnect())}>
-							Cancel
-						</button>
-					</footer>
-				</article>
-			</form>
+				<form action="?/delInterest" method="post" use:enhance id="inter">
+					<article>
+						<h3>A(z) {itemNumber}. adat véglegesen törlődik.</h3>
+						{#if form?.interest}
+							<p class="ah">&nbsp; Az adatot nem lehet törölni.</p>
+						{/if}
+						<input type="hidden" name="int_id" value={selectedIntrestId} />
+						<footer>
+							<button type="submit" class="secondary w z cc" data-target="modal-example">
+								Confirm
+							</button>
+							<button
+								type="button"
+								class="secondary outline h44 w z"
+								data-target="modal-example"
+								on:click={() => ((showIntrestModal = false), scrollToConnect())}
+							>
+								Cancel
+							</button>
+						</footer>
+					</article>
+				</form>
 			{/if}
-
 		</ul>
-		<a href="#top" class="flower"
-				>&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a
-			>
+		<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a
+		>
 	</hgroup>
 
 	<!-- Interested students adding form -->
@@ -241,7 +240,9 @@
 				<label for="country">Country</label>
 				<select name="country" id="country">
 					{#each data.countries as country}
-						<option value={country.country_id} selected={country.country_id === data.schoolCountry}>{country.country_name}</option>
+						<option value={country.country_id} selected={country.country_id === data.schoolCountry}
+							>{country.country_name}</option
+						>
 					{/each}
 				</select>
 			</div>
@@ -257,7 +258,9 @@
 				<label for="connect">Connected by / Region</label>
 				<select name="connect" id="connect">
 					{#each data.regions as region}
-						<option value={region.region_id} selected={region.region_id === data.schoolRegion}>{region.region_name}</option>
+						<option value={region.region_id} selected={region.region_id === data.schoolRegion}
+							>{region.region_name}</option
+						>
 					{/each}
 				</select>
 			</div>
@@ -301,7 +304,6 @@
 		</form>
 	</div>
 
-
 	<!-- Event update form -->
 
 	<div class="grid event-to-position" id="section_event">
@@ -336,7 +338,7 @@
 			<div>
 				<label for="duty">On Duty</label>
 				<select bind:value={data.onduty} name="duty" id="duty" class="hidden-textbox">
-					{#each dutyMap3 as du (du.id)}
+					{#each dutyMap as du (du.id)}
 						<option value={du.id}>{du.name} </option>
 					{/each}
 				</select>
@@ -384,8 +386,7 @@
 		</div>
 		<p class="uni">{data.event.event_name}</p>
 		<form action="?/eventU" method="post" use:enhance>
-			<div>
-			</div>
+			<div />
 			<div>
 				<label for="email">Email</label>
 				<input type="text" name="email" id="email" required />
@@ -431,12 +432,15 @@
 				type="button"
 				on:click={scrollToConnect}
 				id="backToTop"
-				class="contrast outline cgb h44">Cancel &#10070; Jump to the Top
+				class="contrast outline cgb h44"
+				>Cancel &#10070; Jump to the Top
 			</button>
 		</form>
 	</div>
 	<div>
-		<a href="#top" class="flower grid event4-to-position">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
+		<a href="#top" class="flower grid event4-to-position"
+			>&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a
+		>
 	</div>
 </div>
 
@@ -519,11 +523,11 @@
 	}
 
 	.z {
-    color: rgb(144, 132, 132);
-    font-size: medium;
-    font-weight: 400;
-    font-style: italic;
-  }
+		color: rgb(144, 132, 132);
+		font-size: medium;
+		font-weight: 400;
+		font-style: italic;
+	}
 
 	.la {
 		list-style-type: none;
@@ -654,40 +658,40 @@
 	}
 
 	.error {
-    color: tomato;
-    padding: 2%;
-    text-align: center;
-    font-style: italic;
-    line-height: 95%;
-    font-weight: 500;
-  }
+		color: tomato;
+		padding: 2%;
+		text-align: center;
+		font-style: italic;
+		line-height: 95%;
+		font-weight: 500;
+	}
 
 	.error1 {
-    color: tomato;
-    text-align: center;
-    font-style: italic;
-    line-height: 95%;
-    font-weight: 500;
-  }
+		color: tomato;
+		text-align: center;
+		font-style: italic;
+		line-height: 95%;
+		font-weight: 500;
+	}
 
 	.success {
-    color: #32bea6;
-    padding: 2%;
-    text-align: center;
-    font-style: italic;
-    line-height: 95%;
-    font-weight: 500;
-  }
+		color: #32bea6;
+		padding: 2%;
+		text-align: center;
+		font-style: italic;
+		line-height: 95%;
+		font-weight: 500;
+	}
 
 	.cc {
-    background-color: #32bea6;
-    border: 1em solide #32bea6;
+		background-color: #32bea6;
+		border: 1em solide #32bea6;
 		color: white;
-  }
+	}
 
-  .cc:hover {
-    background-color: #0ba38a;
-  }
+	.cc:hover {
+		background-color: #0ba38a;
+	}
 	article::backdrop {
 		background: rgba(0, 0, 0, 0.3);
 	}

@@ -1,14 +1,14 @@
 import { error, redirect } from '@sveltejs/kit'
 import type { PageServerLoad } from './$types'
 import { db } from '$lib/database'
-import { dutyMap3 } from '../../stores/dataStore'
+import { dutyMap } from '../../stores/dataStore'
 
 let extrDuty = ''
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.user) {
-    throw redirect(302, '/auth/login')
-  }
+		throw redirect(302, '/auth/login')
+	}
 	const events = await db.event.findMany({
 		// Todo! user_id comes from cookies
 		orderBy: { closing_date: 'desc' }
@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 			const school_name = String(schools?.school_name)
 			obj.slug = school_name
 
-			for (const dM of dutyMap3) {
+			for (const dM of dutyMap) {
 				if (extrDuty == dM.id) {
 					extrDuty = dM.name
 				}

@@ -9,6 +9,8 @@ export async function load({ locals }) {
     throw redirect(302, '/auth/login')
   }
 
+	const duty = locals.user.duty
+
 	const activities = await db.activity.findMany({
 		where: {
 			end_date: {
@@ -27,7 +29,7 @@ export async function load({ locals }) {
 
 	const city = await db.city.findMany({})
 
-	return { activities, regio, city }
+	return { activities, regio, city, duty }
 }
 
 const activity: Action = async ({ request }) => {
