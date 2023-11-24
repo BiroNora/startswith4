@@ -3,12 +3,12 @@ import { db } from '$lib/database'
 import type { Action, Actions } from './$types'
 
 const today = new Date()
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export async function load({ locals }) {
 	if (!locals.user) {
     throw redirect(302, '/auth/login')
   }
-	
+
 	const activities = await db.activity.findMany({
 		where: {
 			end_date: {
@@ -49,7 +49,7 @@ const activity: Action = async ({ request }) => {
 	throw redirect(303, '../../lists/activities')
 }
 
-  async function delAct() {
+const delAct: Action = async ({ request }) => {
     const data = await request.formData()
     const act_id = Number(data.get('actid'))
     console.log(act_id)
