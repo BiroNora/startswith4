@@ -36,6 +36,7 @@ const activity: Action = async ({ request }) => {
 	const data = await request.formData()
 	const act_name = String(data.get('fantasy'))
 	const clos_date = data.get('meeting-time')
+	const on_duty = String(data.get('duty'))
 	const region_id = Number(data.get('region'))
 	const act_note = String(data.get('message'))
 	const end_date = new Date(String(clos_date))
@@ -45,6 +46,7 @@ const activity: Action = async ({ request }) => {
 			end_date,
 			act_name,
 			act_note,
+			on_duty,
 			region_id
 		}
 	})

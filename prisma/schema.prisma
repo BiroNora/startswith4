@@ -123,6 +123,7 @@ model Activity {
   end_date   DateTime @db.Timestamptz(3)
   act_name   String
   act_note   String?
+  on_duty    String
   region_id  Int
   region     Region   @relation(fields: [region_id], references: [region_id])
 

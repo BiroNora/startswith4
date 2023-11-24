@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { dateSlugify } from '../../stores/dataStore.js'
+	import { dateSlugify, dutyMap } from '../../stores/dataStore.js'
 	import type { ActionData } from './$types'
 
 	let pageName = 'Activity List'
@@ -43,7 +43,7 @@
 					{' 🏠 '}
 					{#each data.regio as reg}
 						{#if act.region_id == reg.region_id}
-						{reg.region_name}
+							{reg.region_name}
 						{/if}
 					{/each}
 				</a>
@@ -86,6 +86,14 @@
 				/>
 			</div>
       <div>
+        <label for="duty">Duty</label>
+        <select name="duty" id="duty" >
+          {#each dutyMap as item, index (item.id)}
+						<option value={item.id}>{item.name}</option>
+					{/each}
+        </select>
+      </div>
+			<div>
         <label for="region">Region</label>
         <select name="region" id="region" >
           {#each data.regio as reg}
