@@ -37,6 +37,7 @@
 					{data.region}
     </a>
   </hgroup>
+
 	<!-- Delete modal -->
 
 	{#if showModal}
@@ -46,13 +47,13 @@
       <footer>
         <button
           type="submit"
-          class="secondary w z cc"
+          class="secondary w z cc i"
           data-target="modal-example">
         Confirm
         </button>
         <button
           type="button"
-          class="secondary outline h44 w z"
+          class="secondary outline h44 w z i"
           data-target="modal-example"
           on:click={() => (showModal = false)}>
           Cancel
@@ -88,6 +89,10 @@
 		color: #83918f;
 		border-color: #83918f;
 	}
+
+  .i {
+    font-style: italic;
+  }
 
 	.w {
 		width: auto;

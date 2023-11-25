@@ -47,6 +47,7 @@
       const region = regions!.find((reg) => reg.region_id === Number(char2))
       yesSreg = region?.region_id ?? yesSreg
     }
+		// If director
     if (char1 === '5') {
       yesD = true
       const duty = dutyMap!.find((d) => d.id === char2)
@@ -148,13 +149,13 @@
 		{/if}
 
 		{#if form?.passw}
-			<p class="error">The password must be at least 8 characters long,
-				and must include at least one lowercase and uppercase letter,
-				at least one numeric digit and at least one special character
+			<p class="error">Password must be at least 8 characters long,
+				must include at least one lowercase and uppercase letter,
+				and at least one numeric digit and at least one special character
 				(such as !, @, #, $, %, ^, &, *).</p>
 		{/if}
 
-		<button class="btn" id="btn" type="submit">Register</button>
+		<button class="btn" id="btn" type="submit">Update</button>
 	</form>
 </div>
 

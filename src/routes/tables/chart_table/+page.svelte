@@ -503,7 +503,7 @@
 				plugins: {
 					title: {
 						display: true,
-						text: 'Interested / Applied Students Are Informed by Which Center',
+						text: 'Interested / Admitted Students Are Informed by Which Center',
 						font: {
 							size: 20
 						}
@@ -522,7 +522,7 @@
 				plugins: {
 					title: {
 						display: true,
-						text: 'Interested / Applied Students Are Informed by Which Channel',
+						text: 'Interested / Admitted Students Are Informed by Which Channel',
 						font: {
 							size: 20
 						}

@@ -19,6 +19,7 @@
 			const duty = dutyType.find((item) => item[0] === char1)
 			const char2 = array[i].charAt(1)
 
+      // If director
       if (char1 == '5') {
         const onDuty = dutyMap.find((item) => item.id === char2)
         region = onDuty ? onDuty.name : 'Unknown'
