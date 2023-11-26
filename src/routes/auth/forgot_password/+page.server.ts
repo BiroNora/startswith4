@@ -37,17 +37,16 @@ const forgot: Action = async ({ request }) => {
   // Send a password reset email with the link containing the resetToken
   const resetLink = `http://localhost:5173/auth/reset-password?${resetToken}`
 
+
+  // Use this transporter for sending emails
   const transporter = nodemailer.createTransport({
-    // Specify your email sending configuration (SMTP server, etc.)
-    service: 'gmail',
-    auth: {
-      user: 'sfjproba27@gmail.com',
-      pass: 'lgsg wdqu tbfx itoz',
-    },
+    host: 'localhost',
+    port: 1025, // The default MailHog SMTP port
+    secure: false, // Use SSL, false for TLS
   })
 
   const is_sent = await transporter.sendMail({
-    from: 'sfjproba27@gmail.com',
+    from: 'startswith@stsw.com',
     to: userEmail,
     subject: 'Password Reset',
     text: `Click the following link to reset your password: ${resetLink}`,
