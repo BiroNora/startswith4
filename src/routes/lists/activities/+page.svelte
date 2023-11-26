@@ -191,7 +191,7 @@
 			{:else}
 				<!-- User !== director && (own director's || director's all_region) messages -->
 				{#if act.dir_flag && (user_duty_array.includes(Number(act.on_duty)) || act.all_region)}
-					<li class="lia">
+				<li class="lia">
 						{dateSlugify(String(act.end_date))}
 						&#9753
 						<strong>{act.act_name}</strong>

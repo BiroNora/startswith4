@@ -16,7 +16,7 @@ export async function load({ locals }) {
 	const user_duty = locals.user.duty
 
 	const dir_num = (locals.user.duty)[4]
-	
+
 	if (dir_num > 50) {
 		dir_duty = String(dir_num % 10) // BAS, MED, HIGH
 	}
