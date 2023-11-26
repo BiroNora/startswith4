@@ -9,21 +9,11 @@
 	export let data
 	export let form: ActionData
 
-	const arr = data.user_duty
+	const user_duty_array = data.user_duty
 		.filter((number: any) => number % 10 !== 0)
 
-	function is_duty(num: number) {
-		data.user_duty
-			.filter((number: any) => number % 10 !== 0)
-			.find((number: any) => {
-				const firstDigit = parseInt(number.toString()[0], 10)
-				return firstDigit === num
-		})
-		//return result !== undefined
-	}
-	const user_duties_array = data.user_duty
-		.filter((number: any) => number % 10 !== 0)
-		.map((number: any) => parseInt(number.toString()[0], 10))
+	// If user === director
+	const dda = data.dir_duty
 
 	function scrollToConnect() {
 		window.scrollTo({
@@ -139,29 +129,10 @@
 		<br>
 
     <ul id="list">
-			{#each data.activities as act}
-			{arr} {data.is_director} {act.dir_flag + ' dirflag'} {user_duties_array + ' user_duties_array'}
-				{#if data.is_director === true}
-				<li class="li">
-					<a href="../lists/activities/{act.act_id}" class="ab">
-						{dateSlugify(String(act.end_date))}
-						&#9753
-						<strong>{act.act_name}</strong>
-						&#10087
-						{#if act.act_note !== null}
-							{act.act_note}
-						{/if}
-						{' 🏠 '}
-						{#each dutyMap as item, index (item.id)}
-							{#if act.on_duty.charAt(0) === item.id}
-								{item.name}:
-							{/if}
-						{/each}
-							every regions
-					</a>
-				</li>
-				{/if}
-				{#if act.dir_flag === true && act.all_region === true}
+		{#each data.activities as act}
+			{#if data.is_director}
+				<!-- User === director && only own messages -->
+				{#if act.dir_flag && act.on_duty.charAt(0) === dda}
 					<li class="li">
 						<a href="../lists/activities/{act.act_id}" class="ab">
 							{dateSlugify(String(act.end_date))}
@@ -177,91 +148,105 @@
 									{item.name}:
 								{/if}
 							{/each}
+							{#if (act.on_duty).charAt(1) == '0'}
 								every regions
-						</a>
-					</li>
-				{/if}
-
-				{#if
-					(act.dir_flag === true) &&
-					(act.all_region === false) &&
-					(arr.includes(act.on_duty)) &&
-					(data.is_director === false)
-				}
-					<li class="li">
-						<a href="../lists/activities/{act.act_id}" class="ab">
-							{dateSlugify(String(act.end_date))}
-							&#9753
-							<strong>{act.act_name}</strong>
-							&#10087
-							{#if act.act_note !== null}
-								{act.act_note}
-							{/if}
-							{' 🏠 '}
-								{#each dutyMap as item, index (item.id)}
-									{#if (act.on_duty).charAt(0) === item.id}
-										{item.name}:
-									{/if}
-								{/each}
+							{:else}
 								{#each data.regio as reg}
 									{#if Number((act.on_duty).charAt(1)) == reg.region_id}
 										{reg.region_name}
 									{/if}
 								{/each}
-						</a>
-					</li>
-				{/if}
-
-				{#if (data.is_director === true) && (act.on_duty.charAt(0) === data?.dir_duty)}
-					<li class="li">
-						<a href="../lists/activities/{act.act_id}" class="ab">
-							{dateSlugify(String(act.end_date))}
-							&#9753
-							<strong>{act.act_name}</strong>
-							&#10087
-							{#if act.act_note !== null}
-								{act.act_note}
 							{/if}
-							{' 🏠 '}
-								{#each dutyMap as item, index (item.id)}
-									{#if (act.on_duty).charAt(0) === item.id}
-										{item.name}:
-									{/if}
-								{/each}
-								{#each data.regio as reg}
-									{#if Number((act.on_duty).charAt(1)) == reg.region_id}
-										{reg.region_name}
-									{/if}
-								{/each}
 						</a>
 					</li>
 				{/if}
+				<!-- User === director && only concerning messages -->
+				{#if !act.dir_flag && act.on_duty.charAt(0) === dda}
+					<li class="lib">
+						{dateSlugify(String(act.end_date))}
+						&#9753
+						<strong>{act.act_name}</strong>
+						&#10087
+						{#if act.act_note !== null}
+							{act.act_note}
+						{/if}
+						{' 🏠 '}
+						{#each dutyMap as item, index (item.id)}
+							{#if act.on_duty.charAt(0) === item.id}
+								{item.name}:
+							{/if}
+						{/each}
+						{#if (act.on_duty).charAt(1) == '0'}
+							every regions
+						{:else}
+							{#each data.regio as reg}
+								{#if Number((act.on_duty).charAt(1)) == reg.region_id}
+									{reg.region_name}
+								{/if}
+							{/each}
+						{/if}
+					</li>
+				{/if}
 
-				{#if act.dir_flag === false}
+			{:else}
+				<!-- User !== director && (own director's || director's all_region) messages -->
+				{#if act.dir_flag && (user_duty_array.includes(Number(act.on_duty)) || act.all_region)}
+					<li class="lia">
+						{dateSlugify(String(act.end_date))}
+						&#9753
+						<strong>{act.act_name}</strong>
+						&#10087
+						{#if act.act_note !== null}
+							{act.act_note}
+						{/if}
+						{' 🏠 '}
+						{#each dutyMap as item, index (item.id)}
+							{#if act.on_duty.charAt(0) === item.id}
+								{item.name}:
+							{/if}
+						{/each}
+						{#if (act.on_duty).charAt(1) == '0'}
+							every regions
+						{:else}
+							{#each data.regio as reg}
+								{#if Number((act.on_duty).charAt(1)) == reg.region_id}
+									{reg.region_name}
+								{/if}
+							{/each}
+						{/if}
+					</li>
+				{/if}
+				<!-- User !== director, any others -->
+				{#if !act.dir_flag }
 					<li class="li">
 						<a href="../lists/activities/{act.act_id}" class="ac">
 							{dateSlugify(String(act.end_date))}
 							&#9753
-							{act.act_name}
+							<strong>{act.act_name}</strong>
 							&#10087
 							{#if act.act_note !== null}
 								{act.act_note}
 							{/if}
 							{' 🏠 '}
 							{#each dutyMap as item, index (item.id)}
-								{#if (act.on_duty).charAt(0) === item.id}
+								{#if act.on_duty.charAt(0) === item.id}
 									{item.name}:
 								{/if}
 							{/each}
-							{#each data.regio as reg}
-								{#if Number((act.on_duty).charAt(1)) == reg.region_id}
-									{reg.region_name}
-								{/if}
-							{/each}
+							{#if (act.on_duty).charAt(1) == '0'}
+								every regions
+							{:else}
+								{#each data.regio as reg}
+									{#if Number((act.on_duty).charAt(1)) == reg.region_id}
+										{reg.region_name}
+									{/if}
+								{/each}
+							{/if}
 						</a>
 					</li>
 				{/if}
-      {/each}
+			{/if}
+    {/each}
     </ul>
     <br>
 		<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
@@ -411,6 +396,41 @@
 		line-height: normal;
 		font-size: 23px;
 	}
+
+	.lia {
+    list-style-position: inside;
+    list-style-type: none;
+    padding-left: 5%;
+    text-indent: -6%;
+    color: #282f2e;
+		line-height: 1.35;
+		font-size: 25px;
+	}
+
+	.lia::before {
+    content: "•"; /* Use a disc bullet character */
+    color: rgb(144, 132, 132); /* Set the bullet color to grey */
+    margin-right: 45px; /* Adjust spacing between bullet and text */
+		font-size: 30px;
+	}
+
+	.lib {
+    list-style-position: inside;
+    list-style-type: none;
+    padding-left: 5%;
+    text-indent: -6%;
+    color: #32BEA6;
+		line-height: 1.35;
+		font-size: 25px;
+	}
+
+	.lib::before {
+    content: "•"; /* Use a disc bullet character */
+    color: rgb(144, 132, 132); /* Set the bullet color to grey */
+    margin-right: 45px; /* Adjust spacing between bullet and text */
+		font-size: 30px;
+	}
+
 
 	.li {
     list-style-position: inside;

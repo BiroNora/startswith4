@@ -16,8 +16,10 @@ export async function load({ locals }) {
 	const user_duty = locals.user.duty
 
 	const dir_num = (locals.user.duty)[4]
-	dir_duty = String(dir_num % 10) // BAS, MED, HIGH
-	console.log('dir_duty ' + dir_duty)
+	
+	if (dir_num > 50) {
+		dir_duty = String(dir_num % 10) // BAS, MED, HIGH
+	}
 
 	// Shows if the user is director
 	dir_flag = is_director = dir_num % 10 == 0 ? false : true
