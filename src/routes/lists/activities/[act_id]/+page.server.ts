@@ -19,13 +19,12 @@ export async function load({ params, locals }) {
 		return fail(400, { act: true })
 	}
 
-	const reg_id = activity.region_id
+	const reg_id = activity.on_duty.charAt(1)
 
-	const reg = await db.region.findUnique({
-		where: { region_id: reg_id }
+	const region = await db.region.findUnique({
+		where: { region_id: Number(reg_id) },
+		select: { region_id: true, region_name: true}
 	})
-
-	const region = reg?.region_name
 
 	return { activity, region }
 }

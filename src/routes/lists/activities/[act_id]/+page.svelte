@@ -1,12 +1,20 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { dateSlugify } from '../../../stores/dataStore.js'
+	import { dateSlugify, dutyMap } from '../../../stores/dataStore.js'
 
 	let pageName = 'Activity Delete Page'
 	let showModal = false
-
+  let region: unknown
 
 	export let data
+
+  const reg_id = data.activity?.on_duty.charAt(1)
+
+	if (reg_id === '0') {
+		region = 'every regions'
+	} else {
+		region = data.region?.region_name
+	}
 </script>
 
 <svelte:head>
@@ -29,12 +37,19 @@
       &nbsp;
       </strong>
       {dateSlugify(String(data.activity?.end_date))}
-					&#9753
-					{data.activity?.act_name}
-					&#10087
-					{data.activity?.act_note}
-					{' 🏠 '}
-					{data.region}
+        &#9753
+      {data.activity?.act_name}
+        &#10087
+      {#if data.activity?.act_note !== null}
+        {data.activity?.act_note}
+      {/if}
+      {' 🏠 '}
+      {#each dutyMap as item, index (item.id)}
+        {#if data.activity?.on_duty.charAt(0) === item.id}
+          {item.name}:
+        {/if}
+      {/each}
+      {region}
     </a>
   </hgroup>
 

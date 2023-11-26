@@ -124,8 +124,8 @@ model Activity {
   act_name   String
   act_note   String?
   on_duty    String
-  region_id  Int
-  region     Region   @relation(fields: [region_id], references: [region_id])
+  dir_flag   Boolean
+  all_region Boolean
 
   @@map("activity")
 }
@@ -148,7 +148,6 @@ model Region {
   InterestedStudent InterestedStudents[]
   country           Country              @relation(fields: [country_id], references: [country_id])
   School            School[]
-  Activity          Activity[]
 
   @@map("region")
 }

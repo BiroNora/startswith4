@@ -9,6 +9,22 @@
 	export let data
 	export let form: ActionData
 
+	const arr = data.user_duty
+		.filter((number: any) => number % 10 !== 0)
+
+	function is_duty(num: number) {
+		data.user_duty
+			.filter((number: any) => number % 10 !== 0)
+			.find((number: any) => {
+				const firstDigit = parseInt(number.toString()[0], 10)
+				return firstDigit === num
+		})
+		//return result !== undefined
+	}
+	const user_duties_array = data.user_duty
+		.filter((number: any) => number % 10 !== 0)
+		.map((number: any) => parseInt(number.toString()[0], 10))
+
 	function scrollToConnect() {
 		window.scrollTo({
 			top: 0
@@ -80,7 +96,16 @@
     >
       &#9758; Program hozzáadása
     </a>
-      &nbsp; &nbsp;
+		{#if data.dir_flag}
+			&nbsp; &nbsp;
+			<a
+			href="#section_dir"
+			class="aa"
+			>
+			&#9758; Központi üzenet hozzáadása
+			</a>
+		{/if}
+			&nbsp; &nbsp;
     </hgroup>
     <br />
 
@@ -114,37 +139,177 @@
 		<br>
 
     <ul id="list">
-      {#each data.activities as act}
-			<li class="li">
-				<a href="../lists/activities/{act.act_id}" class="ab">
-					{dateSlugify(String(act.end_date))}
-					&#9753
-					{act.act_name}
-					&#10087
-					{act.act_note}
-					{' 🏠 '}
-					{#each dutyMap as item, index (item.id)}
-						{#if act.on_duty === item.id}
-							{item.name}:
+			{#each data.activities as act}
+			{arr} {data.is_director} {act.dir_flag + ' dirflag'} {user_duties_array + ' user_duties_array'}
+				{#if data.is_director === true}
+				<li class="li">
+					<a href="../lists/activities/{act.act_id}" class="ab">
+						{dateSlugify(String(act.end_date))}
+						&#9753
+						<strong>{act.act_name}</strong>
+						&#10087
+						{#if act.act_note !== null}
+							{act.act_note}
 						{/if}
-					{/each}
-					{#each data.regio as reg}
-						{#if act.region_id == reg.region_id}
-							{reg.region_name}
-						{/if}
-					{/each}
-				</a>
-        </li>
+						{' 🏠 '}
+						{#each dutyMap as item, index (item.id)}
+							{#if act.on_duty.charAt(0) === item.id}
+								{item.name}:
+							{/if}
+						{/each}
+							every regions
+					</a>
+				</li>
+				{/if}
+				{#if act.dir_flag === true && act.all_region === true}
+					<li class="li">
+						<a href="../lists/activities/{act.act_id}" class="ab">
+							{dateSlugify(String(act.end_date))}
+							&#9753
+							<strong>{act.act_name}</strong>
+							&#10087
+							{#if act.act_note !== null}
+								{act.act_note}
+							{/if}
+							{' 🏠 '}
+							{#each dutyMap as item, index (item.id)}
+								{#if act.on_duty.charAt(0) === item.id}
+									{item.name}:
+								{/if}
+							{/each}
+								every regions
+						</a>
+					</li>
+				{/if}
+
+				{#if
+					(act.dir_flag === true) &&
+					(act.all_region === false) &&
+					(arr.includes(act.on_duty)) &&
+					(data.is_director === false)
+				}
+					<li class="li">
+						<a href="../lists/activities/{act.act_id}" class="ab">
+							{dateSlugify(String(act.end_date))}
+							&#9753
+							<strong>{act.act_name}</strong>
+							&#10087
+							{#if act.act_note !== null}
+								{act.act_note}
+							{/if}
+							{' 🏠 '}
+								{#each dutyMap as item, index (item.id)}
+									{#if (act.on_duty).charAt(0) === item.id}
+										{item.name}:
+									{/if}
+								{/each}
+								{#each data.regio as reg}
+									{#if Number((act.on_duty).charAt(1)) == reg.region_id}
+										{reg.region_name}
+									{/if}
+								{/each}
+						</a>
+					</li>
+				{/if}
+
+				{#if (data.is_director === true) && (act.on_duty.charAt(0) === data?.dir_duty)}
+					<li class="li">
+						<a href="../lists/activities/{act.act_id}" class="ab">
+							{dateSlugify(String(act.end_date))}
+							&#9753
+							<strong>{act.act_name}</strong>
+							&#10087
+							{#if act.act_note !== null}
+								{act.act_note}
+							{/if}
+							{' 🏠 '}
+								{#each dutyMap as item, index (item.id)}
+									{#if (act.on_duty).charAt(0) === item.id}
+										{item.name}:
+									{/if}
+								{/each}
+								{#each data.regio as reg}
+									{#if Number((act.on_duty).charAt(1)) == reg.region_id}
+										{reg.region_name}
+									{/if}
+								{/each}
+						</a>
+					</li>
+				{/if}
+
+				{#if act.dir_flag === false}
+					<li class="li">
+						<a href="../lists/activities/{act.act_id}" class="ac">
+							{dateSlugify(String(act.end_date))}
+							&#9753
+							{act.act_name}
+							&#10087
+							{#if act.act_note !== null}
+								{act.act_note}
+							{/if}
+							{' 🏠 '}
+							{#each dutyMap as item, index (item.id)}
+								{#if (act.on_duty).charAt(0) === item.id}
+									{item.name}:
+								{/if}
+							{/each}
+							{#each data.regio as reg}
+								{#if Number((act.on_duty).charAt(1)) == reg.region_id}
+									{reg.region_name}
+								{/if}
+							{/each}
+						</a>
+					</li>
+				{/if}
       {/each}
     </ul>
     <br>
 		<a href="#top" class="flower">&#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046 &nbsp &#10046</a>
 	</div>
 
+	<!-- Dir message form -->
+
+	{#if data.dir_flag}
+		<div class="rei grid element-to-position" id="section_dir" >
+			<p>Central Message Register</p>
+			<form action="?/dir_message" method="post" >
+				<div>
+					<label for="meeting-time">Show Message till this Date</label>
+					<input
+						type="datetime-local"
+						id="meeting-time"
+						name="meeting-time"
+						value="YYYY-MM-DDT00:00"
+						min="2021-06-07T00:00"
+						max="2060-06-14T00:00"
+					/>
+				</div>
+				<div >
+					<label for="region"><i>Select Region</label>
+					<select name="region" id="region" class="hidden-textbox">
+						<option value="ALL">ALL</option>
+						{#each data.regio as reg}
+							<option value={reg.region_id}>{reg.region_name} </option>
+						{/each}
+					</select>
+				</div>
+				<label for="dir_message">Message</label>
+					<textarea id="dir_message" name="dir_message" rows="4" cols="50"></textarea>
+				<button class="btn" id="btn" type="submit">Send Message</button>
+				<br />
+				<button
+					type="button"
+					on:click={scrollToConnect}
+					id="backToTop"
+					class="contrast outline cgb h44">Cancel &#10070; Jump to the Top</button
+				>
+			</form>
+		</div>
+	{/if}
 
 	<!-- Activity form -->
 
-	<div class="grid element-to-position" id="section_event" >
+	<div class="grid element-to-position1" id="section_event" >
 		<div class="rei">
 			<p>Activity Register</p>
 		</div>
@@ -234,6 +399,13 @@
 	}
 
 	.ab {
+		color: #282f2e;
+		font-weight: 500;
+		line-height: normal;
+		font-size: 25px;
+	}
+
+	.ac {
 		color: #32bea6;
 		font-weight: 400;
 		line-height: normal;
@@ -301,6 +473,10 @@
 
 	.element-to-position {
 		transform: translateY(420vh); /* Move the element down one viewport height (vh) */
+	}
+
+	.element-to-position1 {
+		transform: translateY(520vh); /* Move the element down one viewport height (vh) */
 	}
 
 	.flower {
