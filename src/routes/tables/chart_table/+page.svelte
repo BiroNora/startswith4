@@ -70,6 +70,7 @@
 		'rgb(54, 162, 135)',
 		'rgb(175, 92, 192)'
 	]
+	let err_mess = false
 
 	$: {
 		$selectedRegion, $selectedCountry
@@ -159,13 +160,44 @@
 				createChart()
 			} else {
 				console.error('Server error:', response.statusText)
+				destroyChart()
 			}
 		} catch (error) {
 			console.error('Error:', error)
 		}
 	}
 
+	function destroyChart() {
+		err_mess = true
+
+		const canvasIds: string[] = [
+			'chartCanvas1',
+			'chartCanvas2',
+			'chartCanvas3',
+			'chartCanvas4',
+			'chartCanvas5',
+			'chartCanvas6',
+			'chartCanvas7'
+		]
+		const existingCharts: Chart[] = []
+
+		// Destroy canvas if existing
+		canvasIds.forEach((canvasId) => {
+			const canvas: HTMLCanvasElement | null = document.getElementById(
+				canvasId
+			) as HTMLCanvasElement
+			if (canvas) {
+				const existingChart: Chart | undefined = Chart.getChart(canvas)
+				if (existingChart) {
+					existingCharts.push(existingChart)
+					existingChart.destroy()
+				}
+			}
+		})
+  }
+
 	function createChart() {
+		err_mess = false
 		let chartCanvas1: HTMLCanvasElement | null = document.getElementById(
 			'chartCanvas1'
 		) as HTMLCanvasElement
@@ -637,6 +669,13 @@
 			&nbsp;&nbsp;
 		</div>
 	{/if}
+
+	{#if err_mess}
+		<div class="container" style="margin-bottom: 8rem;">
+			<p><i>Something went wrong. Please try it later.</i></p>
+		</div>
+	{/if}
+
 	<div class="e" style="margin-bottom: 3rem;">
 		<canvas id="chartCanvas1" />
 	</div>

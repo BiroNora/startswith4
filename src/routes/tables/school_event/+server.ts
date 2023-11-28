@@ -15,7 +15,7 @@ export async function POST({ request, locals }) {
     selectedCountry,
     selectedRegion
   } = formData
-	
+
 	if (
 		selectedYear == null &&
 		selectedSemester != 'ALL' &&
@@ -31,7 +31,7 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE e.semester IN (${selectedSemester})
             AND s.active = true
@@ -190,7 +190,7 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE e.event_year IN (${selectedYear})
             AND s.active = true
@@ -349,7 +349,7 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE s.active = true
             AND EXISTS (SELECT 1 FROM "_SchoolToUser" sub_stu WHERE sub_stu."A" = s.school_id)
@@ -501,7 +501,7 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE e.event_year IN (${selectedYear})
             AND e.semester IN (${selectedSemester})
@@ -662,7 +662,7 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE e.semester IN (${selectedSemester})
             AND e.on_duty IN (${selectedDuty})
@@ -825,7 +825,7 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE e.event_year IN (${selectedYear})
             AND e.on_duty IN (${selectedDuty})
@@ -986,7 +986,7 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE e.on_duty IN (${selectedDuty})
             AND s.active = true
@@ -1142,7 +1142,7 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE e.event_year IN (${selectedYear})
             AND e.semester IN (${selectedSemester})
@@ -1309,7 +1309,7 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE e.semester IN (${selectedSemester})
             AND s.country_id IN (${selectedCountry})
@@ -1472,7 +1472,7 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE e.event_year IN (${selectedYear})
             AND s.country_id IN (${selectedCountry})
@@ -1633,7 +1633,7 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE s.country_id IN(${selectedCountry})
             AND s.active = true
@@ -1789,9 +1789,9 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE e.event_year IN (${selectedYear})
             AND e.semester IN (${selectedSemester})
@@ -1955,7 +1955,7 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE e.semester IN (${selectedSemester})
             AND e.on_duty IN (${selectedDuty})
@@ -2122,7 +2122,7 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE e.event_year IN (${selectedYear})
             AND e.on_duty IN (${selectedDuty})
@@ -2287,7 +2287,7 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE e.on_duty IN (${selectedDuty})
             AND s.country_id IN (${selectedCountry})
@@ -2447,7 +2447,7 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE e.event_year IN (${selectedYear})
             AND e.semester IN (${selectedSemester})
@@ -2618,9 +2618,8 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
-          JOIN schools s USING (school_id)
           WHERE e.semester IN (${selectedSemester})
             AND s.country_id IN(${selectedCountry})
             AND s.region_id IN(${selectedRegion})
@@ -2786,7 +2785,7 @@ export async function POST({ request, locals }) {
               e.school_id,
               COALESCE(CAST(COUNT(*) AS INTEGER), 0) AS event_count
           FROM events e
-          JOIN schools s -- Define the 's' alias here
+          JOIN schools s
             ON e.school_id = s.school_id
           WHERE e.event_year IN (${selectedYear})
             AND s.country_id IN(${selectedCountry})

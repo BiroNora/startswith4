@@ -46,6 +46,7 @@
 	const distinctYearsArray = distinctYears || []
 	const countriesArray = countries || []
 	const regionsArray = regions || []
+	let err_mess = false
 
 	function calcPerc(x: any, y: any) {
 		let percentage = 0
@@ -167,6 +168,7 @@
 			});
 			console.log(JSON.stringify(formData));
 			if (response.ok) {
+				err_mess = false
 				const responseData = await response.json();
 					//formatAndSetResponseData(responseData);
 					schoolsData = responseData.schoolsData;
@@ -174,6 +176,7 @@
 					schoolsLength = schoolsData.length;
 				} else {
 					console.error('Server error:', response.statusText);
+					err_mess = true
 				}
 		} catch (error) {
 				console.error('Error:', error);
@@ -246,7 +249,7 @@
 
 <div class="main">
 	<hgroup>
-		<h1 >Schools* and Events**</h1>
+		<h1 >Search on the Base of Schools* and their Events**</h1>
 		<i>&emsp;*Active and cooperative schools only with Startswith contact</i>
 		<br>
 		<i>&emsp;**Semesters: Spring — months between the 3th & 9th months inclusive; Autumn — others</i>
@@ -365,6 +368,12 @@
 				{/if}
 			&nbsp;&nbsp;
 			<i>Filtering: </i>{filtering}
+		</div>
+	{/if}
+
+	{#if err_mess}
+		<div class="container" style="margin-bottom: 8rem;">
+			<p><i>Something went wrong. Please try it later.</i></p>
 		</div>
 	{/if}
 
@@ -587,6 +596,16 @@
 
 	.input-container {
 		position: relative;
+	}
+
+	.container {
+		display: flex; /* or inline-flex */
+		width: 100%;
+		flex-direction: row;
+		justify-content: space-around;
+		gap: 8%;
+		padding-top: 2%;
+		padding-bottom: 4%;
 	}
 
 	.clear-button {
