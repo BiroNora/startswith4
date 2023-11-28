@@ -24,10 +24,7 @@
         <a href="/tables/school_event" target="_blank">School_Event</a>
       </li>
       <li>
-        <a href="/map" target="_blank">Map</a>
-      </li>
-      <li>
-        <a href="/mapsy" target="_blank">Mapsy</a>
+        <a href="/tables/" target="_blank">Region/City Chart</a>
       </li>
       <li>
         <a href="/lists/colleagues" target="_blank">Colleagues</a>
