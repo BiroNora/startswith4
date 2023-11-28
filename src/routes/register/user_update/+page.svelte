@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { duty, dutyMap, dutyType } from '../../stores/dataStore'
+	import { dutyMap } from '../../stores/dataStore'
 	import type { ActionData, PageServerData } from './$types'
 	export let data: PageServerData
 	const { regions, user } = data
-
-  let region: string | undefined
 
   const array = user?.on_duty
     .filter((number) => number % 10 !== 0)
