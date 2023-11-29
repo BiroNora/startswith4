@@ -12,6 +12,8 @@
 	const user_duty_array = data.user_duty
 		.filter((number: any) => number % 10 !== 0)
 
+	const user_duties_only = user_duty_array.map((number: any) => parseInt(String(number)[0], 10))
+
 	// If user === director
 	const dda = data.dir_duty
 
@@ -189,37 +191,13 @@
 				{/if}
 
 			{:else}
-				<!-- User !== director && (own director's || director's all_region) messages -->
-				{#if act.dir_flag && (user_duty_array.includes(Number(act.on_duty)) || act.all_region)}
-				<li class="lia">
-						{dateSlugify(String(act.end_date))}
-						&#9753
-						<strong>{act.act_name}</strong>
-						&#10087
-						{#if act.act_note !== null}
-							{act.act_note}
-						{/if}
-						{' 🏠 '}
-						{#each dutyMap as item, index (item.id)}
-							{#if act.on_duty.charAt(0) === item.id}
-								{item.name}:
-							{/if}
-						{/each}
-						{#if (act.on_duty).charAt(1) == '0'}
-							every regions
-						{:else}
-							{#each data.regio as reg}
-								{#if Number((act.on_duty).charAt(1)) == reg.region_id}
-									{reg.region_name}
-								{/if}
-							{/each}
-						{/if}
-					</li>
-				{/if}
-				<!-- User !== director, any others -->
-				{#if !act.dir_flag }
-					<li class="li">
-						<a href="../lists/activities/{act.act_id}" class="ac">
+			<!-- User !== director && (own (director's || director's all_region)) messages -->
+				{#if
+					(act.dir_flag &&
+					((user_duty_array.includes(Number(act.on_duty))) ||
+					(user_duties_only.includes(Number((act.on_duty).charAt(0))) && act.all_region)))
+				}
+					<li class="lia">
 							{dateSlugify(String(act.end_date))}
 							&#9753
 							<strong>{act.act_name}</strong>
@@ -242,6 +220,30 @@
 									{/if}
 								{/each}
 							{/if}
+						</li>
+					{/if}
+				<!-- User !== director, any others -->
+				{#if !act.dir_flag }
+					<li class="li">
+						<a href="../lists/activities/{act.act_id}" class="ac">
+							{dateSlugify(String(act.end_date))}
+							&#9753
+							<strong>{act.act_name}</strong>
+							&#10087
+							{#if act.act_note !== null}
+								{act.act_note}
+							{/if}
+							{' 🏠 '}
+							{#each dutyMap as item, index (item.id)}
+								{#if act.on_duty.charAt(0) === item.id}
+									{item.name}:
+								{/if}
+							{/each}
+							{#each data.regio as reg}
+								{#if Number((act.on_duty).charAt(1)) == reg.region_id}
+									{reg.region_name}
+								{/if}
+							{/each}
 						</a>
 					</li>
 				{/if}
@@ -430,7 +432,6 @@
     margin-right: 45px; /* Adjust spacing between bullet and text */
 		font-size: 30px;
 	}
-
 
 	.li {
     list-style-position: inside;
