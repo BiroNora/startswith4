@@ -7,7 +7,8 @@ declare global {
 			user: {
 				email: string,
       	name: string,
-      	duty: number[]
+      	duty: number[],
+				active: boolean
 			}
 		}
 		// interface PageData {}

@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import type { Action, Actions, PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (locals.user) {
+	if (locals.user && locals.user.active === true) {
     throw redirect(302, '/lists/activities')
   }
 }

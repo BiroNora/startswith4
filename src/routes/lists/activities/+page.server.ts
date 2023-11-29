@@ -8,7 +8,7 @@ let is_director: boolean
 let dir_duty: string
 
 export async function load({ locals }) {
-	if (!locals.user) {
+	if (!locals.user || locals.user.active === false) {
     throw redirect(302, '/auth/login')
   }
 

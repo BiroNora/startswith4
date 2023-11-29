@@ -8,7 +8,7 @@ let extrDuty = ''
 let sc_id: number
 
 export async function load({ params, locals }) {
-	if (!locals.user) {
+	if (!locals.user || locals.user.active === false) {
 		throw redirect(302, '/auth/login')
 	}
 

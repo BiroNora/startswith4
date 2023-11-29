@@ -3,7 +3,7 @@ import { db } from '$lib/database'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function load({ locals }) {
-  if (!locals.user) {
+  if (!locals.user || locals.user.active === false) {
     throw redirect(302, '/auth/login')
   }
 	const users = await db.user.findMany({

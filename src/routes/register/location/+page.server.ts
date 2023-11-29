@@ -3,7 +3,7 @@ import type { Action, Actions, PageServerLoad } from './$types'
 import { db } from '$lib/database'
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (!locals.user) {
+	if (!locals.user || locals.user.active === false) {
     throw redirect(302, '/auth/login')
   }
 }

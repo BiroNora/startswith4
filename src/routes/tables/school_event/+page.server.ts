@@ -6,10 +6,10 @@ let eventCount = 0
 let estimatedStudent = 0
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (!locals.user) {
+	if (!locals.user || locals.user.active === false) {
     throw redirect(302, '/auth/login')
   }
-	
+
 	const years = await db.event.findMany({
 		distinct: ['event_year'],
 		select: {

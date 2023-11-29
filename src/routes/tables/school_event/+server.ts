@@ -2,7 +2,7 @@ import { db } from '$lib/database'
 import { redirect } from '@sveltejs/kit'
 
 export async function POST({ request, locals }) {
-  if (!locals.user) {
+  if (!locals.user || locals.user.active === false) {
     throw redirect(302, '/auth/login')
   }
 

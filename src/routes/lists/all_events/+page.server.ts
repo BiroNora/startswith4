@@ -6,7 +6,7 @@ import { dutyMap } from '../../stores/dataStore'
 let extrDuty = ''
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (!locals.user) {
+	if (!locals.user || locals.user.active === false) {
 		throw redirect(302, '/auth/login')
 	}
 	const events = await db.event.findMany({

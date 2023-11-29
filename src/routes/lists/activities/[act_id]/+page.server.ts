@@ -5,7 +5,7 @@ import type { Actions } from './$types'
 let act_id: number
 
 export async function load({ params, locals }) {
-	if (!locals.user) {
+	if (!locals.user || locals.user.active === false) {
     throw redirect(302, '/auth/login')
   }
 

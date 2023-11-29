@@ -6,7 +6,7 @@ import { dutyType, isStrongPassword } from '../../stores/dataStore'
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (locals.user) {
-		throw redirect(302, '/lists/activities')
+		throw redirect(302, '/auth/login')
 	}
 
 	const regions = await db.region.findMany({
