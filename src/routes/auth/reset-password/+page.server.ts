@@ -17,7 +17,7 @@ export const load: PageServerLoad = async ({ url }) => {
       where: { resetToken: token },
     })
 
-    if (user && user.resetTokenExpiry && new Date(user.resetTokenExpiry) >= new Date()) {
+    if (user && user.active === true && user.resetTokenExpiry && new Date(user.resetTokenExpiry) >= new Date()) {
       userEmail = user.user_email
       isValide = true
       return { isValide, userEmail }

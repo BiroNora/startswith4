@@ -9,6 +9,8 @@
     .filter((number) => number % 10 !== 0)
     .map((number) => number.toString())
 
+	const is_dir = user?.on_duty![4]! % 10 === 0 ? false : true
+
 	let yesB = false
 	let yesM = false
 	let yesH = false
@@ -50,9 +52,12 @@
       yesD = true
       const duty = dutyMap!.find((d) => d.id === char2)
       yesDuty = duty?.id ?? yesDuty
-      }
     }
+  }
 
+	function showAlert() {
+    alert('A felhasználó inaktív lesz.')
+  }
 	let pageName = 'Update User'
 
 	export let form: ActionData
@@ -61,6 +66,27 @@
 <svelte:head>
 	<title>{pageName}</title>
 </svelte:head>
+
+{#if is_dir}
+<div class="grid">
+	<div class="rei">
+		<p>Update Startswith's User Data</p>
+	</div>
+	<br />
+	<form action="?/user_active_change" method="post" use:enhance>
+		<div>
+			<label for="email">Email</label>
+			<input type="text" name="email" id="email" required />
+		</div>
+
+		{#if form?.user}
+			<p class="error">Confirm user.</p>
+		{/if}
+
+		<button on:click|once={showAlert} class="btn" id="btn" type="submit">Inactive User</button>
+	</form>
+</div>
+{/if}
 
 <div class="grid">
 	<div class="rei">

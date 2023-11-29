@@ -123,15 +123,17 @@
 	<br>
   <ul id="list">
     {#each data.users as user}
-			<li class="li aa">
-				{user.user_name}
-				{' 🏠 '}
-				{filterDuty(user.on_duty)}
-				{' ☎️ '}
-				{user.user_phone}
-				{' 📝 '}
-				{user.user_email}
-      </li>
+      {#if user.active}
+        <li class="li aa">
+          {user.user_name}
+          {' 🏠 '}
+          {filterDuty(user.on_duty)}
+          {' ☎️ '}
+          {user.user_phone}
+          {' 📝 '}
+          {user.user_email}
+        </li>
+      {/if}
     {/each}
   </ul>
 

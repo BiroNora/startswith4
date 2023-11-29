@@ -25,7 +25,6 @@ const forgot: Action = async ({ request }) => {
   const resetToken = crypto.randomUUID()
 
   // Store the token and associate it with the user in your database
-
   await db.user.update({
     where: { user_email: userEmail},
 		data: {

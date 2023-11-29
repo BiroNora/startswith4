@@ -137,4 +137,30 @@ const user: Action = async ({ request }) => {
 	throw redirect(303, '/lists/activities')
 }
 
-export const actions: Actions = { user }
+const user_active_change: Action = async ({ request }) => {
+	const data = await request.formData()
+	const user_email = String(data.get('email'))
+	const active = false
+	const active_by = userEmail
+	console.log(user_email)
+
+	const user = await db.user.findUnique({
+		where: { user_email }
+	})
+
+	if (!user) {
+		return fail(400, { user: true })
+	}
+
+	await db.user.update({
+    where: { user_email: user_email},
+		data: {
+			active,
+			active_by
+		}
+	})
+
+	throw redirect(303, '/lists/colleagues')
+}
+
+export const actions: Actions = { user, user_active_change }
