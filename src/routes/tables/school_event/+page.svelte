@@ -340,15 +340,15 @@
 			<i>Event Semester: </i>{selSemest} &nbsp;&nbsp;
 			<i>Event Duty: </i>
 			{#each duty as item (item.id)}
-				{#if selDuty == item.id}
+				{#if selDuty === item.id}
 					{item.name}
 				{/if}
 			{/each}
 			&nbsp;&nbsp;
 			<i>School Country: </i>
-				{#if (selCountry != 'ALL')}
+				{#if (selCountry !== 'ALL')}
 					{#each countriesArray as country}
-						{#if (country.country_id == selCountry)}
+						{#if (country.country_id === selCountry)}
 							{country.country_name}
 						{/if}
 					{/each}
@@ -357,9 +357,9 @@
 				{/if}
 			&nbsp;&nbsp;
 			<i>School Region: </i>
-				{#if (selRegion != 'ALL')}
+				{#if (selRegion !== 'ALL')}
 					{#each regionsArray as reg}
-						{#if (reg.region_id == selRegion)}
+						{#if (reg.region_id === selRegion)}
 							{reg.region_name}
 						{/if}
 					{/each}

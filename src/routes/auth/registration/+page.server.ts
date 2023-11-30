@@ -51,33 +51,19 @@ const user: Action = async ({ request }) => {
 	let regionD = dutyType[4][0]
 	const on_duty = []
 
-	if (basic == true) {
-		regionB += reB
-	} else {
-		regionB += '0'
-	}
-	if (medior == true) {
-		regionM += reM
-	} else {
-		regionM += '0'
-	}
-	if (high == true) {
-		regionH += reH
-	} else {
-		regionH += '0'
-	}
-	if (superior == true) {
-		regionS += reS
-	} else {
-		regionS += '0'
-	}
-	if (director == true) {
-		regionD += reD
-	} else {
-		regionD += '0'
-	}
+	regionB += basic ? reB : '0'
+	regionM += medior ? reM : '0'
+	regionH += high ? reH : '0'
+	regionS += superior ? reS : '0'
+	regionD += director ? reD : '0'
 
-	if (regionB == '10' && regionM == '20' && regionH == '30' && regionS == '40' && regionD == '50') {
+	if (
+		regionB === '10' &&
+		regionM === '20' &&
+		regionH === '30' &&
+		regionS === '40' &&
+		regionD === '50')
+		{
 		return fail(400, { regions: true })
 	}
 
@@ -88,9 +74,9 @@ const user: Action = async ({ request }) => {
 	on_duty.push(Number(regionD))
 
 	if (
-		typeof user_email != 'string' ||
-		typeof password1 != 'string' ||
-		typeof password2 != 'string' ||
+		typeof user_email !== 'string' ||
+		typeof password1 !== 'string' ||
+		typeof password2 !== 'string' ||
 		!user_email ||
 		!password1 ||
 		!password2 ||

@@ -108,11 +108,11 @@ const location: Action = async ({ request, locals }) => {
 	})
 
 	if (
-		countryifexists &&
-		regioncountry?.country_id == countryifexists?.country_id &&
-		countyregion?.region_id == regioncountry?.region_id &&
-		citycounty?.county_id == countyregion?.county_id &&
-		citycounty
+		(countryifexists ?? null !== null) &&
+		regioncountry?.country_id === countryifexists?.country_id &&
+		countyregion?.region_id === regioncountry?.region_id &&
+		citycounty?.county_id === countyregion?.county_id &&
+		(citycounty ?? null !== null)
 	) {
 		return fail(400, {
 			error: true,

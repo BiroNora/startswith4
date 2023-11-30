@@ -130,21 +130,21 @@ const school: Action = async ({ request }) => {
 	const regioncountry = await db.region.findUnique({
 		where: { region_id }
 	})
-	if (regioncountry?.country_id != country_id) {
+	if (regioncountry?.country_id !== country_id) {
 		return fail(400, { local: true })
 	}
 
 	const countyregion = await db.county.findUnique({
 		where: { county_id }
 	})
-	if (countyregion?.region_id != region_id) {
+	if (countyregion?.region_id !== region_id) {
 		return fail(400, { local: true })
 	}
 
 	const citycounty = await db.city.findUnique({
 		where: { city_id }
 	})
-	if (citycounty?.county_id != county_id) {
+	if (citycounty?.county_id !== county_id) {
 		return fail(400, { local: true })
 	}
 
@@ -155,7 +155,7 @@ const school: Action = async ({ request }) => {
 		return fail(400, { omid: true })
 	}
 
-	if (country_id == 1 && om_id?.length != 6 && !nembes) {
+	if (country_id === 1 && om_id?.length !== 6 && !nembes) {
 		return fail(400, { omval: true })
 	}
 

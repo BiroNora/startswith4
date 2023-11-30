@@ -44,7 +44,7 @@
 
   // Function to filter regions based on the selected country
   function filterRegions() {
-    filteredRegions = regions.filter((region) => region.country_id == selectedCountry)
+    filteredRegions = regions.filter((region) => region.country_id === selectedCountry)
     selectedRegion = null // Reset selected region
     isCountrySelected = true // Enable the region select
     if (filterRegions.length > 0) {
@@ -54,7 +54,7 @@
 
   // Function to filter counties based on the selected region
   function filterCounties() {
-    filteredCounties = counties.filter((county) => county.region_id == selectedRegion)
+    filteredCounties = counties.filter((county) => county.region_id === selectedRegion)
     selectedCounty = null // Reset selected county
     isRegionSelected = true // Enable the county select
     if (filterCounties.length > 0) {
@@ -64,7 +64,7 @@
 
   // Function to filter cities based on the selected county
   function filterCities() {
-    filteredCities = cities.filter((city) => city.county_id == selectedCounty)
+    filteredCities = cities.filter((city) => city.county_id === selectedCounty)
     selectedCity = null // Reset selected city
     isCountySelected = true // Enable the city select
   }
@@ -295,11 +295,11 @@
       <p class="error">Please enter correct data.</p>
     {/if}
 
-    {#if (yesA == false && yesB == false && yesC == false && yesD == false && yesE == false && yesF == false && yesG == false && yesH == false && yesI == false && yesJ == false && yesK == false && yesL == false && yesM == false && yesN == false && yesO == false)}
+    {#if [yesA, yesB, yesC, yesD, yesE, yesF, yesG, yesH, yesI, yesJ, yesK, yesL, yesM, yesN, yesO].every(value => value === false)}
       <p class="error">One school type must be choosen.</p>
     {/if}
 
-    {#if yesBAS == false && yesMED == false && yesHIG == false}
+    {#if yesBAS === false && yesMED === false && yesHIG === false}
       <p class="error">One duty must be choosen.</p>
     {/if}
 

@@ -39,7 +39,7 @@
       // Loop through all list items
       for (let i = 0; i < items.length; i++) {
         const text = items[i].textContent?.toLowerCase() || ""
-        if (text.indexOf(filter) > -1 || filter == "") {
+        if (text.indexOf(filter) > -1 || filter === "") {
           items[i].style.display = ""
           matchingItemCount++
         } else {
@@ -51,7 +51,7 @@
         lengthElement.textContent = matchingItemCount.toString()
       }
 
-      if (filter == "") {
+      if (filter === "") {
         itemCountElement!.style.display = "none" // Hide the itemCount element
       } else {
         itemCountElement!.style.display = "block" // Show the itemCount element
@@ -150,11 +150,11 @@
 									{item.name}:
 								{/if}
 							{/each}
-							{#if (act.on_duty).charAt(1) == '0'}
+							{#if (act.on_duty).charAt(1) === '0'}
 								every regions
 							{:else}
 								{#each data.regio as reg}
-									{#if Number((act.on_duty).charAt(1)) == reg.region_id}
+									{#if Number((act.on_duty).charAt(1)) === reg.region_id}
 										{reg.region_name}
 									{/if}
 								{/each}
@@ -178,11 +178,11 @@
 								{item.name}:
 							{/if}
 						{/each}
-						{#if (act.on_duty).charAt(1) == '0'}
+						{#if (act.on_duty).charAt(1) === '0'}
 							every regions
 						{:else}
 							{#each data.regio as reg}
-								{#if Number((act.on_duty).charAt(1)) == reg.region_id}
+								{#if Number((act.on_duty).charAt(1)) === reg.region_id}
 									{reg.region_name}
 								{/if}
 							{/each}
@@ -211,11 +211,11 @@
 									{item.name}:
 								{/if}
 							{/each}
-							{#if (act.on_duty).charAt(1) == '0'}
+							{#if (act.on_duty).charAt(1) === '0'}
 								every regions
 							{:else}
 								{#each data.regio as reg}
-									{#if Number((act.on_duty).charAt(1)) == reg.region_id}
+									{#if Number((act.on_duty).charAt(1)) === reg.region_id}
 										{reg.region_name}
 									{/if}
 								{/each}
@@ -240,7 +240,7 @@
 								{/if}
 							{/each}
 							{#each data.regio as reg}
-								{#if Number((act.on_duty).charAt(1)) == reg.region_id}
+								{#if Number((act.on_duty).charAt(1)) === reg.region_id}
 									{reg.region_name}
 								{/if}
 							{/each}

@@ -261,7 +261,7 @@
 			<i>Event Semester: </i>{selSemest} &nbsp;&nbsp;
 			<i>Event Duty: </i>
 			{#each duty as item (item.id)}
-				{#if selDuty == item.id}
+				{#if selDuty === item.id}
 					{item.name}
 				{/if}
 			{/each}

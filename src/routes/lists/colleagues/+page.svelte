@@ -20,7 +20,7 @@
 			const char2 = array[i].charAt(1)
 
       // If director
-      if (char1 == '5') {
+      if (char1 === '5') {
         const onDuty = dutyMap.find((item) => item.id === char2)
         region = onDuty ? onDuty.name : 'Unknown'
       } else {
@@ -51,7 +51,7 @@
       // Loop through all list items
       for (let i = 0; i < items.length; i++) {
         const text = items[i].textContent?.toLowerCase() || ""
-        if (text.indexOf(filter) > -1 || filter == "") {
+        if (text.indexOf(filter) > -1 || filter === "") {
           items[i].style.display = ""
           matchingItemCount++
         } else {
@@ -63,7 +63,7 @@
         lengthElement.textContent = matchingItemCount.toString()
       }
 
-      if (filter == "") {
+      if (filter === "") {
         itemCountElement!.style.display = "none" // Hide the itemCount element
       } else {
         itemCountElement!.style.display = "block" // Show the itemCount element

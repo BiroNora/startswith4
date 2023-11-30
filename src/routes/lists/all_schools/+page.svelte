@@ -21,8 +21,8 @@
       // Loop through all list items
       for (let i = 0; i < items.length; i++) {
         const text = items[i].textContent?.toLowerCase() || ""
-        
-        if (text.indexOf(filter) > -1 || filter == "") {
+
+        if (text.indexOf(filter) > -1 || filter === "") {
           items[i].style.display = ""
           matchingItemCount++
         } else {
@@ -32,7 +32,7 @@
       // Update the length element with the matching item count
       lengthElement!.textContent = matchingItemCount.toString()
 
-      if (filter == "") {
+      if (filter === "") {
         itemCountElement!.style.display = "none" // Hide the itemCount element
       } else {
         itemCountElement!.style.display = "block" // Show the itemCount element
@@ -88,11 +88,11 @@
   <ul id="list">
     {#each schools as s }
       {#each cities as c}
-        {#if s.city_id == c.city_id}
+        {#if s.city_id === c.city_id}
           {#each regions as r}
-            {#if s.region_id == r.region_id}
+            {#if s.region_id === r.region_id}
               {#each counties as coun}
-                {#if (s.county_id == coun.county_id)}
+                {#if (s.county_id === coun.county_id)}
                   {#if s.active && !s.coop}
                     <li class="li">
                       <a href="../lists/all_schools/{s.school_id}" class={s.User.length > 0 ? "aa" : "bb"}>

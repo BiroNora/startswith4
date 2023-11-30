@@ -56,20 +56,20 @@
 					<ul class="ac">
 						<li class="lb">Diákok száma: {ints.intrest_count}</li>
 						{#each data.countries as country}
-							{#if country.country_id == ints.country_id}
+							{#if country.country_id === ints.country_id}
 								<li class="lb">Ország: {country.country_name}</li>
 							{/if}
 						{/each}
 						<li class="lb">Évfolyam: {ints.grade}</li>
 						{#each data.regions as regio}
-							{#if regio.region_id == ints.region_id}
+							{#if regio.region_id === ints.region_id}
 								<li class="lb">Régió, ahonnan értesült a programról: {regio.region_name}</li>
 							{/if}
 						{/each}
 						<li class="lb">Csatorna, ahonnan értesült a programról: {ints.channel}</li>
-						{#if ints.applied == true}
+						{#if ints.applied === true}
 							{#each subjectMap as subject (subject.id)}
-								{#if (ints.work_title == subject.id)}
+								{#if (ints.work_title === subject.id)}
 									<li class="lb">Jelentkezési téma: {subject.name}</li>
 								{/if}
 							{/each}

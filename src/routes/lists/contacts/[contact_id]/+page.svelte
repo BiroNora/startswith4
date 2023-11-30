@@ -12,7 +12,7 @@
 
 	export let data
 
-	if (data.contact.active == false) {
+	if (data.contact.active === false) {
 		yesACT = false
 	}
 </script>

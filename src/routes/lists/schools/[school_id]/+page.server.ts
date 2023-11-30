@@ -44,7 +44,7 @@ export async function load({ params, locals }) {
 		schType.map((type, index) => {
 			const ind = String(index + 1)
 			school.school_type.forEach(function (item) {
-				if (ind == item) {
+				if (ind === item) {
 					extrSchoolType += type
 					extrSchoolType += ', '
 				}
@@ -53,7 +53,7 @@ export async function load({ params, locals }) {
 		duType.map((type, index) => {
 			const ind = String(index + 1)
 			school.duty.forEach(function (item) {
-				if (ind == item) {
+				if (ind === item) {
 					extrSchoolDuty += type
 					extrSchoolDuty += ', '
 				}
@@ -79,12 +79,12 @@ export async function load({ params, locals }) {
 			extrDuty = obj.on_duty
 			extrType = obj.event_type
 			for (const dM of dutyMap) {
-				if (extrDuty == dM.id) {
+				if (extrDuty === dM.id) {
 					extrDuty = dM.name
 				}
 			}
 			for (const eT of eventMap) {
-				if (extrType == eT.id) {
+				if (extrType === eT.id) {
 					extrType = eT.name
 				}
 			}

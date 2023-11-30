@@ -14,9 +14,9 @@ export async function POST({ request, locals }) {
 	console.log('selD ' + selectedDuty)
 
 	if (
-		selectedYear == null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty == 'ALL'
+		selectedYear === null &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty === 'ALL'
 	) {
 		console.log('1. year all, semest string, duty all')
 		try {
@@ -81,9 +81,9 @@ export async function POST({ request, locals }) {
   }
 
   if (
-		selectedYear != null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty == 'ALL'
+		selectedYear !== null &&
+		selectedSemester === 'ALL' &&
+		selectedDuty === 'ALL'
 	) {
 		console.log('2. year num, semest all, duty all')
 		try {
@@ -148,9 +148,9 @@ export async function POST({ request, locals }) {
   }
 
   if (
-		selectedYear == null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty == 'ALL'
+		selectedYear === null &&
+		selectedSemester === 'ALL' &&
+		selectedDuty === 'ALL'
 	) {
 		console.log('3. year all, semest all, duty all')
 		try {
@@ -214,9 +214,9 @@ export async function POST({ request, locals }) {
   }
 
   if (
-		selectedYear != null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty == 'ALL'
+		selectedYear !== null &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty === 'ALL'
 	) {
 		console.log('4. year num, semest string, duty all')
 		try {
@@ -282,9 +282,9 @@ export async function POST({ request, locals }) {
   }
 
   if (
-		selectedYear == null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty != 'ALL'
+		selectedYear === null &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty !== 'ALL'
 	) {
 		console.log('5. year all, semest string, duty string')
 		try {
@@ -350,9 +350,9 @@ export async function POST({ request, locals }) {
   }
 
   if (
-		selectedYear != null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty != 'ALL'
+		selectedYear !== null &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty !== 'ALL'
 	) {
 		console.log('6. year num, semest string, duty string')
 		try {
@@ -419,9 +419,9 @@ export async function POST({ request, locals }) {
   }
 
   if (
-		selectedYear == null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty != 'ALL'
+		selectedYear === null &&
+		selectedSemester === 'ALL' &&
+		selectedDuty !== 'ALL'
 	) {
 		console.log('7. year all, semest all, duty string')
 		try {
@@ -486,9 +486,9 @@ export async function POST({ request, locals }) {
   }
 
   if (
-		selectedYear != null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty != 'ALL'
+		selectedYear !== null &&
+		selectedSemester === 'ALL' &&
+		selectedDuty !== 'ALL'
 	) {
 		console.log('8. year num, semest all, duty string')
 		try {

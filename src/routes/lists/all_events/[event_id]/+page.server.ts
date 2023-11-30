@@ -36,12 +36,12 @@ export async function load({ params, locals }) {
 		extrDuty = event.on_duty
 		extrType = event.event_type
 		for (const dM of dutyMap) {
-			if (extrDuty == dM.id) {
+			if (extrDuty === dM.id) {
 				extrDuty = dM.name
 			}
 		}
 		for (const eT of eventMap) {
-			if (extrType == eT.id) {
+			if (extrType === eT.id) {
 				extrType = eT.name
 			}
 		}
@@ -73,17 +73,17 @@ export async function load({ params, locals }) {
 			extrChannel = obj.channel
 			extrStatus = obj.status
 			for (const gM of gradeMap) {
-				if (extrGrade == gM.id) {
+				if (extrGrade === gM.id) {
 					extrGrade = gM.name
 				}
 			}
 			for (const cM of channelMap) {
-				if (extrChannel == cM.id) {
+				if (extrChannel === cM.id) {
 					extrChannel = cM.name
 				}
 			}
 			for (const sM of statusMap) {
-				if (extrStatus == sM.id) {
+				if (extrStatus === sM.id) {
 					extrStatus = sM.name
 				}
 			}

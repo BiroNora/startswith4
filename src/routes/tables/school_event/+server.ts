@@ -17,11 +17,11 @@ export async function POST({ request, locals }) {
   } = formData
 
 	if (
-		selectedYear == null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty == 'ALL' &&
-		selectedCountry == null &&
-		selectedRegion == null
+		(selectedYear === null || selectedYear === undefined) &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty === 'ALL' &&
+		(selectedCountry === null || selectedCountry === undefined) &&
+		(selectedRegion === null || selectedRegion === undefined)
 	) {
 		console.log('year all, semest string, duty all, country all, reg all')
 		try {
@@ -176,11 +176,11 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear != null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty == 'ALL' &&
-		selectedCountry == null &&
-		selectedRegion == null
+		(selectedYear !== null && selectedYear !== undefined) &&
+		selectedSemester === 'ALL' &&
+		selectedDuty === 'ALL' &&
+		(selectedCountry === null || selectedCountry === undefined) &&
+		(selectedRegion === null || selectedRegion === undefined)
 	) {
 		console.log('year num, semester all, duty all, country all, reg all')
 		try {
@@ -335,11 +335,11 @@ export async function POST({ request, locals }) {
 	// ALL, ALL, ALL, ALL, ALL
 
 	if (
-		selectedYear == null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty == 'ALL' &&
-		selectedCountry == null &&
-		selectedRegion == null
+		(selectedYear === null || selectedYear === undefined) &&
+		selectedSemester === 'ALL' &&
+		selectedDuty === 'ALL' &&
+		(selectedCountry === null || selectedCountry === undefined) &&
+		(selectedRegion === null || selectedRegion === undefined)
 	) {
 		console.log('year all, semester all, duty all, country all, reg all')
 		try {
@@ -487,13 +487,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear != null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty == 'ALL' &&
-		selectedCountry == null &&
-		selectedRegion == null
+		(selectedYear !== null && selectedYear !== undefined) &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty === 'ALL' &&
+		(selectedCountry === null || selectedCountry === undefined) &&
+		(selectedRegion === null || selectedRegion === undefined)
 	) {
-		console.log('year num, semester string, duty all, country all, reg all')
+		console.log('4. year num, semester string, duty all, country all, reg all')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -648,13 +648,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear == null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty != 'ALL' &&
-		selectedCountry == null &&
-		selectedRegion == null
+		(selectedYear === null || selectedYear === undefined) &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty !=='ALL' &&
+		(selectedCountry === null || selectedCountry === undefined) &&
+		(selectedRegion === null || selectedRegion === undefined)
 	) {
-		console.log('year all, semest string, duty string, country all, reg all')
+		console.log('5. year all, semest string, duty string, country all, reg all')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -811,13 +811,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear != null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty != 'ALL' &&
-		selectedCountry == null &&
-		selectedRegion == null
+		(selectedYear !== null && selectedYear !== undefined) &&
+		selectedSemester === 'ALL' &&
+		selectedDuty !=='ALL' &&
+		(selectedCountry === null || selectedCountry === undefined) &&
+		(selectedRegion === null || selectedRegion === undefined)
 	) {
-		console.log('year num, semester all, duty string, country all, reg all')
+		console.log('6. year num, semester all, duty string, country all, reg all')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -972,13 +972,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear == null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty != 'ALL' &&
-		selectedCountry == null &&
-		selectedRegion == null
+		(selectedYear === null || selectedYear === undefined) &&
+		selectedSemester === 'ALL' &&
+		selectedDuty !=='ALL' &&
+		(selectedCountry === null || selectedCountry === undefined) &&
+		(selectedRegion === null || selectedRegion === undefined)
 	) {
-		console.log('year all, semester all, duty string, country all, reg all')
+		console.log('7. year all, semester all, duty string, country all, reg all')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -1128,13 +1128,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear != null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty != 'ALL' &&
-		selectedCountry == null &&
-		selectedRegion == null
+		(selectedYear !== null && selectedYear !== undefined) &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty !=='ALL' &&
+		(selectedCountry === null || selectedCountry === undefined) &&
+		(selectedRegion === null || selectedRegion === undefined)
 	) {
-		console.log('year num, semester string, duty string, country all, reg all')
+		console.log('8. year num, semester string, duty string, country all, reg all')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -1295,13 +1295,13 @@ export async function POST({ request, locals }) {
 	// Country NUM, region ALL
 
 	if (
-		selectedYear == null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty == 'ALL' &&
-		selectedCountry != null &&
-		selectedRegion == null
+		(selectedYear === null || selectedYear === undefined) &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty === 'ALL' &&
+		(selectedCountry !== null && selectedCountry !== undefined) &&
+		(selectedRegion === null || selectedRegion === undefined)
 	) {
-		console.log('year all, semest string, duty all, country num, reg all')
+		console.log('9. year all, semest string, duty all, country num, reg all')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -1458,13 +1458,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear != null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty == 'ALL' &&
-		selectedCountry != null &&
-		selectedRegion == null
+		(selectedYear !== null && selectedYear !== undefined) &&
+		selectedSemester === 'ALL' &&
+		selectedDuty === 'ALL' &&
+		(selectedCountry !== null && selectedCountry !== undefined) &&
+		(selectedRegion === null || selectedRegion === undefined)
 	) {
-		console.log('year num, semester all, duty all, country num, reg all')
+		console.log('10. year num, semester all, duty all, country num, reg all')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -1619,13 +1619,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear == null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty == 'ALL' &&
-		selectedCountry != null &&
-		selectedRegion == null
+		(selectedYear === null || selectedYear === undefined) &&
+		selectedSemester === 'ALL' &&
+		selectedDuty === 'ALL' &&
+		(selectedCountry !== null && selectedCountry !== undefined) &&
+		(selectedRegion === null || selectedRegion === undefined)
 	) {
-		console.log('year all, semester all, duty all, country num, reg all')
+		console.log('11. year all, semester all, duty all, country num, reg all')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -1775,13 +1775,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear != null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty == 'ALL' &&
-		selectedCountry != null &&
-		selectedRegion == null
+		(selectedYear !== null && selectedYear !== undefined) &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty === 'ALL' &&
+		(selectedCountry !== null && selectedCountry !== undefined) &&
+		(selectedRegion === null || selectedRegion === undefined)
 	) {
-		console.log('year num, semester string, duty all, country num, reg all')
+		console.log('12. year num, semester string, duty all, country num, reg all')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -1941,13 +1941,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear == null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty != 'ALL' &&
-		selectedCountry != null &&
-		selectedRegion == null
+		(selectedYear === null || selectedYear === undefined) &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty !=='ALL' &&
+		(selectedCountry !== null && selectedCountry !== undefined) &&
+		(selectedRegion === null || selectedRegion === undefined)
 	) {
-		console.log('year all, semest string, duty string, country num, reg all')
+		console.log('13. year all, semest string, duty string, country num, reg all')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -2108,13 +2108,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear != null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty != 'ALL' &&
-		selectedCountry != null &&
-		selectedRegion == null
+		(selectedYear !== null && selectedYear !== undefined) &&
+		selectedSemester === 'ALL' &&
+		selectedDuty !=='ALL' &&
+		(selectedCountry !== null && selectedCountry !== undefined) &&
+		(selectedRegion === null || selectedRegion === undefined)
 	) {
-		console.log('year num, semester all, duty string, country num, reg all')
+		console.log('14. year num, semester all, duty string, country num, reg all')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -2273,13 +2273,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear == null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty != 'ALL' &&
-		selectedCountry != null &&
-		selectedRegion == null
+		(selectedYear === null || selectedYear === undefined) &&
+		selectedSemester === 'ALL' &&
+		selectedDuty !=='ALL' &&
+		(selectedCountry !== null && selectedCountry !== undefined) &&
+		(selectedRegion === null || selectedRegion === undefined)
 	) {
-		console.log('year all, semester all, duty string, country num, reg all')
+		console.log('15. year all, semester all, duty string, country num, reg all')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -2433,13 +2433,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear != null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty != 'ALL' &&
-		selectedCountry != null &&
-		selectedRegion == null
+		(selectedYear !== null && selectedYear !== undefined) &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty !=='ALL' &&
+		(selectedCountry !== null && selectedCountry !== undefined) &&
+		(selectedRegion === null || selectedRegion === undefined)
 	) {
-		console.log('year num, semester string, duty string, country num, reg all')
+		console.log('16. year num, semester string, duty string, country num, reg all')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -2604,13 +2604,13 @@ export async function POST({ request, locals }) {
 	// COUNRY NUM, 1. REGION NUM
 
 	if (
-		selectedYear == null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty == 'ALL' &&
-		selectedCountry != null &&
-		selectedRegion != null
+		(selectedYear === null || selectedYear === undefined) &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty === 'ALL' &&
+		(selectedCountry !== null && selectedCountry !== undefined) &&
+		(selectedRegion !== null && selectedRegion !== undefined)
 	) {
-		console.log('year all, semest string, duty all, country num, reg num')
+		console.log('17. year all, semest string, duty all, country num, reg num')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -2771,13 +2771,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear != null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty == 'ALL' &&
-		selectedCountry != null &&
-		selectedRegion != null
+		(selectedYear !== null && selectedYear !== undefined) &&
+		selectedSemester === 'ALL' &&
+		selectedDuty === 'ALL' &&
+		(selectedCountry !== null && selectedCountry !== undefined) &&
+		(selectedRegion !== null && selectedRegion !== undefined)
 	) {
-		console.log('year num, semester all, duty all, country num, reg num')
+		console.log('18. year num, semester all, duty all, country num, reg num')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -2936,13 +2936,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear == null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty == 'ALL' &&
-		selectedCountry != null &&
-		selectedRegion != null
+		(selectedYear === null || selectedYear === undefined) &&
+		selectedSemester === 'ALL' &&
+		selectedDuty === 'ALL' &&
+		(selectedCountry !== null && selectedCountry !== undefined) &&
+		(selectedRegion !== null && selectedRegion !== undefined)
 	) {
-		console.log('year all, semester all, duty all, country num, reg num')
+		console.log('19. year all, semester all, duty all, country num, reg num')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -3095,13 +3095,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear != null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty == 'ALL' &&
-		selectedCountry != null &&
-		selectedRegion != null
+		(selectedYear !== null && selectedYear !== undefined) &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty === 'ALL' &&
+		(selectedCountry !== null && selectedCountry !== undefined) &&
+		(selectedRegion !== null && selectedRegion !== undefined)
 	) {
-		console.log('year num, semester string, duty all, country num, reg num')
+		console.log('20. year num, semester string, duty all, country num, reg num')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -3265,13 +3265,13 @@ export async function POST({ request, locals }) {
 	// selectedDuty != 'ALL'
 
 	if (
-		selectedYear == null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty != 'ALL' &&
-		selectedCountry != null &&
-		selectedRegion != null
+		(selectedYear === null || selectedYear === undefined) &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty !=='ALL' &&
+		(selectedCountry !== null && selectedCountry !== undefined) &&
+		(selectedRegion !== null && selectedRegion !== undefined)
 	) {
-		console.log('year all, semest string, duty string, country num, reg num')
+		console.log('21. year all, semest string, duty string, country num, reg num')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -3435,13 +3435,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear != null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty != 'ALL' &&
-		selectedCountry != null &&
-		selectedRegion != null
+		(selectedYear !== null && selectedYear !== undefined) &&
+		selectedSemester === 'ALL' &&
+		selectedDuty !=='ALL' &&
+		(selectedCountry !== null && selectedCountry !== undefined) &&
+		(selectedRegion !== null && selectedRegion !== undefined)
 	) {
-		console.log('year num, semester all, duty string, country num, reg num')
+		console.log('22. year num, semester all, duty string, country num, reg num')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -3603,13 +3603,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear == null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty != 'ALL' &&
-		selectedCountry != null &&
-		selectedRegion != null
+		(selectedYear === null || selectedYear === undefined) &&
+		selectedSemester === 'ALL' &&
+		selectedDuty !=='ALL' &&
+		(selectedCountry !== null && selectedCountry !== undefined) &&
+		(selectedRegion !== null && selectedRegion !== undefined)
 	) {
-		console.log('year all, semester all, duty string, country num, reg num')
+		console.log('23. year all, semester all, duty string, country num, reg num')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -3768,13 +3768,13 @@ export async function POST({ request, locals }) {
 	// NUMS AND STRINGS!
 
 	if (
-		selectedYear != null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty != 'ALL' &&
-		selectedCountry != null &&
-		selectedRegion != null
+		(selectedYear !== null && selectedYear !== undefined) &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty !=='ALL' &&
+		(selectedCountry !== null && selectedCountry !== undefined) &&
+		(selectedRegion !== null && selectedRegion !== undefined)
 	) {
-		console.log('year num, semester string, duty string, country num, reg num')
+		console.log('24. year num, semester string, duty string, country num, reg num')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -3942,13 +3942,13 @@ export async function POST({ request, locals }) {
 	// COUNTRY ALL, 2.REGION NUM
 
 	if (
-		selectedYear == null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty == 'ALL' &&
-		selectedCountry == null &&
-		selectedRegion != null
+		(selectedYear === null || selectedYear === undefined) &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty === 'ALL' &&
+		(selectedCountry === null || selectedCountry === undefined) &&
+		(selectedRegion !== null && selectedRegion !== undefined)
 	) {
-		console.log('year all, semest string, duty all, country all, reg num')
+		console.log('25. year all, semest string, duty all, country all, reg num')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -4104,13 +4104,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear != null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty == 'ALL' &&
-		selectedCountry == null &&
-		selectedRegion != null
+		(selectedYear !== null && selectedYear !== undefined) &&
+		selectedSemester === 'ALL' &&
+		selectedDuty === 'ALL' &&
+		(selectedCountry === null || selectedCountry === undefined) &&
+		(selectedRegion !== null && selectedRegion !== undefined)
 	) {
-		console.log('year num, semester all, duty all, country all, reg num')
+		console.log('26. year num, semester all, duty all, country all, reg num')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -4264,13 +4264,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear == null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty == 'ALL' &&
-		selectedCountry == null &&
-		selectedRegion != null
+		(selectedYear === null || selectedYear === undefined) &&
+		selectedSemester === 'ALL' &&
+		selectedDuty === 'ALL' &&
+		(selectedCountry === null || selectedCountry === undefined) &&
+		(selectedRegion !== null && selectedRegion !== undefined)
 	) {
-		console.log('year all, semester all, duty all, country all, reg num')
+		console.log('27. year all, semester all, duty all, country all, reg num')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -4419,13 +4419,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear != null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty == 'ALL' &&
-		selectedCountry == null &&
-		selectedRegion != null
+		(selectedYear !== null && selectedYear !== undefined) &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty === 'ALL' &&
+		(selectedCountry === null || selectedCountry === undefined) &&
+		(selectedRegion !== null && selectedRegion !== undefined)
 	) {
-		console.log('year num, semester string, duty all, country all, reg num')
+		console.log('28. year num, semester string, duty all, country all, reg num')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -4585,13 +4585,13 @@ export async function POST({ request, locals }) {
 	// selectedDuty != 'ALL'
 
 	if (
-		selectedYear == null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty != 'ALL' &&
-		selectedCountry == null &&
-		selectedRegion != null
+		(selectedYear === null || selectedYear === undefined) &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty !=='ALL' &&
+		(selectedCountry === null || selectedCountry === undefined) &&
+		(selectedRegion !== null && selectedRegion !== undefined)
 	) {
-		console.log('year all, semest string, duty string, country all, reg num')
+		console.log('29. year all, semest string, duty string, country all, reg num')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -4751,13 +4751,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear != null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty != 'ALL' &&
-		selectedCountry == null &&
-		selectedRegion != null
+		(selectedYear !== null && selectedYear !== undefined) &&
+		selectedSemester === 'ALL' &&
+		selectedDuty !=='ALL' &&
+		(selectedCountry === null || selectedCountry === undefined) &&
+		(selectedRegion !== null && selectedRegion !== undefined)
 	) {
-		console.log('year num, semester all, duty string, country all, reg num')
+		console.log('30. year num, semester all, duty string, country all, reg num')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -4915,13 +4915,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear == null &&
-		selectedSemester == 'ALL' &&
-		selectedDuty != 'ALL' &&
-		selectedCountry == null &&
-		selectedRegion != null
+		(selectedYear === null || selectedYear === undefined) &&
+		selectedSemester === 'ALL' &&
+		selectedDuty !=='ALL' &&
+		(selectedCountry === null || selectedCountry === undefined) &&
+		(selectedRegion !== null && selectedRegion !== undefined)
 	) {
-		console.log('year all, semester all, duty string, country all, reg num')
+		console.log('31. year all, semester all, duty string, country all, reg num')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (
@@ -5074,13 +5074,13 @@ export async function POST({ request, locals }) {
 	}
 
 	if (
-		selectedYear != null &&
-		selectedSemester != 'ALL' &&
-		selectedDuty != 'ALL' &&
-		selectedCountry == null &&
-		selectedRegion != null
+		(selectedYear !== null && selectedYear !== undefined) &&
+		selectedSemester !== 'ALL' &&
+		selectedDuty !=='ALL' &&
+		(selectedCountry === null || selectedCountry === undefined) &&
+		(selectedRegion !== null && selectedRegion !== undefined)
 	) {
-		console.log('year num, semester string, duty string, country all, reg num')
+		console.log('32. year num, semester string, duty string, country all, reg num')
 		try {
 			const schoolsData = await db.$queryRaw`
         WITH EventCounts AS (

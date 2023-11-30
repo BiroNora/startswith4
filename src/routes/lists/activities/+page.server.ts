@@ -3,6 +3,7 @@ import { db } from '$lib/database'
 import type { Action, Actions } from './$types'
 
 const today = new Date()
+today.setDate(today.getDate() - 1)
 let dir_flag: boolean
 let is_director: boolean
 let dir_duty: string
@@ -22,7 +23,7 @@ export async function load({ locals }) {
 	}
 
 	// Shows if the user is director
-	dir_flag = is_director = dir_num % 10 == 0 ? false : true
+	dir_flag = is_director = dir_num % 10 === 0 ? false : true
 
 	const activities = await db.activity.findMany({
 		where: {

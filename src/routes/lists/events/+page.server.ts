@@ -39,7 +39,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 			obj.slug = school_name
 
 			for (const dM of dutyMap) {
-				if (extrDuty == dM.id) {
+				if (extrDuty === dM.id) {
 					extrDuty = dM.name
 				}
 			}

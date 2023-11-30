@@ -58,6 +58,7 @@
 	function showAlert() {
     alert('A felhasználó inaktív lesz.')
   }
+	
 	let pageName = 'Update User'
 
 	export let form: ActionData

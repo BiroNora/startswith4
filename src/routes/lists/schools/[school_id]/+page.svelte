@@ -35,11 +35,11 @@
 	export let data
 	export let form: ActionData
 
-	if (data.school.active == false) {
+	if (data.school.active === false) {
 		yesACT = false
 	}
 
-	if (data.school.coop == false) {
+	if (data.school.coop === false) {
 		yesCOOP = false
 	}
 
@@ -471,11 +471,11 @@
 				<p class="error">Please enter correct data.</p>
 			{/if}
 
-			{#if yesA == false && yesB == false && yesC == false && yesD == false && yesE == false && yesF == false && yesG == false && yesH == false && yesI == false && yesJ == false && yesK == false && yesL == false && yesM == false && yesN == false && yesO == false}
+			{#if [yesA, yesB, yesC, yesD, yesE, yesF, yesG, yesH, yesI, yesJ, yesK, yesL, yesM, yesN, yesO].every(value => value === false)}
 				<p class="error">One school type must be choosen.</p>
 			{/if}
 
-			{#if yesBAS == false && yesMED == false && yesHIG == false}
+			{#if yesBAS === false && yesMED === false && yesHIG === false}
 				<p class="error">One duty must be choosen.</p>
 			{/if}
 

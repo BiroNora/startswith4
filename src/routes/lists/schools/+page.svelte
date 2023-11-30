@@ -14,7 +14,7 @@
   <ul>
     {#each schools as { school_id, school_name, school_email, address, active, coop, city_id }}
       {#each cities as c}
-        {#if city_id == c.city_id}
+        {#if city_id === c.city_id}
           {#if active && !coop}
           <li class="li">
           <a href="../lists/schools/{school_id}" class="aa">{ school_name } {' 🏠 '} { c.city_name } {', '} { address } {' 📝 '} { school_email } {' ⚠️ '} <strong>NO COOPERATION</strong></a>
