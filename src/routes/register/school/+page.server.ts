@@ -60,72 +60,30 @@ const school: Action = async ({ request }) => {
 	const coop = Boolean(data.get('coop'))
 	const note = String(data.get('note'))
 	const active = true
-	const school_type = []
-	const duty = []
-	console.log('country' + country_id)
-	console.log('region' + region_id)
-	console.log('county' + county_id)
-	console.log('city' + city_id)
+	const school_type: string[] = []
+	const duty: string[] = []
+	const levels: boolean[] = [basic, medior, high]
+	const types: boolean[] = [
+		altisk, gimn, szakgimn, szakkoz, szakisk,
+		techn, szakkepz, almuv, muvokt, keszseg,
+		fejl, kieg, kolleg, hidp, nembes
+	]
 
 	if (!city_id || !country_id || !county_id || !region_id) {
 		return fail(400, { user: true })
 	}
 
-	if (altisk) {
-		school_type.push(schoolType[0][0]) // általános iskola
-	}
-	if (gimn) {
-		school_type.push(schoolType[1][0]) // gimnázium
-	}
-	if (szakgimn) {
-		school_type.push(schoolType[2][0]) // szakgimnázium
-	}
-	if (szakkoz) {
-		school_type.push(schoolType[3][0]) // szakközépiskola
-	}
-	if (szakisk) {
-		school_type.push(schoolType[4][0]) // szakiskola
-	}
-	if (techn) {
-		school_type.push(schoolType[5][0]) // technikum
-	}
-	if (szakkepz) {
-		school_type.push(schoolType[6][0]) // szakképző iskola
-	}
-	if (almuv) {
-		school_type.push(schoolType[7][0]) // alapfokú művészetoktatás
-	}
-	if (muvokt) {
-		school_type.push(schoolType[8][0]) // művészeti oktatás
-	}
-	if (keszseg) {
-		school_type.push(schoolType[9][0]) // készségfejlesztés
-	}
-	if (fejl) {
-		school_type.push(schoolType[10][0]) // fejlesztő nevelés-oktatás
-	}
-	if (kieg) {
-		school_type.push(schoolType[11][0]) // kiegészítő nemzetiségi nyelvoktatás
-	}
-	if (kolleg) {
-		school_type.push(schoolType[12][0]) // kollégium
-	}
-	if (hidp) {
-		school_type.push(schoolType[13][0]) // hídprogramok
-	}
-	if (nembes) {
-		school_type.push(schoolType[14][0]) // nem besorolt
-	}
+	types.forEach((type, index) => {
+		if (type) {
+			school_type.push(schoolType[index][0])
+		}
+	})
 
-	if (basic) {
-		duty.push(dutyType[0][0]) // BASIC
-	}
-	if (medior) {
-		duty.push(dutyType[1][0]) // MEDIOR
-	}
-	if (high) {
-		duty.push(dutyType[2][0]) // HIGH
-	}
+	levels.forEach((level, index) => {
+		if (level) {
+			duty.push(dutyType[index][0])
+		}
+	})
 
 	const regioncountry = await db.region.findUnique({
 		where: { region_id }
