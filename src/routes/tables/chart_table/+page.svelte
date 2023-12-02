@@ -71,6 +71,7 @@
 		'rgb(175, 92, 192)'
 	]
 	let err_mess = false
+	let err_mess1 = false
 
 	$: {
 		$selectedRegion, $selectedCountry
@@ -157,9 +158,19 @@
 				regionAdmitted = responseData.regionAdmitted
 				channelIntrest = responseData.channelIntrest
 				channelAdmitted = responseData.channelAdmitted
-				createChart()
+
+				if (statusCountry.length === 0) {
+					err_mess1 = true
+					err_mess = false
+					destroyChart()
+				} else {
+					err_mess1 = false
+					err_mess = false
+					createChart()
+				}
 			} else {
 				console.error('Server error:', response.statusText)
+				err_mess = true
 				destroyChart()
 			}
 		} catch (error) {
@@ -168,7 +179,6 @@
 	}
 
 	function destroyChart() {
-		err_mess = true
 
 		const canvasIds: string[] = [
 			'chartCanvas1',
@@ -673,6 +683,12 @@
 	{#if err_mess}
 		<div class="container" style="margin-bottom: 8rem;">
 			<p><i>Something went wrong. Please try it later.</i></p>
+		</div>
+	{/if}
+
+	{#if err_mess1}
+		<div class="container" style="margin-bottom: 8rem;">
+			<p><i>No data available.</i></p>
 		</div>
 	{/if}
 
