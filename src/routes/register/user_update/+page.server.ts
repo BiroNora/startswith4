@@ -126,7 +126,6 @@ const user: Action = async ({ request }) => {
 const user_active_change: Action = async ({ request }) => {
 	const data = await request.formData()
 	const user_email = String(data.get('email'))
-	const active = false
 	const active_by = userEmail
 
 	const user = await db.user.findUnique({
@@ -136,6 +135,8 @@ const user_active_change: Action = async ({ request }) => {
 	if (!user) {
 		return fail(400, { user: true })
 	}
+
+	const active = !user.active
 
 	await db.user.update({
     where: { user_email: user_email},

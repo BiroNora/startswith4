@@ -56,9 +56,9 @@
   }
 
 	function showAlert() {
-    alert('A felhasználó inaktív lesz.')
+    alert('User status will be changed.')
   }
-	
+
 	let pageName = 'Update User'
 
 	export let form: ActionData
@@ -84,7 +84,7 @@
 			<p class="error">Confirm user.</p>
 		{/if}
 
-		<button on:click|once={showAlert} class="btn" id="btn" type="submit">Inactive User</button>
+		<button on:click|once={showAlert} class="btn" id="btn" type="submit">Inactive / Reactive User</button>
 	</form>
 </div>
 {/if}
