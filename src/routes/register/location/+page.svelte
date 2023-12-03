@@ -38,7 +38,7 @@
   {#if form?.error}
     <p class="error">{form?.message}</p>
 	{/if}
-  <button on:click class="btn" id="btn" type="submit">Register</button>
+  <button class="btn" id="btn" type="submit">Register</button>
 </form>
 </div>
 
