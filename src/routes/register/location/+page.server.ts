@@ -14,10 +14,10 @@ const location: Action = async ({ request, locals }) => {
   }
 
 	const data = await request.formData()
-	let country = String(data.get('country'))
-	let region = String(data.get('region'))
-	let county = String(data.get('county'))
-	let city = String(data.get('city'))
+	let country = String(data.get('country')).trim()
+	let region = String(data.get('region')).trim()
+	let county = String(data.get('county')).trim()
+	let city = String(data.get('city')).trim()
 	let countryname = ''
 	let country_name
 	let regionname = ''
@@ -81,7 +81,7 @@ const location: Action = async ({ request, locals }) => {
 
 	const c = city.replace(/[!@#$%^&*~°?]/g, '').split('-')
 	for (const val of c) {
-		cityname += val.charAt(0).toUpperCase() + val.slice(1).toLowerCase()
+		cityname += val.charAt(0).toUpperCase() + val.slice(1)
 		cityname += '-'
 	}
 
@@ -112,7 +112,7 @@ const location: Action = async ({ request, locals }) => {
 		regioncountry?.country_id === countryifexists?.country_id &&
 		countyregion?.region_id === regioncountry?.region_id &&
 		citycounty?.county_id === countyregion?.county_id &&
-		(citycounty ?? null !== null)
+		(citycounty ?? null !== null) || (city === 'Budapest')
 	) {
 		return fail(400, {
 			error: true,

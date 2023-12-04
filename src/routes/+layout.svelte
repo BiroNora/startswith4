@@ -5,7 +5,14 @@
 </script>
 
 <div class="m">
-  {#if $page.data.user}
+  {#if $page.data.user === undefined}
+  <div></div>
+  {:else if $page.data.user.active === false}
+  <div>
+    <br>
+    <h6>Please contact your manager.</h6>
+  </div>
+  {:else if $page.data.user.active}
   <nav>
     <ul class="dropdown">
       <li>
@@ -81,7 +88,7 @@
   </nav>
 
   <form class="logout" action="/auth/logout" method="POST" use:enhance >
-    <button class="b" type="submit"><img src="/power-button.png" alt=""></button>
+    <button class="d" type="submit"><img src="/power1.png" alt=""></button>
   </form>
 	{/if}
 </div>
@@ -94,7 +101,7 @@
   .b {
     color: black;
     border: 1px white;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);    position: relative;
   }
 
   .c {
@@ -107,29 +114,30 @@
     font-weight: 400;
   }
 
+  .d {
+    border: 1px rgb(81, 15, 15);
+    background-color: rgb(255, 255, 255);
+    display:inline-flex;
+    width: 100%;
+  }
+
   .m {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     width: 100%;
-    margin-left: 2%;
-    margin-right: 2%;
-  }
-
-  .logout {
-    padding-right: 1%;
-    display:block;
-    justify-content: flex-end;
-    align-items: flex-end;
-    width: 10%;
+    padding-left: 2%;
+    padding-right: 2%;
   }
 
   nav {
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
-    width: 90%;
+    width: 100%;
     background-color: white;
+    padding-right: 2%;
+    margin-top: -2%;
   }
 
   ul {
@@ -156,7 +164,7 @@
   .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f1f1f1;
+    background-color: #fafdfd;
     min-width: 160px;
     z-index: 1001;
     transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
@@ -171,6 +179,7 @@
     text-decoration: none;
     display: block;
     transition: opacity 150ms ease-in-out;
+    color: #32BEA6;
   }
 
   /* Change color of dropdown links on hover */

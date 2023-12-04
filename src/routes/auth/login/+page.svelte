@@ -51,7 +51,7 @@
 
 <style>
   .main {
-    padding-left: 0.5%;
+    padding-left: 2%;
     padding-top: 2%;
     padding-right: 0.5%;
     width: 100%;
