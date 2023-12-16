@@ -20,11 +20,15 @@
 **/node_modules/
 /.svelte-kit
 /.svelte-kit
+/blob-report/
 /build
 /build
 /data
 /package
 /package
+/playwright-report/
+/playwright/.cache/
+/test-results/
 bun.lockb
 memo.txt
 node_modules
