@@ -2,6 +2,7 @@
   "name": "startswith",
   "version": "0.0.1",
   "scripts": {
+    "postinstall": "prisma generate",
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
@@ -11,8 +12,7 @@
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
     "format": "prettier --plugin-search-dir . --write .",
     "test:integration": "playwright test",
-    "test:unit": "vitest",
-    "postinstall": "prisma generate"
+    "test:unit": "vitest"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.1",
