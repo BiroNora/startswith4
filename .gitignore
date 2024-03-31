@@ -1,13 +1,8 @@
-
-!.env.example
 !.env.example
 .~lock*
 .credentials.json
 .DS_Store
-.DS_Store
 .env
-.env
-.env.*
 .env.*
 .envrc
 .txt
@@ -19,12 +14,9 @@
 **/dist/
 **/node_modules/
 /.svelte-kit
-/.svelte-kit
 /blob-report/
 /build
-/build
 /data
-/package
 /package
 /playwright-report/
 /playwright/.cache/
@@ -32,7 +24,5 @@
 bun.lockb
 memo.txt
 node_modules
-node_modules
 prisma/migrations*
-vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
