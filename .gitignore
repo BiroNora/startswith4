@@ -25,4 +25,5 @@ bun.lockb
 memo.txt
 node_modules
 prisma/migrations*
+vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
