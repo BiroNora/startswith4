@@ -2,7 +2,7 @@
   "name": "startswith",
   "version": "0.0.1",
   "scripts": {
-    "postinstall": "prisma generate",
+    "postinstall": "npx prisma generate",
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
