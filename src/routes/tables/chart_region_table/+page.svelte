@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { writable } from 'svelte/store'
-	import { duty, semester, statusMap, subjectMap } from '../../stores/dataStore'
+	import { duty, semester } from '../../stores/dataStore'
 	import type { RequestPayload } from './+server'
 	import type { PageServerData } from './$types'
 	import { Chart } from 'chart.js/auto'
