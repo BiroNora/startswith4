@@ -1,0 +1,175 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model School {
+  school_id    Int       @id @default(autoincrement())
+  om_id        String?
+  school_name  String
+  zip_code     String
+  address      String
+  dir_name     String?
+  dir_phone    String?
+  school_email String    @unique
+  website      String?
+  school_type  String[]
+  coop         Boolean?
+  note         String?
+  city_id      Int
+  country_id   Int
+  county_id    Int
+  region_id    Int
+  duty         String[]
+  active       Boolean
+  active_by    String
+  Contact      Contact[]
+  Event        Event[]
+  city         City      @relation(fields: [city_id], references: [city_id])
+  country      Country   @relation(fields: [country_id], references: [country_id])
+  county       County    @relation(fields: [county_id], references: [county_id])
+  region       Region    @relation(fields: [region_id], references: [region_id])
+  User         User[]
+  basic        Boolean
+  medior       Boolean
+  high         Boolean
+
+  @@map("schools")
+}
+
+model Contact {
+  contact_id    Int      @id @default(autoincrement())
+  contact_email String   @unique
+  contact_name  String?
+  contact_phone String?
+  contact_note  String?
+  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+  active        Boolean
+  active_by     String
+  school_id     Int?
+  School        School?  @relation(fields: [school_id], references: [school_id])
+  User          User[]
+
+  @@map("contact")
+}
+
+model User {
+  user_id          String    @id @default(uuid())
+  user_name        String
+  nationality      String
+  user_phone       String
+  user_email       String    @unique
+  on_duty          Int[]
+  passwordHash     String
+  userAuthToken    String    @unique
+  resetToken       String? // Nullable, as it might not be set
+  resetTokenExpiry DateTime? // Nullable, as it might not be set
+  createdAt        DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt        DateTime  @updatedAt @db.Timestamptz(3)
+  active           Boolean
+  active_by        String
+  Contact          Contact[]
+  Event            Event[]
+  School           School[]
+
+  @@map("users")
+}
+
+model Event {
+  event_id           Int                  @id @default(autoincrement())
+  event_name         String
+  create_date        DateTime             @default(now()) @db.Timestamptz(3)
+  closing_date       DateTime             @db.Timestamptz(3)
+  event_year         Int
+  semester           String
+  on_duty            String
+  event_type         String
+  estimated_student  Int
+  note               String?
+  slug               String               @unique
+  school_id          Int
+  School             School               @relation(fields: [school_id], references: [school_id])
+  User               User[]
+  InterestedStudents InterestedStudents[]
+
+  @@map("events")
+}
+
+model InterestedStudents {
+  intrest_id    Int     @id @default(autoincrement())
+  event_id      Int
+  intrest_count Int
+  grade         String
+  applied       Boolean
+  work_title    String // subject!!
+  channel       String
+  status        String
+  country_id    Int
+  region_id     Int
+  Country       Country @relation(fields: [country_id], references: [country_id])
+  Event         Event   @relation(fields: [event_id], references: [event_id])
+  Region        Region  @relation(fields: [region_id], references: [region_id])
+
+  @@map("interested")
+}
+
+model Activity {
+  act_id     Int      @id @default(autoincrement())
+  start_date DateTime @default(now()) @db.Timestamptz(3)
+  end_date   DateTime @db.Timestamptz(3)
+  act_name   String
+  act_note   String?
+  on_duty    String
+  dir_flag   Boolean
+  all_region Boolean
+
+  @@map("activity")
+}
+
+model Country {
+  country_id        Int                  @id @default(autoincrement())
+  country_name      String               @unique
+  InterestedStudent InterestedStudents[]
+  Region            Region[]
+  School            School[]
+
+  @@map("country")
+}
+
+model Region {
+  region_id         Int                  @id @default(autoincrement())
+  region_name       String               @unique
+  country_id        Int
+  County            County[]
+  InterestedStudent InterestedStudents[]
+  country           Country              @relation(fields: [country_id], references: [country_id])
+  School            School[]
+
+  @@map("region")
+}
+
+model County {
+  county_id   Int      @id @default(autoincrement())
+  county_name String   @unique
+  region_id   Int
+  city        City[]
+  region      Region   @relation(fields: [region_id], references: [region_id])
+  School      School[]
+
+  @@map("county")
+}
+
+model City {
+  city_id   Int      @id @default(autoincrement())
+  city_name String   @unique
+  county_id Int
+  county    County   @relation(fields: [county_id], references: [county_id])
+  School    School[]
+
+  @@map("city")
+}
