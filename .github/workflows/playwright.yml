@@ -40,7 +40,7 @@ jobs:
       run: pnpm exec playwright test
       # Hozzáadunk egy környezeti változót, hátha a Prisma keresné a sémát
       env:
-        DATABASE_URL: "file:./dev.db"
+        DATABASE_URL: "postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
 
     - uses: actions/upload-artifact@v4
       if: always()
