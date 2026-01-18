@@ -23,13 +23,13 @@ jobs:
         cache: 'pnpm'
 
     - name: Install dependencies
-      run: pnpm install
+      # Hozzáadtuk a --frozen-lockfile-t, hogy stabilabb legyen
+      run: pnpm install --frozen-lockfile
 
-    # EZT FIGYELD: Itt generáljuk le a Prisma-t a telepítés után, de a teszt előtt
     - name: Generate Prisma Client
-      run: pnpm exec prisma generate
+      # Itt kényszerítjük, hogy tényleg lefusson
+      run: pnpm prisma generate
 
-    # Ez pedig a SvelteKit belső fájljait rakja rendbe
     - name: Prepare SvelteKit
       run: pnpm exec svelte-kit sync
 
@@ -38,6 +38,9 @@ jobs:
 
     - name: Run Playwright tests
       run: pnpm exec playwright test
+      # Hozzáadunk egy környezeti változót, hátha a Prisma keresné a sémát
+      env:
+        DATABASE_URL: "file:./dev.db"
 
     - uses: actions/upload-artifact@v4
       if: always()
