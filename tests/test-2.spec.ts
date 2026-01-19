@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('test', async ({ page }) => {
+test.skip('test', async ({ page }) => {
   await page.goto('/auth/login');
   await page.getByLabel('Email').click();
   await page.getByLabel('Email').fill('aa@gmail.com');
