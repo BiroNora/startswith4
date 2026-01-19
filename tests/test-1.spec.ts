@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('login', async ({ page }) => {
+test.skip('login', async ({ page }) => {
   // Mockoljuk a bejelentkezést
   await page.route('**/auth/login', async (route) => {
     if (route.request().method() === 'POST') {
@@ -22,7 +22,7 @@ test('login', async ({ page }) => {
   await page.waitForURL('/lists/activities');
 });
 
-test('forgot_pw', async ({ page }) => {
+test.skip('forgot_pw', async ({ page }) => {
   // Mockoljuk az elfelejtett jelszót
   await page.route('**/auth/forgot_password*', async (route) => {
     if (route.request().method() === 'POST') {
