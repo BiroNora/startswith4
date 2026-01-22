@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  tar: '>=7.5.3'
+  tar: '>=7.5.4'
   braces: '>=3.0.3'
   micromatch: '>=4.0.8'
   cross-spawn: '>=7.0.5'
@@ -916,7 +916,7 @@ packages:
       npmlog: 5.0.1
       rimraf: 3.0.2
       semver: 7.7.3
-      tar: 7.5.3
+      tar: 7.5.6
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -3604,8 +3604,8 @@ packages:
       periscopic: 3.1.0
     dev: true
 
-  /tar@7.5.3:
-    resolution: {integrity: sha512-ENg5JUHUm2rDD7IvKNFGzyElLXNjachNLp6RaGf4+JOgxXHkqA+gq81ZAMCUmtMtqBsoU62lcp6S27g1LCYGGQ==}
+  /tar@7.5.6:
+    resolution: {integrity: sha512-xqUeu2JAIJpXyvskvU3uvQW8PAmHrtXp2KDuMJwQqW8Sqq0CaZBAQ+dKS3RBXVhU4wC5NjAdKrmh84241gO9cA==}
     engines: {node: '>=18'}
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
