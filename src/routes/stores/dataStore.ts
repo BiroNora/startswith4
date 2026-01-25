@@ -61,11 +61,9 @@ export function formatDate(date: Date) {
 }
 
 export function isStrongPassword(password: string): boolean {
-	if (password.length < 8 || !password.match(/([A-Z]|[a-z]|[0-9]|[-_+!@#$%^&*(){}[\]:;",.<>?])+/)) {
-		return false
-	}
+	const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
 
-	return true
+  return regex.test(password);
 }
 
 export const schType = [
